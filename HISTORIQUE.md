@@ -3394,3 +3394,54 @@ affiche bien le lien vers le dernier build consulté (pas la page
 actuelle si elle diffère - à re-sélectionner la classe dans le menu
 pour voir la différence, puisque la page courante se pré-sélectionne et
 s'enregistre automatiquement).
+
+## 2026-09-22 (suite) - Dépôt Git initialisé (filet de sécurité après l'incident du jour)
+
+Suite à l'incident de corruption plus haut, proposition faite à
+l'utilisateur d'initialiser un dépôt git local (aucun remote) pour avoir
+un vrai filet de sécurité la prochaine fois - accepté.
+
+- `git init` dans `E:\DiabloIV-Assistant`, identité locale configurée
+  (`git config user.name/email`, scope dépôt uniquement, pas global).
+- `.gitignore` créé : exclut `.venv/` (réinstallable via
+  `requirements.txt`), `tools/` (d4lf, outil tiers téléchargé, ~344 Mo,
+  procédure de réinstallation déjà documentée plus haut dans ce
+  fichier), `__pycache__/`/`*.pyc`, `*.log`, et
+  `app/data/kamilabs_cache/` (cache de scraping régénérable, ~196 Mo,
+  393 fichiers - premier essai de chemin dans le `.gitignore` était
+  faux, `app/scrapers/kamilabs_cache/` au lieu du vrai
+  `app/data/kamilabs_cache/`, corrigé avant de committer).
+- Premier commit : 44 fichiers, ~875 Ko (uniquement le code source
+  réel : `app/`, `scripts/`, `userscript/`, `HISTORIQUE.md`,
+  `requirements.txt`, `lancer.bat`) - vérifié qu'aucun cache/venv/outil
+  tiers volumineux ni fichier sensible ne s'y est glissé avant de
+  committer.
+
+À partir de maintenant, tout changement notable sur ce projet devrait
+idéalement être suivi d'un commit (pas fait automatiquement à chaque
+session - seulement si explicitement demandé, comme pour tout dépôt
+git).
+
+## 2026-09-22 (suite) - "Mes Builds" validé, et découverte : l'import de fichier Tampermonkey fonctionne mieux que le copier-coller
+
+L'utilisateur a testé "Mes Builds" (v2.20) en conditions réelles -
+**fonctionne**.
+
+**Méthode de mise à jour du script trouvée, à privilégier désormais** :
+le tableau de bord Tampermonkey a un onglet "Utilitaires" avec une
+section d'import depuis un fichier local - sélectionner directement
+`userscript/diablo4-assistant.user.js` sur le disque met à jour le
+script installé sans passer par un copier-coller manuel dans
+l'éditeur. Beaucoup plus fiable pour un fichier de cette taille (~230
+Ko) que la méthode utilisée jusqu'ici, qui s'est révélée risquée de
+troncature silencieuse cette session (voir l'incident de corruption
+plus haut - l'export/collage manuel avait perdu une fonctionnalité
+entière sans erreur visible). **Nouvelle procédure de mise à jour
+recommandée pour toutes les prochaines sessions** : Tampermonkey →
+tableau de bord → Utilitaires → Importer depuis un fichier → sélectionner
+le fichier sur le disque. (Piste explorée et abandonnée avant de
+trouver celle-ci : ouvrir `file:///E:/DiabloIV-Assistant/...` dans le
+navigateur pour déclencher une invite de mise à jour Tampermonkey - ne
+fonctionne pas pour un script installé localement sans `@updateURL`,
+le bouton "Vérifier les mises à jour" reste grisé dans ce cas, c'est
+normal.)
