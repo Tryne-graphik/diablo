@@ -4471,3 +4471,37 @@ reste du dictionnaire, en particulier pour les noms propres d'objets rares (Orsi
 Hesha e Kesungi, etc.) ou une hallucination plausible serait facile a ne pas remarquer - ces 79
 entrees marquees `source: "manual_2026-09-23"` dans `fr_en_dictionary.json` sont donc a considerer
 comme moins sures que le reste si un desaccord apparait un jour en jeu.
+
+## 2026-09-23 (suite) - Test en jeu du filtre Strict + fausse piste ecartee (empilement de filtres)
+
+Utilisateur a teste "Générer le filtre" en jeu : le filtre **Ouvert fonctionne**, le **Strict semblait
+ne rien afficher** (probablement aucun objet ramasse ne remplissait les criteres stricts - Ancestral +
+3 affixes precises par emplacement - pas confirme comme un vrai bug, a creuser si ca persiste).
+
+**Fausse piste ecartee** : l'hypothese de depart (plusieurs filtres actifs simultanement dans la liste
+des 25 emplacements du jeu, celui du dessus "cachant" les objets d'un filtre en dessous) est **invalidee**
+- confirme par l'utilisateur : **le jeu ne permet qu'un seul filtre actif a la fois**, pas d'empilement
+possible. Donc le probleme initial observe ("des objets d'un autre build caches") venait d'autre chose
+(vraisemblablement l'ancien filtre etant reste actif au lieu du nouveau, pas d'un vrai conflit multi-
+filtres) - a ne plus explorer dans cette direction.
+
+**Decodage de 4 filtres reels de l'utilisateur (fait main, hors de notre generateur) - trouvailles pour
+recherche future, aucun changement de code applique encore** :
+- Le champ protobuf top-level #4 (suppose "toujours = 1" dans notre codec, hérité sans verification
+  d'Upsilon72) vaut en realite **1, 2, 3, 4** dans les 4 filtres de l'utilisateur - correspond exactement
+  a l'ordre/numero de chaque filtre (ex. le nom affiche "#8" correspondait deja a une valeur 8 vue plus
+  tot dans la session). Tres probablement un numero d'emplacement (slot 1-25), mais pas confirme si le
+  jeu le respecte a l'import ou le reecrit selon l'emplacement cible. Notre generateur ecrit toujours 1 -
+  vu que l'empilement multi-filtres n'existe pas (voir ci-dessus), cette piste perd de son urgence mais
+  reste une donnee interessante pour une prochaine session.
+- Le champ #3 (suppose "rule_count") **ne correspond jamais** au vrai nombre de regles dans les filtres
+  reels de l'utilisateur (ex. 19 regles reelles vs champ=6). L'hypothese "rule_count" vient d'un port
+  non verifie d'Upsilon72 - vraisemblablement faux, mais inoffensif pour nous puisqu'on l'a toujours
+  garde coherent avec nos propres regles.
+- Confirmation supplementaire que **Show/Recolor l'emporte sur Hide independamment de l'ordre** : le
+  filtre "Druide" de l'utilisateur place sa regle "Masquer" (cache presque tout) en tout dernier, apres
+  18 regles Show/Recolor precises - coherent avec notre propre filtre qui marche en jeu.
+- Technique plus riche observee chez l'utilisateur pour les Uniques : combine parfois l'id precis d'un
+  Unique AVEC des conditions d'affixes/qualite (ex. "cet Unique + 4 bonnes stats"), et regroupe plusieurs
+  Uniques differents dans une seule regle partageant une couleur - notre generateur ne fait que "toujours
+  montrer cet Unique", plus simple. Piste d'amelioration future, pas urgente.
