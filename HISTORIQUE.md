@@ -3512,3 +3512,32 @@ des variantes connues sur d'autres sites, vérifier que les onglets
 cachés s'ouvrent discrètement et que le résultat affiché est cohérent
 (objets/compétences communs vs différents, popularité réelle sur les
 compétences qui diffèrent).
+
+## 2026-09-22 (suite) - Idée d'optimisateur de DPS : écartée du périmètre actuel, à revoir comme projet séparé
+
+Question de l'utilisateur : serait-il compliqué de faire un
+optimisateur de DPS ?
+
+**Vérifié avant de répondre** (pas juste répété la limite déjà connue
+du 2026-09-19) : téléchargé une vraie page de planner Maxroll
+(`maxroll.gg/d4/planner/mmfzmj0i`) et cherché un chiffre de DPS ou un
+poids de stats déjà calculé et exposé quelque part dans la donnée qu'on
+lit déjà (`search_metadata`) ou ailleurs sur la page - aucune trace
+structurée trouvée. Les nombreuses mentions de "dégâts" dans le HTML
+sont du texte éditorial écrit à la main par l'auteur du guide
+("+22% de dégâts (1.83/1.5=1.22)"), pas un champ calculé pour un
+build/gear arbitraire. Pas de raccourci disponible cette fois
+(contrairement à d'autres blocages de la session qui avaient une
+donnée déjà calculée à récupérer ailleurs).
+
+**Décision** : un vrai optimisateur nécessiterait d'implémenter
+nous-mêmes la formule de dégâts complète de D4 (buckets multiplicatifs,
+crit, vulnérable, procs conditionnels, disponibilité des buffs, rolls
+d'affixes...), avec une maintenance continue à chaque patch - un
+projet à part entière, pas une extension de l'outil actuel. Décision
+utilisateur, dans le même esprit que celle du 2026-09-19 sur le
+simulateur de DPS : **écarté du périmètre de Diablo IV Assistant**,
+envisageable un jour comme **projet séparé** qui pourrait ensuite se
+greffer à celui-ci (ex. brancher ses résultats dans "Comparer les
+variantes" à la place du simple diff objets/compétences actuel). Rien
+à coder pour l'instant.

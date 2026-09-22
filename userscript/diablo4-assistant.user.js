@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.21
+// @version      2.19
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @match        *://kami-labs.fr/diablo-4/builds/*
 // @match        *://maxroll.gg/d4/build-guides/*
@@ -98,14 +98,6 @@
     sorcerer: ["sorcerer", "sorcier", "sorciere", "sorcière"],
     spiritborn: ["spiritborn", "sacresprit"],
     warlock: ["warlock", "demoniste", "démoniste"],
-  };
-
-  // FR display labels for the dropdown in "Mes Builds" (see renderMyBuildsSection
-  // below) - same 8 canonical class ids as CLASS_KEYWORDS above, order kept
-  // in sync since the dropdown is built from Object.keys(CLASS_KEYWORDS).
-  const CLASS_LABELS_FR = {
-    barbarian: "Barbare", druid: "Druide", necromancer: "Nécromancien", paladin: "Paladin",
-    rogue: "Voleur", sorcerer: "Sorcier", spiritborn: "Sacresprit", warlock: "Démoniste",
   };
 
   function guessTitle() {
@@ -755,42 +747,10 @@
   }
 
   // Runs ONLY inside a background tab opened for extraction (see
-  // openExtractionTab below) - reports the build's gear/skills back via
-  // GM_setValue, then closes its own tab. Tries native extraction first
-  // (instant, works whenever the tab landed on kami-labs/Maxroll - added
-  // 2026-09-22 for compareVariants() below, which can point this at ANY
-  // of the 6 sites' build URLs, not just InfinityBuilds like before) and
-  // falls back to the slower InfinityBuilds gear-tile DOM polling
-  // otherwise - same two extraction paths resolveTranslation() already
-  // uses on the CURRENT page, just reachable from inside another tab too.
+  // openExtractionTab below) - polls until the build's gear/skills have
+  // actually rendered (React hydration isn't instant), reports the result
+  // back via GM_setValue, then closes its own tab.
   function runExtractionMode(requestId) {
-    extractNativeDetail()
-      .then((native) => {
-        if (native && ((native.skillsEn && native.skillsEn.length) || (native.itemsEn && native.itemsEn.length))) {
-          reportExtractionResult(requestId, { skills: native.skillsEn, items: native.itemsEn });
-        } else {
-          runInfinityBuildsExtraction(requestId);
-        }
-      })
-      .catch(() => runInfinityBuildsExtraction(requestId));
-  }
-
-  function reportExtractionResult(requestId, result) {
-    GM_setValue("d4a_result_" + requestId, JSON.stringify(result));
-    setTimeout(() => {
-      try {
-        window.close();
-      } catch (e) {
-        // some browsers refuse to close a script-opened tab from here -
-        // harmless, the opener closes it too (see openExtractionTab)
-      }
-    }, 500);
-  }
-
-  // Polls until the build's gear/skills have actually rendered (React
-  // hydration isn't instant) - the original (pre-2026-09-22) extraction
-  // path, now only reached when the target tab isn't kami-labs/Maxroll.
-  function runInfinityBuildsExtraction(requestId) {
     const deadline = Date.now() + 10000;
     const poll = setInterval(() => {
       const gearRaw = extractGearRaw();
@@ -799,7 +759,16 @@
       if (!ready) return;
       clearInterval(poll);
       setTimeout(() => {
-        reportExtractionResult(requestId, { skills: skillNames(extractSkillsRaw()), items: gearNames(extractGearRaw()) });
+        const result = { skills: skillNames(extractSkillsRaw()), items: gearNames(extractGearRaw()) };
+        GM_setValue("d4a_result_" + requestId, JSON.stringify(result));
+        setTimeout(() => {
+          try {
+            window.close();
+          } catch (e) {
+            // some browsers refuse to close a script-opened tab from here -
+            // harmless, the opener closes it too (see openExtractionTab)
+          }
+        }, 500);
       }, 400); // small settle delay once both blocks are first detected
     }, 300);
   }
@@ -1024,22 +993,6 @@
     return best ? { rank: best.rank, battleTag: best.battleTag, tier: best.tier } : null;
   }
 
-  // "Comparer les variantes" (demande utilisateur 2026-09-22) - combien
-  // des joueurs réels du classement officiel (déjà récupérés par
-  // fetchTowerRuns ci-dessus) utilisent une compétence donnée, pour
-  // objectiver un choix entre deux variantes qui ne diffèrent que par
-  // UNE compétence. Comparaison par nom exact (replié/normalisé), pas
-  // par sous-ensemble de mots comme bestOfficialRank - ici on compare
-  // deux noms de compétence précis l'un à l'autre (déjà extraits
-  // proprement), pas un nom de compétence à un titre de build en texte
-  // libre, donc pas besoin de la tolérance du sous-ensemble.
-  function countPlayersUsingSkill(runs, gameClass, skillName) {
-    const target = fold(skillName);
-    const classRuns = runs.filter((r) => r.gameClass === gameClass);
-    const count = classRuns.filter((r) => (r.skills || []).some((s) => fold(s.name) === target)).length;
-    return { count, total: classRuns.length };
-  }
-
   const HOSTNAME_TO_SOURCE = {
     "kami-labs.fr": "kamilabs",
     "maxroll.gg": "maxroll",
@@ -1097,48 +1050,6 @@
   // class is detected at all - an error message on every ordinary page
   // load would be noisier than useful, unlike the Classement button's
   // explicit click-triggered error messages.
-  // ---------------------------------------------------------------------
-  // "Mes Builds" (demande utilisateur 2026-09-22) - mémorise, par classe,
-  // le dernier build consulté sur n'importe lequel des 6 sites suivis par
-  // ce script, pour le retrouver facilement plus tard via le menu
-  // déroulant sous "Recherche de traduction". GM_setValue (pas
-  // localStorage, qui serait isolé par site) puisque c'est justement du
-  // stockage partagé entre tous ces sites qu'il faut ici - même choix que
-  // le cache du classement officiel juste au-dessus.
-  // ---------------------------------------------------------------------
-  const MY_BUILDS_KEY = "d4a_my_builds";
-
-  function getMyBuilds() {
-    try {
-      return JSON.parse(GM_getValue(MY_BUILDS_KEY, "{}"));
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function recordBuildVisit(gameClass, title, url) {
-    if (!gameClass || !title || !url) return;
-    const all = getMyBuilds();
-    all[gameClass] = { title, url, visitedAt: Date.now() };
-    GM_setValue(MY_BUILDS_KEY, JSON.stringify(all));
-  }
-
-  function renderMyBuildForClass(gameClass) {
-    const resultEl = document.getElementById("d4a-mybuilds-result");
-    if (!resultEl) return;
-    if (!gameClass) {
-      resultEl.innerHTML = "";
-      return;
-    }
-    const entry = getMyBuilds()[gameClass];
-    if (!entry) {
-      resultEl.innerHTML = `<p class="d4a-rank-meta">Aucun build consulté pour cette classe pour l'instant.</p>`;
-      return;
-    }
-    const when = new Date(entry.visitedAt).toLocaleDateString("fr-FR");
-    resultEl.innerHTML = `<p><a href="${entry.url}" target="_blank" rel="noopener noreferrer">${entry.title}</a><br><span class="d4a-rank-meta">consulté le ${when}</span></p>`;
-  }
-
   async function renderBuildInfo() {
     const section = document.getElementById("d4a-buildinfo-section");
     if (!section) return;
@@ -1148,7 +1059,6 @@
       section.innerHTML = "";
       return;
     }
-    recordBuildVisit(gameClass, title, location.href);
     section.innerHTML = "Recherche de la position officielle...";
 
     const [rank, links] = await Promise.all([
@@ -1487,12 +1397,6 @@
       .d4a-rank-links { font-size: 11px; }
       .d4a-rank-links a { color: #03d0fc; margin-right: 4px; }
       #d4a-search-section { border-top: 1px solid #333; padding-top: 8px; }
-      #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
-      #d4a-mybuilds-select {
-        width: 100%; margin: 6px 0; padding: 6px 8px; border-radius: 4px; border: none;
-        background: #000; color: #eee; font-size: 12px;
-      }
-      #d4a-mybuilds-result p { margin: 0; }
       #d4a-search-form { display: flex; gap: 6px; margin: 6px 0 10px; }
       #d4a-search-form input {
         flex: 1; min-width: 0; padding: 6px 8px; border-radius: 4px; border: none;
@@ -2429,146 +2333,6 @@
     };
   }
 
-  // ---------------------------------------------------------------------
-  // "Comparer les variantes" (demande utilisateur 2026-09-22) - pour un
-  // même build, plusieurs sites (ou parfois le même site) proposent des
-  // versions légèrement différentes (un objet différent, une option de
-  // compétence différente, une priorité de stats différente). Objectif :
-  // montrer les écarts précis entre variantes, pas désigner LA meilleure
-  // - ça demanderait un vrai simulateur de dégâts, explicitement écarté
-  // du périmètre de ce projet depuis le 2026-09-19 (voir HISTORIQUE.md).
-  // Seul signal objectif ajouté : la popularité de chaque compétence
-  // parmi les VRAIS joueurs du classement Tower officiel (countPlayersUsingSkill
-  // ci-dessus) - aucune donnée équivalente n'existe pour les objets (le
-  // classement n'expose que les compétences équipées, pas l'équipement).
-  //
-  // Ne compare que les sources pour lesquelles une extraction de détail
-  // existe déjà (kami-labs, Maxroll : natif ; InfinityBuilds : onglet
-  // caché) - D4Builds/D4Guides/talion.tv n'ont jamais eu cette extraction
-  // construite (seulement titre/tier/lien), donc restent hors comparaison
-  // pour l'instant, signalé à l'utilisateur plutôt que silencieusement
-  // ignoré.
-  // ---------------------------------------------------------------------
-  const EXTRACTABLE_SOURCES = new Set(["kamilabs", "maxroll", "infinitybuilds"]);
-  const MAX_COMPARED_OTHER_SOURCES = 3; // borne le coût (chaque onglet caché prend ~5-12s)
-
-  function diffVariantField(variants, field) {
-    const byName = new Map(); // nom replié -> { display, sources: Set }
-    for (const v of variants) {
-      for (const raw of v[field] || []) {
-        const name = (raw || "").trim();
-        if (!name) continue;
-        const key = fold(name);
-        if (!byName.has(key)) byName.set(key, { display: name, sources: new Set() });
-        byName.get(key).sources.add(v.source);
-      }
-    }
-    const common = [];
-    const differing = [];
-    for (const entry of byName.values()) {
-      (entry.sources.size === variants.length ? common : differing).push(entry);
-    }
-    return { common, differing };
-  }
-
-  function renderVariantComparison(variants, gameClass, runs, skippedLinks) {
-    const sourceLinksHtml = variants
-      .map((v) => `<a href="${v.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[v.source] || v.source}</a>`)
-      .join(" · ");
-
-    const skillsDiff = diffVariantField(variants, "skillsEn");
-    const itemsDiff = diffVariantField(variants, "itemsEn");
-
-    const renderCommon = (entries) => (entries.length ? chipList(entries.map((e) => e.display)) : "<em>aucun point commun trouvé</em>");
-
-    const renderDiffering = (entries, withPopularity) => {
-      if (entries.length === 0) return "<p><em>Aucune différence - toutes les variantes comparées utilisent exactement les mêmes.</em></p>";
-      return entries
-        .map((e) => {
-          const sourcesTxt = Array.from(e.sources).map((s) => SOURCE_LABELS[s] || s).join(", ");
-          let popTxt = "";
-          if (withPopularity) {
-            const { count, total } = countPlayersUsingSkill(runs, gameClass, e.display);
-            popTxt = total > 0 ? ` — <span class="d4a-rank-meta">${count}/${total} joueurs du top classement officiel</span>` : "";
-          }
-          return `<div class="d4a-rank-row"><strong>${e.display}</strong><br><span class="d4a-rank-meta">présent chez : ${sourcesTxt}</span>${popTxt}</div>`;
-        })
-        .join("");
-    };
-
-    const skippedNote = skippedLinks.length
-      ? `<p style="color:#c9a227">${skippedLinks.length} autre(s) site(s) ont aussi ce build (${skippedLinks.map((l) => SOURCE_LABELS[l.source] || l.source).join(", ")}) mais leur détail ne peut pas encore être lu par ce script - non inclus dans la comparaison.</p>`
-      : "";
-    const noPopularityNote = itemsDiff.differing.length
-      ? `<p class="d4a-rank-meta">Pas de donnée de popularité pour les objets - le classement officiel n'expose que les compétences équipées, pas l'équipement.</p>`
-      : "";
-    const noLeaderboardNote = runs.length === 0 && skillsDiff.differing.length
-      ? `<p style="color:#c9a227">Classement officiel indisponible cette fois - comparaison des compétences sans données de popularité réelle.</p>`
-      : "";
-
-    return `
-      <p class="d4a-rank-meta">Sources comparées : ${sourceLinksHtml}</p>
-      ${skippedNote}
-      <strong>Compétences communes à toutes les variantes</strong>
-      ${renderCommon(skillsDiff.common)}
-      <strong>Compétences qui diffèrent</strong>
-      ${renderDiffering(skillsDiff.differing, true)}
-      ${noLeaderboardNote}
-      <strong>Objets communs à toutes les variantes</strong>
-      ${renderCommon(itemsDiff.common)}
-      <strong>Objets qui diffèrent</strong>
-      ${renderDiffering(itemsDiff.differing, false)}
-      ${noPopularityNote}
-    `;
-  }
-
-  async function runCompareVariants() {
-    const title = guessTitle();
-    const gameClass = guessClass();
-    if (!gameClass) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p style="color:#c9a227">Classe non détectée sur cette page.</p>`);
-      return;
-    }
-    renderPanel(`<h3>Diablo IV Assistant</h3><p>Recherche des variantes de ce build sur les autres sites...</p>`);
-
-    const [mine, links] = await Promise.all([
-      resolveTranslation().catch(() => null),
-      findCrossSiteLinks(title, gameClass).catch(() => []),
-    ]);
-    if (!mine || (!mine.itemsEn.length && !mine.skillsEn.length)) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p style="color:#c9a227">Impossible de lire le détail de CE build - rien à comparer.</p>`);
-      return;
-    }
-
-    const extractableLinks = links.filter((l) => EXTRACTABLE_SOURCES.has(l.source));
-    const others = extractableLinks.slice(0, MAX_COMPARED_OTHER_SOURCES);
-    const skippedLinks = links.filter((l) => !EXTRACTABLE_SOURCES.has(l.source)).concat(extractableLinks.slice(MAX_COMPARED_OTHER_SOURCES));
-
-    const mySource = currentSourceId() || "infinitybuilds";
-    const variants = [{ source: mySource, url: location.href, skillsEn: mine.skillsEn, itemsEn: mine.itemsEn }];
-
-    if (others.length) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p>Lecture de ${others.length} variante(s) sur les autres sites (ouverture d'onglet(s) en arrière-plan, ~5-15s)...</p>`);
-      const results = await Promise.all(others.map((l) => openExtractionTab(l.url).catch(() => null)));
-      results.forEach((r, i) => {
-        if (r && ((r.items && r.items.length) || (r.skills && r.skills.length))) {
-          variants.push({ source: others[i].source, url: others[i].url, skillsEn: r.skills || [], itemsEn: r.items || [] });
-        } else {
-          skippedLinks.push(others[i]);
-        }
-      });
-    }
-
-    if (variants.length < 2) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p>Aucune autre variante lisible trouvée pour ce build - rien à comparer pour l'instant.</p>`);
-      return;
-    }
-
-    const runs = await fetchTowerRuns().catch(() => []);
-    const html = renderVariantComparison(variants, gameClass, runs, skippedLinks);
-    renderPanel(`<h3>Diablo IV Assistant</h3><p>Comparaison de ${variants.length} variante(s) de ce build :</p>${html}`);
-  }
-
   function init() {
     const extractRequestId = new URLSearchParams(location.search).get("d4a_extract");
     if (extractRequestId) {
@@ -2616,7 +2380,6 @@
       <button id="d4a-btn-translate">🇫🇷 Traduire</button>
       <button id="d4a-btn-filter">⚔ Générer le filtre</button>
       <button id="d4a-btn-ranking">🏆 Classement</button>
-      <button id="d4a-btn-compare">🔬 Comparer les variantes</button>
       <div id="d4a-panel-section"></div>
       <div id="d4a-ranking-section"></div>
       <div id="d4a-search-section">
@@ -2626,14 +2389,6 @@
           <button id="d4a-search-btn">Chercher</button>
         </div>
         <div id="d4a-search-results"></div>
-      </div>
-      <div id="d4a-mybuilds-section">
-        <strong>📌 Mes Builds</strong>
-        <select id="d4a-mybuilds-select">
-          <option value="">Choisir une classe...</option>
-          ${Object.keys(CLASS_KEYWORDS).map((c) => `<option value="${c}">${CLASS_LABELS_FR[c]}</option>`).join("")}
-        </select>
-        <div id="d4a-mybuilds-result"></div>
       </div>
     `;
     document.body.appendChild(column);
@@ -2647,25 +2402,10 @@
     rankingBtn.title = "Classe les meilleurs builds de la classe détectée sur cette page, par consensus entre 6 sites (InfinityBuilds, kami-labs, Maxroll, D4Builds, D4Guides, talion.tv)";
     rankingBtn.onclick = runRanking;
 
-    const compareBtn = document.getElementById("d4a-btn-compare");
-    compareBtn.title = "Compare ce build à ses variantes sur les autres sites (objets/compétences qui diffèrent) et à la popularité réelle des compétences chez les joueurs du classement officiel";
-    compareBtn.onclick = runCompareVariants;
-
     document.getElementById("d4a-search-btn").onclick = runLiveSearch;
     document.getElementById("d4a-search-input").onkeydown = (e) => {
       if (e.key === "Enter") runLiveSearch();
     };
-
-    const myBuildsSelect = document.getElementById("d4a-mybuilds-select");
-    myBuildsSelect.onchange = () => renderMyBuildForClass(myBuildsSelect.value);
-    // Pré-sélectionne la classe de CETTE page si détectée, pour afficher
-    // directement le build suivi correspondant sans avoir à le choisir.
-    const currentClass = guessClass();
-    if (currentClass) {
-      recordBuildVisit(currentClass, guessTitle(), location.href);
-      myBuildsSelect.value = currentClass;
-      renderMyBuildForClass(currentClass);
-    }
 
     toggleBtn.onclick = () => {
       const hidden = column.style.display === "none";
