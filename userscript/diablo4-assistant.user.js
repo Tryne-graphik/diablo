@@ -2209,15 +2209,48 @@
   // list order, first match wins (see the CORRECTION comment above
   // generateFilterCode()), so if 2+ came first a slot with all 3 affixes
   // would get caught by the looser 2+/orange rule and never reach 3+/gold.
+  // 2026-09-23: also emits a matching pair of Unique-specific rules for
+  // any slot whose chosen item (entry.itemName, from the same Stat
+  // Priority widget) is a known named Unique - requested live after the
+  // user hand-edited an exported filter to combine a SpecificUnique
+  // condition with the per-slot affix check, exactly this idiom (also
+  // seen unprompted in their own hand-built filters earlier the same
+  // session, e.g. "Pants X4"/"Pants X3"). Kept SEPARATE from the flat,
+  // unconditional "Keep Unique - X" rule buildUniqueItemRules() already
+  // produces (that one stays as-is, a safety net that always shows the
+  // Unique regardless of its rolled affixes) - these new rules only
+  // change its COLOR to orange/gold when it ALSO rolled 2+/3+ of the
+  // build's priority affixes for that slot, same two-tier idiom as the
+  // Rare-based rules just above. No rarity condition here on purpose
+  // (unlike the Rare-based rules): a SpecificUnique id already uniquely
+  // identifies the item, and a real in-game edit that combined it with
+  // `conditionRarity(RARE)` (contradictory - Uniques are never Rare
+  // rarity) was the bug report that led to this feature.
   function buildPerSlotRules(perSlotData, requireAncestral = true, colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD) {
     const rules = [];
     const skippedSlots = [];
     for (const entry of perSlotData) {
-      const typeIds = ITEM_TYPE_IDS[entry.slot];
-      if (!typeIds || entry.ids.length < 2) {
+      if (entry.ids.length < 2) {
         skippedSlots.push(entry.slot);
         continue;
       }
+      const canonicalUnique = entry.itemName ? UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(entry.itemName.trim().toLowerCase()) : null;
+      const typeIds = ITEM_TYPE_IDS[entry.slot];
+      if (!typeIds && !canonicalUnique) {
+        skippedSlots.push(entry.slot);
+        continue;
+      }
+      if (canonicalUnique) {
+        if (entry.ids.length >= 3) {
+          const cond3 = [conditionSpecificUnique(UNIQUE_ITEM_IDS[canonicalUnique]), conditionAffixes(entry.ids, 3)];
+          if (requireAncestral) cond3.push(conditionAncestral());
+          rules.push(makeRule(`Precis 3+ (BiS) - Unique ${canonicalUnique}`, RECOLOR, cond3, colorBis));
+        }
+        const cond2 = [conditionSpecificUnique(UNIQUE_ITEM_IDS[canonicalUnique]), conditionAffixes(entry.ids, 2)];
+        if (requireAncestral) cond2.push(conditionAncestral());
+        rules.push(makeRule(`Precis 2+ - Unique ${canonicalUnique}`, RECOLOR, cond2, colorGood));
+      }
+      if (!typeIds) continue;
       if (entry.ids.length >= 3) {
         const cond3 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 3)];
         if (requireAncestral) cond3.push(conditionAncestral());
