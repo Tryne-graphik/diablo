@@ -4462,3 +4462,12 @@ reflete l'etat complet a la prochaine ouverture.
 **Couverture de traduction du projet desormais consideree comme close** pour tout ce qui etait
 mesurable avec les verites-terrain actuelles (Uniques, competences, Aspects, categories generiques).
 Une regression ne peut venir que de nouveau contenu ajoute au jeu (nouvelle saison, nouveaux objets).
+
+**Provenance a noter (confirme par l'utilisateur apres coup)** : ces 79 traductions viennent d'une
+IA (Gemini) interrogee par l'utilisateur, pas d'un site bilingue reel comme les 2503 autres entrees
+du dictionnaire (kami-labs/d4base.fr/Wowhead/talion/maxroll - toutes des paires FR/EN scrapees d'une
+source qui affiche reellement les deux langues). Fiabilite donc structurellement plus faible que le
+reste du dictionnaire, en particulier pour les noms propres d'objets rares (Orsivane, Sepazontec,
+Hesha e Kesungi, etc.) ou une hallucination plausible serait facile a ne pas remarquer - ces 79
+entrees marquees `source: "manual_2026-09-23"` dans `fr_en_dictionary.json` sont donc a considerer
+comme moins sures que le reste si un desaccord apparait un jour en jeu.
