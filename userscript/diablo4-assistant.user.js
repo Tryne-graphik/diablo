@@ -1962,7 +1962,19 @@
           unresolvedCount++;
         }
       }
-      results.push({ slot, ids: Array.from(ids), names: Array.from(names), unresolvedCount });
+      // 2026-09-23: the widget also names the slot's chosen item, in
+      // `.d4t-header > .d4-color-unique` when it's a named Unique (confirmed
+      // via DevTools on a real page: Helm -> "Cowl of the Nameless") - a
+      // reliable extra source for buildUniqueItemRules() that doesn't depend
+      // on the separate "Equipment" tab being the one currently active
+      // (ensureStatPriorityTabActive() above already force-switches to this
+      // "Stat Priority" tab regardless, so this always has a chance to read).
+      // Only the `.d4-color-unique` class is read on purpose - a Legendary's
+      // auto-generated flavor name would never match UNIQUE_ITEM_IDS anyway,
+      // no point capturing it.
+      const uniqueNameEl = item.querySelector(".d4t-header .d4-color-unique");
+      const itemName = uniqueNameEl ? uniqueNameEl.textContent.trim() : null;
+      results.push({ slot, ids: Array.from(ids), names: Array.from(names), unresolvedCount, itemName });
     }
     return results;
   }
@@ -3245,25 +3257,36 @@
 
     // 2026-09-22: same page, per-slot this time (see findPerSlotStatPriority()'s
     // docstring) - feeds extra per-slot RECOLOR rules into the Strict filter
-    // only (Open is meant to be the simple/inspect-everything preset). Skipped
-    // entirely when the "Règles précises par emplacement" checkbox is off.
+    // only (Open is meant to be the simple/inspect-everything preset).
+    // 2026-09-23: fetched unconditionally now (not just when optPerSlot is
+    // on) because it also carries each slot's Unique item name (see
+    // extractStatPriorityFromD4ToolsWidget()) - a more reliable source for
+    // named-Unique matching below than the separate Equipment-tab DOM scrape,
+    // since this widget's own tab gets force-activated regardless. The
+    // per-slot RECOLOR rules themselves still respect the checkbox.
     let perSlot = [];
     let perSlotRulesResult = { rules: [], skippedSlots: [] };
-    if (optPerSlot) {
-      try {
-        perSlot = await findPerSlotStatPriority();
-        perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, colorGood, colorBis);
-      } catch (e) {
-        // ignore - same as above, a bonus signal, not required
-      }
+    try {
+      perSlot = await findPerSlotStatPriority();
+      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, colorGood, colorBis);
+    } catch (e) {
+      // ignore - same as above, a bonus signal, not required
     }
+    const perSlotItemNames = perSlot.map((entry) => entry.itemName).filter(Boolean);
 
     // 2026-09-22: named-Unique rules from the build's own scraped equipment
     // list - see buildUniqueItemRules()'s docstring. Included in BOTH
     // filters (unlike per-slot rules, Strict-only): a build's core BiS
     // unique is worth keeping regardless of which preset, and this is an
     // identity match, not a Rare-tier heuristic.
-    const uniqueRulesResult = buildUniqueItemRules(result.itemsEn || [], colorBis);
+    // 2026-09-23: merged with perSlotItemNames (from the Stat Priority
+    // widget, see above) - found live that a build's Unique could go
+    // unmatched when the separate "Equipment" tab wasn't the active one at
+    // generation time, silently producing zero Unique rules. Two sources,
+    // de-duplicated by buildUniqueItemRules() itself (it already skips
+    // repeats), cost nothing when they agree and cover the gap when one
+    // source is empty.
+    const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorBis);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
     // vient de façon abrégée" - D4's in-game filter name field is short, so
