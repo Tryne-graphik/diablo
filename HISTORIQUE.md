@@ -4364,3 +4364,64 @@ fois Wowhead trouve, effort concentre la ou il comptait le plus) - judgehype.com
 rendu JS complet (page quasi vide en HTML brut), a explorer si besoin plus tard.
 
 Suite Node.js et syntaxe toujours vertes apres resynchronisation.
+
+## 2026-09-23 - Confirmation en jeu du fix Codex Upgrade / Greater Affix (v2.24)
+
+Verification offline d'abord (decodage protobuf local, pas besoin du jeu) : filtre genere pour un
+build Warlock avec les 5 stats corrigees (Willpower/Attack Speed/Crit Chance/Crit Dmg/All Damage
+Multiplier) + une competence (Command Fallen) + ciblage d'Unique nomme (Etna's Lost Dagger) - toutes
+les regles decodees correctement (Codex Upgrade en kind=3, Greater Affix en kind=4, ids d'affixes
+et de competence conformes a data.py, CHARM/SEAL corrects). Userscript (JS) confirme identique au
+Python (memes constantes CHARM/SEAL, meme kind=3/4).
+
+**Test en jeu** : filtre minimal "TestCodexGA" (7 regles, une seule stat Willpower) importe et
+verifie manuellement par l'utilisateur - Codex Upgrade ressort bien en vert, Affixe majeure ressort
+bien en cyan, plus de confusion entre les deux. **Confirme : le fix v2.24 fonctionne reellement en
+jeu**, premiere validation en jeu de ce correctif depuis sa decouverte.
+
+Reste a valider en jeu : per-slot precision rules (v2.25-2.28), Ancestral condition, ciblage
+d'Uniques nommes (v2.40), et les 8 corrections AFFIX_IDS de v2.39 (Willpower/Attack Speed/Crit
+Chance/Crit Dmg/All Damage Multiplier/Resource Cost Reduction + toute la table Warlock) - prochaine
+etape logique : generer le vrai filtre Strict pour le build reel de l'utilisateur (Rogue/Dance of
+Knives) via le userscript et l'importer en jeu.
+
+## 2026-09-23 - Reprise des traductions : mesure de couverture reelle + 2 correctifs + rapport HTML
+
+Utilisateur a demande de reprendre le travail de traduction et de produire un etat des lieux visuel
+de ce qu'il reste a traduire (pas juste continuer a l'aveugle comme les sessions precedentes).
+
+**Nouvelle methode** : au lieu de chercher une nouvelle source comme les sessions precedentes,
+mesure de couverture reelle contre 3 verites-terrain deja possedees par le projet - `UNIQUE_ITEM_IDS`
+(335 entrees, `app/loot_filter/uniques.py`), `SKILL_AFFIX_IDS`/`GENERIC_SKILL_AFFIX_IDS` (223
+entrees, `app/loot_filter/data.py`), et un nouveau tirage direct de l'API `d4base.fr/api/items.php`
+(612 objets, pour Aspects/Glyphes/Plateaux) - compare aux 2415 entrees du dictionnaire fusionne.
+
+**2 corrections trouvees et appliquees en cours de route** :
+1. **20 variantes "(Crucible)" d'Uniques resolues automatiquement** - leur objet de base avait deja
+   une traduction FR, et "Crucible" -> "Creuset" etait deja confirme ailleurs dans le dictionnaire
+   (talismans "du Creuset") - compose les deux plutot que deviner. Uniques manquants : 38 -> 18.
+2. **Bug trouve dans `build_dictionary_d4base.py`** : d4base.fr renvoie litteralement le texte
+   "A chercher"/"A trouver" comme `nom_fr` pour 3 Aspects qu'il n'a pas localises - le filtre
+   `fr == en` du script ne l'attrapait pas (le texte differe bien de l'anglais), donc ces 3 entrees
+   polluaient le dictionnaire en se faisant passer pour de vraies traductions. Retirees du
+   dictionnaire, et le script corrige (regex `^(a|à)\s+(chercher|trouver)`) pour ne plus les
+   reintroduire au prochain refetch.
+
+**Resultat final** (dictionnaire 2415 -> **2432 entrees**) :
+- Uniques (hors 6 objets de debug type "Boost Dagger"/"(DNS)", jamais vus en jeu) : **96,4 %** (317/329),
+  12 manquants reels (dont "Supplication" dont la variante Creuset est bloquee par la meme absence)
+- Competences individuelles reelles : **94,7 % inchange** (159/168, 9 manquantes - Wowhead deja
+  quasi-exhaustif depuis v2.43)
+- Aspects : **98,9 %** (271/274 cote d4base, 3 non localisees par la source elle-meme)
+- Categories d'affixe generiques ("Frost Skills", "Core Skills"...) : **0/55**, gap structurel -
+  aucun site de liste de competences ne peut par nature les avoir, confirme la conclusion de v2.43
+  plutot que de re-chercher une source.
+
+**Nouveau** : `research/translation-coverage-2026-09-23.json` (donnees brutes du rapport, sources de
+verite-terrain documentees) + rapport visuel publie en Artifact Claude (page HTML, stats de
+couverture + listes detaillees par categorie + methode) pour que l'utilisateur voie l'etat exact sans
+avoir a lire du JSON.
+
+Reste a traduire manuellement si souhaite : 12 Uniques, 9 competences reelles, 3 Aspects, et les 55
+categories d'affixe (necessiteraient une source differente ou une saisie manuelle - detail complet
+dans le rapport HTML).

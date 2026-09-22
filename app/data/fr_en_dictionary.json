@@ -52,27 +52,6 @@
       "seen_in": 1
     },
     {
-      "fr": "A chercher",
-      "en": "Bone Breaker's Aspect",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "d4base.fr"
-    },
-    {
-      "fr": "A chercher 1",
-      "en": "Breakneck Bandit's Aspect",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "d4base.fr"
-    },
-    {
-      "fr": "A trouver",
-      "en": "Aspect of Unyielding Hits",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "d4base.fr"
-    },
-    {
       "fr": "Abîme d’Hécaton",
       "en": "Hecaton Chasm",
       "kind": "item",
@@ -16711,6 +16690,146 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Kandjar d'Asheara (Creuset)",
+      "en": "Asheara's Khanjar (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Irebleue (Creuset)",
+      "en": "Azurewrath (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Condamnation (Creuset)",
+      "en": "Condemnation (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Condamneuse (Creuset)",
+      "en": "Doombringer (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Champs écarlates (Creuset)",
+      "en": "Fields of Crimson (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Œuvre de Griswold (Creuset)",
+      "en": "Griswold's Opus (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Chef-d'œuvre de Ramaladni (Creuset)",
+      "en": "Ramaladni's Magnum Opus (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Sermon rouge (Creuset)",
+      "en": "Red Sermon (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Surin rouillé (Creuset)",
+      "en": "Rustbitten Dirk (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Sabre de Tsasgal (Creuset)",
+      "en": "Sabre of Tsasgal (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Sanguivore, lame de Zir (Creuset)",
+      "en": "Sanguivor, Blade of Zir (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Fragment de Verathiel (Creuset)",
+      "en": "Shard of Verathiel (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Vœu brisé (Creuset)",
+      "en": "Shattered Vow (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Fendoir du Boucher (Creuset)",
+      "en": "The Butcher's Cleaver (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Le Grand-père (Creuset)",
+      "en": "The Grandfather (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Mortacrux (Creuset)",
+      "en": "The Mortacrux (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "La Troisième lame (Creuset)",
+      "en": "The Third Blade (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Umbracrux (Creuset)",
+      "en": "The Umbracrux (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Saccageuse aux Mille Yeux (Creuset)",
+      "en": "Thousand-Eye Reaver (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Croissant gibbeux (Creuset)",
+      "en": "Waxing Gibbous (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "derived_crucible_suffix"
     }
   ],
   "merged_kamilabs_builds": 376,

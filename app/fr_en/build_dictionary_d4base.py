@@ -25,10 +25,18 @@ Run manually:
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
 import httpx
+
+# 2026-09-23: d4base.fr uses literal "A chercher"/"A trouver" (sometimes with a
+# trailing disambiguation digit, e.g. "A chercher 1") as its own placeholder for
+# items it hasn't localized yet - found via the translation-coverage report,
+# these were slipping through as if they were real FR names (fr != en, so the
+# fr == en skip below didn't catch them).
+_PLACEHOLDER_RE = re.compile(r"^(a|à)\s+(chercher|trouver)\b", re.IGNORECASE)
 
 API_URL = "https://d4base.fr/api/items.php"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; DiabloIVAssistant/0.1)"}
@@ -70,7 +78,7 @@ def build() -> dict:
         fr = (it.get("nom_fr") or "").strip()
         en = (it.get("nom_en") or "").strip()
         kind = KIND_MAP.get(it.get("type_fr"), "unknown")
-        if not fr or not en or fr == en:
+        if not fr or not en or fr == en or _PLACEHOLDER_RE.match(fr):
             continue
         key = (fr.lower(), en.lower(), kind)
         if key in seen:
