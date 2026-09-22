@@ -1,0 +1,12 @@
+# Environnement Python local (réinstallable via requirements.txt)
+.venv/
+__pycache__/
+*.pyc
+
+# Outil tiers téléchargé (d4lf) - voir HISTORIQUE.md pour la procédure
+# d'installation, pas du code du projet, trop volumineux pour un dépôt git
+tools/
+
+# Logs et caches locaux
+*.log
+app/data/kamilabs_cache/

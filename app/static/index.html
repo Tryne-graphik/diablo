@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Diablo IV Assistant - Comparateur de builds</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Comparateur de builds Diablo IV</h1>
+    <p class="subtitle">Compare les builds classés par plusieurs sites pour une classe donnée.</p>
+  </header>
+
+  <form id="search-form">
+    <label>
+      Classe
+      <select id="game-class"></select>
+    </label>
+    <label>
+      Saison
+      <select id="season"></select>
+    </label>
+    <label>
+      Mot-clé (compétence, style de jeu...)
+      <input id="keyword" type="text" placeholder="ex. lames, foudre, invocateur..." />
+    </label>
+    <button type="submit">Comparer</button>
+  </form>
+  <p class="hint">Seuls kami-labs et D4Guides gardent un historique des saisons précédentes - les autres sources (Maxroll, InfinityBuilds, D4Builds, talion.tv) n'affichent que la saison actuelle.</p>
+
+  <p id="status"></p>
+
+  <div class="dashboard">
+    <section class="dash-col" id="consensus-column">
+      <h2>Meilleurs builds</h2>
+      <p class="hint">Consensus multi-sources + classement officiel. Clique un titre pour voir le détail au centre.</p>
+      <div id="consensus"></div>
+    </section>
+
+    <section class="dash-col dash-col-center" id="build-detail-column">
+      <h2>Détail du build</h2>
+      <p id="build-detail-empty" class="empty">Clique sur un titre de build (à gauche ou à droite) pour voir son détail ici.</p>
+      <div id="build-detail-content" hidden>
+        <h3 id="bd-title"></h3>
+        <div id="bd-meta"></div>
+        <div id="bd-content-status" class="hint"></div>
+        <div id="bd-items"></div>
+        <div id="bd-skill-list"></div>
+        <button type="button" id="bd-generate-filter" class="btn-generate">Générer le filtre pour ce build</button>
+        <p id="bd-status"></p>
+      </div>
+    </section>
+
+    <section class="dash-col" id="source-detail-column">
+      <h2>Détail par source</h2>
+      <div id="results"></div>
+    </section>
+  </div>
+
+  <section id="loot-filter-section">
+    <h2>Générateur de filtre de butin</h2>
+    <p class="hint">Génère un code de filtre natif à coller en jeu (Menu Personnage → Filtre de butin → Nouveau filtre → Importer). Format basé sur le travail de reverse-engineering de <a href="https://github.com/Upsilon72/d4-filter-generator" target="_blank" rel="noopener noreferrer">Upsilon72/d4-filter-generator</a>. Limite connue : les affixes "+X compétences de classe" ne sont confirmés que pour le Démoniste - les autres classes n'ont accès qu'aux stats universelles pour l'instant.</p>
+    <form id="loot-filter-form">
+      <label>
+        Classe
+        <select id="lf-class"></select>
+      </label>
+      <label>
+        Nom du filtre
+        <input id="lf-name" type="text" value="Mon filtre" maxlength="30" />
+      </label>
+      <label>
+        Seuil "doré" (stats principales sur un Rare)
+        <select id="lf-gold-threshold">
+          <option value="1">1+</option>
+          <option value="2" selected>2+</option>
+          <option value="3">3+</option>
+        </select>
+      </label>
+    </form>
+    <div class="lf-columns">
+      <div class="lf-column">
+        <h3>Stats principales (dorées)</h3>
+        <div id="lf-core-stats" class="lf-stat-list"></div>
+      </div>
+      <div class="lf-column">
+        <h3>Stats secondaires (oranges)</h3>
+        <div id="lf-secondary-stats" class="lf-stat-list"></div>
+      </div>
+      <div class="lf-column">
+        <h3>Compétences</h3>
+        <div id="lf-skills" class="lf-stat-list"></div>
+      </div>
+    </div>
+    <button type="button" id="lf-generate" class="btn-generate">Générer le code</button>
+    <p id="lf-status"></p>
+    <div id="lf-output" hidden>
+      <textarea id="lf-code" readonly rows="4"></textarea>
+      <button type="button" id="lf-copy">Copier le code</button>
+    </div>
+  </section>
+
+  <section id="tierlist-section">
+    <h2>Tier list officielle (classement Tower)</h2>
+    <p class="hint">Classe les archétypes de build par le meilleur tier de Fosse réellement atteint par un joueur du classement officiel avec ce build - pas un avis de site, des résultats réels. Approximatif par nature (regroupement par similarité de compétences équipées).</p>
+    <form id="tierlist-form">
+      <label>
+        Classe
+        <select id="tierlist-class"></select>
+      </label>
+      <button type="submit">Afficher</button>
+      <button type="button" id="tierlist-refresh">Actualiser le classement (peut prendre ~10s)</button>
+    </form>
+    <p id="tierlist-status"></p>
+    <div id="tierlist-results"></div>
+  </section>
+
+  <section id="leaderboard-search-section">
+    <h2>Chercher dans le classement officiel (Tower)</h2>
+    <p class="hint">Trouve les meilleurs joueurs réels utilisant une compétence donnée - source : la Tower Leaderboard officielle du jeu, via helltides.com.</p>
+    <form id="leaderboard-search-form">
+      <label>
+        Classe
+        <select id="leaderboard-class"></select>
+      </label>
+      <label>
+        Compétence
+        <input id="leaderboard-skill" type="text" placeholder="ex. Dance of Knives, Whirlwind..." required />
+      </label>
+      <button type="submit">Chercher</button>
+    </form>
+    <p id="leaderboard-status"></p>
+    <div id="leaderboard-results"></div>
+  </section>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1791 @@
+{
+  "Rage of Harrogath": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Yen's Blessing": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "X'Fal's Corroded Signet": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Razorplate": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Godslayer Crown": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Frostburn": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Mother's Embrace": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Paingorger's Gauntlets": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Penitent Greaves": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Soulbrand": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Azurewrath": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Flickerstep": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Fists of Fate": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Tassets of the Dawning Sky": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Temerity": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Tibault's Will": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Arreat's Bearing": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Ring of Red Furor": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Ring of the Ravenous": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Unbroken Chain": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Banished Lord's Talisman": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Fields of Crimson": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Ramaladni's Magnum Opus": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "The Butcher's Cleaver": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Twin Strikes": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Tuskhelm of Joritz the Mighty": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "100,000 Steps": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Hellhammer": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Overkill": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Gohr's Devastating Grips": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Ancients' Oath": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Battle Trance": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Hunter's Zenith": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Mjölnic Ryng": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Mad Wolf's Glee": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Unsung Ascetic's Wraps": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Earthbreaker": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Fleshrender": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Storm's Companion": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Waxing Gibbous": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Wildheart Hunger": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Insatiable Fury": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Greatstaff of the Crone": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Dolmen Stone": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Vasily's Prayer": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Tempest Roar": {
+    "boss": [
+      "duriel",
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Airidah's Inexorable Will": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Ring of the Sacrilegious Soul": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Ring of Mendeln": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Blood Artisan's Cuirass": {
+    "boss": [
+      "zir",
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Bloodless Scream": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Cruor's Embrace": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Greaves of the Empty Tomb": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Mutilator Plate": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Howl from Below": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Blood Moon Breeches": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Lidless Wall": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Deathspeaker's Pendant": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Ebonpiercer": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Black River": {
+    "boss": [
+      "andarielle",
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Deathless Visage": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Path of Trag'Oul": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Staff of Endless Rage": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Writhing Band of Trickery": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Scoundrel's Kiss": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Beastfall Boots": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Ring of Starless Skies": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Cowl of the Nameless": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Skyhunter": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Saboteur's Signet": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Condemnation": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Eaglehorn": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Eyes in the Dark": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Asheara's Khanjar": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Windforce": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Word of Hakan": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Grasp of Shadow": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Scoundrel's Leathers": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Shroud of Khanduras": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Doombringer": {
+    "boss": [
+      "duriel",
+      "andarielle",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Melted Heart of Selig": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Andariel's Visage": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Harlequin Crest": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Tyrael's Might": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "The Grandfather": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast",
+      "urivar"
+    ],
+    "uber": true
+  },
+  "Ahavarion, Spear of Lycander": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast",
+      "urivar",
+      "harbinger"
+    ],
+    "uber": true
+  },
+  "Staff of Lam Esen": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Tal Rasha's Iridescent Loop": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Iceheart Brais": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "‍Esadora's Overflowing Cameo": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Flamescar": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Axial Conduit": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Starfall Coronet": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Fractured Winterglass": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Gloves of the Illuminator": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Raiment of the Infinite": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Esu's Heirloom": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "The Oculus": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Blue Rose": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Flameweaver": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Craze of the Dead God": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Ring of the Midday Hunt": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Ring of Writhing Moon": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Nesekem the Herald": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Heir of Perdition": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Shroud of False Death": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Shattered Vow": {
+    "boss": [
+      "andarielle",
+      "duriel",
+      "grigoire",
+      "varshan",
+      "zir",
+      "ice-beast"
+    ],
+    "uber": true
+  },
+  "Protection of the Prime": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Peacemonger's Signet": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Ring of the Midnight Sun": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Loyalty's Mantle": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Wushe Nak Pa": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Band of First Breath": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Jacinth Shell": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Harmony of Ebewaka": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Scorn of the Earth": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Wound Drinker": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Rod of Kepeleke": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Sepazontec": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Ugly Bastard Helm": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Stone of Vehemen": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "The Unmaker": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Pitfighter's Gull": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Sidhe Bindings": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "The Third Blade": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Rakanoth's Wake": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Crown of Lucion": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "The Umbracrux": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Endurant Faith": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Shard of Verathiel": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "The Basilisk": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "The Mortacrux": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Vox Omnium": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Kessime's Legacy": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Mantle of Mountain's Fury": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Malefic Crescent": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Indira's Memory": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Assassin's Stride": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Strike of Stormhorn": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Okun's Catalyst": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Sunstained War-Crozier": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "‍Sunbird's Gorget": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Gathlen's Birthright": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Bane of Ahjad-Den": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "‍Sanguivor, Blade of Zir": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Bands of Ichorous Rose": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Hail of Verglas": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Ophidian Iris": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "‍Hooves of the Mountain God": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "‍Rotting Lightbringer": {
+    "boss": [
+      "varshan",
+      "urivar"
+    ],
+    "uber": false
+  },
+  "The Hand of Naz": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "‍Deathmask of Nirmitruq": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Balazan's Maxtlatl": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Locran's Talisman": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Herald's Morningstar": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Herald of Zakarum": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Argent Veil": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Orsivane": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "‍Autumnal Crown": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Hangman's Hand": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Seal of the Second Trumpet": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Death's Pavane": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Levin Grasp": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Onyx Soul": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Raiment of the Sea": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Might of Qual-Kehk": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Will of Stone": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Deathgrip": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Desperate March": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "The Maestro": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Vision of the Firestorm": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Fleshwrit Carapace": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Hands of the Worldbreaker": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "The Hemat Stone": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Shrouded Gift": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Cage of Madness": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Wreath of Auric Laurel": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Ae'grom's Schism": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Seal of the Ophanim": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Thrice-Woven Nightmare": {
+    "boss": [
+      "varshan"
+    ],
+    "uber": false
+  },
+  "Bastion of Sir Matthias": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Sunbrand": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Seed of Horazon": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "Sire of Sin": {
+    "boss": [
+      "grigoire"
+    ],
+    "uber": false
+  },
+  "The Relentless Heart": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Accord of the Wilds": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Light's Rebuke": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Sanctis of Kethamar": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Orphan Maker": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Gift of Frost": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Hellhound's Sabatons": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Kabraxis' Will": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "The Eightfold Idol": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Signet of Pelghain": {
+    "boss": [
+      "ice-beast"
+    ],
+    "uber": false
+  },
+  "Judgment of Auriel": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Judicant's Glaivehelm": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Fang of the Vipermagi": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Rimeblood": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Dirge of Odium": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Elegy": {
+    "boss": [
+      "zir"
+    ],
+    "uber": false
+  },
+  "Dark Howl": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Kilt of Blackwing": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Gospel of the Devotee": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Will of Rathma": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Cathedral's Song": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Cassia's Grace": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Molten Band": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Cowl of Malefic Torment": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Infernal Homunculus": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "The Blade of Sight Aflame": {
+    "boss": [
+      "urivar"
+    ],
+    "uber": false
+  },
+  "Dark Stalker's Medallion": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Sabre of Tsasgal": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Fractured Runestone": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Greenwalker's Oath": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Mark of the Old Wolf": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "The Undercrown": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Supplication": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Ward of the White Dove": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Sea Lord's Fine Gloves": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Galvanic Azurite": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Widow's Web": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Gauntlets of Sheol": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Rictus of Terror": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Scourge of Duriel": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false
+  },
+  "Emblem of Staalbreak": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Greenwalker's Signet": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Dawnfire": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Drognan's Anguish": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Anathema of the Primes": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Night Terror": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Scepter of the Three": {
+    "boss": [
+      "andarielle"
+    ],
+    "uber": false
+  },
+  "Nomad's Longing Heart": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Ifeh's Dire Totem": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Might of the Ursine": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Blood Wake": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Pact of Bone": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "The Gloom Ward": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Gate of the Red Dawn": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Mantle of the Grey": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Etna's Lost Dagger": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Protean Heart": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Bridle of Tor'Baalos": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Spine of Tathamet": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "The Fecund Seal": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Chainscourged Mail": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Fury of the Wilds": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Heart of Azgar": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Purified Lightbringer": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Mace of King Leoric": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Red Blessing": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Vengeful Sinew": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "March of the Stalwart Soul": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Red Sermon": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Fist of the Iron Rose": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Emberfury": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Shanar's Resonance": {
+    "boss": [
+      "harbinger"
+    ],
+    "uber": false
+  },
+  "Staff of Zerae": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Hesha e Kesungi": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Path of the Emissary": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Hellbrand Signet": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Lurid Pact": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Moloch's Beating Flame": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Nails of the Gore-Crowned": {
+    "boss": [
+      "butcher"
+    ],
+    "uber": false
+  },
+  "Dirge of Airidah": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Griswold's Opus": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Gladiator's Triumph": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Echo of Kwatli": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Bindings of Attrition": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Footfalls of the Waning World": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Hecaton Chasm": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "Litany of Sable": {
+    "boss": [
+      "astaroth"
+    ],
+    "uber": false
+  },
+  "The Open Eye of Gorgorra": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Khamsin Steppewalkers": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Gravewalker's Hand": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Omen of Pain": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Arcadia": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Sundered Night": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Misericorde": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Eye of Baal": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Hand of Apotheosis": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Sashes of the Wretched": {
+    "boss": [
+      "bartuc"
+    ],
+    "uber": false
+  },
+  "Blood-Mad Idol": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Rustbitten Dirk": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Thousand-Eye Reaver": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Thundergod's Blessing": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Wendigo Brand": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  },
+  "Wyrdskin": {
+    "boss": [
+      "all"
+    ],
+    "uber": false
+  }
+}
