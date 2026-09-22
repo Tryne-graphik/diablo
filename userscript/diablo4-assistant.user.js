@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.21
+// @version      2.22
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @match        *://kami-labs.fr/diablo-4/builds/*
 // @match        *://maxroll.gg/d4/build-guides/*
@@ -1697,10 +1697,21 @@
   // one being viewed (confirmed: that mismatch is exactly what was
   // causing items like "Debilitating Toxins" to go untranslated even
   // though a dictionary entry existed for it).
+  // Le panneau "Talisman" (Sceau horadrique) de Maxroll réutilise le MÊME
+  // composant/classe CSS que la vraie liste d'équipement pour afficher
+  // plusieurs paliers d'affixe suggérés (Berú/Fer/Linta/Mlor/Phoba - voir
+  // les entrées "kind":"talisman" de FR_EN_DICTIONARY, ce sont des
+  // PALIERS D'AFFIXE, jamais de vrais noms d'objet) - trouvé 2026-09-22
+  // en construisant "Comparer les variantes", dont la vue de différences
+  // a rendu ce bruit soudain très visible (15+ "objets" présents
+  // uniquement chez Maxroll) alors qu'il polluait silencieusement aussi
+  // la liste "Équipement" de Traduire/Générer le filtre depuis le début.
+  const TALISMAN_TIER_RE = /^(Berú|Fer|Linta|Mlor|Phoba)\s+(of|de)\s+/i;
+
   function extractMaxrollEquipmentFromDom() {
     return Array.from(document.querySelectorAll('[class*="equipment_Slot__title__"]'))
       .map((el) => el.textContent.trim())
-      .filter(Boolean);
+      .filter((text) => text && !TALISMAN_TIER_RE.test(text));
   }
 
   // The widget can still be mounting when the user clicks a button right
@@ -2481,18 +2492,34 @@
 
     const renderCommon = (entries) => (entries.length ? chipList(entries.map((e) => e.display)) : "<em>aucun point commun trouvé</em>");
 
-    const renderDiffering = (entries, withPopularity) => {
+    // Compétences : peu nombreuses (5-8 en général), une ligne détaillée
+    // par compétence avec sa popularité réelle vaut le coup.
+    const renderDifferingSkills = (entries) => {
       if (entries.length === 0) return "<p><em>Aucune différence - toutes les variantes comparées utilisent exactement les mêmes.</em></p>";
       return entries
         .map((e) => {
           const sourcesTxt = Array.from(e.sources).map((s) => SOURCE_LABELS[s] || s).join(", ");
-          let popTxt = "";
-          if (withPopularity) {
-            const { count, total } = countPlayersUsingSkill(runs, gameClass, e.display);
-            popTxt = total > 0 ? ` — <span class="d4a-rank-meta">${count}/${total} joueurs du top classement officiel</span>` : "";
-          }
+          const { count, total } = countPlayersUsingSkill(runs, gameClass, e.display);
+          const popTxt = total > 0 ? ` — <span class="d4a-rank-meta">${count}/${total} joueurs du top classement officiel</span>` : "";
           return `<div class="d4a-rank-row"><strong>${e.display}</strong><br><span class="d4a-rank-meta">présent chez : ${sourcesTxt}</span>${popTxt}</div>`;
         })
+        .join("");
+    };
+
+    // Objets : peuvent être nombreux, pas de popularité à afficher -
+    // regroupés par ensemble de sources ("chez Maxroll uniquement : ...")
+    // plutôt qu'une ligne par objet, bien plus compact à parcourir.
+    const renderDifferingItems = (entries) => {
+      if (entries.length === 0) return "<p><em>Aucune différence - toutes les variantes comparées utilisent exactement les mêmes.</em></p>";
+      const groups = new Map();
+      for (const e of entries) {
+        const sortedSources = Array.from(e.sources).sort();
+        const key = sortedSources.join("|");
+        if (!groups.has(key)) groups.set(key, { label: sortedSources.map((s) => SOURCE_LABELS[s] || s).join(", "), names: [] });
+        groups.get(key).names.push(e.display);
+      }
+      return Array.from(groups.values())
+        .map((g) => `<div class="d4a-rank-row"><span class="d4a-rank-meta">Chez ${g.label} uniquement (${g.names.length})</span>${chipList(g.names)}</div>`)
         .join("");
     };
 
@@ -2512,12 +2539,12 @@
       <strong>Compétences communes à toutes les variantes</strong>
       ${renderCommon(skillsDiff.common)}
       <strong>Compétences qui diffèrent</strong>
-      ${renderDiffering(skillsDiff.differing, true)}
+      ${renderDifferingSkills(skillsDiff.differing)}
       ${noLeaderboardNote}
       <strong>Objets communs à toutes les variantes</strong>
       ${renderCommon(itemsDiff.common)}
       <strong>Objets qui diffèrent</strong>
-      ${renderDiffering(itemsDiff.differing, false)}
+      ${renderDifferingItems(itemsDiff.differing)}
       ${noPopularityNote}
     `;
   }

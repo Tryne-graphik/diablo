@@ -3575,6 +3575,45 @@ version. Toujours vérifier `@version`/`wc -l` sur le disque avant de
 supposer qu'un état "terminé" plus tôt dans la session est toujours
 valide.
 
+## 2026-09-22 (suite) - "Comparer les variantes" testé, deux problèmes trouvés et corrigés (2.22)
+
+L'utilisateur a testé la v2.21 - fonctionne, mais résultat difficile à
+lire (capture d'écran : une longue liste d'objets "qui diffèrent",
+presque tous attribués à "Maxroll" seul, un par un).
+
+**Pas juste un problème d'affichage - une vraie pollution de données
+trouvée en creusant** : les noms comme "Berú of Spellbound Steel",
+"Fer of Spellbound Steel", "Phoba of the Sightless"... sont des
+entrées `"kind":"talisman"` de `FR_EN_DICTIONARY` - les 5 PALIERS
+D'AFFIXE du système de Talisman (Sceau horadrique), jamais de vrais
+noms d'objet. Le panneau "Talisman" de Maxroll réutilise la même
+classe CSS (`equipment_Slot__title__`) que la vraie liste
+d'équipement pour afficher plusieurs paliers suggérés côte à côte -
+`extractMaxrollEquipmentFromDom()` les attrapait tous les deux
+ensemble depuis le début. **Bug préexistant, pas introduit par cette
+session** - silencieusement présent aussi dans la liste "Équipement"
+de Traduire/Générer le filtre, juste invisible là où rien n'attire
+l'attention dessus ; la vue "différences" de la nouvelle fonctionnalité
+l'a rendu flagrant.
+
+**Corrigé** : `TALISMAN_TIER_RE` filtre désormais ces 5 préfixes
+(Berú/Fer/Linta/Mlor/Phoba + "of"/"de") directement à l'extraction,
+bénéficie à toutes les fonctionnalités qui lisent l'équipement Maxroll,
+pas seulement à la comparaison.
+
+**Lisibilité améliorée en plus** : les objets qui diffèrent sont
+maintenant regroupés par ensemble de sources ("Chez Maxroll
+uniquement (3) : ...") au lieu d'un bloc par objet - bien plus compact
+pour une longue liste. Les compétences qui diffèrent gardent le détail
+ligne par ligne (liste courte en général, et la popularité réelle par
+compétence vaut le coup d'être visible individuellement).
+
+`node --check` OK, 2713 lignes, diff vérifié propre. Version finale :
+**2.22**. **Pas encore re-testé après ce fix** - à valider par
+l'utilisateur : réimporter v2.22 et relancer "Comparer les variantes"
+sur le même build pour confirmer que la liste d'objets "qui diffèrent"
+est maintenant courte et pertinente (plus de Berú/Fer/Linta/Mlor/Phoba).
+
 **Résolution : quasi instantanée grâce au dépôt git initialisé plus tôt
 dans la session** - `git checkout 9ec6130 -- userscript/diablo4-assistant.user.js`
 a restauré le contenu exact du dernier commit propre, `node --check` OK,
