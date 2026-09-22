@@ -3541,3 +3541,38 @@ envisageable un jour comme **projet séparé** qui pourrait ensuite se
 greffer à celui-ci (ex. brancher ses résultats dans "Comparer les
 variantes" à la place du simple diff objets/compétences actuel). Rien
 à coder pour l'instant.
+
+## 2026-09-22 (suite) - Deuxième incident : retour en arrière inexpliqué du userscript (2.21 -> 2.19), résolu en 30 secondes grâce à Git
+
+Juste après avoir committé "Comparer les variantes" (2.21, commit
+`9ec6130`) et documenté la décision sur le DPS (aucune édition du
+userscript entre les deux), `git add -A` a détecté que
+`userscript/diablo4-assistant.user.js` était redevenu du contenu
+**v2.19** - "Mes Builds" (2.20) et "Comparer les variantes" (2.21)
+disparus, sans qu'aucune commande d'édition n'ait touché ce fichier
+dans l'intervalle.
+
+**Cause non identifiée** malgré vérification : aucun processus
+`python`/`node`/`chrome-headless-shell` suspect trouvé en cours
+(`Get-CimInstance`/`tasklist`), aucune tâche planifiée Windows
+référençant ce projet ou un interpréteur Python/Node
+(`Get-ScheduledTask`), `E:` est un disque physique fixe local
+("Savegarde HDD"), pas un lecteur synchronisé dans le cloud - élimine
+la piste OneDrive/Dropbox. Aucun agent Claude actif ou récupérable au
+moment de l'incident (`ListAgents` vide). **Hypothèse la plus probable,
+non confirmée** : un éditeur de texte externe (VS Code, Notepad++...)
+qui aurait encore ce fichier ouvert avec une ancienne version en
+mémoire (v2.19), et qui l'aurait re-sauvegardé par-dessus le contenu
+plus récent - à vérifier si l'utilisateur a ce fichier ouvert ailleurs
+que dans cette session.
+
+**Résolution : quasi instantanée grâce au dépôt git initialisé plus tôt
+dans la session** - `git checkout 9ec6130 -- userscript/diablo4-assistant.user.js`
+a restauré le contenu exact du dernier commit propre, `node --check` OK,
+recommité (`f72818f`). Sans le dépôt git, cet incident aurait été aussi
+grave que le premier de la session (aucune autre sauvegarde
+disponible). **Confirme que l'initialisation du dépôt git était la
+bonne décision** - à garder en tête : committer plus fréquemment
+pendant une session de travail (pas seulement en fin de session)
+réduit encore la fenêtre de perte possible en cas de nouvel incident
+de ce genre.
