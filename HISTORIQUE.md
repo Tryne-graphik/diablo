@@ -4562,3 +4562,24 @@ Decodage de ce meme filtre a aussi releve plusieurs regles "3+" affichees sans n
 decodage maison, cause non elucidee (verifie que ce n'est pas un desync de parsing au niveau
 top-level - consommation d'octets exacte confirmee) - possible reliquat du bug d'ordre lui-meme
 plutot qu'un probleme de decodage; pas creuse plus loin, priorite donnee aux fixs confirmes.
+
+## 2026-09-23 (suite) - CONFIRME EN JEU : le fix de l'ordre des regles fonctionne
+
+Utilisateur a regenere un filtre Strict frais (build Dance Of Knives Rogue, maxroll.gg) apres le
+correctif de l'ordre des regles (voir section precedente) et confirme : **les Rares/Legendaires se
+recolorent maintenant correctement en jeu**. Premiere validation en jeu reelle du mecanisme
+"regles specifiques avant Hide Junk" depuis sa decouverte - le filtre Strict, casse depuis le debut
+du projet, fonctionne enfin. Prochaine etape : confirmer aussi le ciblage d'Unique (fix de la source
+Stat Priority, voir ci-dessus) sur ce meme build.
+
+**En parallele, bug de traduction trouve** : sur ce meme build, "Traduire" seul laissait 4 noms
+d'Aspect en anglais malgre une traduction connue (Debilitating Toxins, Imitated Imbuement, Channeling,
+Earthstriker's - noms d'Aspect SANS le prefixe "Aspect of" tels qu'affiches sur Maxroll). Fait
+interessant remarque par l'utilisateur : cliquer ensuite sur "Générer le filtre" complete la
+traduction manquante. Cause probable : "Générer le filtre" appelle desormais toujours
+`findPerSlotStatPriority()` (depuis le fix du ciblage d'Unique plus haut), qui force un changement
+d'onglet vers "Stat Priority" via `ensureStatPriorityTabActive()` - le re-rendu React qui en resulte
+laisse une seconde chance au MutationObserver de traduction de rattraper du texte qui n'etait pas
+encore stabilise au premier passage. Utilisateur a demande de corriger "Traduire" pour qu'il soit
+complet des le premier clic, sans dependre de "Générer le filtre" - **en cours d'investigation**,
+pas encore corrige.
