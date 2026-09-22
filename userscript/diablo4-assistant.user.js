@@ -2554,12 +2554,24 @@
 
   // The widget can still be mounting when the user clicks a button right
   // after the page loads - poll briefly rather than giving up on the
-  // first (possibly premature) empty read.
+  // first (possibly premature) read.
+  // 2026-09-23 CORRECTION: returning on the first NON-EMPTY read (any
+  // items.length > 0) was itself the bug behind a real report - React
+  // mounts equipment slots progressively, so an early read can catch a
+  // PARTIAL list (e.g. 5 of 9 slots) and this function declared success
+  // anyway, silently dropping whichever items (Chest Armor, Gloves,
+  // Crossbow...) hadn't rendered yet - explains why "Traduire" alone
+  // missed some Aspect names that a later "Générer le filtre" click (by
+  // then, well after page load) picked up fine. Fixed: wait for the
+  // item COUNT TO STABILIZE across two consecutive polls, not just for
+  // it to be non-zero once.
   async function waitForMaxrollEquipmentDom(maxWaitMs = 3000, intervalMs = 300) {
     const start = Date.now();
+    let previous = null;
     while (Date.now() - start < maxWaitMs) {
       const items = extractMaxrollEquipmentFromDom();
-      if (items.length > 0) return items;
+      if (items.length > 0 && previous !== null && items.length === previous) return items;
+      previous = items.length;
       await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
     return extractMaxrollEquipmentFromDom();
@@ -2694,10 +2706,29 @@
   // and leaves the full "Aspect d'X" wording instead of just "X" (found
   // 2026-09-21 chasing why "Imitated Imbuement" still showed with its
   // "Aspect d'" prefix attached after the fix below).
-  const ASPECT_PREFIX_RE = /^aspect\s+(of|de|d['’])\s*/i;
+  // 2026-09-23: was missing "du"/"des" (French contracted articles, e.g.
+  // "Aspect du frappe-terre") - found while adding the suffix-form fix
+  // below, confirmed 51 dictionary entries use this prefix form and were
+  // silently left un-stripped (fell back to the full "Aspect du X" wording
+  // instead of just "X" wherever this function's output was used).
+  const ASPECT_PREFIX_RE = /^aspect\s+(of|de|du|des|d['’])\s*/i;
+  // 2026-09-23: some aspects name the SUFFIX form in English ("Earthstriker's
+  // Aspect", not "Aspect of Earthstriker") - found live (Maxroll shows the
+  // bare "Earthstriker's", no "Aspect" at all) alongside 3 other untranslated
+  // names reported the same session, this one being the only one of the 4
+  // that wasn't just a DOM-timing miss (see waitForMaxrollEquipmentDom's
+  // 2026-09-23 fix). The dictionary's FR side still uses a prefix
+  // ("Aspect du frappe-terre") regardless of which form English used, so
+  // stripAspectPrefix already handles the FR half correctly here - only the
+  // EN side needed a second stripping pattern.
+  const ASPECT_SUFFIX_RE = /\s+aspect$/i;
 
   function stripAspectPrefix(name) {
     return name.replace(ASPECT_PREFIX_RE, "").trim();
+  }
+
+  function stripAspectSuffix(name) {
+    return name.replace(ASPECT_SUFFIX_RE, "").trim();
   }
 
   // Finds a "Boards Used" panel on the CURRENT page (found on D4Builds -
@@ -2771,19 +2802,27 @@
       }
 
       // Reverse case: Maxroll's card already shows the short aspect name
-      // alone ("Channeling"), but the dictionary only has the full form
-      // ("Aspect of Channeling" -> "Aspect de canalisation") picked up
-      // from InfinityBuilds' paperdoll. Same "Aspect of X"/"Aspect de X"
-      // prefix-stripping trick as buildNameMap's addPairs() below, just
-      // sourced from the static dictionary instead of a live EN/FR pair -
-      // only handles the PREFIX form (most aspects use it); a few use a
-      // French adjective form instead ("Aspect écrasant" for "Crushing
-      // Aspect") that doesn't strip the same way and is left unmatched
-      // rather than risk a wrong guess.
+      // alone ("Channeling", "Earthstriker's"), but the dictionary only has
+      // the full form ("Aspect of Channeling" -> "Aspect de canalisation",
+      // "Earthstriker's Aspect" -> "Aspect du frappe-terre") picked up from
+      // InfinityBuilds' paperdoll or d4base/kamilabs. Tries both the PREFIX
+      // form ("Aspect of X") and the SUFFIX form ("X's Aspect") English
+      // aspects use - the FR side is stripped with stripAspectPrefix either
+      // way, since it consistently uses a prefix regardless of which form
+      // English used. A few aspects use a French adjective form instead
+      // ("Aspect écrasant" for "Crushing Aspect") that doesn't strip the
+      // same way and is left unmatched rather than risk a wrong guess.
       for (const entry of FR_EN_DICTIONARY) {
         if (!EMBEDDED_MATCH_KINDS.has(entry.kind)) continue;
-        const enStripped = stripAspectPrefix(entry.en || "");
-        if (enStripped.length > 3 && enStripped.toLowerCase() === rawLower) {
+        const enPrefixStripped = stripAspectPrefix(entry.en || "");
+        const enSuffixStripped = stripAspectSuffix(entry.en || "");
+        const enStripped =
+          enPrefixStripped.length > 3 && enPrefixStripped.toLowerCase() === rawLower
+            ? enPrefixStripped
+            : enSuffixStripped.length > 3 && enSuffixStripped.toLowerCase() === rawLower
+              ? enSuffixStripped
+              : null;
+        if (enStripped) {
           const frStripped = stripAspectPrefix(entry.fr || "");
           if (frStripped && frStripped.toLowerCase() !== rawLower) pairs.push([trimmed, frStripped]);
           break;
