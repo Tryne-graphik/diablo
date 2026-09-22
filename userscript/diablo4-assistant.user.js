@@ -1885,10 +1885,17 @@
   // already active (avoids a redundant click+wait on every call), and
   // verify `.d4t-item` actually appeared after clicking - retry up to 2
   // more times with a longer wait each time before giving up.
+  // Real root cause found via DevTools the same day: matching only the
+  // literal English "stat priority" text missed the tab entirely when
+  // Chrome's own page translation is active (its own button text reads
+  // "Priorité des statistiques" instead) - the tab never even got
+  // clicked, so no amount of retrying could have helped. Now matches
+  // either label.
+  const STAT_PRIORITY_TAB_LABELS = new Set(["stat priority", "priorité des statistiques"]);
   async function ensureStatPriorityTabActive() {
     if (document.querySelector(".d4t-item")) return;
     const tabCandidate = Array.from(document.querySelectorAll("*")).find(
-      (e) => e.children.length === 0 && e.textContent.trim().toLowerCase() === "stat priority"
+      (e) => e.children.length === 0 && STAT_PRIORITY_TAB_LABELS.has(e.textContent.trim().toLowerCase())
     );
     if (!tabCandidate) return;
     for (let attempt = 0; attempt < 3; attempt++) {
