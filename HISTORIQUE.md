@@ -4639,4 +4639,16 @@ le texte anglais exact, ratant systematiquement l'element sur une page dont Chro
 **Corrige** : accepte maintenant les deux libelles connus (`stat priority` et `priorité des
 statistiques`). Meme risque theorique ailleurs dans le code (ex. `findParagonNameMap()` cherche
 litteralement "boards used" sur D4Builds) - pas corrige, aucun rapport de bug sur ce point pour
-l'instant, note pour reference si ca se manifeste un jour. Pas encore reteste en jeu.
+l'instant, note pour reference si ca se manifeste un jour.
+
+**Confirme en jeu par l'utilisateur** : "Générer le filtre" sans aucun clic manuel prealable produit
+desormais le filtre complet (regles precises par emplacement + Uniques nommes). Le clic automatique
+sur l'onglet Stat Priority fonctionne enfin de bout en bout, sans intervention manuelle.
+
+**Bilan de fin de session 2026-09-23** : le filtre de butin - casse depuis le tout debut du projet a
+cause du mauvais ordre des regles - fonctionne desormais entierement, de bout en bout, sans aucune
+intervention manuelle : ordre des regles correct, regles precises par emplacement, ciblage d'Uniques
+nommes, activation automatique fiable de l'onglet Stat Priority. Traduction ("Traduire") confirmee
+100% correcte des le premier clic. Couverture de traduction du dictionnaire fermee (2503 entrees). Une
+tres grosse session de corrections de fond - a documenter comme reference si un doute revient sur le
+fonctionnement du filtre de butin.
