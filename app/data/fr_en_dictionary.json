@@ -16830,6 +16830,503 @@
       "kind": "unique_item",
       "seen_in": 1,
       "source": "derived_crucible_suffix"
+    },
+    {
+      "fr": "Halo véhément",
+      "en": "Halo",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Marteau d'éclat lumineux",
+      "en": "Lightburst Hammer",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Nesekem, le Héraut",
+      "en": "Nesekem, the Herald",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Reflet de Haine",
+      "en": "Sliver of Hate",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Glaive de serpent",
+      "en": "Snake Glaive",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Supplication (Creuset)",
+      "en": "Supplication (Crucible)",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Pluie de flèches",
+      "en": "Arrow Storm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Blizzard",
+      "en": "Blizzard",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Charge",
+      "en": "Charge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Tourbillon de poussière",
+      "en": "Dust Devil",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Tremblement de terre",
+      "en": "Earthquake",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Golem",
+      "en": "Golem",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Shrapnel de fer",
+      "en": "Iron Shrapnel",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Rupture",
+      "en": "Rupture",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Vortex",
+      "en": "Vortex",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Aspect des coups inflexibles",
+      "en": "Aspect of Unyielding Hits",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences des abysses",
+      "en": "Abyss Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’agilité",
+      "en": "Agility Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Toutes les compétences",
+      "en": "All Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences des Anciens",
+      "en": "Ancients Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’aura",
+      "en": "Aura Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de sang",
+      "en": "Blood Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de matraquage",
+      "en": "Bludgeoning Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’os",
+      "en": "Bone Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de bagarre",
+      "en": "Brawling Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de mille-pattes",
+      "en": "Centipede Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de compagnon",
+      "en": "Companion Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de Tempête percutante",
+      "en": "ConcussiveStormp Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’invocation",
+      "en": "Conjuration Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences principales",
+      "en": "Core Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de cadavre",
+      "en": "Corpse Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de maîtrise des malédictions",
+      "en": "Curse Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de coupe-jarret",
+      "en": "Cutthroat Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de ténèbres",
+      "en": "Darkness Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences défensives",
+      "en": "Defensive Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de démonologie",
+      "en": "Demonology Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de disciple",
+      "en": "Disciple Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’ambidextrie",
+      "en": "DualWield Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’aigle",
+      "en": "Eagle Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de terre",
+      "en": "Earth Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de focalisation",
+      "en": "Focus Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de givre",
+      "en": "Frost Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de gorille",
+      "en": "Gorilla Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de grenade",
+      "en": "Grenade Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de feu de l’enfer",
+      "en": "Hellfire Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences humaines",
+      "en": "Human Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de jaguar",
+      "en": "Jaguar Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de mastodonte",
+      "en": "Juggernaut Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences macabres",
+      "en": "Macabre Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de tir d’élite",
+      "en": "Marksman Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de maîtrise",
+      "en": "Mastery Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de serviteur",
+      "en": "Minion Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de magie de la nature",
+      "en": "NatureMagic Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences occultes",
+      "en": "Occult Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de puissance",
+      "en": "Potency Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Dégâts des compétences de projectile",
+      "en": "Projectile Skill Damage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de pyromancie",
+      "en": "Pyromancy Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’ombre",
+      "en": "Shade Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de métamorphose",
+      "en": "Shapeshifting Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences foudroyantes",
+      "en": "Shock Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de tranchage",
+      "en": "Slashing Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de tempête",
+      "en": "Storm Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de subterfuge",
+      "en": "Subterfuge Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de piège",
+      "en": "Trap Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de vaillance",
+      "en": "Valor Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences polyvalentes",
+      "en": "Versatile Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de maîtrise des armes",
+      "en": "WeaponMastery Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences d’ours-garou",
+      "en": "Werebear Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de loup-garou",
+      "en": "Werewolf Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de courroux",
+      "en": "Wrath Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Compétences de zélateur",
+      "en": "Zealot Skills",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "manual_2026-09-23"
     }
   ],
   "merged_kamilabs_builds": 376,

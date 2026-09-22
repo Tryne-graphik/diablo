@@ -1,0 +1,93 @@
+DIABLO IV ASSISTANT - TRADUCTIONS COMPLETEES (23 septembre 2026)
+================================================================
+
+OBJETS UNIQUES (12)
+--------------------
+Halo                            -> Halo véhément (Bague)
+Hesha e Kesungi                 -> Hesha e Kesungi (Gants - Sacresprit)
+Lightburst Hammer               -> Marteau d'éclat lumineux (Masse)
+Nesekem, the Herald             -> Nesekem, le Héraut (Glaive mythique)
+Orsivane                        -> Orsivane (Masse)
+Sepazontec                      -> Sepazontec (Bâton - Sacresprit)
+Sliver of Hate                  -> Reflet de Haine (Bague)
+Snake Glaive                    -> Glaive de serpent (Glaive - Sacresprit)
+Supplication                    -> Supplication (Épée)
+Supplication (Crucible)         -> Supplication (Creuset)
+Vox Omnium                      -> Vox Omnium (Bâton / Jambières)
+Wushe Nak Pa                    -> Wushe Nak Pa (Glaive - Sacresprit)
+
+COMPETENCES REELLES (9)
+------------------------
+Arrow Storm              - Rogue        -> Pluie de flèches
+Blizzard                 - Sorcerer     -> Blizzard
+Charge                   - Barbarian    -> Charge
+Dust Devil                - Barbarian    -> Tourbillon de poussière
+Earthquake                - Barbarian    -> Tremblement de terre
+Golem                     - Necromancer  -> Golem
+Iron Shrapnel             - Barbarian    -> Shrapnel de fer
+Rupture                   - Barbarian    -> Rupture
+Vortex                    - Spiritborn   -> Vortex
+
+ASPECTS (3)
+------------
+Bone Breaker's Aspect     -> Aspect du Briseur d’os
+Breakneck Bandit's Aspect -> Aspect du bandit fendant l’air
+Aspect of Unyielding Hits -> Aspect des coups inflexibles
+
+CATEGORIES D'AFFIXE GENERIQUES (55)
+------------------------------------
+Abyss Skills             - Warlock      -> Compétences des abysses
+Agility Skills           - Rogue        -> Compétences d’agilité
+All Skills               - generique    -> Toutes les compétences
+Ancients Skills          - Barbarian    -> Compétences des Anciens
+Aura Skills              - Paladin      -> Compétences d’aura
+Blood Skills             - Necromancer  -> Compétences de sang
+Bludgeoning Skills       - Barbarian    -> Compétences de matraquage
+Bone Skills              - Necromancer  -> Compétences d’os
+Brawling Skills          - Barbarian    -> Compétences de bagarre
+Centipede Skills         - Spiritborn   -> Compétences de mille-pattes
+Companion Skills         - Druid        -> Compétences de compagnon
+ConcussiveStormp Skills  - Spiritborn   -> Compétences de Tempête percutante
+Conjuration Skills       - Sorcerer     -> Compétences d’invocation
+Core Skills              - generique    -> Compétences principales
+Corpse Skills            - Necromancer  -> Compétences de cadavre
+Curse Skills             - Necromancer  -> Compétences de maîtrise des malédictions
+Cutthroat Skills         - Rogue        -> Compétences de coupe-jarret
+Darkness Skills          - Necromancer  -> Compétences de ténèbres
+Defensive Skills         - Multi        -> Compétences défensives
+Demonology Skills        - Warlock      -> Compétences de démonologie
+Disciple Skills          - Paladin      -> Compétences de disciple
+DualWield Skills         - Barbarian    -> Compétences d’ambidextrie
+Eagle Skills             - Spiritborn   -> Compétences d’aigle
+Earth Skills             - Druid        -> Compétences de terre
+Focus Skills             - Spiritborn   -> Compétences de focalisation
+Frost Skills             - Sorcerer     -> Compétences de givre
+Gorilla Skills           - Spiritborn   -> Compétences de gorille
+Grenade Skills           - Rogue        -> Compétences de grenade
+Hellfire Skills          - Warlock      -> Compétences de feu de l’enfer
+Human Skills             - Druid        -> Compétences humaines
+Jaguar Skills            - Spiritborn   -> Compétences de jaguar
+Juggernaut Skills        - Paladin      -> Compétences de mastodonte
+Macabre Skills           - Necromancer  -> Compétences macabres
+Marksman Skills          - Rogue        -> Compétences de tir d’élite
+Mastery Skills           - Sorcerer     -> Compétences de maîtrise
+Minion Skills            - Necromancer  -> Compétences de serviteur
+NatureMagic Skills       - Druid        -> Compétences de magie de la nature
+Occult Skills            - Warlock      -> Compétences occultes
+Potency Skills           - Spiritborn   -> Compétences de puissance
+Projectile Skill Damage  - Multi        -> Dégâts des compétences de projectile
+Pyromancy Skills         - Sorcerer     -> Compétences de pyromancie
+Shade Skills             - Rogue        -> Compétences d’ombre
+Shapeshifting Skills     - Druid        -> Compétences de métamorphose
+Shock Skills             - Sorcerer     -> Compétences foudroyantes
+Slashing Skills          - Barbarian    -> Compétences de tranchage
+Storm Skills             - Druid        -> Compétences de tempête
+Subterfuge Skills        - Rogue        -> Compétences de subterfuge
+Trap Skills              - Rogue        -> Compétences de piège
+Valor Skills             - Paladin      -> Compétences de vaillance
+Versatile Skills         - Druid        -> Compétences polyvalentes
+WeaponMastery Skills     - Barbarian    -> Compétences de maîtrise des armes
+Werebear Skills          - Druid        -> Compétences d’ours-garou
+Werewolf Skills          - Druid        -> Compétences de loup-garou
+Wrath Skills             - Druid        -> Compétences de courroux
+Zealot Skills            - Paladin      -> Compétences de zélateur

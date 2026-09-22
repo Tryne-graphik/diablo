@@ -4425,3 +4425,40 @@ avoir a lire du JSON.
 Reste a traduire manuellement si souhaite : 12 Uniques, 9 competences reelles, 3 Aspects, et les 55
 categories d'affixe (necessiteraient une source differente ou une saisie manuelle - detail complet
 dans le rapport HTML).
+
+## 2026-09-23 (suite) - Le gap de traduction restant est ferme (saisie manuelle complete)
+
+Le rapport HTML a ete mis a jour dans la meme session pour permettre la saisie directe (capacite
+`db` de l'Artifact - un champ FR par ligne, sauvegarde automatique au blur, avec repli localStorage
+si la base est indisponible). L'utilisateur a ensuite fourni un fichier texte complete
+(`C:\Users\Tryne\Downloads\diablo_iv_translations.txt`) avec les 79 traductions (12 Uniques, 9
+competences, 3 Aspects, 55 categories d'affixe generiques) - **tout a ete traduit**, y compris les
+categories generiques jugees hors de portee des sources automatiques.
+
+**Correction trouvee en fusionnant** : le rapport de couverture avait 2 faux positifs parmi les
+"3 Aspects manquants" - `Bone Breaker's Aspect` et `Breakneck Bandit's Aspect` avaient DEJA une
+traduction kami-labs valide dans le dictionnaire ; le script de couverture ne les comparait qu'a la
+traduction (absente) de d4base.fr lui-meme pour cette categorie, sans revarifier contre le
+dictionnaire fusionne complet. Seul `Aspect of Unyielding Hits` etait un vrai manque. Le merge a
+correctement ignore les 2 doublons (cle EN+kind deja presente) plutot que d'ecraser les traductions
+kami-labs existantes.
+
+**Fusion appliquee** : 71 nouvelles entrees ajoutees a `fr_en_dictionary.json` (2432 -> **2503**),
+resynchronisees dans le userscript, `node --check` vert. 6 objets uniques confirmes identiques en
+FR et EN par l'utilisateur (Hesha e Kesungi, Orsivane, Sepazontec, Supplication, Vox Omnium, Wushe
+Nak Pa - noms propres non localises dans le jeu lui-meme) volontairement PAS ajoutes comme entrees
+(convention du projet : une entree FR==EN est un no-op inutile), mais documentes comme "confirmes",
+pas "inconnus". Pour les Uniques, les annotations de type d'objet ajoutees par l'utilisateur pour
+sa propre clarte (ex. "Halo (Bague)") ont ete retirees avant insertion - seul "Supplication
+(Crucible)" -> "Supplication (Creuset)" gardait sa parenthese, celle-ci faisant partie de la vraie
+traduction (Crucible -> Creuset, deja confirme ailleurs via les talismans "du Creuset").
+
+Fichiers ajoutes : `research/traductions-manuelles-2026-09-23.txt` (copie du fichier source de
+l'utilisateur, trace durable). `research/translation-coverage-2026-09-23.json` mis a jour pour
+refleter l'etat final (gap ferme) et documenter la correction des 2 faux positifs. Page Artifact
+republiee avec les 79 valeurs poussees dans sa base (`db.collection("translations")`) pour qu'elle
+reflete l'etat complet a la prochaine ouverture.
+
+**Couverture de traduction du projet desormais consideree comme close** pour tout ce qui etait
+mesurable avec les verites-terrain actuelles (Uniques, competences, Aspects, categories generiques).
+Une regression ne peut venir que de nouveau contenu ajoute au jeu (nouvelle saison, nouveaux objets).
