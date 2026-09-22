@@ -4599,4 +4599,30 @@ distinctes trouvees et fixees :
 Verifie en isolation (script Node autonome, dictionnaire embarque reel) : les 4 noms se resolvent
 maintenant correctement (`Earthstriker's` -> `frappe-terre`, `Channeling` -> `canalisation`,
 `Imitated Imbuement` -> `imitation d'impregnation`, `Debilitating Toxins` releve maintenant par le
-chemin direct de `lookupFr` une fois le DOM stabilise). **Pas encore reteste en jeu.**
+chemin direct de `lookupFr` une fois le DOM stabilise). **Confirme en jeu par l'utilisateur : la
+traduction fonctionne desormais a 100% des le premier clic sur "Traduire".**
+
+## 2026-09-23 (suite) - CONFIRME EN JEU : ciblage d'Unique + regles precises fonctionnent, + durcissement
+
+Retour au filtre de butin. Premiere regeneration du filtre Strict (build Dance Of Knives Rogue) apres
+tous les fix du jour : **seulement 6 regles produites** (aucune regle par-emplacement, aucune regle
+Unique) alors que la case "Regles precises par emplacement" etait cochee - `findPerSlotStatPriority()`
+est revenue vide silencieusement (proteg par un try/catch qui avale toute erreur, "signal bonus, pas
+requis"). Aucune erreur en Console DevTools (juste du bruit de bloqueur de pub).
+
+**Diagnostic** : demande a l'utilisateur de cliquer LUI-MEME sur l'onglet "Stat Priority" avant de
+generer, au lieu de compter sur le clic automatique de `ensureStatPriorityTabActive()`. **Resultat :
+32 regles generees correctement** - toutes les regles par-emplacement (2+/3+ pour Helm/Chest/Gloves/
+Pants/Boots/Amulet/Left+Right Ring/Ranged Weapon/Mainhand/Offhand) ET 4 regles Uniques nommees
+proprement : **"Keep Unique - Cowl of the Nameless"** (les 5 sno ids exacts de `UNIQUE_ITEM_IDS`),
+plus Etna's Lost Dagger, Shrouded Gift, Sea Lord's Fine Gloves - trouvees automatiquement en plus.
+Ordre confirme correct (regles precises d'abord, Hide Junk en dernier). **Premiere validation en jeu
+complete du filtre Strict avec ciblage d'Unique fonctionnel** - la piste "Cowl of the Nameless absent"
+ouverte plus tot dans la session est definitivement fermee.
+
+Cause du clic automatique manque : jamais de verification apres coup que `.d4t-item` existait bel et
+bien dans le DOM - un echec silencieux invisible cote utilisateur. **Corrige** :
+`ensureStatPriorityTabActive()` verifie maintenant `.d4t-item` avant de cliquer (evite un clic inutile
+si l'onglet est deja actif) et apres chaque tentative, avec jusqu'a 2 reessais supplementaires (delai
+croissant) avant d'abandonner. Pas encore reteste en jeu (le workaround manuel reste fiable en
+attendant).
