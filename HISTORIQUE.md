@@ -3614,6 +3614,52 @@ l'utilisateur : réimporter v2.22 et relancer "Comparer les variantes"
 sur le même build pour confirmer que la liste d'objets "qui diffèrent"
 est maintenant courte et pertinente (plus de Berú/Fer/Linta/Mlor/Phoba).
 
+## 2026-09-22 (suite) - Estimation approfondie de l'optimisateur de DPS : plus réaliste que prévu
+
+Suite à la décision du 2026-09-19/22 d'écarter l'optimisateur du
+périmètre actuel, l'utilisateur a demandé une vraie estimation de
+faisabilité (pas juste l'avis rapide déjà donné). Recherche
+approfondie faite (formule, outils existants, données disponibles) :
+
+- **Formule documentée publiquement** : Maxroll "In-Depth Damage
+  Guide" (`maxroll.gg/d4/resources/in-depth-damage-guide`) décrit le
+  système de "buckets" (additifs sommés séparément des multiplicateurs,
+  dégâts d'arme, % de compétence, crit, vulnérable) - modèle réutilisé
+  implicitement par plusieurs outils communautaires indépendants.
+- **Découverte clé, change la donne** : un calculateur DPS D4
+  open-source réutilisable existe -
+  [bytemind-de/d4-tools](https://github.com/bytemind-de/d4-tools),
+  licence MIT, JS pur sans dépendance, actif (78 commits), gère déjà
+  compétences/passifs/glyphes/parangon. Même logique que la réutilisation
+  déjà faite d'`Upsilon72/d4-filter-generator` pour le filtre de butin -
+  pas besoin de reconstruire la formule/les données seul. Alternative
+  trouvée mais moins utile : `jlian/d4-damage-calc` (MIT, saisie 100%
+  manuelle, juste une référence de formule).
+- **Donnée manquante confirmée** : le `data.enus.json` de Maxroll déjà
+  utilisé dans ce projet (`fetchMaxrollGameItems()`) a bien 1471
+  compétences/3202 affixes/glyphes/parangon, mais AUCUN coefficient de
+  dégâts réel (chaque compétence référence un placeholder de gabarit
+  `{payload:tooltip_damage}` sans valeur numérique dans ce fichier) -
+  confirme qu'il faut s'appuyer sur bytemind-de/d4-tools plutôt que
+  dataminer nous-mêmes.
+- **Effort estimé** : calculateur seul en s'appuyant sur
+  bytemind-de/d4-tools ~1-3 semaines (vs 1-3+ mois en repartant de
+  zéro) ; un vrai optimisateur (recherche automatique de la meilleure
+  combinaison) ajoute plusieurs semaines à mois de plus - espace
+  combinatoire trop grand pour une recherche exhaustive, demanderait
+  une approche heuristique ; maintenance continue à chaque saison dans
+  tous les cas.
+- **Recommandation** : réaliste comme projet séparé, MAIS seulement en
+  s'appuyant sur bytemind-de/d4-tools. Scope de départ raisonnable :
+  un calculateur (DPS pour un gear/skills donné, pas de recherche
+  auto) branché sur les builds déjà extraits par ce projet - pas un
+  optimisateur dès la v1.
+
+**Décision** : reste un projet séparé (cohérent avec la décision du
+2026-09-19/22), mais l'estimation est notée ici pour référence si/quand
+l'utilisateur veut s'y attaquer un jour. Rien à coder pour l'instant
+dans Diablo IV Assistant.
+
 **Résolution : quasi instantanée grâce au dépôt git initialisé plus tôt
 dans la session** - `git checkout 9ec6130 -- userscript/diablo4-assistant.user.js`
 a restauré le contenu exact du dernier commit propre, `node --check` OK,
