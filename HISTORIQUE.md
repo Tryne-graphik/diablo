@@ -4581,5 +4581,22 @@ traduction manquante. Cause probable : "Générer le filtre" appelle desormais t
 d'onglet vers "Stat Priority" via `ensureStatPriorityTabActive()` - le re-rendu React qui en resulte
 laisse une seconde chance au MutationObserver de traduction de rattraper du texte qui n'etait pas
 encore stabilise au premier passage. Utilisateur a demande de corriger "Traduire" pour qu'il soit
-complet des le premier clic, sans dependre de "Générer le filtre" - **en cours d'investigation**,
-pas encore corrige.
+complet des le premier clic, sans dependre de "Générer le filtre" - **corrige**, deux causes
+distinctes trouvees et fixees :
+
+1. **`waitForMaxrollEquipmentDom()` retournait au premier lot d'objets NON-VIDE**, pas forcement
+   complet - React monte les emplacements d'equipement progressivement, un lot partiel (5 sur 9 par
+   exemple) declarait deja "pret". Corrige : attend que le compte se stabilise sur deux lectures
+   consecutives. Explique "Debilitating Toxins" (traduction directe existante dans le dictionnaire,
+   juste jamais atteinte a temps) et pourquoi "Générer le filtre" (delai supplementaire du changement
+   d'onglet Stat Priority) finissait par le rattraper.
+2. **`ASPECT_PREFIX_RE` ne reconnaissait que "Aspect of/de/d'"**, pas "du"/"des" (51 entrees du
+   dictionnaire utilisent ce prefixe, ex. "Aspect du frappe-terre"), et aucune regle ne gerait la
+   forme ANGLAISE suffixe ("Earthstriker's Aspect" plutot que "Aspect of Earthstriker") que certains
+   Aspects utilisent. Ajoute `stripAspectSuffix()` en repli dans `findEmbeddedAspectPairs()`.
+   Explique "Imitated Imbuement", "Channeling" et "Earthstriker's".
+
+Verifie en isolation (script Node autonome, dictionnaire embarque reel) : les 4 noms se resolvent
+maintenant correctement (`Earthstriker's` -> `frappe-terre`, `Channeling` -> `canalisation`,
+`Imitated Imbuement` -> `imitation d'impregnation`, `Debilitating Toxins` releve maintenant par le
+chemin direct de `lookupFr` une fois le DOM stabilise). **Pas encore reteste en jeu.**
