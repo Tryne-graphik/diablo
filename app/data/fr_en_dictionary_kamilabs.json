@@ -1,0 +1,5295 @@
+{
+  "generated_at": "2026-09-22T16:35:35.050318+00:00",
+  "builds_crawled": 376,
+  "failures": [
+    "https://kami-labs.fr/diablo-4/builds/build-annuaire-des-builds-druide-de/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-annuaire-des-builds-necromancien-de/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-build-diablo-4-sorciere-end-game-conjuration-orbe-de-givre-hydre-le-guid/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-annuaire-des-builds-barbare-de/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-diablo-4-build-leveling-1-50-voleur-twisting-blades/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-diablo-4-build-leveling-sorcier-hydres/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-annuaire-des-builds-voleur-de/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-diablo-4-build-leveling-voleur-tir-rapide/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-archive-annuaire-des-builds-sorcier-de/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-epines-thorns-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-jet-puissant-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-fente-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-epines-v2-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-fente-s11/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-jet-puissant-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-marteau-des-anciens-seisme-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-rupture-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tourbillon-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-saignee-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-rupture-s4-v2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tourbillon-enigma-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-soulevement-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tourbillon-ptr-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-rupture-s5-ptr/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tourbillon-seisme-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tourbillon-saison-5-v2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tourbillon-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-barbare-tremblement-de-terre-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-debilitant-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-cataclysm-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-diablo-4-build-eboulement-poison-sans-unique-le-guide-complet/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-cataclysme-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-eboulement-s5-ptr/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-familier-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-eboulement-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-orage-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-ouragan-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-orage-eboulement-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-orage-eboulement-saison-5-version-2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-petrification-fleshrender-ptr-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-pulverisation-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-pulverisation-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-pure-eboulement-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-vent-cisaillant-wind-shear-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-druide-rugissement-debilitant-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-blood-surge-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-armee-des-morts-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-blood-surge-saison-5-version-2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-esprit-d-os-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-esprit-d-os-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-esprit-d-os-saison-5-ptr/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-golem-s11/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-invocation-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-invocations-afflux-sanguin-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-invocation-faille-des-ames-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-mage-v2-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-vague-d-ombre-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-vague-de-sang-ptr-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-vague-de-sang-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-vague-de-sang-v2-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-vague-de-sang-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-nerf-sacresprit-evasion-infini-correctif-a-venir-dans-le-patch-2-0-3-de/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-necromancien-vague-de-sang-v3-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-nerfed-build-sacresprit-esquive-infini-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-paladin-zenith-saison-11-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-s-tier-voleur-poison-barrage-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacrespirit-main-ecrasante-v2-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-ailes-acerees-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-diablo-4/build-s-tier-farm-build-sacresprit-esquive-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-diablo-4/build-sacresprit-evasion-saison-8/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-diablo-4/build-leveling-sacresprit-evasion-saison-10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-diablo-4/build-sacresprit-toucher-mortel-comp-principales-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-epine-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-epine-v1-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-main-ecrasante-saison-6-diablo-4-speedfarm/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-plume-legendaire-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-pointe-de-foudre-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-revanche-gorille-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-plume-legendaire-saison-6-v2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-revanche-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-volee-de-plumes-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-volee-de-plumes-legendaire-saison-6-v3/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-vollee-de-plume-fin-de-jeu-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sacresprit-volee-de-plumes-legendaire-saison-6-version-4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorcier-flamme-immortelle-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorcier-mur-de-feu-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-boule-de-feu-fracas-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-chaine-d-eclairs-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-boule-de-feu-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-chaine-d-eclairs-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-froid-intense-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-lance-de-foudre-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-hydre-s9-version-mekuna/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-lance-de-foudre-s5-v2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-lance-de-foudre-s5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-lance-de-foudre-saison-5-v3/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-meteore-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-sorciere-sphere-foudroyante-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-ss-tier-build-sacresprit-laceration-rank-1-mekuna-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-creve-coeur-heartseeker-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-creve-coeur-s11/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-danse-des-couteaux-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-creve-coeur-saison-5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-danse-des-couteaux-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-lames-sournoises-poison-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-piege-mortel-ptr-s9/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-pluie-de-fleches-saison-7/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-poison-rafale-s4/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-poison-rafale-s4-v2/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-rafale-leveling-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-tir-penetrant-s4-amp-s5/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/build-voleur-tir-rapide-saison-6/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-druide-diablo-4/build-druide-cataclysm-saison-8/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-barbare-diablo-4/build-barbare-marteau-des-anciens-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-barbare-diablo-4/build-barbare-tourbillon-amp-fente-saison-10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-barbare-diablo-4/build-barbare-tourbillon-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-barbare-diablo-4/build-barbare-tourbillon-saison-8/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-druide-diablo-4/build-leveling-druide-compagnons-saison-10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-necromancien-diablo-4/build-necromancien-vague-de-sang-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-druide-diablo-4/build-druide-tornade-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-druide-diablo-4/build-nerfed-sss-tier-build-druide-lierre-empoisonne-s10-bug/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-druide-diablo-4/build-druide-corbeaux-1-touche-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-druide-diablo-4/build-ss-tier-build-druide-pulverisation-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-necromancien-diablo-4/build-leveling-necromancien-serviteurs-saison-10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-necromancien-diablo-4/build-necromancien-vague-de-sang-saison-8/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-sorciere-diablo-4/build-sorciere-energie-crepitante-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-necromancien-diablo-4/build-necromancien-chancre-d-ombre-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-sorciere-diablo-4/build-sorciere-hydre-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-sorciere-diablo-4/build-sorciere-energie-crepitante-version-mekuna-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-sorciere-diablo-4/build-sorciere-lance-de-foudre-saison-8/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-sorciere-diablo-4/build-sorciere-mur-de-feu-amp-hydre-saison-10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-sorciere-diablo-4/build-sorciere-sphere-foudroyante-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-voleur-diablo-4/build-leveling-voleur-danse-des-lames-saison-10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-voleur-diablo-4/build-voleur-piege-mortel-s10/: no build id found",
+    "https://kami-labs.fr/diablo-4/builds/builds-voleur-diablo-4/build-voleur-piege-mortel-saison-8/: no build id found"
+  ],
+  "entries": [
+    {
+      "fr": "Abîme d’Hécaton",
+      "en": "Hecaton Chasm",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Accord des contrées sauvages",
+      "en": "Accord of the Wilds",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aiguille de Tathamet",
+      "en": "Spine of Tathamet",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Alliance Mjölnic",
+      "en": "Mjölnic Ryng",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Allure d'Arreat",
+      "en": "Arreat's Bearing",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Amulette Légendaire",
+      "en": "Legendary Amulet",
+      "kind": "item",
+      "seen_in": 42,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Amulette légendaire",
+      "en": "Legendary Amulet",
+      "kind": "item",
+      "seen_in": 44,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Amulette légendaire",
+      "en": "Necklace of Inevitability",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Amulette légendaire",
+      "en": "Ocelot's Eye",
+      "kind": "item",
+      "seen_in": 27,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anathème des Primordiaux",
+      "en": "Anathema of the Primes",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Angoisse de Drognan",
+      "en": "Drognan's Anguish",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau Légendaire",
+      "en": "Legendary Ring",
+      "kind": "item",
+      "seen_in": 56,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau de Mendeln",
+      "en": "Ring of Mendeln",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau de fureur rouge",
+      "en": "Ring of Red Furor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau de la lune agonisante",
+      "en": "Ring of Writhing Moon",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau de l’âme sacrilège",
+      "en": "Ring of the Sacrilegious Soul",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau des affamés",
+      "en": "Ring of the Ravenous",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau du ciel sans étoiles",
+      "en": "Ring of Starless Skies",
+      "kind": "item",
+      "seen_in": 91,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau du soleil de minuit",
+      "en": "Ring of the Midnight Sun",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau légendaire",
+      "en": "Amazon Band",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau légendaire",
+      "en": "Legendary Ring",
+      "kind": "item",
+      "seen_in": 86,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau légendaire",
+      "en": "Ring of Splintered Wood",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Anneau légendaire",
+      "en": "Soulwatch Hoop",
+      "kind": "item",
+      "seen_in": 52,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Appel des Anciens",
+      "en": "Call of the Ancients",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Appel des Anciens",
+      "en": "CalloftheAncients",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Appel du verglas",
+      "en": "Hail of Verglas",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arbitre de la justice",
+      "en": "Arbiter of Justice",
+      "kind": "skill",
+      "seen_in": 17,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arbitre de la justice",
+      "en": "Disciple of Justice",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arc de bataille",
+      "en": "Battle Bow",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arc de bataille",
+      "en": "Battle Bow of Apogeic Furor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arc de bataille",
+      "en": "Battle Bow of Encircling Blades",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arcadie",
+      "en": "Arcadia",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 1M Légendaire",
+      "en": "Legendary 1H Weapon",
+      "kind": "item",
+      "seen_in": 23,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 1M légendaire",
+      "en": "Bearded Axe",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 1M légendaire",
+      "en": "Obsidian Blade",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 1M légendaire",
+      "en": "Spiked Flail",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 2M Légendaire",
+      "en": "Legendary 2H Weapon",
+      "kind": "item",
+      "seen_in": 18,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 2M légendaire",
+      "en": "Bonebreaker",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme 2M légendaire",
+      "en": "War Crest",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme Légendaire",
+      "en": "Legendary Weapon",
+      "kind": "item",
+      "seen_in": 22,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Bone Blade",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Energy Staff",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Legendary Weapon",
+      "kind": "item",
+      "seen_in": 37,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Obsidian Blade",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Parashu",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Ritual Staff",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Skullsplitter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "Staff of Elemental Command",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire",
+      "en": "War Crest",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire 2 mains",
+      "en": "Demonblade",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire 2 mains",
+      "en": "Parashu",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme légendaire 2 mains",
+      "en": "Sparr",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme à Distance Légendaire",
+      "en": "Legendary Ranged Weapon",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme à deux mains Légendaire",
+      "en": "Legendary Item",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme à distance légendaire",
+      "en": "Battle Bow",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme à distance légendaire",
+      "en": "Warcaster",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Arme à une main Légendaire",
+      "en": "Legendary Item",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Armure cyclonique",
+      "en": "Cyclone Armor",
+      "kind": "skill",
+      "seen_in": 20,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Armure cyclonique",
+      "en": "CycloneArmor",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Armure de glace",
+      "en": "Ice Armor",
+      "kind": "skill",
+      "seen_in": 18,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Armée de morts",
+      "en": "Army of the Dead",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect Clandestinité",
+      "en": "Clandestine Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect Insidieux",
+      "en": "Insidious Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect Malveillant",
+      "en": "Malicious Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect agile",
+      "en": "Agile Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect agressif",
+      "en": "Aggressive Aspect",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect archidruidique",
+      "en": "Archdruid's Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect arrogant",
+      "en": "Aspect of Arrogance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect assiégé",
+      "en": "Embattled Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect balistique",
+      "en": "Ballistic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect brise-tempêtes",
+      "en": "Storm Splitter's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect cadavérique",
+      "en": "Cadaverous Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d'arrogance",
+      "en": "Aspect of Arrogance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de Valintyr",
+      "en": "Aspect of the Valintyr",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de banditisme téméraire",
+      "en": "Breakneck Bandit's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de brise-os",
+      "en": "Bone Breaker's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de brèche glaciale",
+      "en": "Sunderfrost Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de calamité",
+      "en": "Aspect of Calamity",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de calme intérieur",
+      "en": "Aspect of Inner Calm",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de canalisation",
+      "en": "Aspect of Channeling",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de capitaine des troupes",
+      "en": "Hellbent Commander Aspect",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de carnage",
+      "en": "Aspect of Slaughter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de cavalcade",
+      "en": "Aspect of the Stampede",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de cercle de lames",
+      "en": "Aspect of Encircling Blades",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de chair dépecée",
+      "en": "Aspect of Hewed Flesh",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de chaleur torride",
+      "en": "Aspect of Scorching Heat",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de châtiment sacré",
+      "en": "Aspect of Holy Punishment",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de coagulation",
+      "en": "Aspect of Coagulation",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de concentration",
+      "en": "Aspect of Concentration",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de conflit céleste",
+      "en": "Aspect of Celestial Strife",
+      "kind": "item",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de conjuration maîtrisée",
+      "en": "Conjuration Master's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de constellation élémentaire",
+      "en": "Aspect of Elemental Constellation",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de contamination",
+      "en": "Aspect of Contamination",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de crémation",
+      "en": "Cremator's Aspect",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de dents de scie",
+      "en": "Aspect of Serration",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de destin inévitable",
+      "en": "Aspect of Inevitable Fate",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de destin élémentaire",
+      "en": "Aspect of Elemental Fate",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de disciple",
+      "en": "Aspect of the Disciple",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de domination",
+      "en": "Aspect of Dominance",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de domination occulte",
+      "en": "Aspect of Occult Dominion",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de duelliste",
+      "en": "Duelist's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de dégâts amplifiés",
+      "en": "Aspect of Amplified Damage",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de délabrement",
+      "en": "Aspect of Decay",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de désobéissance",
+      "en": "Aspect of Disobedience",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de flamme immaculée",
+      "en": "Aspect of the Untarnished Blaze",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de folie guerrière",
+      "en": "Battle-Mad Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de force ancestrale",
+      "en": "Aspect of Ancestral Force",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de force cyclonique",
+      "en": "Aspect of Cyclonic Force",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de force céleste",
+      "en": "Aspect of Heavenly Strength",
+      "kind": "item",
+      "seen_in": 26,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de force détournée",
+      "en": "Aspect of Redirected Force",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de fracture ouverte",
+      "en": "Aspect of Compound Fracture",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de fragments stellaires",
+      "en": "Aspect of Star Shards",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de froid mordant",
+      "en": "Aspect of Biting Cold",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de froid pénétrant",
+      "en": "Aspect of Piercing Cold",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de funambule",
+      "en": "Edgemaster's Aspect",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de gloire suprême",
+      "en": "Aspect of Utmost Glory",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de grande tempête",
+      "en": "Great Storm Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de gros bras",
+      "en": "Heavy Hitting Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de hargne",
+      "en": "Aspect of Malevolence",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de jugement",
+      "en": "Aspect of the Judicator",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l'armure diabolique",
+      "en": "Aspect of Diabolical Armor",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l'oppression démoniaque",
+      "en": "Aspect of Fiendish Oppression",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la bête enragée",
+      "en": "Aspect of the Rabid Beast",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la bête humaine enragée",
+      "en": "Aspect of the Rampaging Werebeast",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la crapule",
+      "en": "Trickster's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la ferveur de Jacques",
+      "en": "Aspect of Jacques' Fervor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la forteresse",
+      "en": "Aspect of the Fortress",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la fureur déchaînée",
+      "en": "Aspect of Apogeic Furor",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la juridiction de Tyraël",
+      "en": "Aspect of Tyrael's Jurisdiction",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la loi de Watkins",
+      "en": "Aspect of Watkins' Law",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la souveraineté de Lagera",
+      "en": "Aspect of Lagera's Sovereignty",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de la terreur ursine",
+      "en": "Aspect of the Ursine Horror",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de lames déchirantes",
+      "en": "Aspect of Shredding Blades",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de lien spirituel",
+      "en": "Spirit Bond Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’alpha",
+      "en": "Aspect of the Alpha",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’attente",
+      "en": "Aspect of the Expectant",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’enclume de Glynn",
+      "en": "Aspect of Glynn's Anvil",
+      "kind": "item",
+      "seen_in": 26,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’heure dorée",
+      "en": "Aspect of the Golden Hour",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’indocile",
+      "en": "Wyward's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’indomptable",
+      "en": "Aspect of the Indomitable",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’ombre",
+      "en": "Aspect of the Umbral",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de l’éveil spirituel",
+      "en": "Aspect of Mind's Awakening",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de malveillance",
+      "en": "Aspect of Malice",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de massacre",
+      "en": "Aspect of Slaughter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de mastodonte",
+      "en": "Juggernaut's Aspect",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de maîtrise de soi",
+      "en": "Aspect of Anger Management",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de mutilation",
+      "en": "Mangler's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de métamorphose",
+      "en": "Aspect of Metamorphosis",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de noctambule",
+      "en": "Nightstalker's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de perfectionnement angélique",
+      "en": "Aspect of Angelic Masterwork",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de pestilence",
+      "en": "Aspect of Pestilence",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de prise au piège",
+      "en": "Aspect of Entrapment",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de projection furieuse",
+      "en": "Wildbolt Aspect",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de prosélytisme",
+      "en": "Aspect of Proselytizing",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de pénitence",
+      "en": "The Penitent's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de querelleur",
+      "en": "Vehement Brawler's Aspect",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de rage infinie",
+      "en": "Aspect of Limitless Rage",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de raz-de-marée",
+      "en": "Tidal Aspect",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de représailles",
+      "en": "Aspect of Retaliation",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de revers mobilisateur",
+      "en": "Aspect of Rallying Reversal",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de roche écrasante",
+      "en": "Crashstone Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de rupture arbitraire",
+      "en": "Wanton Rupture Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de réanimation",
+      "en": "Aspect of Reanimation",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de répression cinétique",
+      "en": "Aspect of Kinetic Suppression",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de sainte cadence",
+      "en": "Aspect of Holy Cadence",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de sang amalgamé",
+      "en": "Aspect of Coalesced Blood",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de sang bouillonnant",
+      "en": "Blood Boiling Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de sang coagulé",
+      "en": "Aspect of Thickened Blood",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de servitude et sacrifice",
+      "en": "Aspect of Service and Sacrifice",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de supériorité",
+      "en": "Aspect of Supremacy",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de torture",
+      "en": "Aspect of Mutilation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de toucher maudit",
+      "en": "Aspect of Accursed Touch",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de toute-puissance",
+      "en": "Aspect of Might",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de toxines incapacitantes",
+      "en": "Aspect of Debilitating Toxins",
+      "kind": "item",
+      "seen_in": 17,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de trappe",
+      "en": "Trapper's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de tremblements de terre",
+      "en": "Aspect of Earthquakes",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de tromperie",
+      "en": "Cheat's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de vagues de sang",
+      "en": "Tides of Blood Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de venin bouillonnant",
+      "en": "Aspect of Bursting Venoms",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de victoire",
+      "en": "Vanquishing Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de vigueur dérobée",
+      "en": "Aspect of Stolen Vigor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de vue perçante",
+      "en": "Aspect of True Sight",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect de zéphyr d’arbitre",
+      "en": "Aspect of the Arbiter's Zephyr",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des courants accablants",
+      "en": "Aspect of Overwhelming Currents",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des damnés",
+      "en": "Aspect of the Damned",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des esquilles d’énergie",
+      "en": "Aspect of Splintering Energy",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des ombres profondes",
+      "en": "Aspect of Deeper Shadows",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des progénitrices",
+      "en": "Progenitor's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des souvenirs de glace",
+      "en": "Aspect of Frozen Memories",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des veines rapaces",
+      "en": "Aspect of Grasping Veins",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect des écrits de Lapa",
+      "en": "Aspect of Lapa's Scripture",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du berger",
+      "en": "Shepherd's Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du chef de guerre",
+      "en": "Bold Chieftain's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du concordat de fanatique",
+      "en": "Aspect of the Zealot's Covenant",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du concordat de mastodonte",
+      "en": "Aspect of the Juggernaut's Covenant",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du crépuscule",
+      "en": "Aspect of the Moonrise",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du déluge",
+      "en": "Aspect of Deluge",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du frappe-terre",
+      "en": "Earthstriker's Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du grand festin",
+      "en": "Aspect of the Great Feast",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du mage seigneurial",
+      "en": "Mage-Lord's Aspect",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du malheur",
+      "en": "Aspect of Misfortune",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect du sillage glacial",
+      "en": "Aspect of the Frozen Wake",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect démoniaque",
+      "en": "Demonic Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect démonique",
+      "en": "Demonic Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’abus",
+      "en": "Exploiter's Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’accélération",
+      "en": "Accelerating Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’adaptabilité",
+      "en": "Aspect of Adaptability",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’allumage",
+      "en": "Aspect of Ignition",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’appréhension",
+      "en": "Aspect of Apprehension",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’appétit funeste",
+      "en": "Aspect of Fel Gluttony",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’après-coup",
+      "en": "Aspect of Aftermath",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’armageddon",
+      "en": "Aspect of Armageddon",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’armure diabolique",
+      "en": "Aspect of Diabolical Armor",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’arpenteur spectral",
+      "en": "Ghostwalker Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’arrogance",
+      "en": "Conceited Aspect",
+      "kind": "item",
+      "seen_in": 15,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’ascension",
+      "en": "Aspect of Ascension",
+      "kind": "item",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’assaut frénétique",
+      "en": "Aspect of Frenzied Onslaught",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’aura maudite",
+      "en": "Aspect of the Cursed Aura",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’autorité",
+      "en": "Aspect of Authority",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’avant-garde",
+      "en": "Vanguard's Aspect",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’avantage alchimique",
+      "en": "Aspect of Alchemical Advantage",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’entaille profonde",
+      "en": "Cut to the Bone Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’expiation",
+      "en": "Aspect of Chastisement",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’explosion osseuse",
+      "en": "Aspect of Bursting Bones",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’harmonie élémentaire",
+      "en": "Aspect of Elemental Attunement",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’imitation d’imprégnation",
+      "en": "Aspect of Imitated Imbuement",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’immortalité",
+      "en": "Undying Aspect",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’infestation",
+      "en": "Aspect of Infestation",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’interdiction",
+      "en": "Aspect of Interdiction",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’obscurité",
+      "en": "Aspect of Gloom",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’obscurité réparatrice",
+      "en": "Aspect of Mending Obscurity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’onde de choc",
+      "en": "Shockwave Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’os durcis",
+      "en": "Aspect of Hardened Bones",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’os protecteurs",
+      "en": "Aspect of Shielding Bones",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’ossification rapide",
+      "en": "Aspect of Rapid Ossification",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect d’éclats dispersés",
+      "en": "Aspect of Splintering Shards",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect farouche",
+      "en": "Ferocious Aspect",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect figé",
+      "en": "Snap Frozen Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect fracturant",
+      "en": "Splintering Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect frissonnant",
+      "en": "Shivering Aspect",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect glacial",
+      "en": "Glacial Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect implacable",
+      "en": "Remorseless Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect imprégné d’ombre",
+      "en": "Shadow-Soaked Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect misanthrope",
+      "en": "Misanthropic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect neurotoxique",
+      "en": "Neurotoxic Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect ombreux",
+      "en": "Umbrous Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect putrescent",
+      "en": "Blighted Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect remuant",
+      "en": "Writhing Aspect",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect sacrificiel",
+      "en": "Sacrificial Aspect",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect sadique",
+      "en": "Sadistic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect surchargé",
+      "en": "Overcharged Aspect",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect vigoureux",
+      "en": "Vigorous Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect violent",
+      "en": "Brutal Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aspect écrasant",
+      "en": "Crushing Aspect",
+      "kind": "item",
+      "seen_in": 32,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aura de défiance",
+      "en": "Defensive Aura",
+      "kind": "skill",
+      "seen_in": 14,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aura de défiance",
+      "en": "Defiance Aura",
+      "kind": "skill",
+      "seen_in": 28,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aura de fanatisme",
+      "en": "Fanaticism Aura",
+      "kind": "skill",
+      "seen_in": 29,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aura de fanatisme",
+      "en": "Offensive Aura",
+      "kind": "skill",
+      "seen_in": 14,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aura de lumière sacrée",
+      "en": "Holy Light Aura",
+      "kind": "skill",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Aura de lumière sacrée",
+      "en": "HolyShock Aura",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Avancée",
+      "en": "Advance lunge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Azurite galvanique",
+      "en": "Galvanic Azurite",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Azurite galvanique",
+      "en": "Galvanic Azurite",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Baiser de bandit",
+      "en": "Scoundrel's Kiss",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bandages d’ascète méconnu",
+      "en": "Unsung Ascetic's Wraps",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Basilic",
+      "en": "The Basilisk",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Blâme",
+      "en": "Condemn",
+      "kind": "skill",
+      "seen_in": 14,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bombardement",
+      "en": "Bombardment",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bombe de magma",
+      "en": "Molten Bomb",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bombe fumigène",
+      "en": "Smoke Grenade",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bombe fumigène",
+      "en": "SmokeBomb",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bond",
+      "en": "Leap",
+      "kind": "skill",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bottes Légendaires",
+      "en": "Legendary Boots",
+      "kind": "item",
+      "seen_in": 43,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bottes de morbête",
+      "en": "Beastfall Boots",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bottes légendaires",
+      "en": "Captain's Ragged Boots",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bottes légendaires",
+      "en": "Legendary Boots",
+      "kind": "item",
+      "seen_in": 52,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bottes légendaires",
+      "en": "Runic Cleats",
+      "kind": "item",
+      "seen_in": 35,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Boucle irisée de Tal Rasha",
+      "en": "Tal Rasha's Iridescent Loop",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier Légendaire",
+      "en": "Legendary Offhand",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier de feu",
+      "en": "Flame Shield",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier divin",
+      "en": "Blessed Shield",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier divin",
+      "en": "BlessedShield",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier légendaire",
+      "en": "Bone Blade",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier légendaire",
+      "en": "Bone Shield",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier légendaire",
+      "en": "Legendary Offhand",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bouclier légendaire",
+      "en": "Legendary Shield",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Boule de feu",
+      "en": "Fireball",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Brandissement",
+      "en": "Brandish",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bris de roche",
+      "en": "Gorilla Basic",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Broyeuse",
+      "en": "Fleshrender",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Brume de sang",
+      "en": "Blood Mist",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Brume de sang",
+      "en": "BloodMist",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bâton de Kepeleke",
+      "en": "Rod of Kepeleke",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bâton de Lam Esen",
+      "en": "Staff of Lam Esen",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bénédiction du dieu du tonnerre",
+      "en": "Thundergod's Blessing",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Bénédiction écarlate",
+      "en": "Red Blessing",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cage de folie",
+      "en": "Cage of Madness",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Calotte runique",
+      "en": "Runic Skullcap",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Calotte runique",
+      "en": "Runic Skullcap of Disobedience",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Camée débordant d'Esadora",
+      "en": "Esadora's Overflowing Cameo",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Camée débordant d’Esadora",
+      "en": "Esadora's Overflowing Cameo",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Capuchon de l'Anonyme",
+      "en": "Cowl of the Nameless",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Carapace de décret de la chair",
+      "en": "Fleshwrit Carapace",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Casque de bâtard hideux",
+      "en": "Ugly Bastard Helm",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cataclysme",
+      "en": "Cataclysm",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop",
+      "kind": "item",
+      "seen_in": 17,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Adaptability",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Anger Management",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Ascension",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Binding Morass",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Celestial Strife",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Grasping Veins",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Holy Punishment",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of Unyielding Hits",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Damned",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Golden Hour",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Great Feast",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Juggernaut's Covenant",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Moonrise",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Rabid Beast",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Rampaging Werebeast",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cercle d'âme-guette",
+      "en": "Soulwatch Hoop of the Zealot's Covenant",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chancre",
+      "en": "Blight",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chanson de la cathédrale",
+      "en": "Cathedral's Song",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chasseur",
+      "en": "Jaguar Ultimate",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chasseur",
+      "en": "The Hunter",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chausse-trappe",
+      "en": "Caltrops",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chausses du monde en déclin",
+      "en": "Footfalls of the Waning World",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chaîne d’éclairs",
+      "en": "Chain Lightning",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chaîne d’éclairs",
+      "en": "ChainLightning",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chaînes d'ombre",
+      "en": "Umbral Chains",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chef-d'œuvre de Ramaladni",
+      "en": "Ramaladni's Magnum Opus",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chef-d’œuvre de Ramaladni",
+      "en": "Ramaladni's Magnum Opus",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chevalière de Pelghain",
+      "en": "Signet of Pelghain",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Chevalière de sabotage",
+      "en": "Saboteur's Signet",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Choc",
+      "en": "Clash",
+      "kind": "skill",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Choc",
+      "en": "Punish",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Choc terrestre",
+      "en": "Ground Stomp",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Choc terrestre",
+      "en": "GroundStomp",
+      "kind": "skill",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Choc traumatisant",
+      "en": "Gorilla Defensive2",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cimier arlequin",
+      "en": "Harlequin Crest",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Clone d’ombre",
+      "en": "Shadow Clone",
+      "kind": "skill",
+      "seen_in": 17,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Clone d’ombre",
+      "en": "ShadowClone",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Commandement de Valloch",
+      "en": "Command Valloch",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Commandement des Déchus",
+      "en": "Command Fallen",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Commandement des déchus",
+      "en": "Command Fallen",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Commandement d’Abodian",
+      "en": "Command Abodian",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Compagnon de l’orage",
+      "en": "Storm's Companion",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Concasseur d'os des Séismes",
+      "en": "Bonebreaker of Earthquakes",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Condamneuse",
+      "en": "Doombringer",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Conduit axial",
+      "en": "Axial Conduit",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Contre-attaque",
+      "en": "Counterattack",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Contre-attaque",
+      "en": "Jaguar Defensive",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Corbeaux",
+      "en": "Ravens",
+      "kind": "skill",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Corne de l'aigle",
+      "en": "Eaglehorn",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Coup de bouclier",
+      "en": "ShieldBash",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Coup de tonnerre",
+      "en": "Storm Strike",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Courant instable",
+      "en": "Unstable Currents",
+      "kind": "skill",
+      "seen_in": 17,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Courant instable",
+      "en": "UnstableCurrents",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Couronne de Lucion",
+      "en": "Crown of Lucion",
+      "kind": "item",
+      "seen_in": 19,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Couronne de Léoric",
+      "en": "Leoric's Crown",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Couronne de laurier aurique",
+      "en": "Wreath of Auric Laurel",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Couronne du Tueur de divinités",
+      "en": "Godslayer Crown",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Courroux du berserker",
+      "en": "Wrath of the Berserker",
+      "kind": "skill",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Courroux du berserker",
+      "en": "WrathoftheBerserker",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats",
+      "kind": "item",
+      "seen_in": 24,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats of Occult Dominion",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats of the Arbiter's Zephyr",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats of the Bounding Conduit",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats of the Cursed Aura",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats of the Orange Herald",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crampons runiques",
+      "en": "Runic Cleats of the Ursine Horror",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri ardent",
+      "en": "Blazing Scream",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri de guerre",
+      "en": "War Cry",
+      "kind": "skill",
+      "seen_in": 20,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri de guerre",
+      "en": "WarCry",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri de ralliement",
+      "en": "Rallying Cry",
+      "kind": "skill",
+      "seen_in": 23,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri exsangue",
+      "en": "Bloodless Scream",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri provocateur",
+      "en": "Challenging Shout",
+      "kind": "skill",
+      "seen_in": 18,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cri provocateur",
+      "en": "ChallengingShout",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Croissant gibbeux",
+      "en": "Waxing Gibbous",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Croissant maléfique",
+      "en": "Malefic Crescent",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Crève-cœur",
+      "en": "Heartseeker",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cube énigmatique",
+      "en": "Enigma Cube",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cube énigmatique",
+      "en": "Enigma Cube of Shredding Blades",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cube énigmatique",
+      "en": "Enigma Cube of the Frozen Wake",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Célérité",
+      "en": "Dash",
+      "kind": "skill",
+      "seen_in": 23,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Cœur fondu de Selig",
+      "en": "Melted Heart of Selig",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Dague égarée d'Etna",
+      "en": "Etna's Lost Dagger",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Danse des poignards",
+      "en": "Dance of Knives",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Danse des poignards",
+      "en": "DanceOfKnives",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Derme toxique",
+      "en": "Centipede Focus",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Derme toxique",
+      "en": "Toxic Skin",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Des yeux dans la nuit",
+      "en": "Eyes in the Dark",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Destin funeste",
+      "en": "Doom",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Diadème de l'étoile déchue",
+      "en": "Starfall Coronet",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Dissimulation",
+      "en": "Concealment",
+      "kind": "skill",
+      "seen_in": 20,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Dissimulation",
+      "en": "Stealth",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Don dissimulé",
+      "en": "Shrouded Gift",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Droit du sang de Gathlen",
+      "en": "Gathlen's Birthright",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Décharge électrique",
+      "en": "Charged Bolts",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Décharge électrique",
+      "en": "ChargedBolt",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Déchaînement",
+      "en": "Rampage",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Déchiquetage",
+      "en": "Shred",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Déchiquetage",
+      "en": "Shred NEW",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Déchirure",
+      "en": "Rend",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Décomposition",
+      "en": "Decompose",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Décrépitude",
+      "en": "Decrepify",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Déluge",
+      "en": "Barrage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Démon d'Abaddon",
+      "en": "Fiend of Abaddon",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "El’Druin, épée de justice",
+      "en": "El'Druin, Sword of Justice",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Esprit d’os",
+      "en": "Bone Spirit",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Essaim de terreur",
+      "en": "Terror Swarm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Explosion de pierres",
+      "en": "Stone Burst",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Explosion macabre",
+      "en": "Corpse Explosion",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Explosion macabre",
+      "en": "CorpseExplosion",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Faille des âmes",
+      "en": "Soulrift",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Faille des âmes",
+      "en": "X1 Necromancer Ultimate4",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Familier",
+      "en": "Familiar",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Familier",
+      "en": "X1 Sorcerer Familiar",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fauchage",
+      "en": "Reap",
+      "kind": "skill",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fente",
+      "en": "Lunging Strike",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fente",
+      "en": "LungingStrike",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Flambeaube",
+      "en": "Dawnfire",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Flamme dévorante de Moloch",
+      "en": "Moloch's Beating Flame",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Flèche puissante",
+      "en": "Forceful Arrow",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fléau",
+      "en": "Centipede Defensive",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fléau",
+      "en": "Scourge",
+      "kind": "skill",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fléau de Duriel",
+      "en": "Scourge of Duriel",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Foi persistante",
+      "en": "Endurant Faith",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Forteresse",
+      "en": "Fortress",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fouet électrique",
+      "en": "ArcLash",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fracture infernale",
+      "en": "Hell Fracture",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fragment de Verathiel",
+      "en": "Shard of Verathiel",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Framée de guerre des Fissures incendiaires",
+      "en": "War Crest of Incendiary Fissures",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Frappe de Corne-Tempête",
+      "en": "Strike of Stormhorn",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Froid intense",
+      "en": "DeepFreeze",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Frénésie",
+      "en": "Frenzy",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Fureur insatiable",
+      "en": "Insatiable Fury",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Galvanisation",
+      "en": "Iron Skin",
+      "kind": "skill",
+      "seen_in": 14,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Galvanisation",
+      "en": "IronSkin",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gantelets du Dévoreur de souffrance",
+      "en": "Paingorger's Gauntlets",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gantelets primordiaux",
+      "en": "Primal Gauntlets of Charged Flash",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants Légendaires",
+      "en": "Legendary Gloves",
+      "kind": "item",
+      "seen_in": 36,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants de rose ichoreuse",
+      "en": "Bands of Ichorous Rose",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants légendaires",
+      "en": "Boneweave Gauntlets",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants légendaires",
+      "en": "Legendary Gloves",
+      "kind": "item",
+      "seen_in": 54,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants légendaires",
+      "en": "Outcast's Handwraps",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants légendaires",
+      "en": "Runic Gloves",
+      "kind": "item",
+      "seen_in": 29,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants raffinés de seigneur des mers",
+      "en": "Sea Lord's Fine Gloves",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves",
+      "kind": "item",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Ascension",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Charged Flash",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Chastisement",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Grasping Veins",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Inner Calm",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Limitless Rage",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Reanimation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Retaliation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Tyrael's Jurisdiction",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Ultimate Shadow",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of Unyielding Hits",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of the Frozen Tundra",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of the Golden Hour",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of the Moonrise",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Gants runiques",
+      "en": "Runic Gloves of the Stampede",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Graine de Horazon",
+      "en": "Seed of Horazon",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Graine d’Horazon",
+      "en": "Seed of Horazon",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Griffe",
+      "en": "Claw",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Griffe de l’âme",
+      "en": "Soulbrand",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Griffe véloce",
+      "en": "Rushing Claw",
+      "kind": "skill",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Griffes d'effroi",
+      "en": "Dread Claws",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Griffes terrifiantes",
+      "en": "Dread Claws",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Guerrier squelette",
+      "en": "Skeleton Warrior",
+      "kind": "skill",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Habit de l'Infini",
+      "en": "Raiment of the Infinite",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Habit de la Mer",
+      "en": "Raiment of the Sea",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Harmonie d’Ebewaka",
+      "en": "Harmony of Ebewaka",
+      "kind": "item",
+      "seen_in": 17,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Haubert runique",
+      "en": "Runic Mail",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Haubert runique",
+      "en": "Runic Mail of the Cursed Aura",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Heaume Légendaire",
+      "en": "Legendary Helm",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Heaume de défense de Joritz le tout-puissant",
+      "en": "Tuskhelm of Joritz the Mighty",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Heaume légendaire",
+      "en": "Legendary Helm",
+      "kind": "item",
+      "seen_in": 14,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Heaume légendaire",
+      "en": "Runic Skullcap",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Homoncule infernal",
+      "en": "Infernal Homunculus",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Hurlement sanglant",
+      "en": "Blood Howl",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Hurlement sanglant",
+      "en": "BloodHowl",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Hurlement sombre",
+      "en": "Dark Howl",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Hydre",
+      "en": "Hydra",
+      "kind": "skill",
+      "seen_in": 15,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Héraut de Zakarum",
+      "en": "Herald of Zakarum",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Héritage de Kessime",
+      "en": "Kessime's Legacy",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Héritage d’Esu",
+      "en": "Esu's Heirloom",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Héritier de perdition",
+      "en": "Heir of Perdition",
+      "kind": "item",
+      "seen_in": 99,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Imprégnation de givre",
+      "en": "Cold Imbuement",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Imprégnation de givre",
+      "en": "ColdImbue",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Imprégnation de poison",
+      "en": "Poison Imbuement",
+      "kind": "skill",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Imprégnation de poison",
+      "en": "PoisonImbue",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Incinération",
+      "en": "Incinerate",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Invoquer Ae'grom",
+      "en": "Summon Ae'grom",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Invoquer Laalish",
+      "en": "Summon Laalish",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Invoquer Vollach",
+      "en": "Summon Vollach",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Irebleue",
+      "en": "Azurewrath",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Iris ophidien",
+      "en": "Ophidian Iris",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières Légendaires",
+      "en": "Legendary Pants",
+      "kind": "item",
+      "seen_in": 24,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières de la lune de sang",
+      "en": "Blood Moon Breeches",
+      "kind": "item",
+      "seen_in": 15,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières légendaires",
+      "en": "Boneweave Faulds",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières légendaires",
+      "en": "Legendary Pants",
+      "kind": "item",
+      "seen_in": 40,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières légendaires",
+      "en": "Runic Leggings",
+      "kind": "item",
+      "seen_in": 19,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières runiques",
+      "en": "Runic Leggings",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières runiques",
+      "en": "Runic Leggings of Glynn's Anvil",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières runiques",
+      "en": "Runic Leggings of Might",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières runiques",
+      "en": "Runic Leggings of Tenacity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jambières runiques",
+      "en": "Runic Leggings of the Indomitable",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jet puissant",
+      "en": "Mighty Throw",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jet puissant",
+      "en": "X1 Barbarian WeaponThrow",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Jugement d'Auriel",
+      "en": "Judgment of Auriel",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Kandjar d'Asheara",
+      "en": "Asheara's Khanjar",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "La Fournaise",
+      "en": "The Furnace",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "La lame de la vue embrasée",
+      "en": "The Blade of Sight Aflame",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "La main de Naz",
+      "en": "The Hand of Naz",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame d'obsidienne",
+      "en": "Obsidian Blade",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame d'obsidienne",
+      "en": "Obsidian Blade of Star Shards",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame d'obsidienne",
+      "en": "Obsidian Blade of Surprise",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame d'os",
+      "en": "Bone Blade",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame d'os",
+      "en": "Bone Blade of Imitated Imbuement",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame démoniaque",
+      "en": "Demonblade",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lame démoniaque",
+      "en": "Demonblade of Earthquakes",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lames de glace",
+      "en": "Ice Blades",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lames de glace",
+      "en": "IceBlades",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lames sournoises",
+      "en": "Twisting Blades",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lance de foudre",
+      "en": "Lightning Spear",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lance de foudre",
+      "en": "LightningSpear",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lance des Cieux",
+      "en": "Spear of the Heavens",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lance des Cieux",
+      "en": "SpearOfTheHeavens",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lance divine",
+      "en": "Divine Lance",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le Cœur implacable",
+      "en": "The Relentless Heart",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le Grand-père",
+      "en": "The Grandfather",
+      "kind": "item",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le Maestro",
+      "en": "The Maestro",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le Mur vigilant",
+      "en": "Lidless Wall",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le Sceau fécond",
+      "en": "The Fecund Seal",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le dévoreur",
+      "en": "Centipede Ultimate",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le dévoreur",
+      "en": "The Devourer",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le protecteur",
+      "en": "Gorilla Ultimate",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Le protecteur",
+      "en": "The Protector",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Les 100 000 pas",
+      "en": "100,000 Steps",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lierre empoisonné",
+      "en": "Poison Creeper",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Lierre empoisonné",
+      "en": "VineCreeper",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Litanie du sable",
+      "en": "Litany of Sable",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Loups",
+      "en": "WolfPack",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Loups",
+      "en": "Wolves",
+      "kind": "skill",
+      "seen_in": 18,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Légendaire",
+      "en": "Legendary",
+      "kind": "item",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "L’Oculus",
+      "en": "The Oculus",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "L’idole octuple",
+      "en": "The Eightfold Idol",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mage squelette",
+      "en": "Skeleton Mage",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mailles châtiées",
+      "en": "Chainscourged Mail",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main gauche légendaire",
+      "en": "Bone Blade",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main gauche légendaire",
+      "en": "Bone Shield",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main gauche légendaire",
+      "en": "Enigma Cube",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main gauche légendaire",
+      "en": "Legendary Offhand",
+      "kind": "item",
+      "seen_in": 16,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main gauche légendaire",
+      "en": "Obsidian Blade",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main gauche légendaire",
+      "en": "Serpent Stone",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Main écrasante",
+      "en": "Gorilla Core",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mains de brise-monde",
+      "en": "Hands of the Worldbreaker",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mains de marche-tombe",
+      "en": "Gravewalker's Hand",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Manteau du Gris",
+      "en": "Mantle of the Grey",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mantelet de Fureur de la montagne",
+      "en": "Mantle of Mountain's Fury",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mantelet de loyauté",
+      "en": "Loyalty's Mantle",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Marche-steppes de Khamsin",
+      "en": "Khamsin Steppewalkers",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Marteau béni",
+      "en": "Blessed Hammer",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Marteau béni",
+      "en": "BlessedHammer",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Marteau des Anciens",
+      "en": "Hammer of the Ancients",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Marteau des Anciens",
+      "en": "HammeroftheAncients",
+      "kind": "skill",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Masque mortuaire de Nirmitruq",
+      "en": "Deathmask of Nirmitruq",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Masse du roi Léoric",
+      "en": "Mace of King Leoric",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Misérable supplicié",
+      "en": "Tortured Wretch",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Misérable torturé",
+      "en": "Tortured Wretch",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Miséricorde",
+      "en": "Misericorde",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Morgenstern du héraut",
+      "en": "Herald's Morningstar",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mur de feu",
+      "en": "Firewall",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mutilation",
+      "en": "Maul",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Mélopée d’Airidah",
+      "en": "Dirge of Airidah",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Métamorphose",
+      "en": "Metamorphosis",
+      "kind": "skill",
+      "seen_in": 16,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Météore",
+      "en": "Meteor",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Nerf de la vengeance",
+      "en": "Vengeful Sinew",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Nova de givre",
+      "en": "Frost Nova",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Nuit déchirée",
+      "en": "Sundered Night",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Adaptability",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Artful Initiative",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Bristling Vengeance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Bursting Venoms",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Celestial Strife",
+      "kind": "item",
+      "seen_in": 10,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Decay",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Reanimation",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Redirected Force",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of Utmost Glory",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Oeil de l'ocelot",
+      "en": "Ocelot's Eye of the Rampaging Werebeast",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Orage",
+      "en": "Lightning Storm",
+      "kind": "skill",
+      "seen_in": 15,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Orage",
+      "en": "LightningStorm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Orbe gelé",
+      "en": "FrozenOrb",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Orphelineuse",
+      "en": "Orphan Maker",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Ouragan",
+      "en": "Hurricane",
+      "kind": "skill",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pacte d’os",
+      "en": "Pact of Bone",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pacte sinistre",
+      "en": "Lurid Pact",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pas de l’ombre",
+      "en": "Shadow Step",
+      "kind": "skill",
+      "seen_in": 15,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pas de l’ombre",
+      "en": "ShadowStep",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pas du néant",
+      "en": "Nether Step",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pas vacillant",
+      "en": "Flickerstep",
+      "kind": "item",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Passage des lames",
+      "en": "Blade Shift",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Peau armurée",
+      "en": "Armored Hide",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Peau armurée",
+      "en": "Gorilla Defensive1",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pierre d’Hemat",
+      "en": "The Hemat Stone",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pierre runique fracturée",
+      "en": "Fractured Runestone",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piqueur",
+      "en": "Centipede Core",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piqueur",
+      "en": "Stinger",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piège de poison",
+      "en": "Poison Trap",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piège de poison",
+      "en": "PoisonTrap",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piège mortel",
+      "en": "Death Trap",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piège mortel",
+      "en": "DeathTrap",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Piétinement",
+      "en": "Trample",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Plastron Légendaire",
+      "en": "Legendary Chest",
+      "kind": "item",
+      "seen_in": 32,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Plastron légendaire",
+      "en": "Legendary Chest",
+      "kind": "item",
+      "seen_in": 37,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Plastron légendaire",
+      "en": "Runic Mail",
+      "kind": "item",
+      "seen_in": 27,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pluie de flèches",
+      "en": "Rain of Arrows",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poigne de fer",
+      "en": "Steel Grasp",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poigne de fer",
+      "en": "SteelGrasp",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poigne de mort",
+      "en": "Deathgrip",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poigne de tyran",
+      "en": "Tyrant's Grasp",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poignes de l’ombre",
+      "en": "Grasp of Shadow",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poignes dévastatrices de Gohr",
+      "en": "Gohr's Devastating Grips",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poing de la Rose de fer",
+      "en": "Fist of the Iron Rose",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Poings du destin",
+      "en": "Fists of Fate",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pointe de foudre",
+      "en": "Eagle Basic",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pointe de terre",
+      "en": "Earth Spike",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Porte-Lumière purifié",
+      "en": "Purified Lightbringer",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Porte-Lumière putride",
+      "en": "Rotting Lightbringer",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Prison d’os",
+      "en": "Bone Prison",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Prison d’os",
+      "en": "BonePrison",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Protection de la blanche colombe",
+      "en": "Ward of the White Dove",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Prélèvement",
+      "en": "Blood Lance",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Puissance de Tyraël",
+      "en": "Tyrael's Might",
+      "kind": "item",
+      "seen_in": 25,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Puissance de l'Ursin",
+      "en": "Might of the Ursine",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Puissance ursine",
+      "en": "Might of the Ursine",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Pulvérisation",
+      "en": "Pulverize",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Purification",
+      "en": "Purify",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rafale",
+      "en": "Flurry",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rage du grizzly",
+      "en": "Grizzly Rage",
+      "kind": "skill",
+      "seen_in": 19,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rage du grizzly",
+      "en": "GrizzlyRage",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rage d’Harrogath",
+      "en": "Rage of Harrogath",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Ralliement",
+      "en": "Rally",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Ralliement",
+      "en": "Sacrifice",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Ravage",
+      "en": "Jaguar Focus",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Ravage",
+      "en": "Ravager",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rempart de terre",
+      "en": "Earthen Bulwark",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Revanche",
+      "en": "Gorilla Potency",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Revanche",
+      "en": "Payback",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rocher",
+      "en": "Boulder",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rose bleue",
+      "en": "Blue Rose",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rugissement de la tempête",
+      "en": "Tempest Roar",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Rugissement débilitant",
+      "en": "Debilitating Roar",
+      "kind": "skill",
+      "seen_in": 18,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Réanimation de squelette",
+      "en": "Raise Skeleton",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Réanimation de squelette",
+      "en": "RaiseSkeleton",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Réanimation de squelette",
+      "en": "Skeleton Mage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sabots du dieu de la montagne",
+      "en": "Hooves of the Mountain God",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sabre de Tsasgal",
+      "en": "Sabre of Tsasgal",
+      "kind": "item",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Saccage",
+      "en": "Rampage",
+      "kind": "skill",
+      "seen_in": 13,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sacre",
+      "en": "Consecration",
+      "kind": "skill",
+      "seen_in": 28,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sanctis de Kethamar",
+      "en": "Sanctis of Kethamar",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sanguivore, lame de Zir",
+      "en": "Sanguivor, Blade of Zir",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sceau d'invocations",
+      "en": "Sigil of Summons",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sceau de chaos",
+      "en": "Sigil of Chaos",
+      "kind": "skill",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sceau de la deuxième trompette",
+      "en": "Seal of the Second Trumpet",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sceau de subversion",
+      "en": "Sigil of Subversion",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sceau des Ophanim",
+      "en": "Seal of the Ophanim",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sceptre des Trois",
+      "en": "Scepter of the Three",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Schisme d'Ae'grom",
+      "en": "Ae'grom's Schism",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Section",
+      "en": "Sever",
+      "kind": "skill",
+      "seen_in": 14,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sentinelle profane",
+      "en": "Profane Sentinel",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sermon rouge",
+      "en": "Red Sermon",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sigil d'invocations",
+      "en": "Sigil of Summons",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sombre geôle",
+      "en": "Dark Prison",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sombre voile",
+      "en": "Dark Shroud",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sombre voile",
+      "en": "DarkShroud",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sous-couronne",
+      "en": "The Undercrown",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sphère foudroyante",
+      "en": "Ball Lightning",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Sphère foudroyante",
+      "en": "BallLightning",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Talisman de Locran",
+      "en": "Locran's Talisman",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Talisman du seigneur banni",
+      "en": "Banished Lord's Talisman",
+      "kind": "item",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Tempête d’os",
+      "en": "Bone Storm",
+      "kind": "skill",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Terreur nocturne",
+      "en": "Night Terror",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Tir pénétrant",
+      "en": "Penetrating Shot",
+      "kind": "skill",
+      "seen_in": 8,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Toile de la veuve",
+      "en": "Widow's Web",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Tombelle",
+      "en": "Gravebloom",
+      "kind": "item",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Tornade",
+      "en": "Tornado",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Totem sinistre d’Ifeh",
+      "en": "Ifeh's Dire Totem",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Tourbillon",
+      "en": "Whirlwind",
+      "kind": "skill",
+      "seen_in": 12,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Trait sacré",
+      "en": "Holy Bolt",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Transe du combat",
+      "en": "Battle Trance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Traqueur",
+      "en": "Eagle Ultimate",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Téléportation",
+      "en": "Teleport",
+      "kind": "skill",
+      "seen_in": 19,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Témérité",
+      "en": "Temerity",
+      "kind": "item",
+      "seen_in": 24,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Umbracrux",
+      "en": "The Umbracrux",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vague de sang",
+      "en": "Blood Wave",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vague de sang",
+      "en": "BloodWave",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vent cisaillant",
+      "en": "Wind Shear",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Veste de bandit",
+      "en": "Scoundrel's Leathers",
+      "kind": "item",
+      "seen_in": 6,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vierge de fer",
+      "en": "Iron Maiden",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vision de la tempête de feu",
+      "en": "Vision of the Firestorm",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Voie de Trag’Oul",
+      "en": "Path of Trag'Oul",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Voie de l’Émissaire",
+      "en": "Path of the Emissary",
+      "kind": "item",
+      "seen_in": 5,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Voile d'argent",
+      "en": "Argent Veil",
+      "kind": "item",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Voile de Khanduras",
+      "en": "Shroud of Khanduras",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Voile de la fausse mort",
+      "en": "Shroud of False Death",
+      "kind": "item",
+      "seen_in": 53,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Voile d’argent",
+      "en": "Argent Veil",
+      "kind": "item",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Volonté de Tibault",
+      "en": "Tibault's Will",
+      "kind": "item",
+      "seen_in": 46,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Volée de plumes",
+      "en": "Eagle Core",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Volée de plumes",
+      "en": "Quill Volley",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vortex",
+      "en": "Eagle Focus",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vrilles nécrophages",
+      "en": "Corpse Tendrils",
+      "kind": "skill",
+      "seen_in": 9,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vrilles nécrophages",
+      "en": "CorpseTendrils",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Vœu brisé",
+      "en": "Shattered Vow",
+      "kind": "item",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Zèle",
+      "en": "PreTrailZeal",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Zèle",
+      "en": "Zeal",
+      "kind": "skill",
+      "seen_in": 3,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éboulement",
+      "en": "Landslide",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éclair de feu",
+      "en": "Fire Bolt",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éclair de feu",
+      "en": "FireBolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éclair de givre",
+      "en": "Frost Bolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éclair de givre",
+      "en": "FrostBolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éclat d’hiverre",
+      "en": "Fractured Winterglass",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Éclats de glace",
+      "en": "IceShards",
+      "kind": "skill",
+      "seen_in": 4,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Écorchement",
+      "en": "Maim",
+      "kind": "skill",
+      "seen_in": 2,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Égide",
+      "en": "Aegis",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Égide",
+      "en": "Smite FalconPunch Recast 1",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Élégie",
+      "en": "Elegy",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Élévation",
+      "en": "Eagle Focus2",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Étoile filante",
+      "en": "Falling Star",
+      "kind": "skill",
+      "seen_in": 11,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Étoile filante",
+      "en": "LanceDive",
+      "kind": "skill",
+      "seen_in": 7,
+      "source": "kamilabs"
+    },
+    {
+      "fr": "Œuvre de Griswold",
+      "en": "Griswold's Opus",
+      "kind": "item",
+      "seen_in": 17,
+      "source": "kamilabs"
+    }
+  ]
+}

@@ -3670,3 +3670,697 @@ bonne décision** - à garder en tête : committer plus fréquemment
 pendant une session de travail (pas seulement en fin de session)
 réduit encore la fenêtre de perte possible en cas de nouvel incident
 de ce genre.
+
+## 2026-09-22 (suite) - Deux préréglages de filtre "Ouvert"/"Strict" (v2.23), après analyse de diablofilter.com et infinitybuilds.gg/loot-filters
+
+Demande utilisateur : analyser https://diablofilter.com/ et https://infinitybuilds.gg/en/loot-filters
+pour ameliorer le generateur de filtre de butin, et proposer deux types de filtre (un ouvert, un tres
+strict). WebFetch sur les deux sites n'a donne que peu de details (pages en grande partie rendues en JS,
+resumees par un petit modele) ; complete via WebSearch + fetch de pages concretes (Mekuna's "T12+ Endgame
+Strict Filter" sur InfinityBuilds, "The Only Filter you need" sur DiabloFilter, page wiki Fextralife sur
+le systeme de filtre natif). Constat principal : la convention communautaire pour un filtre "Strict"
+d'endgame est de masquer aussi les Legendaires/Uniques qui n'ont PAS de Greater Affix (a T12+, on possede
+deja tous les Aspects via le Codex, donc l'objet brut sans GA n'apporte plus rien) - notre generateur ne
+le faisait pas encore (il gardait systematiquement toutes les Legendaires/Uniques, quel que soit le mode).
+
+Implemente dans le userscript (userscript/diablo4-assistant.user.js, v2.22 -> v2.23) :
+generateFilterCode() prend desormais un parametre `mode` ("open" ou "strict") :
+- **Ouvert** (comportement precedent, inchange) : masque seulement Commun/Magique/Rare hors-build,
+  garde toutes les Legendaires/Uniques pour inspection. Pense pour le leveling, l'early endgame, la
+  chasse aux Aspects - moments ou on veut encore examiner chaque Legendaire manuellement.
+- **Strict** (nouveau) : meme base, mais (a) la regle Rare ne garde que le palier 3+ affixes de build
+  (abandonne le palier 2+ plus laxiste), (b) Legendaires/Uniques sont masques par defaut et seulement
+  re-affiches (dore) s'ils ont au moins 1 Greater Affix, (c) les Mythiques restent toujours gardes
+  (regle dediee, jamais dans le masque de masquage). Pense pour le farm T12+/BiS hunting.
+
+Le mecanisme "masquer largement puis une regle plus specifique plus loin dans la liste vient annuler
+ce masquage" est exactement l'idiome deja utilise et valide pour les Rares (Hide Junk masque RARE,
+les regles Check Rare 2+/3+ le contredisent apres coup) - le mode strict reutilise le meme idiome pour
+Legendaire/Unique plutot que d'inventer une nouvelle interaction non testee, puisque seul ce pattern est
+prouve fidele a la sortie de reference d'Upsilon72 (voir l'en-tete d'app/loot_filter/generator.py).
+
+runGenerateFilter() genere et affiche maintenant les DEUX codes (un par mode) avec une courte explication
+FR de chacun, chacun avec son propre bouton "Copier". Teste hors-navigateur dans un sandbox Node (vm)
+qui charge le fichier du userscript avec des stubs DOM minimalistes et hook generateFilterCode() par une
+ligne d'injection juste avant resolveSkillIds() - les deux modes s'executent sans exception et produisent
+des codes base64 de taille differente et coherente (strict legerement plus long : une regle Mythic en
+plus + une regle Legendaire/GA a deux conditions, en echange de la regle "Legendaires - Keep All" et du
+palier Rare 2+ en moins). Script de test jetable dans le scratchpad, non committe.
+
+**Pas encore valide en jeu reel** (import du code strict et verification visuelle que les Legendaires
+sans GA disparaissent bien, que les Mythiques restent visibles, etc.) - a faire par l'utilisateur comme
+pour les versions precedentes.
+
+**Portee volontairement limitee au userscript** (la surface reellement utilisee/validee jusqu'ici,
+d'apres l'historique du projet) : app/loot_filter/generator.py (cote FastAPI) garde son ancien
+comportement mono-palier inchange, pas encore mis a jour avec les modes ouvert/strict - a faire si le
+backend doit un jour exposer la meme fonctionnalite.
+
+## 2026-09-22 (suite) - L'utilisateur colle son propre filtre "Dance Of Knives" - decodage + faille Codex/GreaterAffix trouvee et corrigee (v2.24)
+
+L'utilisateur a colle le code base64 d'un filtre qu'il a lui-meme cree en jeu, en demandant si on
+pouvait le lire, puis si son architecture (regles par emplacement d'equipement) etait meilleure que
+celle du generateur, avec instruction de pousser la retro-ingenierie si oui.
+
+**Decodage** : ecrit un decodeur protobuf generique (marche binaire brut, aucune dependance sur nos
+suppositions de schema) dans le scratchpad, applique au code colle. Resultat : filtre "Dance Of Knives"
+(build Rogue), 12 regles, une par emplacement d'equipement (Arme x2, Arme a distance, Anneaux, Amulette,
+Bottes, Pantalon, Gants, Plastron, Heaume) + Codex/Sceaux + un hide-all final. Chaque regle-emplacement
+utilisait des "kind" de condition (2, 7, 8) absents de notre table (`app/loot_filter/data.py`/`codec.py`,
+qui ne connait que 1/3/4/5/6 herites d'Upsilon72).
+
+**Recherche des kind manquants** : trouve deux ecrits independants qui documentent le format protobuf
+complet du filtre Diablo IV Saison 13 : un gist de fnuecke ("Diablo 4 Season 13 Loot Filter Protobuf
+Format") et `docs/filter-format.md` du depot github.com/ThunderEagle/D4LootBench. Les deux s'accordent
+sur une table de 10 "kind" (0=ItemPowerRange, 1=Rarity, 2=ItemProperties/Ancestral, 3=CodexUpgrade,
+4=GreaterAffix, 5=ItemType, 6=RequiredAffixes, 7=OptionalAffixes, 8=SpecificUnique,
+9=TalismanSetBonus).
+
+**Decouverte majeure** : cette table met kind=3=Codex et kind=4=GreaterAffix, alors que notre
+`codec.py` (port fidele et verifie du code source reel d'Upsilon72 - confirme en allant lire
+`index.html` du depot Upsilon72/d4-filter-generator directement, fonctions `condCodex()` et
+`condGreaterAffix()`) utilise kind=4=Codex et kind=3=GreaterAffix depuis le debut du projet. Les DEUX
+outils ciblent pourtant la meme saison (README d'Upsilon72 dit aussi "Season 13 - Lord of Hatred").
+Confirmation independante et plus convaincante : dans le filtre reel colle par l'utilisateur, les
+conditions kind=7 portaient des ids d'affixe VALIDES de notre propre table (coherent avec
+"OptionalAffixes"), et les conditions kind=2 portaient arg4=4 dans 9 regles sur 10 (coherent avec
+"ItemProperties, Ancestral=4") - les deux seraient denues de sens sous l'ancien schema d'Upsilon72 (qui
+ne definit meme pas ces kind). Conclusion : Upsilon72 (et donc notre generateur depuis le debut) avait
+Codex/GreaterAffix INVERSES. Chaque filtre genere par ce projet jusqu'ici affichait donc en vert
+"Codex Upgrade" des objets qui avaient en realite un Greater Affix, et en cyan "Greater Affix" des
+objets qui etaient en realite des ameliorations de Codex - jamais remarque car les deux tombent sur un
+ensemble d'objets Legendaires qui se recouvre facilement a l'oeil.
+
+**Corrige dans `app/loot_filter/codec.py`** (source commune Python/JS, donc corrige aussi pour le
+backend FastAPI automatiquement) et repercute manuellement dans le miroir JS du userscript :
+`condition_codex_upgrade()`/`conditionCodexUpgrade()` passent kind 4 -> 3 (et perdent leur ancien
+`arg4=1` qui n'existe pas dans le vrai schema Codex - seul field6=1 est utilise) ;
+`condition_greater_affix()`/`conditionGreaterAffix()` passent kind 3 -> 4.
+
+**Ajoute** (nouvelles primitives, pas encore branchees partout) : `condition_ancestral()` (kind=2,
+arg4=4 - confirme par le filtre reel de l'utilisateur, confiance haute) et
+`condition_item_power_range()` (kind=0 - vient seulement des deux ecrits externes, aucune
+corroboration independante dans l'echantillon reel, confiance plus basse, pas utilisee pour l'instant).
+
+**Reponse a la question "mon filtre est-il meilleur ?"** : oui sur un point reel (ciblage par
+emplacement, connaissance precise de quelles stats comptent sur quel slot) - mais copier tel quel
+l'architecture par-emplacement pour la generation automatique serait RISQUE, pas juste une question de
+retro-ingenierie : notre pipeline de scraping ne recupere qu'une liste "Stat Priority" APLATIE (pas
+d'association fiable stat -> emplacement, deja documente le 2026-09-20 - voir plus haut dans ce fichier)
+; generer des regles par-emplacement sur de mauvaises donnees masquerait des Legendaires qui comptent
+reellement. Decision : v2.24 se limite a integrer ce qui est sur et utile sans ces donnees manquantes -
+le mode Strict exige desormais Ancestral (comme les vrais filtres "Strict" communautaires) sur ses
+regles Rare-BiS et Legendaire/Unique+GA. L'architecture par-emplacement reste une piste pour plus tard,
+conditionnee a resoudre l'extraction fiable des priorites de stats par emplacement.
+
+**Pas verifie en jeu** : le fix Codex/GreaterAffix et les nouvelles conditions Ancestral reposent sur
+deux ecrits externes + un seul echantillon reel decode, pas sur un test d'import en jeu fait par ce
+projet. Recommande a l'utilisateur d'importer un petit filtre de test (une regle a la fois) pour
+confirmer visuellement, meme methode que celle qu'Upsilon72 dit avoir utilisee pour ses 77 affixes.
+
+Script de decodage generique (marche binaire protobuf, sans dependance au schema suppose) garde dans
+le scratchpad, non committe - pourrait valoir la peine d'en faire un vrai module
+`app/loot_filter/decoder.py` si le besoin de decoder des filtres revient.
+
+## 2026-09-22 (suite) - CHARM/SEAL inverses trouves + scraping par-emplacement du panneau "Stat Priority" de Maxroll (v2.25)
+
+**CHARM/SEAL inverses** : en decodant octet par octet la regle "Codex & Sceaux" du filtre de
+l'utilisateur, son ID de type d'objet est 0x00237E80 - la table externe (D4LootBench) dit que cette
+valeur est le Sceau Horadrique, pas le Charme, coherent avec le nom de la regle ("Sceaux", pas
+"Charmes"). Nos constantes CHARM/SEAL (heritees d'Upsilon72) etaient donc aussi inversees. Corrige
+dans `codec.py` (CHARM=0x0022ED05, SEAL=0x00237E80) et le userscript. Sans impact fonctionnel avant
+ce fix (notre seule regle les utilisait ensemble), mais aurait fausse toute regle Charme-seul ou
+Sceau-seul future. Au passage, le decodage brut de cette meme regle reconfirme independamment le fix
+kind=3/4 de la session precedente : sa deuxieme condition est kind=3/field6=1 (= Codex Upgrade sous
+le schema corrige), ce qui est la seule interpretation qui a un sens pour une regle nommee "Codex...".
+
+**Panneau "Stat Priority" par emplacement (Maxroll)** : l'utilisateur a montre une capture d'ecran du
+panneau "Stat Priority" de Maxroll sur son propre build - un objet par emplacement d'equipement avec
+sa propre liste numerotee de stats prioritaires (Heaume, Plastron, Gants, Pantalon, Bottes, Arme a
+distance, Main Principale, Main Secondaire, Sceau, Charmes). C'est exactement la donnee qui manquait
+(constatee le 2026-09-20, reconfirmee la session precedente) pour generer des regles par-emplacement
+comme celles du filtre "Dance Of Knives" de l'utilisateur. Verifie que ce panneau est rendu en
+JavaScript cote client (WebFetch ne le voit pas, page vide/coquille) - mais ca ne bloque rien,
+puisque c'est le userscript qui tourne DANS le navigateur qui lit deja la page une fois hydratee,
+exactement comme il le fait pour les traductions.
+
+**Implemente** : `findPerSlotStatPriority()`, meme style defensif que le reste du projet (detection
+par LIBELLE VISIBLE - "Helm", "Chest Armor", etc - pas par classe CSS, puisque la structure DOM reelle
+de Maxroll n'etait pas inspectable a distance). Pour chaque libellé trouve (element sans enfants),
+remonte les ancetres jusqu'a trouver celui dont le texte contient une liste numerotee - suppose etre
+la carte de cet emplacement - et lit la liste numerotee DE CETTE carte seulement (pas de toute la
+page, contrairement a `findPriorityAffixIds()` qui pool tout). `buildPerSlotRules()` transforme ce
+resultat en regles RECOLOR (Rare + Type d'objet + >=2 des affixes reconnus de cet emplacement),
+IGNORE (et signale) les emplacements sans ID de type connu (Heaume, Pantalon - jamais confirmes) ou
+avec moins de 2 stats reconnues - jamais devine. Nouvelle table `ITEM_TYPE_IDS` avec 8 emplacements
+couverts (Anneaux, Amulettes, Bottes, Gants, Plastron, Main Principale/Secondaire, Arme a distance).
+
+**Choix delibere : additif, pas un remplacement d'architecture**. Contrairement au filtre de
+l'utilisateur (qui n'a AUCUNE regle "garder toutes les legendaires" de secours - son masquage final
+couvre Legendaire/Unique, il compte entierement sur sa connaissance manuelle exhaustive par
+emplacement, y compris 3 regles "Unique specifique" pour Casque/Pantalon/Arme2 qu'on ne peut pas
+reproduire automatiquement), le generateur garde ses regles de secours (Legendaires+GA, Mythique) -
+les regles par-emplacement viennent en PLUS, pas a la place, tant que la couverture des ID de type
+et la fiabilite du scraping ne sont pas confirmees en conditions reelles. Cablé dans le flux existant
+de "Générer le filtre" : le filtre Strict recoit maintenant automatiquement les regles par-emplacement
+quand le panneau est detecte, avec une note listant quels emplacements ont ete pris en compte /
+ignores et pourquoi.
+
+**Teste hors-navigateur** (sandbox Node, meme methode que la session precedente) :
+`buildPerSlotRules()` avec des donnees simulees produit exactement 1 regle sur 3 emplacements
+factices (Gants accepte - 2 stats reconnues + ID connu ; Bottes ignorees - 1 seule stat reconnue ;
+Heaume ignore - pas d'ID de type connu), et le decodage protobuf de la regle generee confirme que
+Rarete/Type d'objet/Affixes sont corrects. `findPerSlotStatPriority()` elle-meme n'a PAS pu etre
+testee (necessite un vrai DOM Maxroll hydrate, impossible a simuler fidelement) - **c'est la partie la
+moins fiable de ce qui a ete livre aujourd'hui**, a valider par l'utilisateur en conditions reelles
+avant de faire confiance aux emplacements detectes.
+
+## 2026-09-22 (suite) - Bug de scraping trouve et corrige avec l'aide de l'utilisateur (DevTools) - v2.26
+
+Test en conditions reelles de v2.25 : l'utilisateur a clique "Générer le filtre" sur la page Maxroll du
+build, meme avec l'onglet "Stat Priority" actif manuellement - **rien detecte**, ni l'ancienne detection
+a plat ni la nouvelle par-emplacement. Diagnostic pose : les "1." "2." "3." visibles a l'ecran ne sont
+peut-etre pas du vrai texte (numerotation CSS), ce qui casserait les deux regex qui en dependaient.
+
+L'utilisateur a confirme via DevTools (Elements + Console) :
+- Le panneau vit dans `div.d4t-PriorityEmbed > div.d4t-content` - un **widget tiers "d4tools" integre**
+  a la page Maxroll, pas du Maxroll natif.
+- Structure confirmee par emplacement : `.d4t-item > .d4t-body` contient `.d4t-slot` (nom de
+  l'emplacement, ex. "Helm") et un `<ul>` de `<li class="d4t-number">` (un par stat prioritaire, plus
+  un `<li class="d4t-craft">` separe pour la suggestion de Tempering/craft - pas une priorite).
+- Confirme dans la Console : `document.body.innerText.match(/.{0,40}Imbuement Skills.{0,40}/)` renvoie
+  `"Ranks to Imbuement Skills"` **sans le "1. "** - preuve directe que le numero est genere par CSS,
+  pas du texte reel. Diagnostic initial valide.
+
+**Corrige** : `findPerSlotStatPriority()` et `findPriorityAffixIds()` utilisent maintenant en priorite
+les vrais selecteurs confirmes (`.d4t-item`, `.d4t-slot`, `li.d4t-number`) via une nouvelle fonction
+partagee `extractStatPriorityFromD4ToolsWidget()`, bien plus fiable que l'heuristique textuelle
+d'origine (gardee en repli pour les sites sans ce widget, toujours non confirmee ailleurs). Avantage
+supplementaire : cette methode lit le nom d'emplacement directement depuis `.d4t-slot` (pas besoin de
+deviner un vocabulaire de libelles a l'avance) - fonctionnera aussi pour des emplacements qu'on n'avait
+pas explicitement listes (Charm 1/Charm 2, futurs slots specifiques a une classe, etc).
+
+Teste hors-navigateur (sandbox Node, meme methode) : pas de regression sur les plomberies existantes
+(le fake DOM du sandbox ne peut pas simuler `.d4t-item`, donc cette partie precise reste a valider par
+l'utilisateur en conditions reelles - demande faite).
+
+Bonne collaboration de session : le diagnostic a distance (hypothese posee sans acces DOM) + la
+verification DevTools de l'utilisateur (Elements pour la structure, Console pour confirmer
+l'hypothese) a permis de corriger un vrai bug en quelques allers-retours plutot que de deviner a
+l'aveugle.
+
+## 2026-09-22 (suite) - v2.26 validee en conditions reelles (a un bug de nommage pres) - fix v2.27
+
+L'utilisateur a reteste v2.26 sur la meme page Maxroll : **succes en grande partie**. La note
+par-emplacement liste desormais 6 emplacements avec regles precises ajoutees au filtre Strict : Chest
+Armor, Gloves, Boots, Ranged Weapon, Mainhand, Offhand - chacun avec ses vraies stats prioritaires
+detectees (ex. Gloves -> Vulnerable Damage Multiplier, Damage Over Time Multiplier, Poison Damage
+Multiplier). Le pool a plat (`findPriorityAffixIds`) fonctionne aussi desormais (avant : "aucune trouvee").
+
+**Bug trouve** : Amulet et les deux anneaux etaient signales "ignores faute d'ID de type", alors qu'on a
+bien un ID pour ce type d'objet - la vraie cause etait un **mauvais nom de cle** dans `ITEM_TYPE_IDS` :
+la table utilisait "Rings"/"Amulets" (pluriel generique, un choix de depart non confirme), alors que le
+vrai libelle `.d4t-slot` de ce build est "Amulet" (singulier) et "Left Ring"/"Right Ring" (deux
+emplacements distincts, pas un seul "Rings" generique). Corrige dans `ITEM_TYPE_IDS` et `SLOT_LABELS`
+(v2.27) - meme ID reutilise pour "Left Ring" et "Right Ring".
+
+Seaux et Charmes (Charm 1 a 6 sur ce build) restent hors couverture par-emplacement, mais c'est correct
+en l'etat : ces emplacements ne peuvent jamais dropper en Rare dans le jeu (uniquement Legendaire), donc
+une regle "Rare + ce type" n'aurait jamais pu matcher quoi que ce soit de toute facon - deja geres par
+la regle separee "Legendary Talismans"/Codex.
+
+**Reste a valider** : import du code Strict resultant en jeu (verification visuelle que les regles
+par-emplacement recolorent bien les bonnes Rares), et Heaume/Pantalon restent sans ID de type confirme
+(toujours hors couverture, comme documente depuis le debut de cette fonctionnalite).
+
+## 2026-09-22 (suite) - Validation en jeu reussie + regles par-emplacement a deux paliers (v2.28)
+
+**Confirme par l'utilisateur : ca fonctionne en jeu reel.** Premiere validation en jeu de cette
+fonctionnalite (filtre importe, comportement visuel correct).
+
+Suggestion utilisateur : un 3eme filtre encore plus precis (objets a 3 affixes sur un emplacement)
+plutot que 2, et possibilite de fusionner ca dans le meme filtre plutot qu'un code separe. Reponse :
+pas besoin d'un 3eme filtre - reutilise exactement l'idiome deja en place pour le pool a plat ("Check
+Rare - 2+/3+ Build Affixes", orange puis dore qui l'ecrase) mais applique par emplacement. `buildPerSlotRules()`
+genere maintenant DEUX regles par emplacement avec 3+ stats reconnues (2+ orange, 3+ dore par-dessus,
+meme convention priorite/ordre que partout ailleurs dans le generateur) et une seule regle 2+ pour les
+emplacements avec exactement 2 stats reconnues. Un seul filtre Strict, deux paliers de precision par
+emplacement au lieu de deux codes a choisir.
+
+Teste hors-navigateur (sandbox Node) : scenario a 3 emplacements simules (Gloves 3 stats -> 2 regles,
+Chest Armor 2 stats -> 1 regle, Boots/Helm toujours ignores) produit exactement le nombre de regles
+attendu. Pas encore reteste en jeu avec ce nouveau palier - a faire par l'utilisateur.
+
+## 2026-09-22 (suite) - Options personnalisables + affichage simplifie (v2.29)
+
+Suite au retour positif ("genial, on va pouvoir affiner"), 3 demandes : ne chercher que les objets
+Ancestraux, simplifier l'affichage (trop de texte affiche par defaut), et des cases a cocher pour
+personnaliser le filtre avant de le lancer.
+
+**Cases a cocher** (panneau persistant, sous "Générer le filtre", repliees par defaut via
+`<details>`) : Ancestral uniquement / Masquer Légendaires-Uniques sans Greater Affix / Règles précises
+par emplacement - toutes cochees par defaut (= comportement Strict inchange si l'utilisateur n'y
+touche pas), etat persiste via GM_setValue/GM_getValue (meme pattern que "Mes Builds").
+
+`generateFilterCode()` prend maintenant un objet `options` (`requireAncestral`,
+`hideLegendaryWithoutGA`) au lieu d'un comportement Strict fige en dur. Quand Ancestral est decoche,
+la condition Ancestral disparait des regles BiS/Legendaire+GA/par-emplacement. Quand "Masquer sans GA"
+est decoche, le filtre Strict garde toutes les Legendaires/Uniques sans condition (comme le filtre
+Ouvert) au lieu de les masquer par defaut. Quand "Regles precises" est decoche, le scraping Maxroll par
+emplacement est saute entierement (evite le travail DOM inutile). `buildPerSlotRules()` prend aussi un
+parametre `requireAncestral` desormais.
+
+**Affichage simplifie** : la longue liste "Priorite de stats detectee..." + le detail par-emplacement
+(qui pouvait faire 10+ lignes) sont remplaces par un `<summary>` d'une ligne ("X stat(s) de priorite
+detectee(s), Y emplacement(s) precis") replie par defaut, avec le detail complet dans un `<details>`
+qu'on ouvre seulement si besoin.
+
+Teste hors-navigateur (sandbox Node) : le meme scenario avec options par defaut vs
+`{requireAncestral:false, hideLegendaryWithoutGA:false}` produit deux codes differents (408 vs 324
+octets decodes), confirmant que les options affectent bien la sortie. Pas encore teste en conditions
+reelles (cases a cocher + persistance GM_setValue).
+
+## 2026-09-22 (suite) - Couleurs personnalisables + legende + nom de filtre abrege (v2.30)
+
+Trois demandes apres le retour positif sur les cases a cocher :
+
+**Couleurs personnalisables** (3 cases comme demande) : selecteurs `<input type="color">` pour BiS
+(dore par defaut), Bon (orange par defaut) et Greater Affix (cyan par defaut), dans le meme bloc
+d'options que les cases a cocher deja ajoutees, persistes pareil via GM_setValue. `generateFilterCode()`
+et `buildPerSlotRules()` prennent ces couleurs en parametre au lieu des constantes COLOR_GOLD/
+COLOR_ORANGE/COLOR_CYAN codees en dur (le vert Codex/Legendaire reste fixe, comme demande - seulement
+3 cases). Nouvelle fonction `hexToColor()` convertit le hex du `<input type="color">` vers le format
+ARGB packe attendu par `makeRule()`.
+
+**Legende** : bloc toujours visible juste avant les filtres generes, avec un petit carre de la vraie
+couleur choisie a cote de chaque signification (BiS, Bon, Greater Affix, Codex/Legendaire).
+
+**Nom de filtre abrege** : `[MR] Dance of Knives Strict` au lieu de `Dance of Knives Rogue End... - Strict`
+- tag de 2 lettres du site source (MR=Maxroll, IB=InfinityBuilds, KL=kami-labs, les 3 seules valeurs
+possibles de `sourceLabel`) + titre du build tronque a 18 caracteres.
+
+Teste hors-navigateur : `hexToColor("#ff00ff")` decode correctement en ARGB, et un filtre genere avec
+cette couleur personnalisee contient bien les bons octets de couleur a la decode. Pas encore teste en
+conditions reelles (selecteurs de couleur + legende + nouveau nom de filtre).
+
+## 2026-09-22 (suite) - Legende deplacee et repliable (v2.31)
+
+Demande utilisateur : deplacer la legende des couleurs juste sous les selecteurs de couleur (au lieu
+du panneau de resultat genere), et la rendre repliable ("petite fleche a derouler pour le detail").
+Fait : legende retiree du panneau de resultat, deplacee dans le bloc d'options persistant juste apres
+`.d4a-color-row`, dans son propre `<details class="d4a-legend-details">`. Les carres de couleur de la
+legende sont maintenant lies en direct aux 3 selecteurs (`oninput` met a jour le carre immediatement,
+`onchange` persiste via GM_setValue comme avant) puisque la legende vit desormais dans le panneau
+statique construit une seule fois, plutot que reconstruite a chaque generation de filtre.
+
+## 2026-09-22 (suite) - Legendaires/Uniques sans GA mais avec bonnes stats (v2.32)
+
+Question utilisateur : possible d'ajuster le filtre pour voir les Legendaires/Uniques sans Greater
+Affix mais avec les bonnes stats quand meme, ou est-ce deja prevu ? Reponse : pas encore prevu -
+jusqu'ici, sans GA, une Legendaire/Unique etait masquee sans egard a ses stats.
+
+Ajoute une 4e case ("...mais garder si 2+ bonnes stats meme sans GA", cochee par defaut) qui ajoute
+une regle intermediaire : Legendaire/Unique avec 2+ des stats de build (+ Ancestral si l'option est
+cochee), recoloree "Bon" (orange) - poussee AVANT la regle Greater Affix (dore) dans la liste de
+regles, meme convention que partout ailleurs (la regle la plus specifique/meilleure ecrase la
+precedente pour un objet qui correspond aux deux).
+
+Teste hors-navigateur : decodage protobuf confirme la structure exacte attendue - regle orange
+(AFFIXES REQUIS >= 2, Ancestral) avant la regle doree (Greater Affix, Ancestral), les deux ciblant
+Legendaire/Unique. Pas encore teste en jeu.
+
+## 2026-09-22 (suite) - Affichage du resultat encore simplifie (v2.33)
+
+Demande : ne garder par defaut que les boutons pour copier les filtres, texte du filtre dans une
+fenetre optionnelle, "on clique sur le filtre qui nous interesse puis bouton (voir le detail) et
+autre bouton (voir le texte du filtre)".
+
+Restructure le panneau de resultat de "Générer le filtre" :
+- Equipement/Competences/note de competences non resolues/detection (stat priority + par-emplacement)
+  fusionnes dans UN SEUL `<details>` "👁 Détails du build", replie par defaut.
+- Chaque filtre (Ouvert/Strict) n'affiche plus sa textarea par defaut : juste la description + deux
+  boutons ("📋 Copier" et "📄 Voir le texte"). Le bouton "Voir le texte" bascule juste l'attribut
+  `hidden` de la textarea (et change son propre libelle en "🙈 Masquer le texte") - pas besoin
+  d'ouvrir le texte pour copier, le bouton Copier lit directement `textarea.value`.
+
+Vue par defaut desormais tres compacte : titre, lien source, un repli details, puis 2x
+(titre-filtre + description + 2 boutons) - plus aucune textarea ni liste de chips visible sans
+interaction. Teste hors-navigateur (syntaxe + logique de generation inchangee, ce changement est
+uniquement du HTML/CSS/gestion d'evenements cote panneau). Pas encore teste en conditions reelles.
+
+## 2026-09-22 (suite) - Titre duplique retire, titre principal centre (v2.34)
+
+Demande : effacer le "Diablo IV Assistant" qui s'affichait en dessous de "Comparer les variantes"
+(duplique le titre bleu deja affiche en haut du panneau persistant) et centrer ce titre bleu.
+
+Corrige dans `renderPanel()` : strip automatique d'un `<h3>Diablo IV Assistant</h3>` en tete du HTML
+recu, plutot que de retoucher les ~15 appels de renderPanel() qui l'incluaient chacun individuellement
+(risque plus faible qu'editer chaque site a la main). `#d4a-column-title` (le titre persistant en
+haut, celui reellement visible en premier) recoit `text-align: center`.
+
+## 2026-09-22 (suite) - ID de type d'objet Heaume trouve (v2.35)
+
+Utilisateur a cree un mini-filtre en jeu (juste "Heaume", ItemType uniquement) et colle son code
+d'export. Decode octet par octet (script de decodage du scratchpad) : `ItemType parmi: type inconnu
+0x0006D16E` - confirme, ajoute a `ITEM_TYPE_IDS["Helm"]`. Meme methode qu'Upsilon72 pour ses affixes
+(export mono-condition, decode a la main). Pantalon reste a faire (meme methode, filtre pas encore
+fourni pour ce slot).
+
+## 2026-09-22 (suite) - ID de type d'objet Pantalon trouve - couverture par-emplacement complete (v2.36)
+
+Meme methode, filtre mono-condition (Pantalon) exporte et colle par l'utilisateur : `0x0006D16F`.
+Ajoute a `ITEM_TYPE_IDS["Pants"]`. Bonus : les 5 IDs d'armure connus (Chest 0x...16D, Helm 0x...16E,
+Pants 0x...16F, Boots 0x...170, Gloves 0x...171) sont parfaitement consecutifs - pas un hasard,
+l'espace d'ID de type d'objet semble sequentiel au moins pour les pieces d'armure. **Tous les
+emplacements d'equipement pertinents (10, hors Sceau/Charmes qui ne peuvent jamais etre Rare) ont
+maintenant un ID confirme** - derniere lacune du systeme par-emplacement fermee.
+
+Script de test du scratchpad ajuste (le cas de test "emplacement sans ID connu" utilisait Pants, qui
+en a desormais un - remplace par un nom d'emplacement fictif pour continuer a tester ce chemin de
+code). Tous les tests passent.
+
+## 2026-09-22 (suite) - Decodage en masse de diablofilter.com (168 filtres reels) - v2.37
+
+Suggestion utilisateur : analyser diablofilter.com en profondeur en lisant les differents filtres du
+site pour trouver ce qui nous manque, plutot que de tester une compétence a la fois en jeu.
+
+**Faisabilite** : verifie d'abord que le code d'export (base64) de chaque filtre est present dans le
+HTML brut de sa page de detail (confirme via `curl` direct - contrairement a WebFetch qui ne le voit
+pas, le contenu etant transforme en markdown par un petit modele qui perd le code). `curl` fonctionne
+tres bien depuis Bash dans cet environnement.
+
+**Execution** : trouve `sitemap-filters.xml` (214 URLs de filtres), telecharge les 213 pages
+accessibles via curl, puis un script Python (`research/bulk_decode.py`) qui :
+1. Cherche dans chaque HTML une chaine base64 qui parse comme un message Filter protobuf valide
+   (168/213 pages ont donne un code valide - le reste sont probablement des pages de guide/liste
+   sans filtre exportable directement, ou des filtres retires).
+2. Pour chaque regle de chaque filtre decode, collecte tous les ID de type d'objet (kind=5) et
+   d'affixe requis/optionnel (kind=6/7) qui ne sont PAS deja dans nos tables.
+3. Groupe les ID inconnus par frequence et par slugs de filtres ou ils apparaissent (le nom du
+   fichier/URL contient souvent le nom du build/de la classe).
+
+**Resultats** : 16 ID de type d'objet inconnus (probablement d'autres sous-types d'armes/armures -
+non assignes, confiance trop faible pour deviner sans contexte de nom de regle), et **84 ID
+d'affixe/competence inconnus**, dont deux corroborés avec confiance suffisante pour etre integres
+tout de suite (methode : un ID qui n'apparait QUE dans des filtres dont le slug nomme UNE competence
+precise, chez PLUSIEURS auteurs independants, est une correlation forte) :
+- `SKILL_AFFIX_IDS.rogue["Dance of Knives"] = 0x001E7931` (uniquement dans des filtres
+  "dance-of-knives-*", 3 auteurs differents)
+- `AFFIX_IDS["Imbuement Skills"] = 0x001D6E45` (retrouve aussi sur la propre regle Heaume de
+  l'utilisateur decodee en debut de session - "Ranks to Imbuement Skills" vu litteralement sur sa
+  capture Maxroll)
+
+**Bonus** : cet echantillon massif (168 filtres reels independants) reconfirme encore une fois - a
+grande echelle cette fois, pas juste sur un seul filtre - le fix Codex/GreaterAffix et CHARM/SEAL de
+la session precedente.
+
+**Reste ouvert** : les 82 autres ID d'affixe/competence et les 16 ID de type d'objet, sauvegardes
+dans `research/diablofilter-bulk-decode-2026-09-22.json` (+ `research/bulk_decode.py` reutilisable,
++ `research/README.md` explicatif) pour continuer ce travail plus tard - la correlation par slug
+marche bien pour les competences (noms de build explicites) mais est plus incertaine pour les types
+d'objet (les slugs ne nomment pas les emplacements d'equipement).
+
+## 2026-09-22 (suite) - Metadonnees JSON de diablofilter.com trouvees, 4 nouvelles competences confirmees (v2.38)
+
+Utilisateur voulait pousser a fond sur les 84 ID inconnus, et a propose de chercher d'autres sources
+si je lui disais ce qui manque.
+
+**Grosse amelioration de methode** : chaque page de filtre diablofilter.com embarque un objet JSON
+`window.__PRELOADED_FILTER__` avec le code base64 ET des metadonnees structurees fiables : `class`
+(la vraie classe, ex. "rogue") et `skill_icon` (un identifiant de competence propre, ex.
+"dance_of_knives") - bien plus fiable que deviner depuis le nom de fichier (methode de la passe
+precedente). Reecrit `research/bulk_decode.py` (v2) pour lire ce JSON directement.
+
+**Resultat** : sur les ID inconnus, ceux dont TOUTES les occurrences pointent vers exactement une
+seule paire (classe, skill_icon) - a travers plusieurs filtres/auteurs independants - et qui n'ont
+AUCUN autre ID candidat concurrent pour cette meme competence, sont surs. 4 nouvelles confirmations
+sans ambiguite :
+- `SKILL_AFFIX_IDS.warlock["Command Fallen"] = 0x0026AD4D` (16 filtres)
+- `SKILL_AFFIX_IDS.sorcerer["Firewall"] = 0x001D6758` (9 filtres)
+- `SKILL_AFFIX_IDS.sorcerer["Meteor"] = 0x001D6766` (6 filtres)
+- `SKILL_AFFIX_IDS.paladin["Holy Light Aura"] = 0x00261ABD` (2 filtres - **premiere entree pour
+  Paladin**, table vide jusqu'ici)
+
+**Ce qui bloque la suite** : pour la plupart des autres competences (Whirlwind, Pulverize,
+Penetrating Shot, Hydra, Wolves, Skeletal Warriors...), il y a 2 a 4 ID CANDIDATS CONCURRENTS pour la
+meme competence (un filtre pour cette competence combine generalement plusieurs stats liees a la
+fois, donc plusieurs ID inconnus apparaissent ensemble) - impossible de determiner lequel est
+vraiment "+rangs a cette competence" sans signal supplementaire. Delibrement non devine plutot que de
+risquer une mauvaise attribution. Meme chose pour les 16 ID de type d'objet inconnus (armes/armures
+manquantes) - les slugs de filtre ne nomment pas les emplacements d'equipement, donc aucune
+correlation fiable possible avec cette seule source.
+
+`research/README.md` et `research/diablofilter-bulk-decode-2026-09-22.json` mis a jour avec l'etat
+complet (candidats concurrents par competence inclus) pour reprendre ce travail plus tard, soit avec
+une autre source, soit avec la methode fiable a 100% (filtre de test mono-condition en jeu, comme pour
+Heaume/Pantalon).
+
+## 2026-09-22 (suite) - TROUVAILLE MAJEURE : source de donnees faisant autorite, corrige des erreurs dans des donnees jugees "confirmees" depuis le debut du projet (v2.39)
+
+En cherchant a identifier les ID concurrents restants (Whirlwind, Pulverize, etc - la ou plusieurs ID
+candidats empechaient une attribution sure via la correlation diablofilter.com), exploration de deux
+depots de donnees jouables communautaires (DiabloTools/d4data - pas le bon format d'ID, ecarte) puis
+**github.com/ThunderEagle/D4LootBench** dont le depot contient `src/D4LootBench.Core/Data/d4-data.json`
+- une base de donnees COMPLETE et maintenue, faite specifiquement pour ce format de filtre :
+294 affixes, 224 competences, 27 types d'objet, chacun avec un `hash` ET, pour la plupart, un
+`snoName` (le vrai identifiant interne du moteur de jeu, ex. `S04_CritChance`,
+`X2_SkillRankBonus_Warlock_Core_BlazingScream`) - la preuve la plus proche de la verite qu'on puisse
+avoir sans dataminer le jeu nous-memes.
+
+**Resultat immediat** : recoupe avec les 84 ID de competence inconnus -> **84/84 resolus**. Recoupe
+avec les 16 ID de type d'objet inconnus -> 13/16 resolus (table complete des types d'armes : Epee,
+Epee 2M, Hache 2M, Baton, Faux, Polearme, Baguette, Focus, Totem, Bouclier, Arbalete de poing - en
+plus de ce qu'on avait deja). 3 ID de type d'objet restent non-resolus meme dans cette source (tres
+frequents - 170 a 230 filtres chacun - probablement pas un emplacement d'equipement du tout, peut-etre
+un Sigil ou autre chose, pas investigue plus).
+
+**Puis une decouverte bien plus importante en croisant les valeurs DEJA "confirmees"** : en verifiant
+par curiosite si nos AFFIX_IDS existants (herites d'Upsilon72, "confirmes" par leur propre methode
+d'export mono-affixe) correspondaient bien a la meme table, **8 divergences trouvees sur 62 verifiees**.
+Le `snoName` a servi de juge de paix a chaque fois (identifiant moteur explicite, ex.
+"S04_CritChance" vs "S04_CritDamage" - sans ambiguite possible) :
+
+- **Willpower, Attack Speed, Critical Strike Chance, Critical Strike Damage Multiplier et All Damage
+  Multiplier avaient chacun l'ID d'un AUTRE de ce groupe** (un groupe de 5 valeurs melangees dans la
+  plage 0x1BEAB4-0x1BEAD4). Corrige.
+- **Resource Cost Reduction** decale de 2 (0x1D3A0F -> 0x1D3A11, la vraie valeur "Lesser" du jeu).
+- **GENERIC_SKILL_AFFIX_IDS["All Skills"]** etait en fait l'ID de "Tyrant's Grasp" (une competence
+  Warlock specifique !), et le vrai "+All Skills" (X2_SkillRankBonus_AllSkills) se trouvait par un
+  melange separe sous l'ancienne entree "Hell Fracture" de SKILL_AFFIX_IDS.warlock.
+- **9 des 13 entrees Warlock d'origine avaient l'ID d'une AUTRE competence Warlock** (meme genre de
+  melange, plage 0x0026AD42-0x0026ADCD) : Occult Skills, Demonology Skills, Sigil of Chaos, Sigil of
+  Summons, Blazing Scream, Bombardment, Tyrant's Grasp, Hell Fracture, Abyss Skills - toutes
+  corrigees avec le `snoName` en tiebreaker. Seules Hellfire Skills, Sigil of Subversion, Rampage et
+  Dread Claws etaient correctes a l'origine.
+
+**Consequence concrete, a bien comprendre** : depuis le tout debut de ce projet, TOUT filtre genere
+utilisant Willpower/Attack Speed/Critical Strike Chance/Critical Strike Damage Multiplier/All Damage
+Multiplier comme stat prioritaire, OU TOUT filtre genere pour un build Warlock (les 4/5 de ses
+competences), ciblait en realite une AUTRE stat/competence que celle affichee dans le nom de la regle.
+Le mecanisme global du filtre restait fonctionnel (une vraie stat etait bien ciblee, juste pas la
+bonne), donc rien n'aurait semble "casse" visuellement sans verification precise - c'est exactement le
+genre d'erreur silencieuse qu'une verification a l'oeil en jeu ne detecte pas facilement (les deux
+stats melangees produisent des resultats plausibles).
+
+**Applique dans `app/loot_filter/data.py`** (source canonique, docstring du module entierement
+reecrit pour documenter cette correction) **et porte fidelement dans le userscript** (v2.39) :
+- 6 corrections dans AFFIX_IDS (les 5 + Resource Cost Reduction)
+- 1 correction dans GENERIC_SKILL_AFFIX_IDS (All Skills)
+- Table warlock entierement corrigee (14 entrees, 9 corrigees + 5 nouvelles)
+- **228 entrees SKILL_AFFIX_IDS au total** sur les 8 classes (avant : 13 au total, seulement Warlock) -
+  Paladin avait une table vide, a desormais 25 entrees.
+
+**Verifie** : `python -c "from app.loot_filter.generator import generate_filter_code; ..."` avec les
+6 competences reelles du build de l'utilisateur (Smoke Grenade, Concealment, Shadow Clone, Dance of
+Knives, Dark Shroud, Poison Imbuement) -> **5 sur 6 resolues maintenant** (seul "Shadow Clone" reste
+non trouve, probablement une competence sans affixe "+rangs" dediee dans le jeu, pas une lacune de
+notre table). Avant cette session : 0 sur 6. Suite Node.js (sandbox) toujours verte, aucune regression.
+
+**`research/` mis a jour** : `d4lootbench-data-2026-09-22.json` (snapshot de la source), README
+entierement reecrit pour refleter que cette source ferme presque tout ce qui restait ouvert.
+
+**A garder en tete pour la suite** : cette source est une base de donnees tierce maintenue, pas une
+verification par export mono-affixe en jeu comme la methode Upsilon72/Heaume/Pantalon. Si un filtre
+genere avec une de ces nouvelles valeurs semble faux en jeu, la methode de verification fiable a 100%
+reste la meme : un filtre de test a une seule condition, exporte et decode.
+
+## 2026-09-22 (suite) - Ciblage d'Uniques nommes par identite + clarification sur les traductions (v2.40)
+
+Suite logique de la trouvaille D4LootBench : la meme base de donnees contient aussi 771 objets
+Uniques nommes et 45 sets de Talismans, avec leur SNO id - exactement ce qu'il fallait pour la
+condition "Specific Unique" (kind=8) decouverte dans le propre filtre "Dance Of Knives" de
+l'utilisateur en tout debut de session (3 regles ciblant un objet unique precis par slot : Etna's
+Lost Dagger, Shrouded Gift, Harlequin Crest) mais jamais implementee jusqu'ici.
+
+**Question de l'utilisateur : est-ce que ca ameliore aussi les traductions ?** Reponse honnete :
+non, D4LootBench est anglais uniquement, aucun texte francais dedans. Verifie quand meme la
+couverture reelle de notre dictionnaire FR/EN (`app/data/fr_en_dictionary.json`, construit en
+comparant les pages EN/FR d'InfinityBuilds) contre cette base : **337 Uniques dans le jeu, 227 (67%)
+ont une traduction, 110 manquent** ; **224 competences dans le jeu, seulement 50 (22%) ont une
+traduction, 174 manquent**. Chiffre honnete a garder en tete - combler ca necessiterait soit de
+scraper plus de builds (couverture organique), soit trouver une VRAIE source bilingue EN/FR (pas
+celle-ci).
+
+**Implemente** :
+- `codec.py`/userscript : nouvelle fonction `condition_specific_unique()`/`conditionSpecificUnique()`
+  (kind=8, deja vu dans le vrai filtre de l'utilisateur, confirme aussi contre le schema D4LootBench).
+- `app/loot_filter/uniques.py` (nouveau fichier) et son miroir JS dans le userscript :
+  `UNIQUE_ITEM_IDS`, 335 noms d'Uniques -> liste de SNO id (la plupart des objets ont PLUSIEURS id -
+  reeditions saisonnieres/variantes de puissance d'objet - tous regroupes, meme convention que les
+  ItemType multi-sous-type ailleurs dans le projet). 2 entrees de debug/placeholder filtrees.
+- `build_unique_item_rules()`/`buildUniqueItemRules()` : pour chaque objet de la liste d'equipement
+  scrapee du build (`result.itemsEn`), cherche une correspondance dans la table ; si trouvee, ajoute
+  une regle SHOW "Keep Unique - <Nom>" avec la condition Specific Unique. Les noms qui ne
+  correspondent pas (la plupart - un Legendaire a un nom de saveur genere aleatoirement, pas un nom
+  d'Unique fixe) sont ignores silencieusement, meme convention que les competences non resolues.
+- Cable dans les DEUX filtres (Ouvert ET Strict, contrairement aux regles par-emplacement qui restent
+  Strict uniquement) - l'unique BiS d'un build vaut la peine d'etre garde quel que soit le preset.
+- Nouvelle note dans le panneau listant les Uniques reconnus.
+
+**Limite connue et assumee** : cette table n'est PAS exhaustive - "Grief" (une Unique Rogue bien
+connue, visible dans l'equipement du build de l'utilisateur) n'est carrement pas dans les donnees
+D4LootBench. Meme comportement que pour une competence non reconnue : silencieusement ignoree plutot
+que devinee.
+
+**Verifie** : decodage protobuf confirme que la regle generee pour "Etna's Lost Dagger" (l'item
+precisement present dans le filtre original de l'utilisateur) redonne EXACTEMENT le meme sno_id
+(0x276181) qu'observe dans leur filtre reel. Suite Node.js toujours verte.
+
+## 2026-09-22 (suite) - Traductions completees via kami-labs (~400 builds) - v2.41
+
+Suite a la lacune de traduction constatee (67% Uniques, 22% competences) et a la demande de
+l'utilisateur d'utiliser kami-labs et InfinityBuilds pour la combler.
+
+**kami-labs est une bien meilleure source que prevu** : contrairement a InfinityBuilds (necessite
+Playwright, 2 visites de page EN+FR par build, positionnement fragile par correspondance DOM), chaque
+page de build kami-labs.fr sert directement un JSON `window.ESRD_STATE_V3` avec `name_en`/`name_fr`
+(competences) et `name`/`nameFr` + `aspectName`/`aspectNameFr` (objets/aspects) DEJA APPARIES - aucune
+heuristique de position necessaire. Et le rendu est cote serveur (l'ID du build,
+`data-build-id="BUILD-XXXXX"`, est present dans le HTML brut) - simple requete HTTP, pas besoin de
+navigateur. ~400 builds couvrant toutes les saisons depuis S5 (vs ~25 pour la tier list InfinityBuilds
+seule).
+
+**Nouveau** : `app/fr_en/build_dictionary_kamilabs.py` (crawl asynchrone, concurrence bornee a 8) -
+376 pages trouvees, 241 vrais builds (135 echecs = pages d'annuaire/archive sans build reel, normal),
+**736 paires FR/EN extraites**. `app/fr_en/merge_dictionaries.py` fusionne ca dans
+`app/data/fr_en_dictionary.json` en dedupliquant par (fr, en, kind) - **574 entrees vraiment
+nouvelles** ajoutees (les 162 autres etaient deja connues via InfinityBuilds, bon signe de coherence
+entre les deux sources). `scripts/sync_userscript_dictionary.py` (deja existant) re-execute pour
+re-embarquer le dictionnaire dans le userscript.
+
+**Resultat** : dictionnaire passe de 1305 a **1879 entrees**. Couverture verifiee contre les listes
+completes de D4LootBench :
+- Uniques : 67% -> **86%** (46 objets encore sans traduction, contre 110 avant)
+- Competences : 22% -> **57%** (96 encore sans traduction, contre 174 avant)
+
+Amelioration substantielle mais pas totale - il resterait a etendre encore (par exemple en incluant
+aussi les pages d4builds.gg/d4guides.gg/talion.tv si elles offrent aussi du FR/EN aparie, ou en
+acceptant que certains objets tres rares/recents ne soient tout simplement pas couverts par les builds
+publies a ce jour).
+
+**Petit bonus UX** : la note "Uniques reconnus" du panneau affiche maintenant le nom FRANCAIS (via
+`lookupFr()`, deja existant) au lieu du nom EN brut, profitant directement de cette meilleure
+couverture.
+
+Verifie : encodage UTF-8 du fichier fusionne confirme correct au niveau des octets bruts (le "affam�s"
+vu plus tot dans une sortie console etait un artefact d'affichage du terminal Windows, pas une vraie
+corruption). Suite Node.js et syntaxe toujours vertes apres re-synchronisation.
+
+## 2026-09-22 (suite) - Correction : d4builds.gg est deja integre au classement (pas une nouvelle tache)
+
+Utilisateur a fourni deux sources (d4builds.gg pour la liste/notation des builds, slashingcreeps.com
+pour les builds/traduction) en demandant de completer la traduction avec.
+
+**slashingcreeps.com verifie** (un vrai article de build lu integralement) : site 100% francais, texte
+en prose sans AUCUN terme anglais accole (contrairement a kami-labs/InfinityBuilds qui donnent des
+paires EN/FR structurees) - impossible d'en extraire des paires de traduction automatiquement. A la
+demande de l'utilisateur, cette source est abandonnee.
+
+**d4builds.gg verifie** : site 100% anglais (`lang="en"`), ne peut pas non plus fournir de traduction.
+Erreur commise en premiere analyse : j'ai annonce a l'utilisateur que le scraper n'etait "pas encore
+branche" au systeme de classement, en me basant sur un grep incomplet (uniquement dans consensus.py
+et main.py). **C'etait faux** - `app/scrapers/d4builds.py` existe et `app/scrapers/__init__.py`
+l'enregistre bien dans `ALL_SCRAPERS` depuis le tout premier commit du depot (avant meme le debut de
+cette session). Teste en conditions reelles pour confirmer : `rank_builds('warlock')` retourne bien
+des groupes avec `source='d4builds'`, y compris des builds EXCLUSIFS a cette source (non trouves par
+les 5 autres sites) : "Command Fallen", "Profane Sentinel", "Umbral Chains" - confirme concretement
+la remarque de l'utilisateur ("y'a souvent de tres bons builds dessus"). Rien a corriger dans le code,
+juste une correction d'information aupres de l'utilisateur.
+
+## 2026-09-22 (suite) - talion.tv verifie pour la traduction - rien de nouveau a extraire
+
+Utilisateur a suggere talion.tv comme 3eme source pour completer la traduction (apres avoir
+abandonne slashingcreeps.com).
+
+**Uniques** : talion.tv a bien une base structuree EN/FR (`api.talion.tv/api/diablo/uniques/front`,
+name_en/name_fr apparies), mais `scripts/build_talion_uniques_dictionary.py` (deja existant dans le
+projet, source anterieure a cette session) l'a deja entierement fusionnee. Relance pour verifier :
+0 nouvelle entree, 0 correction - deja a jour.
+
+**Competences** : recherche de l'endpoint de detail de build (non documente) via enregistrement des
+vraies requetes reseau avec Playwright pendant le chargement d'une page de build reelle - trouve
+`api.talion.tv/api/builds/{id}/front`. Contenu inspecte (onglet "Arbre de competences", ~975 Ko) :
+texte enrichi redige a la main en francais, aucun champ name_en/name_fr ni aucune autre structure
+EN/FR exploitable nulle part dans les 8+ Mo de reponse - meme limitation que slashingcreeps.com deja
+ecarte. Rien a extraire de plus depuis talion.tv.
+
+**Conclusion** : la couverture de traduction (Uniques 86%, Competences 57%) semble avoir atteint la
+limite pratique des sources automatiquement exploitables identifiees a ce jour. Combler le reste (46
+Uniques, 96 competences) necessiterait soit de la curation manuelle, soit d'accepter le repli Google
+Translate deja en place pour ces cas.
+
+## 2026-09-22 (suite) - d4base.fr trouve par l'utilisateur - encore 417 traductions (v2.42)
+
+Utilisateur a trouve https://d4base.fr/ ("Diablo IV - Base de Donnees FR/EN") apres avoir continue a
+chercher de son cote.
+
+**Verification** : Playwright + enregistrement reseau (meme methode que talion.tv) sur une page
+d'objet reelle -> trouve l'API publique `d4base.fr/api/items.php?sort=nom_fr&dir=asc&limit=500
+[&offset=N]` (plafonnee a 500 par requete, 2 requetes suffisent pour les 612 objets au total).
+Structure ideale : `nom_fr`/`nom_en` deja apparies par objet, plus `description_fr`/`description_en`
+et `type_fr`/`type_en`. Couvre Uniques (dont Mythiques), Aspects, Glyphes et Plateaux de Parangon -
+**pas de competences** (seulement 5 valeurs de `type_fr` dans toute la base : Aspect, Glyphe, Plateau,
+Unique, Unique Mythique).
+
+**Nouveau** : `app/fr_en/build_dictionary_d4base.py` - 587 paires utilisables sur 612 objets. Le
+script de fusion `app/fr_en/merge_dictionaries.py` a ete generalise (accepte maintenant n'importe
+quelle source en argument au lieu d'etre code en dur pour kami-labs uniquement) : **417 entrees
+vraiment nouvelles** fusionnees.
+
+**Resultat** : dictionnaire 1879 -> **2296 entrees**. Couverture :
+- Uniques : 86% -> **89%** (36 encore sans traduction, contre 46 avant)
+- Glyphes de Parangon : 5 -> **70** entrees
+- Plateaux de Parangon : 1 -> **37** entrees
+- Competences : inchange a 57% (cette source n'en a pas)
+
+Suite Node.js et syntaxe toujours vertes apres resynchronisation du userscript.
+
+## 2026-09-22 (suite) - Wowhead ferme (presque) le manque de traduction des competences (v2.43)
+
+Utilisateur a fourni 3 sources (wowhead.com/diablo-4/fr/skills, millenium.org, judgehype.com) en
+demandant une analyse approfondie.
+
+**wowhead.com est excellent** : trouve (Playwright, inspection du HTML rendu) que la page listview
+des competences (`/diablo-4/skills` EN et `/diablo-4/fr/skills` FR) embarque un tableau JSON complet
+de 282 competences DIRECTEMENT dans le HTML initial (la pagination affichee a l'ecran n'est que du
+rendu cote client - toutes les donnees sont deja la), chaque entree avec un `id` numerique interne
+STABLE entre les deux langues (ex. id 165023 = "Fireball" en EN = "Boule de feu" en FR sur les deux
+pages). Jointure par id plutot que par position ou nom - fiable et simple : 2 chargements de page
+(EN + FR), 282 competences chacune, 272 paires exploitables.
+
+**Nouveau** : `app/fr_en/build_dictionary_wowhead.py`. Fusionne (**119 entrees vraiment nouvelles**,
+145 deja connues - bon signal de coherence avec kami-labs). Dictionnaire 2296 -> **2415 entrees**.
+
+**Resultat** : competences 57% -> **71%** en comptage brut, mais **94.7% en réalité** une fois qu'on
+separe les vraies competences individuelles (Boule de feu, Tornade, etc, 160/169 traduites, seulement
+9 manquantes : Arrow Storm, Blizzard, Charge, Dust Devil, Earthquake, Golem, Iron Shrapnel, Rupture,
+Vortex) des 55 noms de CATEGORIE d'affixe restants (ex. "Frost Skills (Sorcerer)") qui ne sont pas de
+vraies competences selectionnables - un site de liste de competences comme Wowhead ne peut
+structurellement pas les avoir, il faudrait une autre source (ou traduction manuelle) si on veut
+combler ca un jour.
+
+**millenium.org et judgehype.com pas encore explores en profondeur** (rendements decroissants une
+fois Wowhead trouve, effort concentre la ou il comptait le plus) - judgehype.com semble necessiter un
+rendu JS complet (page quasi vide en HTML brut), a explorer si besoin plus tard.
+
+Suite Node.js et syntaxe toujours vertes apres resynchronisation.

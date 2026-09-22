@@ -1,0 +1,2270 @@
+{
+  "results": {
+    "2pac-o-lypse-hellfire-endgame-4613f3b5": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "2PAC-O-LYPSE HELLFIRE ENDGAME"
+    },
+    "885t-blood-lance-necromancer-full-endgame-eaf54691": {
+      "class": "necromancer",
+      "skill_icon": "blood_lance",
+      "title": "885T BLOOD LANCE NECROMANCER (FULL ENDGAME)"
+    },
+    "900-ancestral-only-3c4acec9": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "All Classes, 900 ancestral only"
+    },
+    "all-class-meta-season-14-5860547c": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "All Class Meta Season 14"
+    },
+    "all-classes-strict-ga-items-b77008e1": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "All classes-STRICT-GA items"
+    },
+    "all-rounder-end-game-filter-8d1ff05d": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "All Rounder End Game Filter (Updated)"
+    },
+    "apocalypse-endgame-warlock-moxsy-f45136cc": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "Apocalypse Endgame Warlock (Moxsy)"
+    },
+    "apocalypse-maxroll-94888224": {
+      "class": "warlock",
+      "skill_icon": null,
+      "title": "Apocalypse Maxroll"
+    },
+    "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "Apocalypse Warlock Endgame Build Guide for Diablo IV Season 13 - Reckoning"
+    },
+    "arc-angel-chain-lightning-sorc-maxroll-s13-f0450dc7": {
+      "class": "sorcerer",
+      "skill_icon": "chain_lightning",
+      "title": "ARC ANGEL \u2014 Chain Lightning Sorcerer Endgame Filter (S13)"
+    },
+    "astral-bone-spirit-074083f5": {
+      "class": "necromancer",
+      "skill_icon": "bone_spirit",
+      "title": "Astral Bone Spirit"
+    },
+    "auradin-mobalytics-a8b1c532": {
+      "class": "paladin",
+      "skill_icon": "falling_star",
+      "title": "Auradin Mobalytics"
+    },
+    "barbarian-whirlwind-leveling-502a335f": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Barbarian - Whirlwind (Leveling)"
+    },
+    "blizzard-sorcerer-070227ef": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "FROSTSHOCK \u2014 Blizzard Sorc Cold/Shock Hybrid (S13, Maxroll, Early Game, Mid Game, End Game))"
+    },
+    "blood-wave-maxroll-structuur-loot-filter-5a012915": {
+      "class": "necromancer",
+      "skill_icon": "blood_mist",
+      "title": "Blood wave maxroll structuur loot filter"
+    },
+    "blood-wave-necromancer-season-starter-d114d840": {
+      "class": "necromancer",
+      "skill_icon": "blood_wave",
+      "title": "Blood Wave Necromancer Season Starter"
+    },
+    "blood-wave-s15-endgame-b0a0e7a7": {
+      "class": "necromancer",
+      "skill_icon": "blood_wave",
+      "title": "Blood Wave S15 Endgame"
+    },
+    "bloodwave-endgame-push-lordxsaura-s-guide-5792a326": {
+      "class": "necromancer",
+      "skill_icon": "blood_wave",
+      "title": "Bloodwave Endgame Push - LordxSaura's Guide"
+    },
+    "bone-s-mid-level-barb-618a8c53": {
+      "class": "barbarian",
+      "skill_icon": "mighty_throw",
+      "title": "Bone's Mid-Level Barb"
+    },
+    "bone-s-warlock-9d476c3d": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "Bone's Warlock"
+    },
+    "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "Warlock Apocalypse All Levels v10 (Lunatic Alt Build Support)"
+    },
+    "carnage-blender-warlock-172963df": {
+      "class": "warlock",
+      "skill_icon": "terror_swarm",
+      "title": "Rizarjay's Carnage Blender Warlock Filter"
+    },
+    "cliptis-ww-1e972c70": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Cliptis WW"
+    },
+    "dance-of-knives-endgame-filter-d7ecdcd3": {
+      "class": "rogue",
+      "skill_icon": null,
+      "title": "Dance of Knives Endgame Filter"
+    },
+    "dance-of-knives-ultimate-filter-23c565be": {
+      "class": "rogue",
+      "skill_icon": "dance_of_knives",
+      "title": "Dance Of Knives ULTIMATE FILTER Season 15"
+    },
+    "death-trap-c413f3e3": {
+      "class": "rogue",
+      "skill_icon": "death_trap",
+      "title": "Death Trap"
+    },
+    "death-trap-rogue-endgame-filter-376f9fdf": {
+      "class": "rogue",
+      "skill_icon": "death_trap",
+      "title": "M1PY's 'Death Trap' Rogue Endgame Filter"
+    },
+    "dread-claws-warlock-build-loot-filter-raxxanterax-e265f6d8": {
+      "class": "warlock",
+      "skill_icon": "dread_claws",
+      "title": "Dread Claws Warlock Build Loot Filter Raxxanterax"
+    },
+    "dread-claws-warlock-early-endgame-maxroll-wudijo-1dad5331": {
+      "class": "warlock",
+      "skill_icon": "dread_claws",
+      "title": "Dread Claws Warlock Early Endgame - MaxRoll  wudijo"
+    },
+    "druid-comapnion-99993125": {
+      "class": "druid",
+      "skill_icon": "wolves",
+      "title": "Druid Comapnion Early End Game"
+    },
+    "druid-companion-endgame-22d42fdc": {
+      "class": "druid",
+      "skill_icon": "wolves",
+      "title": "Druid Companion Endgame"
+    },
+    "druid-leveling-dkdent-3b8432f4": {
+      "class": "druid",
+      "skill_icon": "lightning_storm",
+      "title": "Druid Leveling Dkdent"
+    },
+    "duck-s-penetrating-shot-endgame-filter-51ae296c": {
+      "class": "rogue",
+      "skill_icon": "penetrating_shot",
+      "title": "Duck's Penetrating Shot Endgame Filter"
+    },
+    "easy-no-trash-items-all-clases-051e8c01": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Easy No Trash items all clases"
+    },
+    "eavde-counterswarm-strict-a8774f96": {
+      "class": "spiritborn",
+      "skill_icon": "counterattack",
+      "title": "Evade Counterswarm Strict (v3.0.3 May 27th)"
+    },
+    "en-uk-dread-claws-warlock-optimised-filter-pt-dread-claws-warlock-6fbf0de3": {
+      "class": "warlock",
+      "skill_icon": null,
+      "title": "[EN-UK] Dread Claws Warlock \u2013 Optimised Filter  [PT] ] Dread Claws Warlock"
+    },
+    "endgame-selector-8b4d80aa": {
+      "class": "all",
+      "skill_icon": "whirlwind",
+      "title": "endgame selector"
+    },
+    "evade-counterswarm-83836e9a": {
+      "class": "spiritborn",
+      "skill_icon": "counterattack",
+      "title": "EVADE CounterSwarm"
+    },
+    "evade-counterswarm-spiritborn-allrounder-d170f09c": {
+      "class": "spiritborn",
+      "skill_icon": "counterattack",
+      "title": "Evade Counterswarm Spiritborn - Allrounder"
+    },
+    "evade-counterswarm-strict-s14-019140d3": {
+      "class": "spiritborn",
+      "skill_icon": "rushing_claw",
+      "title": "Evade Counterswarm Strict S14"
+    },
+    "experimental-whirlwind-dust-devil-c18e983b": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WHIRLWIND DUST DEVIL early game"
+    },
+    "fresh-70-progressive-gear-finder-073f4d44": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Fresh70\u2014Bursting Fire WW Barb (non-Selig)"
+    },
+    "generic-endgame-filter-87604745": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Generic Endgame Filter"
+    },
+    "ghost-ww-barb-strict-801b4f95": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Ghost - WW barb strict"
+    },
+    "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b": {
+      "class": "barbarian",
+      "skill_icon": "challenging_shout",
+      "title": "Ghostygaster Whirlwind Barbarian MidGame :UK-PT"
+    },
+    "grenade-rogue-endgame-filter-51dac90b": {
+      "class": "rogue",
+      "skill_icon": "dance_of_knives",
+      "title": "Duck's Grenade Rogue Endgame Filter"
+    },
+    "icyveins-ball-lightning-build-gear-filter-e55499a2": {
+      "class": "sorcerer",
+      "skill_icon": "ball_lightning",
+      "title": "Fresh70\u2014Ball Lightning Sorc (IcyVeins)"
+    },
+    "imortilize-s-crushing-hand-endgame-e624ef90": {
+      "class": "spiritborn",
+      "skill_icon": "crushing_hand",
+      "title": "Imortilize's Crushing Hand - Endgame"
+    },
+    "imortilize-s-evade-firestorm-endgame-c64e30c0": {
+      "class": "spiritborn",
+      "skill_icon": "rushing_claw",
+      "title": "Imortilize's Evade Firestorm - Endgame"
+    },
+    "imortilize-s-evade-swarmborn-20adf39e": {
+      "class": "spiritborn",
+      "skill_icon": "counterattack",
+      "title": "Imortilize's Swarmborn - Endgame"
+    },
+    "imortilize-s-evade-thorns-endgame-2e59d0c2": {
+      "class": "spiritborn",
+      "skill_icon": "armored_hide",
+      "title": "Imortilize's Evade Thorns - Endgame"
+    },
+    "imortilize-s-poison-stinger-endgame-46fdd2f2": {
+      "class": "spiritborn",
+      "skill_icon": "stinger",
+      "title": "Imortilize's Poison Stinger - Endgame"
+    },
+    "imortilize-s-rake-fireborn-endgame-2abcd8f4": {
+      "class": "spiritborn",
+      "skill_icon": "rake",
+      "title": "Imortilize's Fire Rake - Endgame"
+    },
+    "imortilize-s-rock-splitter-endgame-filter-ec82e7d3": {
+      "class": "spiritborn",
+      "skill_icon": "rock_splitter",
+      "title": "Imortilize's Rock Splitter - Endgame"
+    },
+    "imortilizes-lightning-stinger-fe2b1f21": {
+      "class": "spiritborn",
+      "skill_icon": "stinger",
+      "title": "Imortilize's Lightning Stinger"
+    },
+    "improve-diablo-color-c3a046e7": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Improve Diablo Color"
+    },
+    "km-s-sub-zero-hydra-mid-game-filter-2743e543": {
+      "class": "sorcerer",
+      "skill_icon": "hydra",
+      "title": "KM's SUB-ZERO HYDRA MID-GAME Filter!"
+    },
+    "km-s-sub-zero-hydra-mid-game-filter-49f71cdc": {
+      "class": "sorcerer",
+      "skill_icon": "hydra",
+      "title": "KM's SUB-ZERO HYDRA MID-GAME Filter!"
+    },
+    "km-s-sub-zero-hydra-starter-6331f151": {
+      "class": "sorcerer",
+      "skill_icon": "hydra",
+      "title": "KM's SUB-ZERO HYDRA STARTER"
+    },
+    "km-s-sub-zero-hydra-starter-8d2be767": {
+      "class": "sorcerer",
+      "skill_icon": "hydra",
+      "title": "KM's SUB-ZERO HYDRA STARTER"
+    },
+    "kp-blazing-scream-warlock-filter-build-focused-67b67571": {
+      "class": "warlock",
+      "skill_icon": "blazing_scream",
+      "title": "KP - Blazing Scream Warlock Filter (Build Focused) 9/18: Small Update!"
+    },
+    "kp-blazing-scream-warlock-filter-starter-e7d2166d": {
+      "class": "warlock",
+      "skill_icon": "blazing_scream",
+      "title": "KP - Blazing Scream Warlock Filter (Starter)"
+    },
+    "kp-blazing-scream-warlock-filter-strict-0c5c0cc8": {
+      "class": "warlock",
+      "skill_icon": "blazing_scream",
+      "title": "KP - Blazing Scream Warlock Filter (Strict)"
+    },
+    "kp-pen-shot-filter-7-5-de45e9bf": {
+      "class": "rogue",
+      "skill_icon": "penetrating_shot",
+      "title": "KP - Pen Shot Filter 7/5"
+    },
+    "kp-shred-druid-filter-db34185f": {
+      "class": "druid",
+      "skill_icon": "shred",
+      "title": "KP - Shred Druid Filter Updated: 7/15"
+    },
+    "kp-static-sorc-filter-based-on-mekuna-s-static-sorc-221ee135": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "KP - Static Sorc Filter / Based on Mekuna's Static Sorc (Update: 7/15)"
+    },
+    "kp-warlock-filter-9a4fb889": {
+      "class": "warlock",
+      "skill_icon": null,
+      "title": "KP - Warlock Filter"
+    },
+    "kp-ww-barb-mid-game-32d309a6": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "KP - WW Barb Mid Game"
+    },
+    "kp-ww-wt-barb-filter-bf24156a": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "KP - Whirl Wind Barb Filter - Late Game (Update 7/15)"
+    },
+    "lancewave-necromancer-full-endgame-pit-135-b0ee5763": {
+      "class": "necromancer",
+      "skill_icon": "blood_wave",
+      "title": "LanceWave Necromancer (FULL ENDGAME - Pit 135)"
+    },
+    "levelling-fire-9540f8e8": {
+      "class": "warlock",
+      "skill_icon": "blazing_scream",
+      "title": "LEVELLING FROM NORMAL TO T6 WITH FIRE (BLAZING SCREAM)"
+    },
+    "light-ball-lightning-ballkuna-bosses-leaderboard-pit-272e737f": {
+      "class": "sorcerer",
+      "skill_icon": "ball_lightning",
+      "title": "[LIGHT] Ball Lightning (Ballkuna / UltraSpeed /  Bosses / Leaderboard-Pit)"
+    },
+    "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "[LIGHT] Static Field (Mekuna T1-T10 / Shockuna / Push-Bosses)"
+    },
+    "lightning-sorceress-b5c91655": {
+      "class": "sorcerer",
+      "skill_icon": "ball_lightning",
+      "title": "Ball Lightning Sorceress Endgame Filter"
+    },
+    "lockfear-warlock-minion-b3061112": {
+      "class": "warlock",
+      "skill_icon": "summon_aegrom",
+      "title": "Lockfear Warlock Minion s14"
+    },
+    "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e": {
+      "class": "warlock",
+      "skill_icon": "command_fallen",
+      "title": "Lunatic Warlock Endgame Build Guide for Diablo IV Season 13 - Reckoning"
+    },
+    "m1py-s-dance-of-knives-endgame-filter-97f7b9ef": {
+      "class": "rogue",
+      "skill_icon": "dance_of_knives",
+      "title": "M1PY's 'Dance of Knives' Rogue Endgame Filter"
+    },
+    "mattias-penetrating-shot-rogue-leveling-filter-endgame-filter-in-description-83920ea8": {
+      "class": "rogue",
+      "skill_icon": "penetrating_shot",
+      "title": "Mattias' 'Penetrating Shot' Rogue Endgame Filter"
+    },
+    "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121": {
+      "class": "rogue",
+      "skill_icon": "dance_of_knives",
+      "title": "[MaxRoll] Dance of Knives Endgame Rogue (Soft) (2026-06-30)"
+    },
+    "maxroll-medium-7ef7d81f": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Maxroll Medium"
+    },
+    "maxroll-minion-necro-080bd806": {
+      "class": "necromancer",
+      "skill_icon": "army_of_the_dead",
+      "title": "Maxroll Early Minion Necro"
+    },
+    "mekuna-s-ballkuna-speed-pit-61fada87": {
+      "class": "sorcerer",
+      "skill_icon": "ball_lightning",
+      "title": "Mekuna's Ballkuna (Speed &  Pit)"
+    },
+    "meteor-sorceress-a52a17f3": {
+      "class": "sorcerer",
+      "skill_icon": "meteor",
+      "title": "Meteor Sorceress Endgame Filter"
+    },
+    "mid-game-minions-70923511": {
+      "class": "necromancer",
+      "skill_icon": null,
+      "title": "Minion Necromancer [Updated] [MID-GAME]"
+    },
+    "mimi-s-chains-endgame-filter-ee4d5da8": {
+      "class": "sorcerer",
+      "skill_icon": "chain_lightning",
+      "title": "Mimi's CHAINS Endgame Filter"
+    },
+    "mimis-blizzard-midgame-filter-25d3b116": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "Mimi's Blizzard Midgame Filter"
+    },
+    "mimis-blizzard-sorc-8d846be7": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "Mimi's Blizzard Sorc EARLY GAME"
+    },
+    "mimis-firewall-early-game-filter-0d0185a1": {
+      "class": "sorcerer",
+      "skill_icon": "firewall",
+      "title": "Mimi's Firewall EARLY game filter"
+    },
+    "mimis-firewall-mid-game-f7c7fa81": {
+      "class": "sorcerer",
+      "skill_icon": "firewall",
+      "title": "MIMI'S FIREWALL MID GAME"
+    },
+    "mimis-ice-spikes-sorc-dd1c710c": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "Mimi's Ice Spikes Sorc (early game)"
+    },
+    "minion-necro-v1-ed0d8ba3": {
+      "class": "necromancer",
+      "skill_icon": "skeletal_warriors",
+      "title": "MINION NECRO V2"
+    },
+    "mobalytics-apocalypse-594bf9d6": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "Mobalytics Apocalypse"
+    },
+    "mrronit-zeal-paladin-kinda-not-perfect-4fc6b882": {
+      "class": "paladin",
+      "skill_icon": "zeal",
+      "title": "MrRonit Zeal Paladin Kinda (NOT PERFECT)"
+    },
+    "my-filter-ez-setup-end-game-2637b65f": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "My Filter (Ez setup End Game)"
+    },
+    "naotsonek-filter-6b7376cb": {
+      "class": "spiritborn",
+      "skill_icon": "razor_wings",
+      "title": "Naotsonek filter"
+    },
+    "new-all-rounda-6e65b91d": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "New All Rounda!"
+    },
+    "nicktew-s-trillion-dps-dread-claws-endgame-warlock-14ccdb1d": {
+      "class": "warlock",
+      "skill_icon": "dread_claws",
+      "title": "NickTew's Trillion DPS Dread Claws Endgame Warlock"
+    },
+    "no-crap-better-looting-c173f8f3": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "No crap better looting"
+    },
+    "null-s-universal-loot-filter-483c8817": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Null's Universal Endgame Loot Filter"
+    },
+    "perfected-leveling-dance-of-knives-00941062": {
+      "class": "rogue",
+      "skill_icon": "dance_of_knives",
+      "title": "PERFECTED LEVELING DANCE OF KNIVES"
+    },
+    "pestilent-swarm-dd74a2be": {
+      "class": "spiritborn",
+      "skill_icon": "scourge",
+      "title": "Pestilent Swarm"
+    },
+    "quill-volley-279459f5": {
+      "class": "spiritborn",
+      "skill_icon": "quill_volley",
+      "title": "Quill Volley"
+    },
+    "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Raxx's filter T6+ WHIRLWIND DD + RECOLOR late game"
+    },
+    "raxxanterax-s-dread-claws-warlock-endgame-2dde442a": {
+      "class": "warlock",
+      "skill_icon": "dread_claws",
+      "title": "Raxxanterax\u2019s Dread Claws Warlock Endgame"
+    },
+    "rentnerdin-von-jessirocks-cf6e68ec": {
+      "class": "paladin",
+      "skill_icon": "holy_light_aura",
+      "title": "Rentnerdin von JessiRocks (AURADIN, Season 13)"
+    },
+    "resolver-stacker-uberstric-98b05b19": {
+      "class": "barbarian",
+      "skill_icon": "mighty_throw",
+      "title": "Resolver Stacker Uber Stric"
+    },
+    "ring-of-firekuna-firewall-light-c450520b": {
+      "class": "sorcerer",
+      "skill_icon": "firewall",
+      "title": "Ring of FireKuna - Firewall (LIGHT)"
+    },
+    "rizarjay-s-firewall-sorcerer-filter-1fb8b485": {
+      "class": "sorcerer",
+      "skill_icon": "firewall",
+      "title": "Rizarjay's Firewall Sorcerer Filter"
+    },
+    "rizarjay-s-minion-barbarian-filter-208bd6cf": {
+      "class": "barbarian",
+      "skill_icon": "call_of_the_ancients",
+      "title": "Rizarjay's Minion Barbarian Filter"
+    },
+    "rizarjay-s-prismatic-storm-sorceress-filter-dd55ff75": {
+      "class": "sorcerer",
+      "skill_icon": "chain_lightning",
+      "title": "Rizarjay's Prismatic Storm Sorceress Filter"
+    },
+    "rizarjay-s-shred-druid-filter-73e2d055": {
+      "class": "druid",
+      "skill_icon": "shred",
+      "title": "Rizarjay's Shred Druid Filter"
+    },
+    "rizarjays-apocalypse-warlock-2087d2c3": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "Rizarjay's Apocalypse Warlock"
+    },
+    "rizarjays-blazing-scream-warlock-08670ec3": {
+      "class": "warlock",
+      "skill_icon": "blazing_scream",
+      "title": "Rizarjay's Blazing Scream Warlock"
+    },
+    "rizarjays-firewall-sorcerer-12995ab8": {
+      "class": "sorcerer",
+      "skill_icon": "firewall",
+      "title": "Rizarjay's Firewall Sorcerer"
+    },
+    "robs-whirlwind-barb-spin2win-6f048969": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "[S13] Robs Whirlwind Barb Spin2Win - STRICT"
+    },
+    "robs-whirlwind-barb-spin2win-early-game-a20a6134": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "[S13] Robs Whirlwind Barb Spin2Win - Early Game"
+    },
+    "rootsxo-minion-barb-lategame-a0c49fa1": {
+      "class": "barbarian",
+      "skill_icon": "call_of_the_ancients",
+      "title": "Roots' Minion Barb - Lategame"
+    },
+    "s13-ball-lightning-uber-strict-dc8de6ca": {
+      "class": "sorcerer",
+      "skill_icon": "ball_lightning",
+      "title": "[S13] Ball Lightning - UBER Strict"
+    },
+    "s13-blizzard-sorc-early-game-90953691": {
+      "class": "sorcerer",
+      "skill_icon": null,
+      "title": "[S13] Blizzard Sorc EARLY GAME"
+    },
+    "s13-dread-claws-warlock-leveling-guide-wudijo-4cf9a6c2": {
+      "class": "warlock",
+      "skill_icon": "dread_claws",
+      "title": "[S13] Dread Claws Warlock Leveling Guide - Wudijo"
+    },
+    "s13-expanded-apocalypse-based-on-wudijo-filter-build-597835b7": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "[S13] Expanded apocalypse based on Wudijo filter/build"
+    },
+    "s13-foundation-filter-6f625e7c": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "S13 Foundation Filter"
+    },
+    "s13-m1py-holy-light-aura-endgame-speed-1dbee47b": {
+      "class": "paladin",
+      "skill_icon": "holy_light_aura",
+      "title": "[S13]{M1PY}{Mobalytics} Auradin - Holy Light Aura - Endgame Speed"
+    },
+    "s13-m1py-holy-light-aura-starter-3f62cecb": {
+      "class": "paladin",
+      "skill_icon": "holy_light_aura",
+      "title": "[S13]{M1PY}{Mobalytics} Auradin - Holy Light Aura - Starter"
+    },
+    "s13-minions-leveling-1ed8e6ef": {
+      "class": "necromancer",
+      "skill_icon": "skeletal_mages",
+      "title": "[S13] Minions (Leveling)"
+    },
+    "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2": {
+      "class": "necromancer",
+      "skill_icon": null,
+      "title": "S13 Necromancer MaxRoll Minion + Blood Wave"
+    },
+    "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630": {
+      "class": "warlock",
+      "skill_icon": "dread_claws",
+      "title": "[S13] Rob2628's Abyss Shadow Speed Warlock build"
+    },
+    "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "[S13] Rob2628's Whirlwind Barbarian Endgame build"
+    },
+    "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "[S13] Robs Whirlwind Barb Spin2Win - UBER STRICT"
+    },
+    "s14-heartseeker-starter-beb06a3d": {
+      "class": "rogue",
+      "skill_icon": "heartseeker",
+      "title": "S14-Heartseeker Starter"
+    },
+    "s14-lightning-god-screamheart-412bcd9d": {
+      "class": "druid",
+      "skill_icon": "lightning_storm",
+      "title": "S14 Lightning God - Screamheart"
+    },
+    "sai-template-7e67d4fb": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Sai-Template"
+    },
+    "screamheart-s-dopamine-enhancing-strict-torment-12-filter-e4cf8e98": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Screamheart's Dopamine Enhancing Strict Torment Filter"
+    },
+    "selig-ww-barb-a4c30ed5": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Selig WW Barb"
+    },
+    "shockblizz-sorc-1a8e4544": {
+      "class": "sorcerer",
+      "skill_icon": null,
+      "title": "ShockBlizz Sorc"
+    },
+    "shred-druid-s14-3de45377": {
+      "class": "druid",
+      "skill_icon": "lightning_storm",
+      "title": "Shred Druid S14"
+    },
+    "shred-druid-s14-by-bercik0s-411ae6da": {
+      "class": "druid",
+      "skill_icon": "shred",
+      "title": "Shred Druid s14 by Bercik0s"
+    },
+    "sorc-artificer-pit-run-26ba3474": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "Sorc-Artificer & Pit Run"
+    },
+    "sorcerer-charged-bolts-maxroll-094c112d": {
+      "class": "sorcerer",
+      "skill_icon": "charged_bolts",
+      "title": "Sorcerer-charged Bolts-Maxroll"
+    },
+    "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd": {
+      "class": "sorcerer",
+      "skill_icon": "blizzard",
+      "title": "[STRICT] Static Field (Mekuna T1-T10 / Shockuna / Push-Bosses)"
+    },
+    "stinger-spiritborn-ancestral-ca0585e4": {
+      "class": "spiritborn",
+      "skill_icon": "stinger",
+      "title": "Stinger Spiritborn Ancestral+"
+    },
+    "strict-ball-lightning-ballkuna-bosses-leaderboard-pit-52729f27": {
+      "class": "sorcerer",
+      "skill_icon": "ball_lightning",
+      "title": "[STRICT] Ball Lightning (Ballkuna / UltraSpeed/ Bosses / Leaderboard-Pit)"
+    },
+    "stricter-maxroll-early-minion-necro-25ac97b5": {
+      "class": "necromancer",
+      "skill_icon": "army_of_the_dead",
+      "title": "Stricter Maxroll Early Minion Necro"
+    },
+    "taco-s-leap-rend-barb-00331f6b": {
+      "class": "barbarian",
+      "skill_icon": "rend",
+      "title": "Taco's Leap Rend Barb"
+    },
+    "taco-s-pulverize-druid-0003b2d8": {
+      "class": "druid",
+      "skill_icon": "pulverize",
+      "title": "Taco's Greater Pulverize Druid"
+    },
+    "testing-99391ff4": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WW / Minion Barb"
+    },
+    "the-best-ww-barb-uber-endgame-filter-ed50a311": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WW BARB UBER ENDGAME FILTER"
+    },
+    "twisting-blades-rogue-leveling-61cf33c8": {
+      "class": "rogue",
+      "skill_icon": "twisting_blades",
+      "title": "Twisting Blades Rogue Leveling"
+    },
+    "tyrant-s-grasp-warlock-starter-to-endgame-6ba07a80": {
+      "class": "warlock",
+      "skill_icon": "tyrants_grasp",
+      "title": "Tyrant's Grasp Warlock - Starter to Endgame"
+    },
+    "tyzo-whirlwind-midgame-ed15a057": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "TyZo Whirlwind (Midgame)"
+    },
+    "tyzo-whirlwind-strict-a1b91277": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "TyZo Whirlwind (Strict)"
+    },
+    "universal-60bac854": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "S14 Universal [+] @dystonaut"
+    },
+    "universal-76b3e711": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "S14 Universal [++] @dystonaut"
+    },
+    "universal-endgame-filter-c258f130": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Universal Endgame Filter"
+    },
+    "universal-f8033945": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "S14 Universal [-] @dystonaut"
+    },
+    "universal-filter-758ebd55": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Universal Filter"
+    },
+    "universal-starter-leveling-filter-c52ef2e2": {
+      "class": "all",
+      "skill_icon": null,
+      "title": "Universal Starter Leveling Filter"
+    },
+    "warlock-blazing-scream-all-levels-3eaab6b0": {
+      "class": "warlock",
+      "skill_icon": "apocalypse",
+      "title": "WARLOCK BLAZING SCREAM ALL LEVELS v2"
+    },
+    "warlock-lunatic-build-all-levels-v3-d3eb5992": {
+      "class": "warlock",
+      "skill_icon": "command_fallen",
+      "title": "Warlock Lunatic Build ALL Levels V11 (Apocalypse Alt Build Support)"
+    },
+    "warlockblazscream-04ea4201": {
+      "class": "warlock",
+      "skill_icon": null,
+      "title": "WarlockBlazScream"
+    },
+    "werenado-druid-35dfe79f": {
+      "class": "druid",
+      "skill_icon": "tornado",
+      "title": "WereNado Druid"
+    },
+    "whirlwind-barbarian-selig-s-amulet-build-52bafd61": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Whirlwind Barbarian (Selig\u2019s Amulet Build)"
+    },
+    "whirlwind-dust-devil-v2-48484fb1": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WHIRLWIND DUST DEVIL mid game"
+    },
+    "whirlwind-dust-devil-v3-013bc614": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WHIRLWIND DUST DEVIL late game"
+    },
+    "whirlwind-leveling-aoi-73a64c91": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "Whirlwind Leveling Aoi"
+    },
+    "wudijo-lunatic-filter-61ac7305": {
+      "class": "warlock",
+      "skill_icon": null,
+      "title": "Wudijo Lunatic Filter"
+    },
+    "ww-barb-based-on-the-cliptis-build-9db71acb": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WW Barb - Based on the Cliptis Build"
+    },
+    "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b": {
+      "class": "barbarian",
+      "skill_icon": "whirlwind",
+      "title": "WW Barb - Mythic Selig Overpower Barb (Based on the Cliptis Build)"
+    }
+  },
+  "unknown_affix_hits": {
+    "0x001D6E2F": [
+      "all-class-meta-season-14-5860547c",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992"
+    ],
+    "0x00280B85": [
+      "all-class-meta-season-14-5860547c",
+      "bone-s-mid-level-barb-618a8c53",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "ghost-ww-barb-strict-801b4f95",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "ww-barb-based-on-the-cliptis-build-9db71acb",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x001C68F6": [
+      "all-class-meta-season-14-5860547c",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8"
+    ],
+    "0x001C6920": [
+      "all-class-meta-season-14-5860547c",
+      "barbarian-whirlwind-leveling-502a335f",
+      "bone-s-mid-level-barb-618a8c53",
+      "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "selig-ww-barb-a4c30ed5",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311"
+    ],
+    "0x001BEAB8": [
+      "all-class-meta-season-14-5860547c",
+      "all-rounder-end-game-filter-8d1ff05d",
+      "auradin-mobalytics-a8b1c532",
+      "blizzard-sorcerer-070227ef",
+      "carnage-blender-warlock-172963df",
+      "dance-of-knives-endgame-filter-d7ecdcd3",
+      "death-trap-c413f3e3",
+      "death-trap-rogue-endgame-filter-376f9fdf",
+      "dread-claws-warlock-build-loot-filter-raxxanterax-e265f6d8",
+      "druid-comapnion-99993125",
+      "druid-companion-endgame-22d42fdc",
+      "druid-leveling-dkdent-3b8432f4",
+      "eavde-counterswarm-strict-a8774f96",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "fresh-70-progressive-gear-finder-073f4d44",
+      "ghost-ww-barb-strict-801b4f95",
+      "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "kp-blazing-scream-warlock-filter-build-focused-67b67571",
+      "kp-blazing-scream-warlock-filter-starter-e7d2166d",
+      "kp-pen-shot-filter-7-5-de45e9bf",
+      "kp-shred-druid-filter-db34185f",
+      "kp-static-sorc-filter-based-on-mekuna-s-static-sorc-221ee135",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "m1py-s-dance-of-knives-endgame-filter-97f7b9ef",
+      "mattias-penetrating-shot-rogue-leveling-filter-endgame-filter-in-description-83920ea8",
+      "mimi-s-chains-endgame-filter-ee4d5da8",
+      "mimis-blizzard-midgame-filter-25d3b116",
+      "mimis-blizzard-sorc-8d846be7",
+      "mimis-ice-spikes-sorc-dd1c710c",
+      "mobalytics-apocalypse-594bf9d6",
+      "my-filter-ez-setup-end-game-2637b65f",
+      "new-all-rounda-6e65b91d",
+      "nicktew-s-trillion-dps-dread-claws-endgame-warlock-14ccdb1d",
+      "no-crap-better-looting-c173f8f3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "pestilent-swarm-dd74a2be",
+      "quill-volley-279459f5",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "raxxanterax-s-dread-claws-warlock-endgame-2dde442a",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "resolver-stacker-uberstric-98b05b19",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjay-s-firewall-sorcerer-filter-1fb8b485",
+      "rizarjay-s-minion-barbarian-filter-208bd6cf",
+      "rizarjay-s-prismatic-storm-sorceress-filter-dd55ff75",
+      "rizarjay-s-shred-druid-filter-73e2d055",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "selig-ww-barb-a4c30ed5",
+      "shockblizz-sorc-1a8e4544",
+      "shred-druid-s14-3de45377",
+      "shred-druid-s14-by-bercik0s-411ae6da",
+      "sorc-artificer-pit-run-26ba3474",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd",
+      "testing-99391ff4",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311",
+      "twisting-blades-rogue-leveling-61cf33c8",
+      "universal-endgame-filter-c258f130",
+      "universal-starter-leveling-filter-c52ef2e2",
+      "werenado-druid-35dfe79f",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614"
+    ],
+    "0x001C6949": [
+      "all-class-meta-season-14-5860547c",
+      "endgame-selector-8b4d80aa",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "null-s-universal-loot-filter-483c8817",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "resolver-stacker-uberstric-98b05b19",
+      "selig-ww-barb-a4c30ed5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "testing-99391ff4",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "ww-barb-based-on-the-cliptis-build-9db71acb",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x001CC06A": [
+      "all-class-meta-season-14-5860547c",
+      "rizarjay-s-shred-druid-filter-73e2d055"
+    ],
+    "0x00280B8B": [
+      "all-class-meta-season-14-5860547c",
+      "druid-companion-endgame-22d42fdc",
+      "s14-lightning-god-screamheart-412bcd9d"
+    ],
+    "0x001C7EB0": [
+      "all-class-meta-season-14-5860547c"
+    ],
+    "0x00261AC2": [
+      "all-class-meta-season-14-5860547c",
+      "auradin-mobalytics-a8b1c532",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "s13-m1py-holy-light-aura-starter-3f62cecb"
+    ],
+    "0x00280BA5": [
+      "all-class-meta-season-14-5860547c",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062"
+    ],
+    "0x002782B5": [
+      "all-class-meta-season-14-5860547c"
+    ],
+    "0x00280B93": [
+      "all-class-meta-season-14-5860547c",
+      "werenado-druid-35dfe79f"
+    ],
+    "0x002782A5": [
+      "all-class-meta-season-14-5860547c",
+      "rizarjay-s-minion-barbarian-filter-208bd6cf",
+      "rootsxo-minion-barb-lategame-a0c49fa1",
+      "taco-s-leap-rend-barb-00331f6b"
+    ],
+    "0x00280BAD": [
+      "arc-angel-chain-lightning-sorc-maxroll-s13-f0450dc7",
+      "blizzard-sorcerer-070227ef",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "light-ball-lightning-ballkuna-bosses-leaderboard-pit-272e737f",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "lightning-sorceress-b5c91655",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "mimi-s-chains-endgame-filter-ee4d5da8",
+      "rizarjay-s-prismatic-storm-sorceress-filter-dd55ff75",
+      "s13-ball-lightning-uber-strict-dc8de6ca",
+      "s13-blizzard-sorc-early-game-90953691",
+      "shockblizz-sorc-1a8e4544",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd",
+      "strict-ball-lightning-ballkuna-bosses-leaderboard-pit-52729f27"
+    ],
+    "0x001D6743": [
+      "arc-angel-chain-lightning-sorc-maxroll-s13-f0450dc7",
+      "blizzard-sorcerer-070227ef",
+      "mimi-s-chains-endgame-filter-ee4d5da8"
+    ],
+    "0x00280BA9": [
+      "arc-angel-chain-lightning-sorc-maxroll-s13-f0450dc7",
+      "blizzard-sorcerer-070227ef",
+      "km-s-sub-zero-hydra-mid-game-filter-2743e543",
+      "km-s-sub-zero-hydra-mid-game-filter-49f71cdc",
+      "km-s-sub-zero-hydra-starter-6331f151",
+      "km-s-sub-zero-hydra-starter-8d2be767",
+      "mimis-ice-spikes-sorc-dd1c710c",
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001C7EB8": [
+      "astral-bone-spirit-074083f5"
+    ],
+    "0x001D6E3F": [
+      "blizzard-sorcerer-070227ef",
+      "lightning-sorceress-b5c91655",
+      "meteor-sorceress-a52a17f3",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D6756": [
+      "blizzard-sorcerer-070227ef",
+      "km-s-sub-zero-hydra-mid-game-filter-2743e543",
+      "km-s-sub-zero-hydra-mid-game-filter-49f71cdc",
+      "kp-static-sorc-filter-based-on-mekuna-s-static-sorc-221ee135",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "mimis-blizzard-midgame-filter-25d3b116",
+      "mimis-blizzard-sorc-8d846be7",
+      "mimis-ice-spikes-sorc-dd1c710c",
+      "s13-blizzard-sorc-early-game-90953691",
+      "shockblizz-sorc-1a8e4544",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd"
+    ],
+    "0x001D3A11": [
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "endgame-selector-8b4d80aa",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "kp-blazing-scream-warlock-filter-build-focused-67b67571",
+      "kp-blazing-scream-warlock-filter-starter-e7d2166d",
+      "kp-blazing-scream-warlock-filter-strict-0c5c0cc8",
+      "kp-shred-druid-filter-db34185f",
+      "mimis-ice-spikes-sorc-dd1c710c",
+      "quill-volley-279459f5",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311"
+    ],
+    "0x00280B83": [
+      "bone-s-mid-level-barb-618a8c53",
+      "rizarjay-s-minion-barbarian-filter-208bd6cf",
+      "rootsxo-minion-barb-lategame-a0c49fa1",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4"
+    ],
+    "0x001E79A1": [
+      "bone-s-mid-level-barb-618a8c53"
+    ],
+    "0x001D6E45": [
+      "dance-of-knives-endgame-filter-d7ecdcd3",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "kp-pen-shot-filter-7-5-de45e9bf"
+    ],
+    "0x001E7931": [
+      "dance-of-knives-endgame-filter-d7ecdcd3",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "perfected-leveling-dance-of-knives-00941062"
+    ],
+    "0x001CC18D": [
+      "druid-comapnion-99993125",
+      "druid-companion-endgame-22d42fdc"
+    ],
+    "0x00280B8F": [
+      "druid-companion-endgame-22d42fdc",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "werenado-druid-35dfe79f"
+    ],
+    "0x002782B9": [
+      "druid-companion-endgame-22d42fdc",
+      "taco-s-pulverize-druid-0003b2d8"
+    ],
+    "0x001D6E2D": [
+      "druid-companion-endgame-22d42fdc"
+    ],
+    "0x001CC071": [
+      "druid-companion-endgame-22d42fdc",
+      "kp-shred-druid-filter-db34185f",
+      "rizarjay-s-shred-druid-filter-73e2d055"
+    ],
+    "0x001CC068": [
+      "druid-leveling-dkdent-3b8432f4"
+    ],
+    "0x00280BB1": [
+      "eavde-counterswarm-strict-a8774f96",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x00280BB3": [
+      "eavde-counterswarm-strict-a8774f96",
+      "evade-counterswarm-83836e9a",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x001D6E2B": [
+      "eavde-counterswarm-strict-a8774f96",
+      "evade-counterswarm-83836e9a",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "kp-blazing-scream-warlock-filter-build-focused-67b67571",
+      "kp-blazing-scream-warlock-filter-starter-e7d2166d",
+      "kp-blazing-scream-warlock-filter-strict-0c5c0cc8",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "null-s-universal-loot-filter-483c8817",
+      "resolver-stacker-uberstric-98b05b19",
+      "rizarjay-s-minion-barbarian-filter-208bd6cf",
+      "s14-lightning-god-screamheart-412bcd9d"
+    ],
+    "0x001ED0CB": [
+      "eavde-counterswarm-strict-a8774f96",
+      "evade-counterswarm-83836e9a",
+      "evade-counterswarm-spiritborn-allrounder-d170f09c",
+      "evade-counterswarm-strict-s14-019140d3",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "naotsonek-filter-6b7376cb",
+      "pestilent-swarm-dd74a2be"
+    ],
+    "0x00280BB5": [
+      "evade-counterswarm-83836e9a",
+      "evade-counterswarm-strict-s14-019140d3",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x001EC119": [
+      "evade-counterswarm-83836e9a",
+      "imortilize-s-evade-firestorm-endgame-c64e30c0",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x001EBDFD": [
+      "evade-counterswarm-83836e9a",
+      "imortilize-s-evade-firestorm-endgame-c64e30c0",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x001EC199": [
+      "evade-counterswarm-83836e9a"
+    ],
+    "0x001C6943": [
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "taco-s-leap-rend-barb-00331f6b",
+      "testing-99391ff4",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x001C6938": [
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614"
+    ],
+    "0x002782A9": [
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614"
+    ],
+    "0x001D6754": [
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "lightning-sorceress-b5c91655",
+      "sorc-artificer-pit-run-26ba3474"
+    ],
+    "0x001EBD36": [
+      "imortilize-s-crushing-hand-endgame-e624ef90"
+    ],
+    "0x00280BAF": [
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x001EC1B8": [
+      "imortilize-s-evade-thorns-endgame-2e59d0c2"
+    ],
+    "0x001EBDB9": [
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "quill-volley-279459f5"
+    ],
+    "0x001D6E3D": [
+      "km-s-sub-zero-hydra-mid-game-filter-2743e543",
+      "km-s-sub-zero-hydra-mid-game-filter-49f71cdc",
+      "km-s-sub-zero-hydra-starter-6331f151",
+      "km-s-sub-zero-hydra-starter-8d2be767"
+    ],
+    "0x001D675E": [
+      "km-s-sub-zero-hydra-mid-game-filter-2743e543",
+      "km-s-sub-zero-hydra-mid-game-filter-49f71cdc",
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001C9545": [
+      "kp-pen-shot-filter-7-5-de45e9bf"
+    ],
+    "0x001C9549": [
+      "kp-pen-shot-filter-7-5-de45e9bf"
+    ],
+    "0x001C9543": [
+      "kp-pen-shot-filter-7-5-de45e9bf"
+    ],
+    "0x00280B8D": [
+      "kp-shred-druid-filter-db34185f"
+    ],
+    "0x00280B95": [
+      "lancewave-necromancer-full-endgame-pit-135-b0ee5763"
+    ],
+    "0x0026AD4D": [
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "wudijo-lunatic-filter-61ac7305"
+    ],
+    "0x00280B9B": [
+      "maxroll-minion-necro-080bd806",
+      "mid-game-minions-70923511",
+      "minion-necro-v1-ed0d8ba3",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "stricter-maxroll-early-minion-necro-25ac97b5"
+    ],
+    "0x001D6766": [
+      "meteor-sorceress-a52a17f3",
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x00280BAB": [
+      "meteor-sorceress-a52a17f3",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjay-s-firewall-sorcerer-filter-1fb8b485",
+      "rizarjays-firewall-sorcerer-12995ab8"
+    ],
+    "0x001D6E4F": [
+      "mid-game-minions-70923511",
+      "minion-necro-v1-ed0d8ba3",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2"
+    ],
+    "0x001D6758": [
+      "mimis-firewall-early-game-filter-0d0185a1",
+      "mimis-firewall-mid-game-f7c7fa81",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjay-s-firewall-sorcerer-filter-1fb8b485",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x00280B99": [
+      "minion-necro-v1-ed0d8ba3"
+    ],
+    "0x001D6E51": [
+      "minion-necro-v1-ed0d8ba3",
+      "s13-minions-leveling-1ed8e6ef"
+    ],
+    "0x00261AB7": [
+      "mrronit-zeal-paladin-kinda-not-perfect-4fc6b882"
+    ],
+    "0x0026AD85": [
+      "nicktew-s-trillion-dps-dread-claws-endgame-warlock-14ccdb1d"
+    ],
+    "0x0026AD7A": [
+      "nicktew-s-trillion-dps-dread-claws-endgame-warlock-14ccdb1d"
+    ],
+    "0x0026AD7C": [
+      "nicktew-s-trillion-dps-dread-claws-endgame-warlock-14ccdb1d"
+    ],
+    "0x001D6E43": [
+      "perfected-leveling-dance-of-knives-00941062"
+    ],
+    "0x001C692A": [
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b"
+    ],
+    "0x00261ABD": [
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b"
+    ],
+    "0x001D6E53": [
+      "s13-minions-leveling-1ed8e6ef"
+    ],
+    "0x001C952F": [
+      "s14-heartseeker-starter-beb06a3d"
+    ],
+    "0x00280B91": [
+      "s14-lightning-god-screamheart-412bcd9d",
+      "taco-s-pulverize-druid-0003b2d8"
+    ],
+    "0x001D6768": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D675C": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D6760": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001E79A8": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D673F": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D6752": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D6745": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001D6747": [
+      "shockblizz-sorc-1a8e4544"
+    ],
+    "0x001BEAB6": [
+      "sorc-artificer-pit-run-26ba3474",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311"
+    ],
+    "0x00280B89": [
+      "taco-s-pulverize-druid-0003b2d8"
+    ],
+    "0x001CC064": [
+      "taco-s-pulverize-druid-0003b2d8"
+    ],
+    "0x0024F06A": [
+      "taco-s-pulverize-druid-0003b2d8"
+    ]
+  },
+  "unknown_itemtype_hits": {
+    "0x0006D14F": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "apocalypse-maxroll-94888224",
+      "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0",
+      "barbarian-whirlwind-leveling-502a335f",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "bone-s-mid-level-barb-618a8c53",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "dread-claws-warlock-early-endgame-maxroll-wudijo-1dad5331",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "en-uk-dread-claws-warlock-optimised-filter-pt-dread-claws-warlock-6fbf0de3",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "fresh-70-progressive-gear-finder-073f4d44",
+      "ghost-ww-barb-strict-801b4f95",
+      "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b",
+      "kp-warlock-filter-9a4fb889",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "null-s-universal-loot-filter-483c8817",
+      "perfected-leveling-dance-of-knives-00941062",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "resolver-stacker-uberstric-98b05b19",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-dread-claws-warlock-leveling-guide-wudijo-4cf9a6c2",
+      "s13-expanded-apocalypse-based-on-wudijo-filter-build-597835b7",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "sai-template-7e67d4fb",
+      "selig-ww-barb-a4c30ed5",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "tyrant-s-grasp-warlock-starter-to-endgame-6ba07a80",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "wudijo-lunatic-filter-61ac7305",
+      "ww-barb-based-on-the-cliptis-build-9db71acb",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x0006D16B": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "kp-shred-druid-filter-db34185f",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-minions-leveling-1ed8e6ef",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f"
+    ],
+    "0x0006D15D": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "900-ancestral-only-3c4acec9",
+      "all-class-meta-season-14-5860547c",
+      "barbarian-whirlwind-leveling-502a335f",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bone-s-mid-level-barb-618a8c53",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "druid-leveling-dkdent-3b8432f4",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "eavde-counterswarm-strict-a8774f96",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "evade-counterswarm-spiritborn-allrounder-d170f09c",
+      "evade-counterswarm-strict-s14-019140d3",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "fresh-70-progressive-gear-finder-073f4d44",
+      "ghost-ww-barb-strict-801b4f95",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-evade-firestorm-endgame-c64e30c0",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "kp-shred-druid-filter-db34185f",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "my-filter-ez-setup-end-game-2637b65f",
+      "naotsonek-filter-6b7376cb",
+      "null-s-universal-loot-filter-483c8817",
+      "perfected-leveling-dance-of-knives-00941062",
+      "pestilent-swarm-dd74a2be",
+      "quill-volley-279459f5",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "resolver-stacker-uberstric-98b05b19",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "testing-99391ff4",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "ww-barb-based-on-the-cliptis-build-9db71acb",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x0006D163": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "blizzard-sorcerer-070227ef",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "levelling-fire-9540f8e8",
+      "light-ball-lightning-ballkuna-bosses-leaderboard-pit-272e737f",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "lightning-sorceress-b5c91655",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "meteor-sorceress-a52a17f3",
+      "mimi-s-chains-endgame-filter-ee4d5da8",
+      "mimis-blizzard-midgame-filter-25d3b116",
+      "mimis-blizzard-sorc-8d846be7",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-ball-lightning-uber-strict-dc8de6ca",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "sai-template-7e67d4fb",
+      "shockblizz-sorc-1a8e4544",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd",
+      "strict-ball-lightning-ballkuna-bosses-leaderboard-pit-52729f27",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201"
+    ],
+    "0x0006D152": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "apocalypse-maxroll-94888224",
+      "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0",
+      "barbarian-whirlwind-leveling-502a335f",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "bone-s-mid-level-barb-618a8c53",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "druid-comapnion-99993125",
+      "druid-companion-endgame-22d42fdc",
+      "druid-leveling-dkdent-3b8432f4",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "fresh-70-progressive-gear-finder-073f4d44",
+      "ghost-ww-barb-strict-801b4f95",
+      "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b",
+      "kp-shred-druid-filter-db34185f",
+      "kp-warlock-filter-9a4fb889",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "null-s-universal-loot-filter-483c8817",
+      "perfected-leveling-dance-of-knives-00941062",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "resolver-stacker-uberstric-98b05b19",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "sai-template-7e67d4fb",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "testing-99391ff4",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "wudijo-lunatic-filter-61ac7305",
+      "ww-barb-based-on-the-cliptis-build-9db71acb",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x0006D16A": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "apocalypse-maxroll-94888224",
+      "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0",
+      "blizzard-sorcerer-070227ef",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "km-s-sub-zero-hydra-mid-game-filter-2743e543",
+      "km-s-sub-zero-hydra-mid-game-filter-49f71cdc",
+      "km-s-sub-zero-hydra-starter-6331f151",
+      "km-s-sub-zero-hydra-starter-8d2be767",
+      "kp-blazing-scream-warlock-filter-starter-e7d2166d",
+      "kp-static-sorc-filter-based-on-mekuna-s-static-sorc-221ee135",
+      "levelling-fire-9540f8e8",
+      "light-ball-lightning-ballkuna-bosses-leaderboard-pit-272e737f",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "lightning-sorceress-b5c91655",
+      "lockfear-warlock-minion-b3061112",
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "meteor-sorceress-a52a17f3",
+      "mimi-s-chains-endgame-filter-ee4d5da8",
+      "mimis-blizzard-midgame-filter-25d3b116",
+      "mimis-blizzard-sorc-8d846be7",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-foundation-filter-6f625e7c",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "sai-template-7e67d4fb",
+      "shockblizz-sorc-1a8e4544",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd",
+      "strict-ball-lightning-ballkuna-bosses-leaderboard-pit-52729f27",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "wudijo-lunatic-filter-61ac7305"
+    ],
+    "0x0006D155": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "sai-template-7e67d4fb",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201"
+    ],
+    "0x0006D13A": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "apocalypse-maxroll-94888224",
+      "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0",
+      "astral-bone-spirit-074083f5",
+      "auradin-mobalytics-a8b1c532",
+      "barbarian-whirlwind-leveling-502a335f",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "bone-s-mid-level-barb-618a8c53",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "fresh-70-progressive-gear-finder-073f4d44",
+      "ghost-ww-barb-strict-801b4f95",
+      "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "kp-shred-druid-filter-db34185f",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "light-ball-lightning-ballkuna-bosses-leaderboard-pit-272e737f",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "lightning-sorceress-b5c91655",
+      "lockfear-warlock-minion-b3061112",
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "meteor-sorceress-a52a17f3",
+      "mimi-s-chains-endgame-filter-ee4d5da8",
+      "minion-necro-v1-ed0d8ba3",
+      "null-s-universal-loot-filter-483c8817",
+      "perfected-leveling-dance-of-knives-00941062",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "resolver-stacker-uberstric-98b05b19",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "sai-template-7e67d4fb",
+      "selig-ww-barb-a4c30ed5",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd",
+      "strict-ball-lightning-ballkuna-bosses-leaderboard-pit-52729f27",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "wudijo-lunatic-filter-61ac7305",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x00165271": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "900-ancestral-only-3c4acec9",
+      "all-class-meta-season-14-5860547c",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "eavde-counterswarm-strict-a8774f96",
+      "evade-counterswarm-83836e9a",
+      "evade-counterswarm-spiritborn-allrounder-d170f09c",
+      "evade-counterswarm-strict-s14-019140d3",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-evade-firestorm-endgame-c64e30c0",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "my-filter-ez-setup-end-game-2637b65f",
+      "naotsonek-filter-6b7376cb",
+      "perfected-leveling-dance-of-knives-00941062",
+      "pestilent-swarm-dd74a2be",
+      "quill-volley-279459f5",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-minions-leveling-1ed8e6ef",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61"
+    ],
+    "0x0006D172": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "astral-bone-spirit-074083f5",
+      "auradin-mobalytics-a8b1c532",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "lancewave-necromancer-full-endgame-pit-135-b0ee5763",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "sai-template-7e67d4fb",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201"
+    ],
+    "0x0006D154": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "astral-bone-spirit-074083f5",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "sai-template-7e67d4fb",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201"
+    ],
+    "0x0006D144": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "apocalypse-maxroll-94888224",
+      "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0",
+      "barbarian-whirlwind-leveling-502a335f",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "bone-s-mid-level-barb-618a8c53",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "druid-companion-endgame-22d42fdc",
+      "druid-leveling-dkdent-3b8432f4",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "fresh-70-progressive-gear-finder-073f4d44",
+      "ghost-ww-barb-strict-801b4f95",
+      "ghostygaster-whirlwind-barbarian-midgame-filter-ghostygaster-whirlwind-barbarian-filtro-midgame-efc5a93b",
+      "kp-shred-druid-filter-db34185f",
+      "kp-warlock-filter-9a4fb889",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "null-s-universal-loot-filter-483c8817",
+      "perfected-leveling-dance-of-knives-00941062",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "resolver-stacker-uberstric-98b05b19",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "sai-template-7e67d4fb",
+      "selig-ww-barb-a4c30ed5",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "the-best-ww-barb-uber-endgame-filter-ed50a311",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "wudijo-lunatic-filter-61ac7305",
+      "ww-barb-based-on-the-cliptis-build-9db71acb",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x0006D153": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "druid-leveling-dkdent-3b8432f4",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "evade-counterswarm-83836e9a",
+      "icyveins-ball-lightning-build-gear-filter-e55499a2",
+      "kp-shred-druid-filter-db34185f",
+      "kp-static-sorc-filter-based-on-mekuna-s-static-sorc-221ee135",
+      "levelling-fire-9540f8e8",
+      "light-ball-lightning-ballkuna-bosses-leaderboard-pit-272e737f",
+      "light-static-field-mekuna-t1-t10-shockuna-push-bosses-9a4ad958",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "mimi-s-chains-endgame-filter-ee4d5da8",
+      "mimis-firewall-early-game-filter-0d0185a1",
+      "mimis-firewall-mid-game-f7c7fa81",
+      "minion-necro-v1-ed0d8ba3",
+      "perfected-leveling-dance-of-knives-00941062",
+      "ring-of-firekuna-firewall-light-c450520b",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-minions-leveling-1ed8e6ef",
+      "shockblizz-sorc-1a8e4544",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "static-field-mekuna-t1-t10-shockuna-push-bosses-79cbf8fd",
+      "strict-ball-lightning-ballkuna-bosses-leaderboard-pit-52729f27",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f"
+    ],
+    "0x0016D22D": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "900-ancestral-only-3c4acec9",
+      "all-class-meta-season-14-5860547c",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "eavde-counterswarm-strict-a8774f96",
+      "evade-counterswarm-83836e9a",
+      "evade-counterswarm-spiritborn-allrounder-d170f09c",
+      "evade-counterswarm-strict-s14-019140d3",
+      "imortilize-s-crushing-hand-endgame-e624ef90",
+      "imortilize-s-evade-firestorm-endgame-c64e30c0",
+      "imortilize-s-evade-swarmborn-20adf39e",
+      "imortilize-s-evade-thorns-endgame-2e59d0c2",
+      "imortilize-s-poison-stinger-endgame-46fdd2f2",
+      "imortilize-s-rake-fireborn-endgame-2abcd8f4",
+      "imortilize-s-rock-splitter-endgame-filter-ec82e7d3",
+      "imortilizes-lightning-stinger-fe2b1f21",
+      "levelling-fire-9540f8e8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "my-filter-ez-setup-end-game-2637b65f",
+      "naotsonek-filter-6b7376cb",
+      "perfected-leveling-dance-of-knives-00941062",
+      "pestilent-swarm-dd74a2be",
+      "quill-volley-279459f5",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "s13-minions-leveling-1ed8e6ef",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "testing-99391ff4",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "whirlwind-barbarian-selig-s-amulet-build-52bafd61"
+    ],
+    "0x00234A98": [
+      "2pac-o-lypse-hellfire-endgame-4613f3b5",
+      "apocalypse-maxroll-94888224",
+      "apocalypse-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-963f6ee0",
+      "astral-bone-spirit-074083f5",
+      "auradin-mobalytics-a8b1c532",
+      "barbarian-whirlwind-leveling-502a335f",
+      "blood-wave-maxroll-structuur-loot-filter-5a012915",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "bloodwave-endgame-push-lordxsaura-s-guide-5792a326",
+      "bone-s-mid-level-barb-618a8c53",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "dance-of-knives-ultimate-filter-23c565be",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "endgame-selector-8b4d80aa",
+      "evade-counterswarm-83836e9a",
+      "experimental-whirlwind-dust-devil-c18e983b",
+      "ghost-ww-barb-strict-801b4f95",
+      "kp-shred-druid-filter-db34185f",
+      "kp-ww-barb-mid-game-32d309a6",
+      "kp-ww-wt-barb-filter-bf24156a",
+      "levelling-fire-9540f8e8",
+      "lockfear-warlock-minion-b3061112",
+      "lunatic-warlock-endgame-build-guide-for-diablo-iv-season-13-reckoning-97bba79e",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "maxroll-minion-necro-080bd806",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "minion-necro-v1-ed0d8ba3",
+      "null-s-universal-loot-filter-483c8817",
+      "perfected-leveling-dance-of-knives-00941062",
+      "raxx-s-filter-t6-whirlwind-dust-devil-recolor-improvements-df14a91b",
+      "rentnerdin-von-jessirocks-cf6e68ec",
+      "resolver-stacker-uberstric-98b05b19",
+      "rizarjays-apocalypse-warlock-2087d2c3",
+      "rizarjays-blazing-scream-warlock-08670ec3",
+      "rizarjays-firewall-sorcerer-12995ab8",
+      "robs-whirlwind-barb-spin2win-early-game-a20a6134",
+      "s13-blizzard-sorc-early-game-90953691",
+      "s13-m1py-holy-light-aura-endgame-speed-1dbee47b",
+      "s13-m1py-holy-light-aura-starter-3f62cecb",
+      "s13-minions-leveling-1ed8e6ef",
+      "s13-necromancer-maxroll-minion-blood-filters-4efd3ba2",
+      "s13-rob-s-dreadclaw-endgame-build-loot-filter-53f69630",
+      "s13-rob2628-s-whirlwind-barbarian-endgame-build-f14642d3",
+      "s13-robs-whirlwind-barb-spin2win-uber-strict-9bf42c7f",
+      "s14-lightning-god-screamheart-412bcd9d",
+      "sai-template-7e67d4fb",
+      "selig-ww-barb-a4c30ed5",
+      "sorc-artificer-pit-run-26ba3474",
+      "sorcerer-charged-bolts-maxroll-094c112d",
+      "stricter-maxroll-early-minion-necro-25ac97b5",
+      "taco-s-leap-rend-barb-00331f6b",
+      "taco-s-pulverize-druid-0003b2d8",
+      "testing-99391ff4",
+      "tyzo-whirlwind-midgame-ed15a057",
+      "tyzo-whirlwind-strict-a1b91277",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-blazing-scream-all-levels-3eaab6b0",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992",
+      "warlockblazscream-04ea4201",
+      "werenado-druid-35dfe79f",
+      "whirlwind-dust-devil-v2-48484fb1",
+      "whirlwind-dust-devil-v3-013bc614",
+      "wudijo-lunatic-filter-61ac7305",
+      "ww-barb-mythic-selig-overpower-barb-based-on-the-cliptis-build-5bbfd37b"
+    ],
+    "0x0006D168": [
+      "blood-wave-necromancer-season-starter-d114d840",
+      "blood-wave-s15-endgame-b0a0e7a7",
+      "brujo-apocalipsis-v2-da-o-de-fuego-o-sombra-c61c1693",
+      "death-trap-c413f3e3",
+      "death-trap-rogue-endgame-filter-376f9fdf",
+      "easy-no-trash-items-all-clases-051e8c01",
+      "m1py-s-dance-of-knives-endgame-filter-97f7b9ef",
+      "mattias-penetrating-shot-rogue-leveling-filter-endgame-filter-in-description-83920ea8",
+      "maxroll-dance-of-knives-endgame-rogue-soft-2026-06-30-47da4121",
+      "maxroll-medium-7ef7d81f",
+      "mekuna-s-ballkuna-speed-pit-61fada87",
+      "s13-minions-leveling-1ed8e6ef",
+      "sorc-artificer-pit-run-26ba3474",
+      "testing-99391ff4",
+      "twisting-blades-rogue-leveling-61cf33c8",
+      "universal-60bac854",
+      "universal-76b3e711",
+      "universal-f8033945",
+      "warlock-lunatic-build-all-levels-v3-d3eb5992"
+    ]
+  }
+}

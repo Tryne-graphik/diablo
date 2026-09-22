@@ -1,0 +1,4115 @@
+{
+  "generated_at": "2026-09-22T17:22:49.995206+00:00",
+  "items_fetched": 612,
+  "entries": [
+    {
+      "fr": "A chercher",
+      "en": "Bone Breaker's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "A chercher 1",
+      "en": "Breakneck Bandit's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "A trouver",
+      "en": "Aspect of Unyielding Hits",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Absorption",
+      "en": "Imbiber",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Abysse",
+      "en": "Abyssal",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Accord des contrées sauvages",
+      "en": "Accord of the Wilds",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Acmé du chasseur",
+      "en": "Hunter's Zenith",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Adepte",
+      "en": "Adept",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Ahavarion, lance de Lycandre",
+      "en": "Ahavarion, Spear of Lycander",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aiguille de Tathamet",
+      "en": "Spine of Tathamet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Ambidextre",
+      "en": "Ambidextrous",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Âme d’onyx",
+      "en": "Onyx Soul",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Anathème des Primordiaux",
+      "en": "Anathema of the Primes",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Angoisse de Drognan",
+      "en": "Drognan's Anguish",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Anneau de fureur rouge",
+      "en": "Ring of Red Furor",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Anneau de la chasse méridienne",
+      "en": "Ring of the Midday Hunt",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Anneau de la lune agonisante",
+      "en": "Ring of Writhing Moon",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Anneau des affamés",
+      "en": "Ring of the Ravenous",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Anneau du ciel sans étoiles",
+      "en": "Ring of Starless Skies",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Archidémon",
+      "en": "Archfiend",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect agile",
+      "en": "Agile Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect chargé",
+      "en": "Charged Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect complexe",
+      "en": "Aspect of Intricacy",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'abus",
+      "en": "Exploiter's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'activité sismique",
+      "en": "Seismic-shift Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'acuité élémentaire",
+      "en": "Aspect of Elemental Acuity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'adaptabilité",
+      "en": "Aspect of Adaptability",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'agilité précaire",
+      "en": "Aspect of Tenuous Agility",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'alacrité",
+      "en": "Aspect of alacrity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'anémie",
+      "en": "Aspect of Anemia",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'appréhension",
+      "en": "Aspect of Apprehension",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'appropriation",
+      "en": "Raider's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'après-coup",
+      "en": "Aspect of Aftermath",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'armure diabolique",
+      "en": "Aspect of Diabolical Armor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'armure hérissée",
+      "en": "Aspect of Spiked Armor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'arpenteur spectral",
+      "en": "Ghostwalker Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'arrogance",
+      "en": "Conceited Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'ascension",
+      "en": "Aspect of Ascension",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'assaut planifié",
+      "en": "Prepared Assailant's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'audace",
+      "en": "Aspect of Audacity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'autorité",
+      "en": "Aspect of Authority",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'avant-garde",
+      "en": "Vanguard's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'avantage alchimique",
+      "en": "Aspect of Alchemical Advantage",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'échange marquant",
+      "en": "Aspect of Potent Exchange",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'efficacité",
+      "en": "Aspect of Efficiency",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'élan en avant",
+      "en": "Aspect of Forward Momentum",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'embaumement",
+      "en": "Aspect of the Embalmer",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'empreinte de la nature",
+      "en": "Nature's Reach Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'enchantement",
+      "en": "Aspect of the Enchanter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'endurance",
+      "en": "Aspect of Endurance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'engelure",
+      "en": "Frostbitten Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'entaille galvanisée",
+      "en": "Galvanized Slasher's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'équilibre naturel",
+      "en": "Aspect of Natural Balance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'Étripaille",
+      "en": "Gorefeast Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'euphorie",
+      "en": "Aspect of Exhilaration",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'excellence",
+      "en": "Aspect of Excellence",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'expiation",
+      "en": "Aspect of Chastisement",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'explosion osseuse",
+      "en": "Aspect of Bursting Bones",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'harmonie élémentaire",
+      "en": "Aspect of Elemental Attunement",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'hémorragie",
+      "en": "Fastblood Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'imitation d'imprégnation",
+      "en": "Aspect of Imitated Imbuement",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'immolation",
+      "en": "Aspect of Immolation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'immortalité",
+      "en": "Undying Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'imprégnations instables",
+      "en": "Aspect of Unstable Imbuements",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'impulsion",
+      "en": "Aspect of Impetus",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'impulsion furieuse",
+      "en": "Aspect of Furious Impulse",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'inertie",
+      "en": "Aspect of Momentum",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'infestation",
+      "en": "Aspect of Infestation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'ingéniosité humaine",
+      "en": "Aspect of Human Ingenuity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'initiative astucieuse",
+      "en": "Aspect of Artful Initiative",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'instincts naturels",
+      "en": "Aspect of Natural Instincts",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'interdiction",
+      "en": "Aspect of Interdiction",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'obscurité",
+      "en": "Aspect of Gloom",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'obscurité réparatrice",
+      "en": "Aspect of Mending Obscurity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'ombre ultime",
+      "en": "Aspect of Ultimate Shadow",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'oppression démoniaque",
+      "en": "Aspect of Fiendish Oppression",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'os durcis",
+      "en": "Aspect of Hardened Bones",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'os protecteurs",
+      "en": "Aspect of Shielding Bones",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect d'ossification rapide",
+      "en": "Aspect of Rapid Ossification",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de brassage nébuleux",
+      "en": "Aspect of Nebulous Brews",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de cadavre insidieux",
+      "en": "Aspect of Creeping Cadaver",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de canalisation",
+      "en": "Aspect of Channeling",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de carapace nécrotique",
+      "en": "Aspect of Hewed Flesh",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de cavalcade",
+      "en": "Aspect of the Stampede",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de coagulation",
+      "en": "Aspect of Coagulation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de concentration",
+      "en": "Aspect of Concentration",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de concentration tenace",
+      "en": "Sticker-thought Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de confédération impie",
+      "en": "Aspect of the Unholy Confederate",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de contemplation",
+      "en": "Aspect of Contemplation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de coups calculés",
+      "en": "Aspect of Tempering Blows",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de couvert",
+      "en": "Aspect of Shelter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de cruel augure",
+      "en": "Fell Soothsayer's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de dédain",
+      "en": "Aspect of Scorn",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de défense de la Mort",
+      "en": "Aspect of Death's Defense",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de dents de scie",
+      "en": "Aspect of Serration",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de désobéissance",
+      "en": "Aspect of Disobedience",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de destin élémentaire",
+      "en": "Aspect of Elemental Fate",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de dévouement",
+      "en": "Aspect of Dedication",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de disciple",
+      "en": "Aspect of the Disciple",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de domination",
+      "en": "Aspect of Dominance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de ferme décret",
+      "en": "Aspect of Firm Decree",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de ferveur du combat",
+      "en": "Battle Fervor's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de flamme immaculée",
+      "en": "Aspect of the Untarnished Blaze",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de fléau lié",
+      "en": "Bane-Link Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de folie guerrière",
+      "en": "Battle-Mad Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de force brute",
+      "en": "Raw Might Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de force céleste",
+      "en": "Aspect of Heavenly Strength",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de fragilisation",
+      "en": "Enfeebling Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de frappes combinées",
+      "en": "Aspect of Combined Strikes",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de frappes drainantes",
+      "en": "Siphoning Strikes Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de froid mordant",
+      "en": "Aspect of Biting Cold",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de froid pénétrant",
+      "en": "Aspect of Piercing Cold",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de funambule",
+      "en": "Edgemaster's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de fureur du berserker",
+      "en": "Aspect of Berserk Fury",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de gloire suprême",
+      "en": "Aspect of Utmost Glory",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de grande tempête",
+      "en": "Great Storm Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de grenadier",
+      "en": "Grenadier's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de griffes indomptables",
+      "en": "Aspect of Wild Claws",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de hargne",
+      "en": "Aspect of Malevolence",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de hâte",
+      "en": "Aspect of Haste",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de haute vélocité",
+      "en": "High Velocity Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de héraut orange",
+      "en": "Aspect of the Orange Herald",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de jugement",
+      "en": "Aspect of the Judicator",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'alchimiste glacial",
+      "en": "Icy Alchemist's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'alchimiste toxique",
+      "en": "Toxic Alchemist's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'émissaire de Rathma",
+      "en": "Aspect of Rathma's Chosen",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'enclume de Glynn",
+      "en": "Aspect of Glynn's Anvil",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'esprit vif",
+      "en": "Aspect of Swift Spirit",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'éveil spirituel",
+      "en": "Aspect of Mind's Awakening",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'heure dorée",
+      "en": "Aspect of the Golden Hour",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'indocile",
+      "en": "Wyward's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'indomptable",
+      "en": "Aspect of the Indomitable",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'ombre",
+      "en": "Aspect of the Umbral",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'ombre éternelle",
+      "en": "Aspect of the Long Shadow",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de l'opportuniste",
+      "en": "Opportunist's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la bénédiction d'Akarat",
+      "en": "Aspect of Akarat's Blessing",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la dette du métamorphe",
+      "en": "Aspect of the Changeling's Debt",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la ferveur de Jacques",
+      "en": "Aspect of Jacques' Fervor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la forteresse",
+      "en": "Aspect of the Fortress",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la frappe du vent",
+      "en": "Wind Striker Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la fureur déchaînée",
+      "en": "Aspect of Apogeic Furor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la garde septentrionale",
+      "en": "Aspect of the Northern Guard",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la juridiction de Tyraël",
+      "en": "Aspect of Tyrael's Jurisdiction",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la loi de Watkins",
+      "en": "Aspect of Watkins' Law",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la souveraineté de Lagera",
+      "en": "Aspect of Lagera's Sovereignty",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la terreur ursine",
+      "en": "Aspect of the Ursine Horror",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de la voie choisie",
+      "en": "Aspect of the Followed Path",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de lames déchirantes",
+      "en": "Aspect of Shredding Blades",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de lumière éblouissante",
+      "en": "Aspect of Dazzling Light",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de Lumière réparatrice",
+      "en": "Aspect of the Light's Mending",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de lumière stellaire",
+      "en": "Starlight Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de maître d'armes",
+      "en": "Weapon Master's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de maîtrise de soi",
+      "en": "Aspect of Anger Management",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de malchance",
+      "en": "Aspect of Misfortune",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de malveillance",
+      "en": "Aspect of Malice",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de massacre",
+      "en": "Aspect of Slaughter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de mastodonte",
+      "en": "Juggernaut's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de mélange commotionnant",
+      "en": "Aspect of Concussive Blend",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de menace insaisissable",
+      "en": "Aspect of Elusive Menace",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de métamorphe",
+      "en": "Aspect of the Shapeshifter",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de métamorphose",
+      "en": "Aspect of Metamorphosis",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de miasmes toxiques",
+      "en": "Aspect of Poisonous Clouds",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de militance",
+      "en": "Aspect of Militance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de mort inopinée",
+      "en": "Aspect of Untimely Death",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de noctambule",
+      "en": "Nightstalker's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de pas dolent",
+      "en": "Sickfoot's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de pénitence",
+      "en": "The Penitent's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de perfectionnement angélique",
+      "en": "Aspect of Angelic Masterwork",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de perfusion",
+      "en": "Aspect of Transfusion",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de persécution",
+      "en": "Aspect of Walloping",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de pestilence",
+      "en": "Aspect of Pestilence",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de piège explosif",
+      "en": "Blast-Trapper's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de pierre de guérison",
+      "en": "Aspect of Mending Stone",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de pluie de fer",
+      "en": "Aspect of Iron Rain",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de plumage renforcé",
+      "en": "Aspect of Empowered Feathers",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de plumes rappelées",
+      "en": "Aspect of Recalling Feathers",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de plumes tombantes",
+      "en": "Aspect of Falling Feathers",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de prise au piège",
+      "en": "Aspect of Entrapment",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de prodige",
+      "en": "Prodigy's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de progrès des pèlerins",
+      "en": "Aspect of Pilgrim's Progress",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de projection furieuse",
+      "en": "Wildbolt Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de prosélytisme",
+      "en": "Aspect of Proselytizing",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de protection arcanique",
+      "en": "Arcane Ward Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de puissance des Cieux",
+      "en": "Aspect of Sky Power",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de puissance des forêts",
+      "en": "Aspect of Forest Power",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de puissance des plaines",
+      "en": "Aspect of Plains Power",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de puissance du sol",
+      "en": "Aspect of Soil Power",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de rage vorace",
+      "en": "Aspect of Voracious Rage",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de rechargement",
+      "en": "Recharging Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de réfutation",
+      "en": "Aspect of Refutation",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de rempart",
+      "en": "Bulwark's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de renforcement exprimé",
+      "en": "Aspect of Vocalized Empowerment",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de répression cinétique",
+      "en": "Aspect of Kinetic Suppression",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de requiem",
+      "en": "Requiem Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de réussite",
+      "en": "Aspect of Fortune",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de révélation",
+      "en": "Revelator's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de revers mobilisateur",
+      "en": "Aspect of Rallying Reversal",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de roche écrasante",
+      "en": "Crashstone Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de ruse ailée",
+      "en": "Aspect of Fleet Wings",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sainte cadence",
+      "en": "Aspect of Holy Cadence",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sang amalgamé",
+      "en": "Aspect of Coalesced Blood",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sang bouillonnant",
+      "en": "Blood Boiling Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sang coagulé",
+      "en": "Aspect of Thickened Blood",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sang tout-puissant",
+      "en": "Aspect of Potent Blood",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sape",
+      "en": "Sapping Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sauvagerie",
+      "en": "Aspect of the Wildrage",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sélection naturelle",
+      "en": "Aspect of Natural Selection",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sentinelle",
+      "en": "Ranger's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de solidité",
+      "en": "Bruiser's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de sorcellerie de combat",
+      "en": "Battle Caster's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de strates protectrices",
+      "en": "Aspect of Layered Wards",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de supériorité",
+      "en": "Aspect of Supremacy",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de surchauffe",
+      "en": "Overheating Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de survie précaire",
+      "en": "Aspect of Tenuous Survival",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de synergie",
+      "en": "Aspect of Synergy",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de synthèse rituelle",
+      "en": "Aspect of Ritual Synthesis",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de tempête de flèches",
+      "en": "Aspect of Arrow Storms",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de ténacité",
+      "en": "Aspect of Tenacity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de ténèbres affaiblissantes",
+      "en": "Aspect of Debilitating Darkness",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de ténèbres paralysantes",
+      "en": "Aspect of Crippling Darkness",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de terreur",
+      "en": "Aspect of Terror",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de tir d'élite",
+      "en": "Deadeye's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de toucher maudit",
+      "en": "Aspect of Accursed Touch",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de tourment",
+      "en": "Aspect of Torment",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de toute-puissance",
+      "en": "Aspect of Might",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de toxines incapacitantes",
+      "en": "Aspect of Debilitating Toxins",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de transformation puissante",
+      "en": "Powershifting Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de trappe",
+      "en": "Trapper's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de travail de la pierre",
+      "en": "Stoneworker's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de tromperie",
+      "en": "Cheat's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de vagues de sang",
+      "en": "Tides of Blood Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de vaillance",
+      "en": "Aspect of Valiance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de Valintyr",
+      "en": "Aspect of the Valintyr",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de verve explosive",
+      "en": "Aspect of Explosive Verve",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de vigueur dérobée",
+      "en": "Aspect of Stolen Vigor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de vindicte",
+      "en": "Aspect of Retribution",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de virevolte",
+      "en": "Lightning Dancer's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de voix tonitruante",
+      "en": "Aspect of Booming Voice",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de vue perçante",
+      "en": "Aspect of True Sight",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect de zéphyr d'arbitre",
+      "en": "Aspect of the Arbiter's Zephyr",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect des écrits de Lapa",
+      "en": "Aspect of Lapa's Scripture",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect des ombres profondes",
+      "en": "Aspect of Deeper Shadows",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect des serres éternelles",
+      "en": "Aspect of Endless Talons",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du berger",
+      "en": "Shepherd's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du berserker de l'Ours",
+      "en": "Bear Clan Berserker's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du chef de guerre",
+      "en": "Bold Chieftain's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du concordat de fanatique",
+      "en": "Aspect of the Zealot's Covenant",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du concordat de mastodonte",
+      "en": "Aspect of the Juggernaut's Covenant",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du déluge",
+      "en": "Aspect of Deluge",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du frappe-terre",
+      "en": "Earthstriker's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du grand festin",
+      "en": "Aspect of the Great Feast",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du mage seigneurial",
+      "en": "Mage-Lord's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du pacte du Zélote",
+      "en": "Aspect of the Zealot's Covenant",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du Protecteur",
+      "en": "Aspect of the Protector",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du sang de fer",
+      "en": "Iron Blood Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du seigneur du Sang",
+      "en": "Lord of Blood's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du vide",
+      "en": "Aspect of the Void",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect du voile de neige",
+      "en": "Snowveiled Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect élusif",
+      "en": "Eluding Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect embrumé",
+      "en": "Enshrouding Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect enfermé",
+      "en": "Encased Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect envenimé",
+      "en": "Envenomed Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect équilibré",
+      "en": "Balanced Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect facétieux",
+      "en": "Trickster's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect figé",
+      "en": "Snap Frozen Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect fracturant",
+      "en": "Splintering Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect hérissé",
+      "en": "Bristleback Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect impitoyable",
+      "en": "Ruthless Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect imprégné d'ombre",
+      "en": "Shadow-Soaked Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect infâme",
+      "en": "Nefarious Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect infectieux",
+      "en": "Aspect of Bitter Infection",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect insatiable",
+      "en": "Insatiable Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect irrépressible",
+      "en": "Irrepressible Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect lâche",
+      "en": "Craven Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect métamorphosé",
+      "en": "Shifter's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect méthodique",
+      "en": "Methodical Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect misanthrope",
+      "en": "Misanthropic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect mutilé",
+      "en": "Mangled Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect neurotoxique",
+      "en": "Neurotoxic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect nocif",
+      "en": "Impairing Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect perpétuel",
+      "en": "Everling Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect protecteur",
+      "en": "Protecting Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect pyroclastique",
+      "en": "Pyroclastic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect sacrificiel",
+      "en": "Sacrificial Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect sadique",
+      "en": "Sadistic Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect surchargé",
+      "en": "Overcharged Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect vengeur",
+      "en": "Vengeful Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect vertueux",
+      "en": "Virtuous Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect vigoureux",
+      "en": "Vigorous Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect vorace",
+      "en": "Ravenous Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aspect vulpin",
+      "en": "Vulpine's Aspect",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Aura de mort",
+      "en": "Death Aura",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Avant-garde",
+      "en": "Vanguard",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Azurite galvanique",
+      "en": "Galvanic Azurite",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bagarre",
+      "en": "Rumble",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bague de supercherie mouvante",
+      "en": "Writhing Band of Trickery",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bague du Premier Souffle",
+      "en": "Band of First Breath",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bague en fusion",
+      "en": "Molten Band",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Baiser de bandit",
+      "en": "Scoundrel's Kiss",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bandages d’ascète méconnu",
+      "en": "Unsung Ascetic's Wraps",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Basilic",
+      "en": "The Basilisk",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bastion de Sire Matthias",
+      "en": "Bastion of Sir Matthias",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bâton de Lam Esen",
+      "en": "Staff of Lam Esen",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bâton de rage éternelle",
+      "en": "Staff of Endless Rage",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bâton de Zéraé",
+      "en": "Staff of Zerae",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bénédiction de Yen",
+      "en": "Yen's Blessing",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bénédiction écarlate",
+      "en": "Red Blessing",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bottes de morbête",
+      "en": "Beastfall Boots",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Boucle irisée de Tal Rasha",
+      "en": "Tal Rasha's Iridescent Loop",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bouillonnement",
+      "en": "Seethin",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bourreau",
+      "en": "Executioner",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Braies du cœur glacé",
+      "en": "Iceheart Brais",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Bride de Tor’Baalos",
+      "en": "Bridle of Tor Baalos",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Brise-os",
+      "en": "Bone Breaker",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Broyage",
+      "en": "Crusher",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Broyeuse",
+      "en": "Fleshrender",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cadeau enveloppé",
+      "en": "Shrouded Gift",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cage de folie",
+      "en": "Cage of Madness",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Camée débordant d’Esadora",
+      "en": "Esadora's Overflowing Cameo",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Candidature",
+      "en": "Challenger",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Capuchon de l’Anonyme",
+      "en": "Cowl of the Nameless",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Capuchon de tourment maléfique",
+      "en": "Cowl of Malefic Torment",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Carapace d'ichor",
+      "en": "Ichor carapace",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Carapace de décret de la chair",
+      "en": "Fleshwrit Carapace",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Casque de bâtard hideux",
+      "en": "Ugly Bastard Helm",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cauchemar trois fois tissé",
+      "en": "Trice-Woven Nightmare",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cautère",
+      "en": "Flamescar",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chaîne intègre",
+      "en": "Unbroken Chain",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chaleur ardente",
+      "en": "Searing Heat",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Champs écarlates",
+      "en": "Fields of Crimson",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chanson de la cathédrale",
+      "en": "Cathedral's Song",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chasse aux têtes",
+      "en": "Headhunter",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chasse-cieux",
+      "en": "Skyhunter",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chef-d’œuvre de Ramaladni",
+      "en": "Ramaladni's Magnum Opus",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chevalière corrodée d’X’fal",
+      "en": "X'Fal's Corroded Signet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chevalière de la marche verte",
+      "en": "Greenwalker's Signet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chevalière de pacifiste",
+      "en": "Peacemonger's Signet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chevalière de Pelghain",
+      "en": "Signet of Pelghain",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chevalière de sabotage",
+      "en": "Saboteur's Signet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chevalière marquée des Enfers",
+      "en": "Hellbrand Signet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Chute de glace",
+      "en": "Icefall",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cimier arlequin",
+      "en": "Harlequin Crest",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cœur d’Azgar",
+      "en": "Heart of Azgar",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cœur fondu de Selig",
+      "en": "Melted Heart of Selig",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cœur implacable",
+      "en": "The Relentless Heart",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cœur nostalgique de nomade",
+      "en": "Nomad's Longing Heart",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cœur protéen",
+      "en": "Protean Heart",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Colère",
+      "en": "Wrath",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Compagnon de l’orage",
+      "en": "Storm's Companion",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Condamnation",
+      "en": "Condemnation",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Condamneuse",
+      "en": "Doombringer",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Conduction incessante",
+      "en": "Ceaseless Conduit",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Conjuration",
+      "en": "Conjurer",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Consommation",
+      "en": "Unbound",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Contrôle",
+      "en": "Control",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Coquille de hyacinthe",
+      "en": "Jacinth Shell",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Corne de l’aigle",
+      "en": "Eaglehorn",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cotte-de-rasoir",
+      "en": "Razorplate",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Coup bas",
+      "en": "Cheap Shot",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Couperet",
+      "en": "Cutthroat",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Couperet",
+      "en": "Cleaver",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Couronne automnale",
+      "en": "Autumnal Crown",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Couronne de laurier aurique",
+      "en": "Wreath of Auric Laurel",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Couronne du Tueur de divinités",
+      "en": "Godslayer Crown",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cri sans vie",
+      "en": "Bloodless Scream",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Croc et griffe",
+      "en": "Fang and Claw",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Crochet des vipères-magi",
+      "en": "Fang of the Vipermagi",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Croissant gibbeux",
+      "en": "Waxing Gibbous",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Croissant maléfique",
+      "en": "Malefic Crescent",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Crosse de guerre décolorée",
+      "en": "Sunstained War-Crozier",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Cryopathie",
+      "en": "Cryopathy",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Dague perdue d’Etna",
+      "en": "Etna's Lost Dagger",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Déchaînement",
+      "en": "Unleash",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Déchaînement fondamental",
+      "en": "Fundamental Release",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Décimation",
+      "en": "Decimator",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Dégainage mortel",
+      "en": "Mortal Draw",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Démonologue",
+      "en": "Demonologist",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Destin frigide",
+      "en": "Frigid Fate",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Diadème de l’étoile déchue",
+      "en": "Starfall Coronet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Domination",
+      "en": "Dominate",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Don de givre",
+      "en": "Gift of Frost",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Droit du sang de Gathlen",
+      "en": "Gathlen's Birthright",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Dynamisme",
+      "en": "Dynamism",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Electrisation",
+      "en": "Electrocute",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Élégie",
+      "en": "Elegy",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Elémentaliste",
+      "en": "Elementalist",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Elimination",
+      "en": "Eliminiator",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Emblème de Staalbrèche",
+      "en": "Emblem of Staalbreak",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Enchantement",
+      "en": "Enchanter",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Entropie",
+      "en": "Entropy",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Esprit",
+      "en": "Spirit",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Étreinte de Cruor",
+      "en": "Cruor's Embrace",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Évangile de fidèle",
+      "en": "Gospel of the Devotee",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Eviscération",
+      "en": "Disembowel",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Exploitation",
+      "en": "Exploit",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fendoir du Boucher",
+      "en": "The Butcher's Cleaver",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Festin de chair",
+      "en": "Flesh-Eater",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Flambeaube",
+      "en": "Dawnfire",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Flamme dévorante de Moloch",
+      "en": "Moloch Beating Flame",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Flamme nourricière",
+      "en": "Flamefeeder",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fléau de Duriel",
+      "en": "Scourge of Duriel",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Flétrissement",
+      "en": "Wither",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fleuve Noir",
+      "en": "Black River",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Foi persistante",
+      "en": "Endurant Faith",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Folies du dieu mort",
+      "en": "Craze of the Dead God",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Force de la nature",
+      "en": "Force of nature",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Forge infernale",
+      "en": "Hellforge",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Foudre et tonnerre",
+      "en": "Thunderstruck",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Foudroiement",
+      "en": "Electrocution",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Foulée assassine",
+      "en": "Assassin's Stride",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fragment de Verathiel",
+      "en": "Shard of Verathiel",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Frappe de Corne-Tempête",
+      "en": "Strike of Stormhorn",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Frappes jumelles",
+      "en": "Twin Strikes",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Frénésie sanglante",
+      "en": "Blood Frenzy",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fureur de braise",
+      "en": "Emberfury",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fureur des contrées sauvages",
+      "en": "Fury of the Wilds",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Fureur insatiable",
+      "en": "Insatiable Fury",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Gantelets du Dévoreur de souffrance",
+      "en": "Paingorger's Gauntlets",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Gantelets du Sheol",
+      "en": "Gauntlets of Sheol",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Gants de rose ichoreuse",
+      "en": "Bands of Ichorous Rose",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Gants du loup déchaîné",
+      "en": "Mad Wolf's Glee",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Gants raffinés de seigneur des mers",
+      "en": "Sea Lord's Fine Gloves",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Garde-chair morlu",
+      "en": "Morlu Fleshward",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Givresang",
+      "en": "Rimeblood",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Grâce de Cassia",
+      "en": "Cassia's Grace",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Graine d’Horazon",
+      "en": "Seed of Horazon",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Grand bâton de la Corneille",
+      "en": "Greatstaff of the Crone",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Griffes de la couronne ensanglantée",
+      "en": "Nails of the Gore Crowned",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Guide de la secte",
+      "en": "Cult Leader",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Habit de la mer",
+      "en": "Raiment of the Sea",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Harnois de mutilation",
+      "en": "Mutilator Plate",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Hausse-col de souimanga",
+      "en": "Sunbird's Gorget",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Heaume-glaive de juge",
+      "en": "Judicant's Glaivehelm",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Héritage de Kessime",
+      "en": "Kessime's Legacy",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Héritier de perdition",
+      "en": "Heir of Perdition",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Hiver",
+      "en": "Winter",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Homoncule infernal",
+      "en": "Infernal Homunculus",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Hurlement sombre",
+      "en": "Dark Howl",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Hurlements des profondeurs",
+      "en": "Howl from Below",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Insondable",
+      "en": "Fathomless",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Instinct bouillonnant",
+      "en": "Burning Instinct",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Instinct de survie",
+      "en": "Survival Instincts",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Invocation élémentaire",
+      "en": "Elemental Summoner",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Jugement d’Auriel",
+      "en": "Judgment of Auriel",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Kilt d’Ailenoire",
+      "en": "Kilt of Blackwing",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "L’idole octuple",
+      "en": "The Eightfold Idol",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "L’Oculus",
+      "en": "The Oculus",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "La lame de la vue embrasée",
+      "en": "The Blade of Sight Aflame",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "La main de Naz",
+      "en": "The Hand of Naz",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Le Grand-père",
+      "en": "The Grandfather",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Le Maestro",
+      "en": "The Maestro",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Le Mur vigilant",
+      "en": "Lidless Wall",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Le sang engendre le sang",
+      "en": "Blood Begets Blood",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Lèche-blessure",
+      "en": "Wound Drinker",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Les 100 000 pas",
+      "en": "100,000 Steps",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Libération",
+      "en": "Release",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Liens des Sidhes",
+      "en": "Sidhe Bindings",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Machinations",
+      "en": "Tricks of the Trade",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mailles châtiées",
+      "en": "Chainscourged Mail",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Main du pendu",
+      "en": "Hangman's Hand",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mains de brise-monde",
+      "en": "Hands of the WorldBreaker",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Maître d'armes",
+      "en": "Weapons Master",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Maître-esprit",
+      "en": "Overmind",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Maîtrise des armes",
+      "en": "Weapon Master",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Maîtrise des enchantements",
+      "en": "Enchantment Master",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Maléfice supérieur",
+      "en": "Greater Hex",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Manteau du Gris",
+      "en": "Mantle of the Grey",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mantelet de Fureur de la montagne",
+      "en": "Mantle of Mountain's Fury",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Marche de l’âme indéfectible",
+      "en": "March of the Stalwart Soul",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Marche désespérée",
+      "en": "Desperate March",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Marque du vieux loup",
+      "en": "Mark of the Old Wolf",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Marque solaire",
+      "en": "Sunbrand",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Martelenfer",
+      "en": "Hellhammer",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Masque du sans-nom",
+      "en": "Cowl of the Nameless",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Masque mortuaire de Nirmitruq",
+      "en": "Deathmask of Nirmitruq",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Masse du roi Léoric",
+      "en": "Mace of King Leoric",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Masse-âcre",
+      "en": "Overkill",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Maxtlatl de Balazan",
+      "en": "Balazan's Maxtlatl",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Médaillon du vagabond sombre",
+      "en": "Dark Stalker's Medallion",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mélopée d’Odium",
+      "en": "Dirge of Odium",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mépris de la Terre",
+      "en": "Scorn of the Earth",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mobilisation",
+      "en": "Marshal",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Morgenstern du héraut",
+      "en": "Herald's Morningstar",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mortacrux",
+      "en": "The Mortacrux",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Mouette des fosses de combat",
+      "en": "Pitfighter's Gull",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Nerf de la vengeance",
+      "en": "Vengeful Sinew",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Occultiste",
+      "en": "Occultist",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Ombre",
+      "en": "Shadow",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Orientation ancestrale",
+      "en": "Ancestral Guidance",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Orphelineuse",
+      "en": "Orphan Maker",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Ouragan",
+      "en": "Windforce",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Ours-garou",
+      "en": "Werebear",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pacte d’os",
+      "en": "Pact of Bone",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pacte horrible",
+      "en": "Lurid Pact",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pavane mortelle",
+      "en": "Death's Pavane",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Percébène",
+      "en": "Ebonpiercer",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pierre de dolmen",
+      "en": "Dolmen Stone",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pierre de Vehemen",
+      "en": "Stone of Vehemen",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pierre runique fracturée",
+      "en": "Fractured Runestone",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Plaies d’Ahjad-Den",
+      "en": "Bane of Ahjad-Den",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Plateau de base — Druide",
+      "en": "Druid Basic Board",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Plateau de base — Nécromancien",
+      "en": "Necromancer Basic Board",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Plateau de base — Rôdeur",
+      "en": "Rogue Basic Board",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Poigne de mort",
+      "en": "Deathgrip",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Poigne éclair",
+      "en": "Levin Grasp",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Poignes dévastatrices de Gohr",
+      "en": "Gohr's Devastating Grips",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Poing de la Rose de fer",
+      "en": "Fist of the Iron Rose",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Porte de l’aube rouge",
+      "en": "Gate of the Red Dawn",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Porte-guerre",
+      "en": "Warbringer",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Porte-Lumière purifié",
+      "en": "Purified Lightbringer",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Possession",
+      "en": "Dominion",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Précision",
+      "en": "Precision",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Profanation",
+      "en": "Desecration",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Protection de la blanche colombe",
+      "en": "Ward of the White Dove",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Protection de la première",
+      "en": "Protection of the Prime",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Protection lugubre",
+      "en": "The Gloom Ward",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Puissance",
+      "en": "Might",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Puissance de Qual-Kehk",
+      "en": "Might of Qual-Kehk",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Puissance de Tyraël",
+      "en": "Tyrael's Might",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Puissance ursine",
+      "en": "Might of the Ursine",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Pyromane",
+      "en": "Pyromaniac",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Rage d’Harrogath",
+      "en": "Rage of Harrogath",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Rage de sang",
+      "en": "Blood Rage",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Renforcement",
+      "en": "Reinforced",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Renforcement",
+      "en": "Guzzler",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Réprimande de la Lumière",
+      "en": "Light's Rebuke",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Résonance de Shanar",
+      "en": "Shanar's Resonance",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Résurrection",
+      "en": "Deadraiser",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Revanche",
+      "en": "Revenge",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Rictus de terreur",
+      "en": "Rictus of Terror",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Ritualisme",
+      "en": "Ritualism",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Rixe",
+      "en": "Brawl",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Rose bleue",
+      "en": "Blue Rose",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Rugissement de la tempête",
+      "en": "Tempest Roar",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sabre de Tsasgal",
+      "en": "Sabre of Tsasgal",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Saignée",
+      "en": "Hemorrhage",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sanctis de Kethamar",
+      "en": "Sanctis of Kethamar",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sang nourricier",
+      "en": "Bloodfeeder",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sanguivore, lame de Zir",
+      "en": "Sanguivor Blade of Zir",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sans témoins",
+      "en": "No Witnesses",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sceau de la deuxième trompette",
+      "en": "Seal of the Second Trumpet",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sceau des Ophanim",
+      "en": "Seal of the Ophanim",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sceau fécond",
+      "en": "The Fecund Seal",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sceptre des Trois",
+      "en": "Scepter of the Three",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Schisme d’Ae’grom",
+      "en": "Ae'grom's Schism",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Seigneur du Péché",
+      "en": "Sire of Sin",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Serment de la marche verte",
+      "en": "Greenwalker's Oath",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Serment des anciens",
+      "en": "Ancients' Oath",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sermon rouge",
+      "en": "Red Sermon",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Solerets de chien des Enfers",
+      "en": "Hellhound's Sabatons",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Sous-couronne",
+      "en": "The Undercrown",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Spicules démoniaques",
+      "en": "Demonic Spicules",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Stoïsime",
+      "en": "Undaunted",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Stratège",
+      "en": "Tactician",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Surcharge",
+      "en": "Charged",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Surtension statique",
+      "en": "Static Surge",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Tacticien",
+      "en": "Tactician",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Technique parfaite",
+      "en": "Flawless technique",
+      "kind": "paragon_board",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Tectonique",
+      "en": "Tectonic",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Témérité",
+      "en": "Temerity",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Terreur nocturne",
+      "en": "Night Terror",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Territoire",
+      "en": "Territorial",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Tête pensante",
+      "en": "Mastermind",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Tisse-flammes",
+      "en": "Flameweaver",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Toile de la veuve",
+      "en": "Widow's Web",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Torche",
+      "en": "Torch",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Totem sinistre d’Ifeh",
+      "en": "Ifeh's Dire Totem",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Tourbillon",
+      "en": "Twister",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Tutélaire",
+      "en": "Warding",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Umbracrux",
+      "en": "The Umbracrux",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Vague de sang",
+      "en": "Blood Wake",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Veste de bandit",
+      "en": "Scoundrel's Leathers",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Visage d'Andariel",
+      "en": "Andariel's Visage",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Visage d’Andarielle",
+      "en": "Andariel's Visage",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Visage immortel",
+      "en": "Deathless Visage",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Visage sans vie",
+      "en": "Deathless Visage",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Vision de la tempête de feu",
+      "en": "Vision of the Firestorm",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Vision surnaturelle",
+      "en": "Eldritch Sight",
+      "kind": "paragon_glyph",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Voie de l’Émissaire",
+      "en": "Path of the Emissary",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Voie de Trag’Oul",
+      "en": "Path of Trag'Oul",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Voile d’argent",
+      "en": "Argent Veil",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Voile de Khanduras",
+      "en": "Shroud of Khanduras",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Voile de la fausse mort",
+      "en": "Shroud of False Death",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Volonté de Kabraxis",
+      "en": "Kabraxis Will",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Volonté de pierre",
+      "en": "Will of Stone",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Volonté de Rathma",
+      "en": "Will of Rathma",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    },
+    {
+      "fr": "Volonté inébranlable d’Airidah",
+      "en": "Airidah's Inexorable Will",
+      "kind": "unique_item",
+      "seen_in": 1,
+      "source": "d4base.fr"
+    }
+  ]
+}

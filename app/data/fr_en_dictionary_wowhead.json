@@ -1,0 +1,1857 @@
+{
+  "generated_at": "2026-09-22T17:30:24.475022+00:00",
+  "skills_fetched": {
+    "en": 282,
+    "fr": 282
+  },
+  "entries": [
+    {
+      "fr": "Commandement de Valloch",
+      "en": "Command Valloch",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Poigne de tyran",
+      "en": "Tyrant's Grasp",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lacération",
+      "en": "Lacerate",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Chancre",
+      "en": "Blight",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Épuisement",
+      "en": "Exhaustion",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Paranoïa",
+      "en": "Paranoia",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Flèche puissante",
+      "en": "Forceful Arrow",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Souffle infernal",
+      "en": "Infernal Breath",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Orbe gelé",
+      "en": "Frozen Orb",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Poigne de fer",
+      "en": "Steel Grasp",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Étoile filante",
+      "en": "Falling Star",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Éclair de givre",
+      "en": "Frost Bolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Champ de langueur",
+      "en": "Field of Languish",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Fracture infernale",
+      "en": "Hell Fracture",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Condamnation",
+      "en": "Condemned",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Douleur partagée",
+      "en": "Shared Pain",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Souffrance décuplée",
+      "en": "Amplified Suffering",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Coup de grâce",
+      "en": "Death Blow",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Chausse-trappe",
+      "en": "Caltrops",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lance divine",
+      "en": "Divine Lance",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Destin blasphématoire",
+      "en": "Blasphemous Fate",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Météore",
+      "en": "Meteor",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Éboulement",
+      "en": "Landslide",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Faille des âmes",
+      "en": "Soulrift",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Attaque",
+      "en": "Attack",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sombre geôle",
+      "en": "Dark Prison",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Armée de morts",
+      "en": "Army of the Dead",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Appel des Anciens",
+      "en": "Call of the Ancients",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Orage",
+      "en": "Lightning Storm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Jet puissant",
+      "en": "Mighty Throw",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Armure cyclonique",
+      "en": "Cyclone Armor",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Raclée",
+      "en": "Bash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bouclier pourfendeur",
+      "en": "Sundering Shield",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Coup de tonnerre",
+      "en": "Storm Strike",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Armure de glace",
+      "en": "Ice Armor",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Morsure rabique",
+      "en": "Rabies",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tempête d’os",
+      "en": "Bone Storm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tir rapide",
+      "en": "Rapid Fire",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bombardement",
+      "en": "Bombardment",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Maelström d’acier",
+      "en": "Iron Maelstrom",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Traqueur",
+      "en": "Seeker",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Appel des Loups de fer",
+      "en": "Iron Wolf's Call",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Brandissement",
+      "en": "Brandish",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Misérable supplicié",
+      "en": "Tortured Wretch",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tourbillon",
+      "en": "Whirlwind",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Guerrier squelette",
+      "en": "Skeleton Warrior",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Envie sanguinaire",
+      "en": "Bloodthirst",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Imprégnation de poison",
+      "en": "Poison Imbuement",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Rempart de terre",
+      "en": "Earthen Bulwark",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sentinelle profane",
+      "en": "Profane Sentinel",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Ravageur",
+      "en": "Ravager",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Commandement d’Abodian",
+      "en": "Command Abodian",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Commandement de Laalish",
+      "en": "Command Laalish",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Étincelle",
+      "en": "Spark",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Coup de bouclier",
+      "en": "Shield Bash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Puissance écrasante",
+      "en": "Crushing Force",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Trait sacré",
+      "en": "Holy Bolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Coup double",
+      "en": "Double Swing",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Représailles",
+      "en": "Reprisal",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Boucherie",
+      "en": "Rampage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Morcellement",
+      "en": "Dismembering",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Poigne de fer",
+      "en": "Iron Grip",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Esprit d’os",
+      "en": "Bone Spirit",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Élimination",
+      "en": "Annihilator",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Intimidation",
+      "en": "Intimidated",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Forteresse",
+      "en": "Fortress",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Soif de sang",
+      "en": "Bloodlust",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pointe de terre",
+      "en": "Earth Spike",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Boule de feu",
+      "en": "Fireball",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Éclair de feu",
+      "en": "Fire Bolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Marteau béni",
+      "en": "Blessed Hammer",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Couche de cendres",
+      "en": "Covered in Ash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lames de glace",
+      "en": "Ice Blades",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Déchaînement de violence",
+      "en": "Raging Violence",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Éradication",
+      "en": "Eradication",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Fente",
+      "en": "Lunging Strike",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Marteau des Anciens",
+      "en": "Hammer of the Ancients",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cadeau de braises",
+      "en": "Ember's Gift",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Dévastation totale",
+      "en": "Raging Havoc",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Égide de Raheir",
+      "en": "Raheir's Aegis",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Chaos ardent",
+      "en": "Burning Chaos",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Métamorphose",
+      "en": "Metamorphosis",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sceau d’invocations",
+      "en": "Sigil of Summons",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Frappe au sol",
+      "en": "Ground Slam",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cri provocateur",
+      "en": "Challenging Shout",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Ralliement",
+      "en": "Rally",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Goût de chair",
+      "en": "Taste of Flesh",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Piège câblé",
+      "en": "Wire Trap",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tir de couverture",
+      "en": "Cover Fire",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Piétinement",
+      "en": "Trample",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Mines à déclencheur",
+      "en": "Trip Mines",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bouteille incendiaire",
+      "en": "Molotov",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tir violent",
+      "en": "Snipe",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Décrépitude",
+      "en": "Decrepify",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Charge explosive",
+      "en": "Explosive Charge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vierge de fer",
+      "en": "Iron Maiden",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Mur d’agonie",
+      "en": "Wall of Agony",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Déchirure",
+      "en": "Cleave",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Onde de choc",
+      "en": "Shockwave",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Chaînes d’ombre",
+      "en": "Umbral Chains",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Brise-terre",
+      "en": "Earth Breaker",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Destin funeste",
+      "en": "Doom",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Harpons des Anciens",
+      "en": "Ancient Harpoons",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Galvanisation",
+      "en": "Iron Skin",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sceau de subversion",
+      "en": "Sigil of Subversion",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Saccage",
+      "en": "Rampage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Éclats d’os",
+      "en": "Bone Splinters",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pas du néant",
+      "en": "Nether Step",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sceau de chaos",
+      "en": "Sigil of Chaos",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bouclier divin",
+      "en": "Blessed Shield",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Le chasseur",
+      "en": "The Hunter",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Le protecteur",
+      "en": "The Protector",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lance des Cieux",
+      "en": "Spear of the Heavens",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lance de foudre",
+      "en": "Lightning Spear",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lierre empoisonné",
+      "en": "Poison Creeper",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Le dévoreur",
+      "en": "The Devourer",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vent cisaillant",
+      "en": "Wind Shear",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Charge au bouclier",
+      "en": "Shield Charge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lance d’os",
+      "en": "Bone Spear",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Flèches perçantes",
+      "en": "Piercing Arrows",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Hantise",
+      "en": "Haunt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Soulèvement",
+      "en": "Upheaval",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Hurlement sanglant",
+      "en": "Blood Howl",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Clone d’ombre",
+      "en": "Shadow Clone",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Fauchage",
+      "en": "Reap",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Explosion macabre",
+      "en": "Corpse Explosion",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Déchirure",
+      "en": "Rend",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sans issue",
+      "en": "No Escape",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sacre",
+      "en": "Consecration",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Passage des lames",
+      "en": "Blade Shift",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Aura de lumière sacrée",
+      "en": "Holy Light Aura",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Avancée",
+      "en": "Advance",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Rocher",
+      "en": "Boulder",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pulvérisation",
+      "en": "Pulverize",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Rage du grizzly",
+      "en": "Grizzly Rage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "À portée de main",
+      "en": "Ready At Hand",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Piège de poison",
+      "en": "Poison Trap",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pelote d’épingles",
+      "en": "Pin Cushion",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Feu nourri",
+      "en": "Opening Fire",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Munitions chargées",
+      "en": "Loaded Munitions",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pas de l’ombre",
+      "en": "Shadow Step",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Véritable génie",
+      "en": "Mastermind",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cri de guerre",
+      "en": "War Cry",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Terre calcinée",
+      "en": "Scorched Earth",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Zénith",
+      "en": "Zenith",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Un petit verre ?",
+      "en": "Share a Drink",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Charge de bouclier",
+      "en": "Shield Charge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Griffe",
+      "en": "Claw",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Carreau incendiaire",
+      "en": "Incendiary Bolt",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Danse des poignards",
+      "en": "Dance of Knives",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Embuscade",
+      "en": "Ambusher",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Afflux sanguin",
+      "en": "Blood Surge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Détonation multiple",
+      "en": "Bargaining Chips",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Arbitre de la justice",
+      "en": "Arbiter of Justice",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Grand frisson",
+      "en": "Thrillseeker",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vague de sang",
+      "en": "Blood Wave",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Courant instable",
+      "en": "Unstable Currents",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Piège mortel",
+      "en": "Death Trap",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tir pénétrant",
+      "en": "Penetrating Shot",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Saignée",
+      "en": "Hemorrhage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Hydre",
+      "en": "Hydra",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Choc",
+      "en": "Clash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Aura de défiance",
+      "en": "Defiance Aura",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Frappe revigorante",
+      "en": "Invigorating Strike",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vertu des Loups de fer",
+      "en": "Iron Wolf's Virtue",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Fureur des Cieux",
+      "en": "Heaven's Fury",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tempête de feu",
+      "en": "Storm of Fire",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Mur de feu",
+      "en": "Firewall",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Imprudence",
+      "en": "Recklessness",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bombe fumigène",
+      "en": "Smoke Grenade",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Jet de bouclier",
+      "en": "Shield Throw",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Décomposition",
+      "en": "Decompose",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cataclysme",
+      "en": "Cataclysm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Éclats de glace",
+      "en": "Ice Shards",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Perforation",
+      "en": "Puncture",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Imprégnation de givre",
+      "en": "Cold Imbuement",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Mutilation",
+      "en": "Maul",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Raillerie",
+      "en": "Provoke",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Dissimulation",
+      "en": "Concealment",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Explosion de pierres",
+      "en": "Stone Burst",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Zèle",
+      "en": "Zeal",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bombe de magma",
+      "en": "Molten Bomb",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Coup de pied",
+      "en": "Kick",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bouclier consacré",
+      "en": "Consecrated Shield",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pluie de flèches",
+      "en": "Rain of Arrows",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Célérité",
+      "en": "Dash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Téléportation",
+      "en": "Teleport",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Démon d’Abaddon",
+      "en": "Fiend of Abaddon",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Rugissement débilitant",
+      "en": "Debilitating Roar",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Brume de sang",
+      "en": "Blood Mist",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Attirer l’attention",
+      "en": "Draw Fire",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Griffes d’effroi",
+      "en": "Dread Claws",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Le traqueur",
+      "en": "The Seeker",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Prélèvement",
+      "en": "Blood Lance",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Imprégnation d’ombre",
+      "en": "Shadow Imbuement",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Incinération",
+      "en": "Incinerate",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Purification",
+      "en": "Purify",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Arrivée des Loups de fer",
+      "en": "Iron Wolf's Arrival",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Crève-cœur",
+      "en": "Heartseeker",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Prison d’os",
+      "en": "Bone Prison",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Essaim de terreur",
+      "en": "Terror Swarm",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Nova de givre",
+      "en": "Frost Nova",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Griffe véloce",
+      "en": "Rushing Claw",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Peau armurée",
+      "en": "Armored Hide",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Chaîne d’éclairs",
+      "en": "Chain Lightning",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cratère",
+      "en": "Crater",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Mage squelette",
+      "en": "Skeleton Mage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Courroux du berserker",
+      "en": "Wrath of the Berserker",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Avant-garde",
+      "en": "Vanguard",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Décharge électrique",
+      "en": "Charged Bolts",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Déferlement de flammes",
+      "en": "Flame Surge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vague de flammes",
+      "en": "Wave of Flame",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Corbeaux",
+      "en": "Ravens",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bouclier de feu",
+      "en": "Flame Shield",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Fouet électrique",
+      "en": "Arc Lash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Leurre railleur",
+      "en": "Mocking Lure",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Ouragan",
+      "en": "Hurricane",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lames sournoises",
+      "en": "Twisting Blades",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Calamité",
+      "en": "Scourge",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Garde de Raheir",
+      "en": "Raheir's Guard",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Blâme",
+      "en": "Condemn",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Loups",
+      "en": "Wolves",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Ailes acérées",
+      "en": "Razor Wings",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Commandement des Déchus",
+      "en": "Command Fallen",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Toucher mortel",
+      "en": "Touch of Death",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Familier",
+      "en": "Familiar",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Rafale",
+      "en": "Flurry",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Derme toxique",
+      "en": "Toxic Skin",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Tornade",
+      "en": "Tornado",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Piqûre de fiélon",
+      "en": "Hellion Sting",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Volée de plumes",
+      "en": "Quill Volley",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bond",
+      "en": "Leap",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Main écrasante",
+      "en": "Crushing Hand",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Hystérie",
+      "en": "Hysteria",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vaillance",
+      "en": "Valiance",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Contre-attaque",
+      "en": "Counterattack",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sombre voile",
+      "en": "Dark Shroud",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Élévation",
+      "en": "Soar",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Revanche",
+      "en": "Payback",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Chaîne d’âmes",
+      "en": "Chain of Souls",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Déluge",
+      "en": "Barrage",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Choc traumatisant",
+      "en": "Concussive Stomp",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Bris de roche",
+      "en": "Rock Splitter",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Commandement d’Ae’grom",
+      "en": "Command Ae'grom",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Aura de fanatisme",
+      "en": "Fanaticism Aura",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cri de ralliement",
+      "en": "Rallying Cry",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Lacération",
+      "en": "Rake",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Cri ardent",
+      "en": "Blazing Scream",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Poing flétrissant",
+      "en": "Withering Fist",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Frénésie",
+      "en": "Frenzy",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Brutale sauvagerie",
+      "en": "Thrash",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pétrification",
+      "en": "Petrify",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Piqueur",
+      "en": "Stinger",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Égide",
+      "en": "Aegis",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Pointe de foudre",
+      "en": "Thunderspike",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Sphère foudroyante",
+      "en": "Ball Lightning",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Froid intense",
+      "en": "Deep Freeze",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Vrilles nécrophages",
+      "en": "Corpse Tendrils",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Terreur",
+      "en": "Terrify",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Choc terrestre",
+      "en": "Ground Stomp",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Section",
+      "en": "Sever",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Protection des Loups de fer",
+      "en": "Iron Wolf's Ward",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Déchiquetage",
+      "en": "Shred",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    },
+    {
+      "fr": "Écorchement",
+      "en": "Flay",
+      "kind": "skill",
+      "seen_in": 1,
+      "source": "wowhead.com"
+    }
+  ]
+}

@@ -23,6 +23,7 @@ from dataclasses import dataclass, field
 
 from app.loot_filter import codec
 from app.loot_filter.data import AFFIX_IDS, GENERIC_SKILL_AFFIX_IDS, SKILL_AFFIX_IDS
+from app.loot_filter.uniques import UNIQUE_ITEM_IDS_BY_LOWER_NAME, UNIQUE_ITEM_IDS
 
 
 @dataclass
@@ -30,6 +31,32 @@ class FilterResult:
     code: str
     unresolved_skills: list[str] = field(default_factory=list)
     resolved_affix_count: int = 0
+
+
+def build_unique_item_rules(item_names: list[str], color: int = codec.COLOR_GOLD) -> tuple[list[bytes], list[str]]:
+    """2026-09-22: one SHOW rule per named Unique/Mythic item found in
+    `item_names` (typically a build's own scraped equipment list) that
+    matches app.loot_filter.uniques.UNIQUE_ITEM_IDS - names that don't
+    match (most of a build's list won't: Legendaries get an auto-generated
+    flavor name, not a fixed Unique name) are silently skipped, same as
+    unresolved skills elsewhere in this module. Returns (rules, matched_names).
+    """
+    rules: list[bytes] = []
+    matched: list[str] = []
+    seen_lower: set[str] = set()
+    for raw_name in item_names:
+        canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(raw_name.strip().lower())
+        if canonical is None or canonical.lower() in seen_lower:
+            continue
+        seen_lower.add(canonical.lower())
+        matched.append(canonical)
+        rules.append(
+            codec.make_rule(
+                f"Keep Unique - {canonical}", codec.SHOW,
+                [codec.condition_specific_unique(UNIQUE_ITEM_IDS[canonical])], color,
+            )
+        )
+    return rules, matched
 
 
 def _resolve_skill_ids(game_class: str, skill_names: list[str]) -> tuple[list[int], list[str]]:
