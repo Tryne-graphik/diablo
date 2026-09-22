@@ -1874,15 +1874,29 @@
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  // 2026-09-23 CORRECTION: this used to click once and wait a fixed
+  // 1200ms, trusting the click worked - found live that it can silently
+  // fail (no `.d4t-item` ends up in the DOM, no error anywhere since
+  // every caller wraps this in a try/catch treating it as "a bonus
+  // signal, not required") - the user's own workaround (click the tab
+  // themselves first, then generate) always worked, proving the widget
+  // itself is reliable once its tab is actually active; only our
+  // programmatic click was flaky. Hardened: skip entirely if the tab is
+  // already active (avoids a redundant click+wait on every call), and
+  // verify `.d4t-item` actually appeared after clicking - retry up to 2
+  // more times with a longer wait each time before giving up.
   async function ensureStatPriorityTabActive() {
+    if (document.querySelector(".d4t-item")) return;
     const tabCandidate = Array.from(document.querySelectorAll("*")).find(
       (e) => e.children.length === 0 && e.textContent.trim().toLowerCase() === "stat priority"
     );
-    if (tabCandidate) {
+    if (!tabCandidate) return;
+    for (let attempt = 0; attempt < 3; attempt++) {
       for (const target of [tabCandidate, tabCandidate.parentElement, tabCandidate.parentElement?.parentElement]) {
         if (target) target.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
       }
-      await sleep(1200); // let the tab's content actually render before reading it
+      await sleep(1200 + attempt * 600); // let the tab's content actually render before reading it
+      if (document.querySelector(".d4t-item")) return;
     }
   }
 
