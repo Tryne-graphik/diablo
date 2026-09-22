@@ -3559,12 +3559,21 @@ référençant ce projet ou un interpréteur Python/Node
 (`Get-ScheduledTask`), `E:` est un disque physique fixe local
 ("Savegarde HDD"), pas un lecteur synchronisé dans le cloud - élimine
 la piste OneDrive/Dropbox. Aucun agent Claude actif ou récupérable au
-moment de l'incident (`ListAgents` vide). **Hypothèse la plus probable,
-non confirmée** : un éditeur de texte externe (VS Code, Notepad++...)
-qui aurait encore ce fichier ouvert avec une ancienne version en
-mémoire (v2.19), et qui l'aurait re-sauvegardé par-dessus le contenu
-plus récent - à vérifier si l'utilisateur a ce fichier ouvert ailleurs
-que dans cette session.
+moment de l'incident (`ListAgents` vide). **Cause confirmée par l'utilisateur** : Tampermonkey a une fonction
+"Enregistrer sur le disque" (visible dans le menu Fichier de son
+éditeur, capture d'écran plus haut dans cette session) qui réécrit le
+fichier source local à partir du contenu actuellement chargé dans
+l'éditeur Tampermonkey - l'utilisateur avait encore une ancienne
+version (v2.19) ouverte dans cet onglet et l'a enregistrée sur le
+disque, écrasant sans le vouloir le travail plus récent. **Point
+d'attention pour toutes les prochaines sessions** : le fichier sur
+disque n'est plus seulement à risque d'être en retard sur Tampermonkey
+(le piège habituel, largement documenté plus haut) - il peut aussi être
+écrasé DANS L'AUTRE SENS si l'utilisateur clique "Enregistrer sur le
+disque" depuis un onglet éditeur Tampermonkey resté sur une ancienne
+version. Toujours vérifier `@version`/`wc -l` sur le disque avant de
+supposer qu'un état "terminé" plus tôt dans la session est toujours
+valide.
 
 **Résolution : quasi instantanée grâce au dépôt git initialisé plus tôt
 dans la session** - `git checkout 9ec6130 -- userscript/diablo4-assistant.user.js`
