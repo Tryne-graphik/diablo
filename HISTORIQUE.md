@@ -4626,3 +4626,17 @@ bien dans le DOM - un echec silencieux invisible cote utilisateur. **Corrige** :
 si l'onglet est deja actif) et apres chaque tentative, avec jusqu'a 2 reessais supplementaires (delai
 croissant) avant d'abandonner. Pas encore reteste en jeu (le workaround manuel reste fiable en
 attendant).
+
+## 2026-09-23 (suite) - Vraie cause trouvee : l'onglet Stat Priority ne se surligne meme pas
+
+Le durcissement ci-dessus n'a pas suffi - utilisateur a regenere 4-5 fois, toujours le filtre court (6
+regles). Verification : l'onglet "Stat Priority" ne se surlignait meme pas au clic automatique - le
+probleme n'etait donc pas un timing/rendu, mais que **le clic n'atteignait jamais le bon element du
+tout**. DevTools de l'utilisateur a revele la cause : le bouton affiche **"Priorité des statistiques"**
+(traduit par Chrome), pas "Stat Priority" en anglais - `ensureStatPriorityTabActive()` ne cherchait que
+le texte anglais exact, ratant systematiquement l'element sur une page dont Chrome a traduit le texte.
+
+**Corrige** : accepte maintenant les deux libelles connus (`stat priority` et `priorité des
+statistiques`). Meme risque theorique ailleurs dans le code (ex. `findParagonNameMap()` cherche
+litteralement "boards used" sur D4Builds) - pas corrige, aucun rapport de bug sur ce point pour
+l'instant, note pour reference si ca se manifeste un jour. Pas encore reteste en jeu.
