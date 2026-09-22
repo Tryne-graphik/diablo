@@ -4539,13 +4539,26 @@ Corrige aussi l'ordre interne 2+/3+ des regles precises par emplacement (3+ doit
 que l'or l'emporte sur l'orange - meme bug, meme cause). Verifie par decodage offline (ordre correct
 confirme byte a byte), **pas encore reteste en jeu** - prochaine etape prioritaire.
 
-**Piste separee, non resolue** : dans le filtre "Filtre de butin #8" (25 regles) que l'utilisateur
-affirme etre la sortie brute non modifiee de "Générer le filtre", aucune regle de ciblage d'Unique
-n'apparait alors que son Casque aurait du etre "Cowl of the Nameless" (confirme present dans notre
-table `UNIQUE_ITEM_IDS`, 5 sno ids connus). Le nom EST connu de nous - le probleme est donc dans
-l'extraction du nom depuis le site du guide (site pas encore precise par l'utilisateur) ou dans la
-comparaison, pas dans une donnee manquante. A investiguer des que le site source est connu. Decodage
-de ce filtre a aussi releve plusieurs regles "3+" affichees sans nom par mon script de decodage
-maison, cause non elucidee (verifie que ce n'est pas un desync de parsing au niveau top-level -
-consommation d'octets exacte confirmee) - possible reliquat du bug d'ordre lui-meme plutot qu'un
-probleme de decodage; pas creuse plus loin, priorite donnee au fix confirme.
+**Piste separee, resolue** : dans le filtre "Filtre de butin #8" (25 regles), aucune regle de ciblage
+d'Unique n'apparaissait alors que le Casque du build (Dance Of Knives Rogue, maxroll.gg) aurait du
+etre "Cowl of the Nameless" (confirme present dans `UNIQUE_ITEM_IDS`, 5 sno ids connus - donc pas une
+donnee manquante). Cause trouvee via capture d'ecran + DevTools de l'utilisateur : le widget Maxroll a
+DEUX sous-onglets, "Equipment" et "Stat Priority" - `extractMaxrollEquipmentFromDom()` ne lit que le
+DOM de l'onglet "Equipment" (`.equipment_Slot__title__*`), qui n'est probablement pas monte quand
+"Stat Priority" est l'onglet actif au moment du clic sur "Générer le filtre" - zero nom scrape,
+zero regle Unique generee, silencieusement.
+
+**Corrige (v2.23-ere continuee) 2026-09-23** : le panneau Stat Priority (deja utilise pour les regles
+precises par emplacement) affiche AUSSI le nom de l'objet choisi par emplacement - confirme via
+DevTools : `.d4t-header > span.d4-color-unique` (ex. "Cowl of the Nameless" sous le slot "Helm").
+Ajoute son extraction a `extractStatPriorityFromD4ToolsWidget()`, fusionne avec les noms de l'onglet
+Equipment avant `buildUniqueItemRules()` (source supplementaire, deduplique automatiquement).
+`findPerSlotStatPriority()` est maintenant appelee inconditionnellement (avant : seulement si la case
+"regles precises par emplacement" etait cochee), puisqu'elle force deja l'activation de son propre
+onglet (`ensureStatPriorityTabActive()`) - la rendant plus fiable que le scrape Equipment pour cet
+usage precis, independamment de l'onglet que l'utilisateur a sous les yeux. Pas encore reteste en jeu.
+
+Decodage de ce meme filtre a aussi releve plusieurs regles "3+" affichees sans nom par mon script de
+decodage maison, cause non elucidee (verifie que ce n'est pas un desync de parsing au niveau
+top-level - consommation d'octets exacte confirmee) - possible reliquat du bug d'ordre lui-meme
+plutot qu'un probleme de decodage; pas creuse plus loin, priorite donnee aux fixs confirmes.
