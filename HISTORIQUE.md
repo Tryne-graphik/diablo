@@ -4501,7 +4501,51 @@ recherche future, aucun changement de code applique encore** :
 - Confirmation supplementaire que **Show/Recolor l'emporte sur Hide independamment de l'ordre** : le
   filtre "Druide" de l'utilisateur place sa regle "Masquer" (cache presque tout) en tout dernier, apres
   18 regles Show/Recolor precises - coherent avec notre propre filtre qui marche en jeu.
+  **CORRECTION (voir section suivante) : cette conclusion etait fausse.** Ce n'est pas "Show/Recolor
+  gagne independamment de l'ordre", c'est plus simple et plus strict : **premiere regle qui correspond
+  gagne, dans l'ordre de la liste, point final** - le filtre Druide marche justement PARCE QUE "Masquer"
+  est en dernier (pas malgre sa position).
 - Technique plus riche observee chez l'utilisateur pour les Uniques : combine parfois l'id precis d'un
   Unique AVEC des conditions d'affixes/qualite (ex. "cet Unique + 4 bonnes stats"), et regroupe plusieurs
   Uniques differents dans une seule regle partageant une couleur - notre generateur ne fait que "toujours
   montrer cet Unique", plus simple. Piste d'amelioration future, pas urgente.
+
+## 2026-09-23 (suite) - TROUVAILLE MAJEURE confirmee en jeu : le modele de priorite des regles etait faux, filtre Strict corrige
+
+Suite au test du filtre Strict ("rien de colore"), diagnostic par mini-filtre de test : **Cacher
+Legendaire+Unique en premiere regle, Recolorer en or juste apres, catch-all Show en dernier** - importe
+en jeu avec un Legendaire quelconque en inventaire (pas besoin d'Affixe majeure). **Resultat : rien ne
+se recolore, l'objet reste cache.** Confirme sans ambiguite : le jeu evalue les regles d'un filtre
+**dans l'ordre de la liste, de haut en bas, premiere regle qui correspond gagne (first-match-wins)** -
+pas de "regle plus specifique qui annule un Hide precedent" comme suppose depuis le debut du projet
+(hypothese heritee sans verification du port d'Upsilon72/d4-filter-generator's buildFilter(), voir
+generator.py original).
+
+**Consequence grave** : "Hide Junk" a toujours ete place TOT dans tous les filtres generes par ce
+projet (juste apres "Legendary Talismans"), AVANT les regles censees "sauver" les bons Rares/Legendaires
+(Check Rare 2+/3+, Codex, Legendaire+Affixe majeure, per-slot precision). Sous le vrai modele
+first-match-wins, ces regles de secours n'ont donc probablement **jamais fonctionne depuis le tout
+debut du projet** - seuls Codex Upgrade et Affixe majeure avaient ete confirmes en jeu plus tot cette
+session, et par coincidence : dans CE test minimal, "Hide Junk" ne visait que Commun/Magique/Rare, donc
+les Legendaires n'etaient jamais concernes par le Hide pour commencer - le mecanisme de contournement
+lui-meme n'avait jamais ete reellement teste.
+
+**Corrige** dans `app/loot_filter/generator.py` (filtre Open, Python) et le userscript
+(`generateFilterCode()` + `buildPerSlotRules()`, Open et Strict) : toutes les regles Show/Recolor
+specifiques passent maintenant AVANT "Hide Junk", desormais tout en dernier. "Show All - Catch All"
+final retire (redondant - confirme par la structure des filtres reels de l'utilisateur, qui n'ont
+jamais ce catch-all : un objet qui ne correspond a aucune regle s'affiche normalement par defaut).
+Corrige aussi l'ordre interne 2+/3+ des regles precises par emplacement (3+ doit passer avant 2+ pour
+que l'or l'emporte sur l'orange - meme bug, meme cause). Verifie par decodage offline (ordre correct
+confirme byte a byte), **pas encore reteste en jeu** - prochaine etape prioritaire.
+
+**Piste separee, non resolue** : dans le filtre "Filtre de butin #8" (25 regles) que l'utilisateur
+affirme etre la sortie brute non modifiee de "Générer le filtre", aucune regle de ciblage d'Unique
+n'apparait alors que son Casque aurait du etre "Cowl of the Nameless" (confirme present dans notre
+table `UNIQUE_ITEM_IDS`, 5 sno ids connus). Le nom EST connu de nous - le probleme est donc dans
+l'extraction du nom depuis le site du guide (site pas encore precise par l'utilisateur) ou dans la
+comparaison, pas dans une donnee manquante. A investiguer des que le site source est connu. Decodage
+de ce filtre a aussi releve plusieurs regles "3+" affichees sans nom par mon script de decodage
+maison, cause non elucidee (verifie que ce n'est pas un desync de parsing au niveau top-level -
+consommation d'octets exacte confirmee) - possible reliquat du bug d'ordre lui-meme plutot qu'un
+probleme de decodage; pas creuse plus loin, priorite donnee au fix confirme.
