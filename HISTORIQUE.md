@@ -3445,3 +3445,70 @@ navigateur pour déclencher une invite de mise à jour Tampermonkey - ne
 fonctionne pas pour un script installé localement sans `@updateURL`,
 le bouton "Vérifier les mises à jour" reste grisé dans ce cas, c'est
 normal.)
+
+## 2026-09-22 (suite) - "Comparer les variantes" (2.21)
+
+Demande utilisateur : pouvoir comparer en détail les différentes
+versions d'un même build (objets différents, options de compétences
+différentes, parfois stats différentes) selon le site ou même au sein
+d'un site, pour identifier la meilleure variante.
+
+**Clarifié avant de coder** : désigner LA meilleure variante par le
+calcul demanderait un simulateur de dégâts complet, déjà explicitement
+écarté du périmètre du projet le 2026-09-19 (trop gros projet à part
+entière, formule de dégâts D4 très complexe). Proposé et validé avec
+l'utilisateur à la place : afficher les écarts précis entre variantes
+(diff), plus un signal objectif déjà disponible - la popularité de
+chaque compétence chez les VRAIS joueurs du classement Tower officiel
+(déjà intégré pour la position officielle). Pas d'équivalent pour les
+objets : le classement n'expose que les compétences équipées, pas
+l'équipement complet.
+
+Implémenté directement (sans agent séparé) dans
+`userscript/diablo4-assistant.user.js` :
+- **`runExtractionMode` généralisé** (utilisé par `openExtractionTab`
+  pour lire un build dans un onglet caché) : essaie d'abord
+  `extractNativeDetail()` (kami-labs/Maxroll, instantané), puis se
+  rabat sur l'ancienne lecture DOM InfinityBuilds
+  (`runInfinityBuildsExtraction`, renommée mais logique inchangée) si
+  la page cible n'est ni l'un ni l'autre. Avant ce changement, pointer
+  un onglet caché vers une URL kami-labs/Maxroll échouait
+  silencieusement (10s de polling DOM pour rien, ces sites n'ont pas
+  les éléments `.gear-paperdoll-tile` attendus) - jamais un problème
+  avant puisque `openExtractionTab` n'était appelé qu'avec des URLs
+  InfinityBuilds ; le nouveau bouton en a besoin pour les 3 sources
+  extractibles.
+- **`EXTRACTABLE_SOURCES`** = kami-labs/Maxroll/InfinityBuilds - les
+  3 seules sources avec une extraction de détail déjà construite.
+  D4Builds/D4Guides/talion.tv n'ont jamais eu cette extraction (juste
+  titre/tier/lien) - signalé explicitement à l'utilisateur dans le
+  résultat plutôt que silencieusement omis, plutôt que de prétendre à
+  une comparaison exhaustive des 6 sites.
+- **`countPlayersUsingSkill(runs, gameClass, skillName)`** - réutilise
+  `fetchTowerRuns()` déjà en cache (30 min) pour la position
+  officielle, compte combien de joueurs réels de cette classe ont
+  exactement cette compétence.
+- **`diffVariantField`/`renderVariantComparison`** - regroupe
+  objets/compétences par nom replié à travers toutes les variantes
+  comparées, sépare "communs à toutes" de "diffèrent", affiche pour
+  chaque compétence différente sa popularité réelle (objets : juste la
+  liste des sources qui l'utilisent, pas de popularité disponible).
+- **`runCompareVariants`** (nouveau bouton "🔬 Comparer les variantes",
+  4e bouton du panneau) - lit le build de la page courante (réutilise
+  `resolveTranslation()`), trouve les variantes sur les autres sites
+  (réutilise `findCrossSiteLinks()`), ouvre jusqu'à 3 onglets cachés en
+  parallèle pour les sources extractibles trouvées (borne le coût),
+  puis calcule et affiche la comparaison.
+
+`node --check` OK, 2686 lignes. Diff vérifié contre le commit précédent
+(`git diff --stat`) - seulement les changements intentionnels, aucune
+ligne préexistante touchée par erreur. Grep anti-corruption relancé sur
+tout le fichier - rien trouvé. Version finale : **2.21**.
+
+**Pas encore testé en conditions réelles** - à valider par
+l'utilisateur : recopier v2.21 (import de fichier Tampermonkey, voir
+méthode ci-dessus), cliquer "Comparer les variantes" sur un build ayant
+des variantes connues sur d'autres sites, vérifier que les onglets
+cachés s'ouvrent discrètement et que le résultat affiché est cohérent
+(objets/compétences communs vs différents, popularité réelle sur les
+compétences qui diffèrent).
