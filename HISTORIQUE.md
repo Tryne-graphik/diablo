@@ -4645,10 +4645,35 @@ l'instant, note pour reference si ca se manifeste un jour.
 desormais le filtre complet (regles precises par emplacement + Uniques nommes). Le clic automatique
 sur l'onglet Stat Priority fonctionne enfin de bout en bout, sans intervention manuelle.
 
+## 2026-09-23 (suite) - Nouvelle fonctionnalite : precision par emplacement dediee aux Uniques nommes
+
+Utilisateur a fourni le filtre genere PUIS une version modifiee a la main en jeu, pour montrer ce qui
+manquait : il avait ajoute une condition SpecificUnique (kind=8, Cowl of the Nameless) A L'INTERIEUR
+des regles "Precis 2+/3+ - Helm" existantes, en plus des conditions Rare/ItemType/Affixes deja la -
+exactement la technique deja vue dans ses propres filtres faits main plus tot dans la session (ex.
+"Pants X4" combine un id d'Unique avec un controle d'affixes). Bug trouve dans son edition : la regle
+"3+" gardait `kind=1` (Rare) EN MEME TEMPS que la condition Unique - contradictoire, un objet ne peut
+pas etre a la fois Rare et matcher un id de Unique specifique (les Uniques ne sont jamais Rare).
+
+**Clarifie avec l'utilisateur** (question a choix) : il veut une regle SEPAREE qui recolore l'Unique
+different selon 2+/3+ bonnes affixes, tout en gardant la regle plate "toujours garder" existante comme
+filet de securite (pas un remplacement).
+
+**Implemente** dans `buildPerSlotRules()` : pour tout emplacement dont l'objet choisi (via le panneau
+Stat Priority, `entry.itemName`) est un Unique nomme connu (`UNIQUE_ITEM_IDS_BY_LOWER_NAME`), emet en
+plus une paire de regles RECOLOR ciblant son identite exacte (kind=8, SANS condition de rareté - un id
+Unique suffit deja a l'identifier, corrige le bug de l'edition manuelle) + son nombre d'affixes
+prioritaires du meme emplacement (2+/3+, meme palier orange/or que les regles Rare). Poussees AVANT la
+regle plate "Keep Unique - X" dans l'ordre final (le mecanisme first-match-wins fait le reste) : bonnes
+affixes -> recolore special ; sinon -> retombe sur le filet de securite "toujours garder" par defaut.
+Les regles Rare/ItemType existantes pour ce meme emplacement restent aussi generees en parallele (utile
+si un Rare non-Unique du meme emplacement est une meilleure alternative temporaire). Pas encore teste
+en jeu.
+
 **Bilan de fin de session 2026-09-23** : le filtre de butin - casse depuis le tout debut du projet a
 cause du mauvais ordre des regles - fonctionne desormais entierement, de bout en bout, sans aucune
-intervention manuelle : ordre des regles correct, regles precises par emplacement, ciblage d'Uniques
-nommes, activation automatique fiable de l'onglet Stat Priority. Traduction ("Traduire") confirmee
-100% correcte des le premier clic. Couverture de traduction du dictionnaire fermee (2503 entrees). Une
-tres grosse session de corrections de fond - a documenter comme reference si un doute revient sur le
-fonctionnement du filtre de butin.
+intervention manuelle : ordre des regles correct, regles precises par emplacement (Rare et desormais
+Unique nomme), ciblage d'Uniques nommes, activation automatique fiable de l'onglet Stat Priority.
+Traduction ("Traduire") confirmee 100% correcte des le premier clic. Couverture de traduction du
+dictionnaire fermee (2503 entrees). Une tres grosse session de corrections de fond - a documenter comme
+reference si un doute revient sur le fonctionnement du filtre de butin.
