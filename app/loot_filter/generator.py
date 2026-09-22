@@ -1,20 +1,36 @@
 """Builds a ready-to-import D4 loot filter code for a chosen build.
 
-Rule template (priority, highest first - i.e. LAST in the list passed to
-make_filter, matching app/loot_filter/codec.py's convention) ported
-directly from Upsilon72/d4-filter-generator's buildFilter():
+2026-09-23 CORRECTION: every rule order in this module before today was
+backwards. The game evaluates a filter's rules in LIST ORDER, top to
+bottom, and stops at the FIRST match (simple first-match-wins) - not
+"reverse order" and not "a later specific rule overrides an earlier
+Hide" as this module's original docstring (ported from
+Upsilon72/d4-filter-generator without independent verification) claimed.
+Confirmed 2026-09-23 with a minimal real in-game test: a filter with
+Hide(Legendary|Unique) placed BEFORE a Recolor(Legendary|Unique) rule
+hid the item and the later Recolor never applied - proving Hide, once
+matched, wins outright regardless of what comes after it. Every rule
+this module ever generated had its Rare-recolor rules placed AFTER
+"Hide Junk" (whose rarity mask includes Rare), so they were very
+likely dead code the entire time: a Rare that should have been
+recolored orange/gold instead just got hidden by "Hide Junk" first.
+Cross-checked against the user's own hand-built, actually-working
+filters, which all follow this same pattern: every specific
+show/recolor rule first, the broad "hide everything else" rule dead
+last, and no trailing catch-all SHOW after it (an item matching no
+rule at all displays in its normal, unstyled state by default - a
+final catch-all is redundant, not needed).
 
-  1. Show everything (catch-all)
-  2. Recolor cyan  - any Greater Affix
-  3. Recolor green - Legendary and above
+Rule order now (first match wins, so more specific / better tiers go
+before looser ones that could also match the same item):
+  1. Show   - Legendary Talismans/Charms (always kept, not build-specific)
+  2. Recolor gold  - Rare with >= gold_threshold of the build's core stats
+  3. Recolor orange- Rare with >= 1 of any build-relevant affix
   4. Recolor green - Codex upgrade
-  5. Recolor gold  - Rare with >= gold_threshold of the build's core stats
-  6. Recolor orange- Rare with >= 1 of any build-relevant affix
-  7. Hide          - Common/Magic/Rare junk (rules 5/6 above already
-                      recolored the Rares worth keeping before this hides
-                      the rest - rule order/priority is what makes that work)
-  8. Show          - Legendary Talismans/Charms (always kept regardless of
-                      the above, since Talismans aren't build-specific)
+  5. Recolor green - Legendary and above
+  6. Recolor cyan  - any Greater Affix
+  7. Hide          - Common/Magic/Rare junk (last: only reached by an
+                      item that matched none of the keep rules above it)
 """
 
 from __future__ import annotations
@@ -96,17 +112,6 @@ def generate_filter_code(
             [codec.condition_rarity(codec.LEGENDARY_PLUS), codec.condition_item_types([codec.CHARM, codec.SEAL])],
         )
     )
-    rules.append(
-        codec.make_rule("Hide Junk", codec.HIDE_ALL, [codec.condition_rarity(codec.COMMON | codec.MAGIC | codec.RARE)])
-    )
-    if all_build_ids:
-        rules.append(
-            codec.make_rule(
-                "Check Rare - Build Affix", codec.RECOLOR,
-                [codec.condition_rarity(codec.RARE), codec.condition_affixes(all_build_ids, 1)],
-                codec.COLOR_ORANGE,
-            )
-        )
     if len(core_ids) >= gold_threshold:
         rules.append(
             codec.make_rule(
@@ -115,10 +120,20 @@ def generate_filter_code(
                 codec.COLOR_GOLD,
             )
         )
+    if all_build_ids:
+        rules.append(
+            codec.make_rule(
+                "Check Rare - Build Affix", codec.RECOLOR,
+                [codec.condition_rarity(codec.RARE), codec.condition_affixes(all_build_ids, 1)],
+                codec.COLOR_ORANGE,
+            )
+        )
     rules.append(codec.make_rule("Codex Upgrade", codec.RECOLOR, [codec.condition_codex_upgrade()], codec.COLOR_GREEN))
     rules.append(codec.make_rule("Legendaries - Keep All", codec.RECOLOR, [codec.condition_rarity(codec.LEGENDARY_PLUS)], codec.COLOR_GREEN))
     rules.append(codec.make_rule("Greater Affix - Loot", codec.RECOLOR, [codec.condition_greater_affix(1)], codec.COLOR_CYAN))
-    rules.append(codec.make_rule("Show All - Catch All", codec.SHOW, [codec.condition_rarity(codec.ALL_RARITIES)]))
+    rules.append(
+        codec.make_rule("Hide Junk", codec.HIDE_ALL, [codec.condition_rarity(codec.COMMON | codec.MAGIC | codec.RARE)])
+    )
 
     code = codec.make_filter(filter_name, rules)
     return FilterResult(code=code, unresolved_skills=unresolved_skills, resolved_affix_count=len(all_build_ids))

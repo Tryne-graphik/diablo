@@ -2049,13 +2049,19 @@
   // rolled a GA. "open" is for leveling/early endgame/aspect-hunting,
   // where every Legendary is still worth an inspection.
   //
-  // "Hide, then a later more-specific rule overrides the hide" is the
-  // exact idiom the existing 2+/3+ Rare rules already use successfully
-  // (Hide Junk's rarity mask includes RARE; the Check Rare rules below it
-  // override that hide for the Rares that actually matter) - strict mode
-  // reuses that same idiom for Legendary/Unique rather than inventing a
-  // new interaction, since only that pattern is proven to work byte-for-
-  // byte against Upsilon72's reference output (see generator.py's header).
+  // 2026-09-23 CORRECTION: the paragraph that used to be here claimed
+  // "Hide, then a later more-specific rule overrides the hide" was a
+  // proven-working idiom - it was never actually proven, and a real
+  // in-game test the same day disproved it: the game evaluates a
+  // filter's rules in LIST ORDER, first match wins, full stop. Once an
+  // item matches a Hide rule, nothing later in the list can un-hide it.
+  // Every rule this function built before today put "Hide Junk" BEFORE
+  // the specific Recolor rules meant to rescue the Rares/Legendaries
+  // that matter - meaning those rescue rules were very likely dead code
+  // the entire time. Fixed by pushing every specific keep/recolor rule
+  // FIRST and "Hide Junk" dead last (see generator.py's header for the
+  // full writeup and the confirming test) - matches how the user's own
+  // hand-built, actually-working filters are structured.
   // 2026-09-22: `options` lets the Strict filter's two toggleable behaviors
   // be switched off independently (wired to the new checkboxes in the
   // persistent panel) - `requireAncestral` and `hideLegendaryWithoutGA`.
@@ -2079,34 +2085,27 @@
     const colorGood = options.colorGood ?? COLOR_ORANGE;
     const colorGA = options.colorGA ?? COLOR_CYAN;
 
+    // 2026-09-23: rebuilt in first-match-wins order (see the CORRECTION
+    // comment above this function) - every specific keep/recolor rule
+    // now comes BEFORE "Hide Junk", which moved to dead last. Within a
+    // group of rules that could both match the same item (the Rare
+    // 2+/3+ tiers, the Legendary GA/no-GA tiers), the MORE SPECIFIC/
+    // BETTER one is pushed first so it wins the match.
     const rules = [];
     rules.push(makeRule("Legendary Talismans", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])]));
 
-    // Open: hide Common/Magic/Rare only, exactly as before - every
-    // Legendary+ stays visible via "Legendaries - Keep All" below. Strict:
-    // when hideLegendaryWithoutGA is on, also fold Legendary|Unique into the
-    // same broad hide (Mythic and Talismans excluded on purpose - always
-    // kept), overridden a few rules down by the GA-only keep rule; off, and
-    // it behaves like Open for that rarity tier (falls through to the
-    // unconditional "Legendaries - Keep All" rule below).
-    const hideMask = COMMON | MAGIC | RARE | (hideLegendaryWithoutGA ? LEGENDARY | UNIQUE : 0);
-    rules.push(makeRule("Hide Junk", HIDE_ALL, [conditionRarity(hideMask)]));
-
-    if (!strict && allBuildIds.length >= 2) {
-      rules.push(makeRule("Check Rare - 2+ Build Affixes", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 2)], colorGood));
-    }
     if (allBuildIds.length >= 3) {
-      // Comes AFTER (so higher priority than, per make_filter's ordering
-      // convention) the 2+ rule, so a Rare matching 3+ shows gold instead
-      // of being caught by the orange rule first. Strict mode only has
-      // this 3+ tier - the looser 2+ bar is dropped on purpose - and, when
-      // requireAncestral is on, also requires Ancestral (kind=2 condition,
-      // reverse-engineered 2026-09-22), matching the community "T12+
-      // Strict" convention: at endgame every drop is Ancestral-capable, so
-      // a non-Ancestral Rare is never BiS.
+      // Strict mode only has this 3+ tier - the looser 2+ bar is dropped
+      // on purpose - and, when requireAncestral is on, also requires
+      // Ancestral (kind=2 condition, reverse-engineered 2026-09-22),
+      // matching the community "T12+ Strict" convention: at endgame every
+      // drop is Ancestral-capable, so a non-Ancestral Rare is never BiS.
       const bisConditions = [conditionRarity(RARE), conditionAffixes(allBuildIds, 3)];
       if (requireAncestral) bisConditions.push(conditionAncestral());
       rules.push(makeRule("Check Rare - 3+ Build Affixes (BiS)", RECOLOR, bisConditions, colorBis));
+    }
+    if (!strict && allBuildIds.length >= 2) {
+      rules.push(makeRule("Check Rare - 2+ Build Affixes", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 2)], colorGood));
     } else if (!strict && allBuildIds.length === 1) {
       // Only one affix known in total - a ">=2" requirement could never
       // match anything, so fall back to the simple ">=1" check rather
@@ -2116,30 +2115,42 @@
       // rule that would light up almost every Rare that drops.
       rules.push(makeRule("Check Rare - Build Affix", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 1)], colorGood));
     }
-    // Per-slot rules (buildPerSlotRules(), when supplied) slot in here: after
-    // the flat build-affix Rare rules, before the Legendary/Codex rules -
-    // same "specific rule overrides the broader hide above it" position the
-    // 2+/3+ rules use, just scoped to one ItemType each instead of all Rares.
+    // Per-slot rules (buildPerSlotRules(), when supplied) slot in here,
+    // before the flat build-affix Rare rules would matter less since
+    // they're scoped to one ItemType each - position relative to Codex/
+    // Legendary rules below is what matters (must stay before Hide Junk).
     for (const r of extraRules) rules.push(r);
     rules.push(makeRule("Codex Upgrade", RECOLOR, [conditionCodexUpgrade()], COLOR_GREEN));
     if (hideLegendaryWithoutGA) {
       rules.push(makeRule("Mythic - Always Keep", RECOLOR, [conditionRarity(MYTHIC)], COLOR_GREEN));
-      // Pushed BEFORE the GA rule (so GA still overrides/wins gold when an
-      // item has both) - same idiom as the Rare 2+/3+ tiers: a broader,
-      // lower-priority "good enough" rule first, a more specific one after.
+      // GA-keep pushed BEFORE the no-GA-but-good-stats rule (so GA still
+      // wins gold when an item has both) - more specific/better tier first,
+      // same idiom as the Rare 2+/3+ tiers above.
+      const gaKeepConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionGreaterAffix(1)];
+      if (requireAncestral) gaKeepConditions.push(conditionAncestral());
+      rules.push(makeRule("Legendary/Unique - Keep only with Greater Affix", RECOLOR, gaKeepConditions, colorBis));
       if (keepGoodStatsNoGA && allBuildIds.length >= 2) {
         const noGaConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionAffixes(allBuildIds, 2)];
         if (requireAncestral) noGaConditions.push(conditionAncestral());
         rules.push(makeRule("Legendary/Unique - Keep with Build Affixes (no GA)", RECOLOR, noGaConditions, colorGood));
       }
-      const gaKeepConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionGreaterAffix(1)];
-      if (requireAncestral) gaKeepConditions.push(conditionAncestral());
-      rules.push(makeRule("Legendary/Unique - Keep only with Greater Affix", RECOLOR, gaKeepConditions, colorBis));
     } else {
       rules.push(makeRule("Legendaries - Keep All", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN));
     }
     rules.push(makeRule("Greater Affix - Loot", RECOLOR, [conditionGreaterAffix(1)], colorGA));
-    rules.push(makeRule("Show All - Catch All", SHOW, [conditionRarity(ALL_RARITIES)]));
+    // Hide Junk LAST (see the CORRECTION comment above this function) -
+    // only reached by an item that matched none of the keep/recolor rules
+    // above it. No trailing catch-all SHOW needed: an item matching no
+    // rule in the whole filter displays in its normal, unstyled state by
+    // default (confirmed against the user's own hand-built filters, none
+    // of which end in an explicit catch-all Show either).
+    // Open: hide Common/Magic/Rare only - every Legendary+ stays visible
+    // via "Legendaries - Keep All" above. Strict: when hideLegendaryWithoutGA
+    // is on, also fold Legendary|Unique into the same broad hide (Mythic and
+    // Talismans excluded on purpose - always kept); off, and it behaves like
+    // Open for that rarity tier (already unconditionally kept above).
+    const hideMask = COMMON | MAGIC | RARE | (hideLegendaryWithoutGA ? LEGENDARY | UNIQUE : 0);
+    rules.push(makeRule("Hide Junk", HIDE_ALL, [conditionRarity(hideMask)]));
     return { code: makeFilter(filterName, rules), unresolvedSkills: unresolved, resolvedAffixCount: allBuildIds.length };
   }
 
@@ -2156,12 +2167,15 @@
   // 2026-09-22: two-tier per-slot version, requested after the user asked
   // for a "3rd, even more precise filter (3 affixes)" and whether it could
   // be merged into the existing one instead of a separate code - yes: reuse
-  // the SAME orange-then-gold-overrides idiom the flat pool's "Check Rare -
-  // 2+/3+ Build Affixes" rules already use (2+ pushed first/lower priority,
-  // 3+ pushed after/higher priority so a slot matching all 3 shows gold
-  // instead of being caught by the 2+ rule first), just scoped to one
-  // ItemType per slot instead of every Rare. One filter, two precision
-  // tiers per slot, instead of two separate filter codes to choose between.
+  // the same orange/gold two-tier idiom the flat pool's "Check Rare -
+  // 2+/3+ Build Affixes" rules use, just scoped to one ItemType per slot
+  // instead of every Rare. One filter, two precision tiers per slot,
+  // instead of two separate filter codes to choose between.
+  // 2026-09-23 CORRECTION: the 3+ (BiS/gold) rule must be pushed BEFORE
+  // the 2+ (orange) rule, not after - the game matches filter rules in
+  // list order, first match wins (see the CORRECTION comment above
+  // generateFilterCode()), so if 2+ came first a slot with all 3 affixes
+  // would get caught by the looser 2+/orange rule and never reach 3+/gold.
   function buildPerSlotRules(perSlotData, requireAncestral = true, colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD) {
     const rules = [];
     const skippedSlots = [];
@@ -2171,14 +2185,14 @@
         skippedSlots.push(entry.slot);
         continue;
       }
-      const cond2 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2)];
-      if (requireAncestral) cond2.push(conditionAncestral());
-      rules.push(makeRule(`Precis 2+ - ${entry.slot}`, RECOLOR, cond2, colorGood));
       if (entry.ids.length >= 3) {
         const cond3 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 3)];
         if (requireAncestral) cond3.push(conditionAncestral());
         rules.push(makeRule(`Precis 3+ (BiS) - ${entry.slot}`, RECOLOR, cond3, colorBis));
       }
+      const cond2 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2)];
+      if (requireAncestral) cond2.push(conditionAncestral());
+      rules.push(makeRule(`Precis 2+ - ${entry.slot}`, RECOLOR, cond2, colorGood));
     }
     return { rules, skippedSlots };
   }
