@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.45
+// @version      2.46
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1268,13 +1268,17 @@
   const COLOR_GREEN = makeColor(0, 200, 0);
   const COLOR_ORANGE = makeColor(255, 140, 0);
   const COLOR_GOLD = makeColor(255, 215, 0);
+  // 2026-09-23: 4th per-slot tier ("Palier 4 / Parfait", 4 matching
+  // affixes) - see buildPerSlotRules()'s docstring.
+  const COLOR_PERFECT = makeColor(255, 47, 209);
 
   // 2026-09-22: 3 of the 4 semantic colors (BiS/Bon/Greater Affix - Codex/
   // Legendary-keep green is left fixed, user asked for "3 cases") are now
   // user-customizable via <input type="color"> in the options panel, hex
   // strings persisted with GM_setValue. These are the swatch DEFAULTS,
   // matching the previously-hardcoded COLOR_GOLD/COLOR_ORANGE/COLOR_CYAN.
-  const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff" };
+  // 2026-09-23: added `perfect` (per-slot Palier 4 - see buildPerSlotRules()).
+  const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff", perfect: "#ff2fd1" };
   function hexToColor(hex, fallback) {
     const m = /^#?([0-9a-f]{6})$/i.exec(hex || "");
     if (!m) return fallback;
@@ -1332,16 +1336,25 @@
     for (const b of body) binary += String.fromCharCode(b);
     return btoa(binary);
   }
-  // 2026-09-23: pairs a rule's encoded bytes with whether generateFilterCode()
-  // is allowed to drop it when the filter would otherwise exceed D4's
+  // 2026-09-23: pairs a rule's encoded bytes with a trim PRIORITY, used by
+  // generateFilterCode() when the filter would otherwise exceed D4's
   // native 25-rule-per-filter cap (confirmed live - the game silently
   // truncates anything past rule 25 on import, which had been quietly
   // dropping essential tail rules like Hide Junk for any build with
-  // several per-slot precision entries). Only the loosest per-slot tier
-  // ("Precis 2+ - X") is ever marked trimmable; every safety-net and
-  // flat-pool rule always survives.
-  function tagRule(bytes, trimmable = false) {
-    return { bytes, trimmable };
+  // several per-slot precision entries). 0 (default) = safety net, NEVER
+  // trimmed. Anything >0 is trimmed in DESCENDING priority order (highest
+  // first) until the filter fits, only moving to the next priority level
+  // if the previous one wasn't enough - see the trimming loop in
+  // generateFilterCode(). 2026-09-23: was a plain boolean (only the
+  // loosest per-slot "2+" tier was ever trimmable) until the per-slot
+  // system grew from 2 to 4 tiers (buildPerSlotRules()) - a single
+  // trimmable bucket could no longer guarantee getting under the cap in
+  // the worst case (many slots all resolving 4 confirmed affixes), so
+  // trimming now has levels: per-slot Palier 2 (priority 3, dropped
+  // first) > Palier 3 (2) > Palier 4 (1) > Palier 5/Superieur and every
+  // other rule (0, never dropped).
+  function tagRule(bytes, trimPriority = 0) {
+    return { bytes, trimPriority };
   }
 
   // Ported from app/loot_filter/data.py - see that file's module docstring
@@ -2206,25 +2219,30 @@
     // Codex Upgrade/Legendaries/Greater Affix/Hide Junk (always the LAST
     // rules pushed, per the first-match-wins ordering above - exactly
     // what a naive tail-truncation removes first). Drop the loosest,
-    // most-expendable rules (tagRule(..., true) - currently only the
-    // per-slot "Precis 2+ - X" tier) from the END of the array first,
-    // one at a time, until at or under the cap - every safety-net and
-    // flat-pool rule (tagRule(..., false)) is exempt and always survives.
+    // most-expendable rules first, in DESCENDING trimPriority order (see
+    // tagRule()'s docstring) - e.g. per-slot Palier 2 across every slot
+    // before touching Palier 3, then Palier 4 - one at a time from the
+    // END of the array, only moving to the next priority level if the
+    // current one wasn't enough to fit. Priority 0 (every safety-net/
+    // flat-pool rule, and per-slot Palier 5) never gets touched.
     const MAX_FILTER_RULES = 25;
     let trimmedCount = 0;
     let finalRules = rules;
     if (finalRules.length > MAX_FILTER_RULES) {
       let excess = finalRules.length - MAX_FILTER_RULES;
-      finalRules = [];
-      for (let i = rules.length - 1; i >= 0; i--) {
-        const r = rules[i];
-        if (excess > 0 && r.trimmable) {
-          excess--;
-          trimmedCount++;
-          continue;
+      const dropped = new Set();
+      const priorities = Array.from(new Set(rules.map((r) => r.trimPriority).filter((p) => p > 0))).sort((a, b) => b - a);
+      for (const p of priorities) {
+        if (excess <= 0) break;
+        for (let i = rules.length - 1; i >= 0 && excess > 0; i--) {
+          if (rules[i].trimPriority === p && !dropped.has(i)) {
+            dropped.add(i);
+            excess--;
+            trimmedCount++;
+          }
         }
-        finalRules.unshift(r);
       }
+      finalRules = rules.filter((_, i) => !dropped.has(i));
     }
     return {
       code: makeFilter(filterName, finalRules.map((r) => r.bytes)),
@@ -2268,7 +2286,27 @@
   // whole filter, not just the Unique targeting. Replaced with a pooled
   // 2-rule approach in buildUniqueItemRules() instead (constant cost
   // regardless of how many Uniques match) - see its docstring.
-  function buildPerSlotRules(perSlotData, requireAncestral = true, colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD) {
+  // 2026-09-23: grown from 2 tiers to 5, per the user's explicit spec -
+  // "Palier 2" (2 matching affixes), "Palier 3" (3), "Palier 4" (4, i.e. a
+  // perfect roll on every known affix an item can have), and "Palier 5"
+  // (the slot's affixes PLUS a Greater Affix - the best possible signal).
+  // Palier 5 only requires 2+ matching affixes (the same floor as Palier
+  // 2, always true inside this loop) rather than 4 - a GA on a merely-good
+  // roll is still worth calling out distinctly, and demanding a full
+  // 4-affix match on top of a GA would make this tier fire so rarely it's
+  // not worth a dedicated rule. Colors: Palier 5 reuses colorGA (the same
+  // flat "Greater Affix - Loot" rule's color in generateFilterCode()) so
+  // "this item has a Greater Affix" always reads as the same color
+  // everywhere in the filter, not just at the flat-pool level. Order is
+  // most-specific-first (5 > 4 > 3 > 2), same first-match-wins reasoning
+  // as the CORRECTION above. Trim priority (see tagRule()'s docstring):
+  // Palier 2 (3, dropped first) > Palier 3 (2) > Palier 4 (1) > Palier 5
+  // (0, never dropped) - going from 2 to 4 tiers roughly doubles the
+  // worst-case per-slot rule count, so more tiers had to become
+  // expendable to still reliably fit D4's 25-rule cap; Palier 5 is kept
+  // safe since it only ever emits one rule per slot (worst case ~9-11
+  // rules total) and is the rarest/most valuable signal.
+  function buildPerSlotRules(perSlotData, requireAncestral = true, colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
     const rules = [];
     const skippedSlots = [];
     for (const entry of perSlotData) {
@@ -2277,16 +2315,23 @@
         skippedSlots.push(entry.slot);
         continue;
       }
+      const condGA = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2), conditionGreaterAffix(1)];
+      if (requireAncestral) condGA.push(conditionAncestral());
+      rules.push(tagRule(makeRule(`Precis 5 (Superieur) - ${entry.slot}`, RECOLOR, condGA, colorGA), 0));
+
+      if (entry.ids.length >= 4) {
+        const cond4 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 4)];
+        if (requireAncestral) cond4.push(conditionAncestral());
+        rules.push(tagRule(makeRule(`Precis 4 (Parfait) - ${entry.slot}`, RECOLOR, cond4, colorPerfect), 1));
+      }
       if (entry.ids.length >= 3) {
         const cond3 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 3)];
         if (requireAncestral) cond3.push(conditionAncestral());
-        rules.push(tagRule(makeRule(`Precis 3+ (BiS) - ${entry.slot}`, RECOLOR, cond3, colorBis), false));
+        rules.push(tagRule(makeRule(`Precis 3 - ${entry.slot}`, RECOLOR, cond3, colorBis), 2));
       }
       const cond2 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2)];
       if (requireAncestral) cond2.push(conditionAncestral());
-      // Trimmable: the loosest tier, dropped first if the filter would
-      // otherwise exceed D4's 25-rule cap (see tagRule()'s docstring).
-      rules.push(tagRule(makeRule(`Precis 2+ - ${entry.slot}`, RECOLOR, cond2, colorGood), true));
+      rules.push(tagRule(makeRule(`Precis 2 - ${entry.slot}`, RECOLOR, cond2, colorGood), 3));
     }
     return { rules, skippedSlots };
   }
@@ -2366,23 +2411,33 @@
         background: #15151f; color: #eee; padding: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,.4); border-radius: 8px;
         display: flex; flex-direction: column; gap: 8px;
-        width: 280px; max-height: calc(100vh - 70px); overflow-y: auto;
-        font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.5;
+        width: 300px; max-height: calc(100vh - 70px); overflow-y: auto;
+        font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5;
       }
-      #d4a-column-title { font-weight: bold; color: #03d0fc; font-size: 13px; text-align: center; }
-      #d4a-column > button, #d4a-search-form button {
+      #d4a-column-title { font-weight: bold; color: #03d0fc; font-size: 14px; text-align: center; }
+      /* 2026-09-23: "un peu petit" - bumped +1/+2px across the board
+         (button/checkbox-label text +2, everything else +1), and the
+         action buttons moved into a 2-column grid (.d4a-action-grid,
+         shorter labels: "Filtre"/"Comparer" instead of "Générer le
+         filtre"/"Comparer les variantes") to recover the vertical space
+         that cost, plus the space freed by no longer permanently showing
+         the filter-options explanations (now on-demand, see
+         #d4a-filter-options below). Panel width 280->300px to fit two
+         columns of buttons and a 4th color picker comfortably. */
+      #d4a-column > button, #d4a-search-form button, .d4a-action-grid button {
         background: #333; color: #fff; border: none; padding: 6px 10px;
-        border-radius: 4px; cursor: pointer; font-size: 11px; font-family: system-ui, sans-serif;
+        border-radius: 4px; cursor: pointer; font-size: 13px; font-family: system-ui, sans-serif;
       }
+      .d4a-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
       #d4a-panel-section:empty, #d4a-ranking-section:empty, #d4a-buildinfo-section:empty { display: none; }
-      #d4a-buildinfo-section { font-size: 11px; color: #9aa0ab; margin: -2px 0 4px; line-height: 1.5; }
+      #d4a-buildinfo-section { font-size: 12px; color: #9aa0ab; margin: -2px 0 4px; line-height: 1.5; }
       #d4a-buildinfo-section a { color: #03d0fc; }
-      #d4a-column h3 { margin: 0 0 8px; font-size: 15px; color: #eee; }
+      #d4a-column h3 { margin: 0 0 8px; font-size: 16px; color: #eee; }
       #d4a-column .d4a-close { float: right; cursor: pointer; color: #9aa0ab; }
       #d4a-column .d4a-chip-list { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 10px; }
-      #d4a-column .d4a-chip { background: #000; border: 1px solid #333; border-radius: 10px; padding: 2px 8px; font-size: 12px; }
+      #d4a-column .d4a-chip { background: #000; border: 1px solid #333; border-radius: 10px; padding: 2px 8px; font-size: 13px; }
       #d4a-column textarea {
-        width: 100%; font-family: monospace; font-size: 11px; background: #000;
+        width: 100%; font-family: monospace; font-size: 12px; background: #000;
         color: #eee; border: 1px solid #333; border-radius: 6px; padding: 6px; resize: vertical;
       }
       #d4a-column button.d4a-copy { background: #03d0fc; color: #000; font-weight: bold; }
@@ -2402,46 +2457,56 @@
       #d4a-rank-list { max-height: 364px; overflow-y: auto; }
       .d4a-rank-row { padding: 6px 0; border-bottom: 1px solid #333; }
       .d4a-rank-row:last-child { border-bottom: none; }
-      .d4a-rank-meta { color: #9aa0ab; font-size: 11px; }
-      .d4a-tier-badge { display: inline-block; font-weight: 700; font-size: 10px; padding: 1px 5px; border-radius: 3px; color: #fff; margin-right: 3px; }
-      .d4a-rank-links { font-size: 11px; }
+      .d4a-rank-meta { color: #9aa0ab; font-size: 12px; }
+      .d4a-tier-badge { display: inline-block; font-weight: 700; font-size: 11px; padding: 1px 5px; border-radius: 3px; color: #fff; margin-right: 3px; }
+      .d4a-rank-links { font-size: 12px; }
       .d4a-rank-links a { color: #03d0fc; margin-right: 4px; }
       #d4a-search-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-select {
         width: 100%; margin: 6px 0; padding: 6px 8px; border-radius: 4px; border: none;
-        background: #000; color: #eee; font-size: 12px;
+        background: #000; color: #eee; font-size: 13px;
       }
       #d4a-mybuilds-result p { margin: 0; }
       #d4a-search-form { display: flex; gap: 6px; margin: 6px 0 10px; }
       #d4a-search-form input {
         flex: 1; min-width: 0; padding: 6px 8px; border-radius: 4px; border: none;
-        background: #000; color: #eee; font-size: 12px;
+        background: #000; color: #eee; font-size: 13px;
       }
       #d4a-search-results { max-height: 300px; overflow-y: auto; }
       .d4a-search-row { padding: 6px 0; border-bottom: 1px solid #333; }
       .d4a-search-row:last-child { border-bottom: none; }
-      .d4a-search-source { color: #9aa0ab; font-size: 11px; }
+      .d4a-search-source { color: #9aa0ab; font-size: 12px; }
       /* 2026-09-22: <details>/<summary> for the collapsed detection summary
          in the filter panel, and for the Strict-filter options checkboxes -
          both added the same day after "il faudrait simplifier l'affichage"
-         and "des cases a cocher pour personnaliser le filtre". */
+         and "des cases a cocher pour personnaliser le filtre". 2026-09-23:
+         also now used for the small on-demand "en savoir plus" explanations
+         nested inside #d4a-filter-options (.d4a-help, see below) - same
+         idiom, smaller/tighter so they don't read as a 2nd options panel. */
       #d4a-column details { border: 1px solid #333; border-radius: 6px; padding: 4px 8px; margin: 2px 0; }
-      #d4a-column details > summary { cursor: pointer; color: #9aa0ab; font-size: 11px; list-style: none; }
+      #d4a-column details > summary { cursor: pointer; color: #9aa0ab; font-size: 12px; list-style: none; }
       #d4a-column details > summary::-webkit-details-marker { display: none; }
       #d4a-column details p { margin: 6px 0 0; }
-      #d4a-column details label { display: block; font-size: 11px; margin: 4px 0; cursor: pointer; }
+      #d4a-column details label { display: block; font-size: 13px; margin: 4px 0; cursor: pointer; }
       #d4a-column details input[type="checkbox"] { margin-right: 5px; vertical-align: middle; }
-      #d4a-filter-options { background: #0c0c14; }
-      #d4a-filter-options > summary { color: #03d0fc; }
-      .d4a-color-row { display: flex; gap: 10px; margin-top: 6px; border-top: 1px solid #333; padding-top: 6px; }
-      .d4a-color-row label { display: flex; align-items: center; gap: 4px; font-size: 10px; margin: 0; }
+      /* 2026-09-23: "laisse les options du filtre toujours ouverte" - was a
+         collapsed <details>, now a permanently-visible <div> (no more
+         summary/toggle at this level - only the NESTED .d4a-help/legend
+         explanations inside it still collapse, see above). */
+      #d4a-filter-options { background: #0c0c14; border: 1px solid #333; border-radius: 6px; padding: 6px 8px; margin: 2px 0; }
+      #d4a-filter-options label { display: block; font-size: 13px; margin: 4px 0; cursor: pointer; }
+      #d4a-filter-options label input[type="checkbox"] { margin-right: 5px; vertical-align: middle; }
+      .d4a-section-title { color: #03d0fc; font-weight: bold; font-size: 13px; }
+      .d4a-help { margin: 2px 0 6px 18px; }
+      .d4a-color-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; border-top: 1px solid #333; padding-top: 6px; }
+      .d4a-color-row label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
       .d4a-color-row input[type="color"] { width: 20px; height: 20px; padding: 0; border: none; border-radius: 3px; background: none; cursor: pointer; }
-      .d4a-legend { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; opacity: .85; margin: 4px 0 0; }
-      .d4a-legend span { display: inline-flex; align-items: center; gap: 4px; }
-      .d4a-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+      .d4a-legend { display: flex; flex-direction: column; gap: 4px; font-size: 12px; opacity: .9; margin: 4px 0 0; }
+      .d4a-legend span { display: flex; align-items: center; gap: 5px; }
+      .d4a-legend i { flex: none; display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
       .d4a-legend-details { border: none; padding: 0; margin-top: 6px; }
-      .d4a-legend-details > summary { font-size: 10px; }
+      .d4a-legend-details > summary { font-size: 11px; }
     `;
     document.head.appendChild(style);
   }
@@ -3389,9 +3454,11 @@
     const hexBis = document.getElementById("d4a-color-bis")?.value || COLOR_HEX_DEFAULTS.bis;
     const hexGood = document.getElementById("d4a-color-good")?.value || COLOR_HEX_DEFAULTS.good;
     const hexGA = document.getElementById("d4a-color-ga")?.value || COLOR_HEX_DEFAULTS.ga;
+    const hexPerfect = document.getElementById("d4a-color-perfect")?.value || COLOR_HEX_DEFAULTS.perfect;
     const colorBis = hexToColor(hexBis, COLOR_GOLD);
     const colorGood = hexToColor(hexGood, COLOR_ORANGE);
     const colorGA = hexToColor(hexGA, COLOR_CYAN);
+    const colorPerfect = hexToColor(hexPerfect, COLOR_PERFECT);
 
     // Read the CURRENT page's own "Stat Priority" list, if it has one -
     // see findPriorityAffixIds()'s docstring. Never blocks filter
@@ -3416,7 +3483,7 @@
     let perSlotRulesResult = { rules: [], skippedSlots: [] };
     try {
       perSlot = await findPerSlotStatPriority();
-      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, colorGood, colorBis);
+      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, colorGood, colorBis, colorPerfect, colorGA);
     } catch (e) {
       // ignore - same as above, a bonus signal, not required
     }
@@ -3527,7 +3594,7 @@
         ${detectionDetails}
       </details>
       ${filterBlock("open", "Ouvert", "Leveling / early endgame / chasse aux aspects : masque juste Commun-Magique-Rare hors-build, garde toutes les Légendaires et Uniques pour inspection.", openResult.code)}
-      ${filterBlock("strict", "Strict", "Endgame T12+ / farm intensif (options dans le panneau)." + (strictResult.trimmedForRuleCap ? ` <span style="color:#c9a227">${strictResult.trimmedForRuleCap} règle(s) "2+" par emplacement retirée(s) pour respecter la limite de 25 règles du jeu.</span>` : ""), strictResult.code)}
+      ${filterBlock("strict", "Strict", "Endgame T12+ / farm intensif (options dans le panneau)." + (strictResult.trimmedForRuleCap ? ` <span style="color:#c9a227">${strictResult.trimmedForRuleCap} règle(s) de précision par emplacement (Paliers 2-4, les plus larges d'abord) retirée(s) pour respecter la limite de 25 règles du jeu.</span>` : ""), strictResult.code)}
     `);
 
     for (const key of ["open", "strict"]) {
@@ -3743,31 +3810,47 @@
     column.innerHTML = `
       <div id="d4a-column-title">Diablo IV Assistant</div>
       <div id="d4a-buildinfo-section"></div>
-      <button id="d4a-btn-translate">🇫🇷 Traduire</button>
-      <button id="d4a-btn-filter">⚔ Générer le filtre</button>
-      <details id="d4a-filter-options">
-        <summary>⚙ Options du filtre Strict</summary>
+      <div class="d4a-action-grid">
+        <button id="d4a-btn-translate">🇫🇷 Traduire</button>
+        <button id="d4a-btn-filter">⚔ Filtre</button>
+        <button id="d4a-btn-ranking">🏆 Classement</button>
+        <button id="d4a-btn-compare">🔬 Comparer</button>
+      </div>
+      <div id="d4a-filter-options">
+        <div class="d4a-section-title">⚙ Options du filtre Strict</div>
         <label><input type="checkbox" id="d4a-opt-ancestral"> Ancestral uniquement</label>
         <label><input type="checkbox" id="d4a-opt-hide-no-ga"> Masquer Légendaires/Uniques sans Greater Affix</label>
         <label><input type="checkbox" id="d4a-opt-keep-good-no-ga"> ...mais garder si 2+ bonnes stats même sans GA</label>
+        <details class="d4a-help">
+          <summary>ℹ️ En savoir plus</summary>
+          <p>Ne s'applique que si "Masquer Légendaires/Uniques sans Greater Affix" est coché juste au-dessus. Sans cette option, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot. Avec elle, il reste visible (couleur "Bon") au lieu d'être masqué.</p>
+        </details>
         <label><input type="checkbox" id="d4a-opt-perslot"> Règles précises par emplacement (Maxroll)</label>
+        <details class="d4a-help">
+          <summary>ℹ️ En savoir plus sur les paliers</summary>
+          <p>Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement (Anneau, Amulette, Torse...) reçoit jusqu'à 4 règles de précision, la plus haute qui correspond l'emporte :</p>
+          <p><strong>Palier 2</strong> : le Rare a 2 des affixes prioritaires de l'emplacement.</p>
+          <p><strong>Palier 3</strong> : 3 affixes prioritaires.</p>
+          <p><strong>Palier 4 (Parfait)</strong> : les 4 affixes prioritaires connus pour cet emplacement.</p>
+          <p><strong>Palier 5 (Supérieur)</strong> : 2+ affixes prioritaires ET au moins un Greater Affix - le signal le plus rare, toujours prioritaire sur les autres paliers.</p>
+        </details>
         <div class="d4a-color-row">
-          <label>BiS <input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"></label>
-          <label>Bon <input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"></label>
-          <label>Greater Affix <input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"></label>
+          <label>Palier 2/Bon <input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"></label>
+          <label>Palier 3/BiS <input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"></label>
+          <label>Palier 4 <input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"></label>
+          <label>Palier 5/GA <input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"></label>
         </div>
         <details class="d4a-legend-details">
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">
-            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>BiS (3+ stats / Ancestral+GA)</span>
-            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Bon (2+ stats)</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Greater Affix</span>
-            <span><i style="background:#00c800"></i>Codex / Légendaire à garder</span>
+            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Palier 2 / Bon : 2+ affixes du build (par emplacement, ou pool général)</span>
+            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Palier 3 / BiS : 3+ affixes du build (pool général : + Ancestral et Greater Affix)</span>
+            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Palier 4 / Parfait : les 4 affixes du build sur cet emplacement</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Palier 5 / Supérieur : affixes du build + Greater Affix (ou n'importe quel objet avec un Greater Affix, pool général)</span>
+            <span><i style="background:#00c800"></i>Codex à améliorer / Légendaire-Unique-Mythique à garder</span>
           </div>
         </details>
-      </details>
-      <button id="d4a-btn-ranking">🏆 Classement</button>
-      <button id="d4a-btn-compare">🔬 Comparer les variantes</button>
+      </div>
       <div id="d4a-panel-section"></div>
       <div id="d4a-ranking-section"></div>
       <div id="d4a-search-section">
@@ -3792,7 +3875,9 @@
     const translateBtn = document.getElementById("d4a-btn-translate");
     translateBtn.title = "Traduit les objets/compétences avec les termes exacts du client FR, puis le reste du texte de la page via Google";
     translateBtn.onclick = runTranslateAll;
-    document.getElementById("d4a-btn-filter").onclick = runGenerateFilter;
+    const filterBtn = document.getElementById("d4a-btn-filter");
+    filterBtn.title = "Génère les filtres de butin Ouvert et Strict à partir des options ci-dessous";
+    filterBtn.onclick = runGenerateFilter;
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
     // filtre avant de le lancer" - 3 options for the Strict filter, default
@@ -3804,13 +3889,15 @@
       cb.checked = GM_getValue(id, true);
       cb.onchange = () => GM_setValue(id, cb.checked);
     }
-    // Same persistence for the 3 color pickers (BiS/Bon/Greater Affix).
-    // Legend swatches live next to the pickers now (moved there 2026-09-22,
-    // "juste en dessous du choix des couleurs") and must stay in sync with
+    // Same persistence for the 4 color pickers (Palier 2/Bon, Palier 3/BiS,
+    // Palier 4/Parfait - added 2026-09-23, Palier 5/Greater Affix). Legend
+    // swatches live next to the pickers now (moved there 2026-09-22, "juste
+    // en dessous du choix des couleurs") and must stay in sync with
     // whatever the user picks, not just show the hardcoded defaults.
     for (const [id, key, legendId] of [
       ["d4a-color-bis", "bis", "d4a-legend-bis"],
       ["d4a-color-good", "good", "d4a-legend-good"],
+      ["d4a-color-perfect", "perfect", "d4a-legend-perfect"],
       ["d4a-color-ga", "ga", "d4a-legend-ga"],
     ]) {
       const input = document.getElementById(id);

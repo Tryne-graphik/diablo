@@ -4750,3 +4750,43 @@ tous presents. Un seul Unique reconnu cette fois (Sea Lord's Fine Gloves, pas Co
 utilisateur pense que c'est probablement une erreur de sa part (peut-etre variante Midgame au lieu
 d'Endgame active au moment de la generation, comme observe plus tot dans la session) plutot qu'un
 bug - **a reverifier la prochaine session**, pas urgent. Session arretee ici pour la soiree.
+
+## 2026-09-23 (suite) - v2.46 : ajustements UI avant retest en jeu (police, options toujours visibles, 5 paliers)
+
+Avant de reverifier en jeu le point en suspens (Unique manquant), l'utilisateur a demande plusieurs
+retouches mineures a l'interface du panneau :
+
+1. **Police agrandie** : tous les textes du panneau bumpes de +1 a +2px (boutons et labels de cases a
+   cocher +2px, le reste +1px) - panneau passe de 13px a 14px de base, boutons de 11 a 13px, labels de
+   details de 11 a 13px, etc. Largeur du panneau 280->300px pour compenser.
+2. **Options du filtre Strict toujours visibles** : `#d4a-filter-options` n'est plus un `<details>`
+   repliable mais un `<div>` permanent - seules les explications DETAILLEES imbriquees (nouvelles,
+   voir point 4) restent repliees par defaut, a la demande.
+3. **5 paliers de precision par emplacement** (au lieu de 2) dans `buildPerSlotRules()` - specifie par
+   l'utilisateur : Palier 2 (2 affixes du build), Palier 3 (3 affixes), Palier 4 "Parfait" (les 4
+   affixes connus pour cet emplacement), Palier 5 "Superieur" (2+ affixes ET au moins un Greater
+   Affix - reutilise la couleur GA existante pour rester coherent avec la regle plate "Greater Affix -
+   Loot"). Ordre push = plus specifique d'abord (5>4>3>2), meme logique first-match-wins que le fix
+   d'ordre de la veille. Nouvelle couleur personnalisable "Parfait" (4e color picker, defaut #ff2fd1).
+4. **Explications a la demande** ajoutees pour "Regles precises par emplacement" (detaille les 4
+   paliers) et pour "...mais garder si 2+ bonnes stats sans GA", chacune dans un `<details class="d4a-
+   help">` replie par defaut - liberait la place perdue par le point 2. Legende des couleurs reecrite
+   pour refleter les 5 paliers (en colonne au lieu d'un flex-wrap, plus lisible).
+5. **Boutons d'action en grille 2 colonnes** ("Traduire"/"Filtre"/"Classement"/"Comparer" - titres
+   raccourcis, les longues descriptions completes restent dans l'attribut `title` au survol) au lieu de
+   4 boutons empiles - la place recuperee par les points 2 et 4 rend ca possible sans surcharger le
+   panneau.
+
+**Risque de volume de regles ré-évalué** : passer de 2 a 4 paliers par emplacement pouvait, dans le
+pire cas (tous les emplacements resolvant 4 affixes connus), faire exploser le nombre de regles bien
+au-dela du plafond natif de 25 regles/filtre (decouvert la veille). `tagRule()` est passe d'un booleen
+`trimmable` a une **priorite numerique** (0 = jamais retire, sinon retire du plus haut niveau de
+priorite au plus bas jusqu'a rentrer sous 25) - Palier 2 (priorite 3, retire en premier) > Palier 3 (2)
+> Palier 4 (1) > Palier 5 (0, jamais retire, le signal le plus rare/precieux). Teste hors-jeu avec un
+scenario volontairement pathologique (11 emplacements x 4 affixes chacun = 44 regles par-emplacement +
+12 de base = 56 au total) : le nouveau systeme de troncature multi-niveaux ramene correctement a
+exactement 25, en ne touchant JAMAIS au Palier 5. Script de test dans le scratchpad de la session (non
+committe, jetable). `node --check` vert, aucun artefact de corruption trouve en grep (lecon de
+l'incident de perte de donnees du 22/09). **Rien de tout ca n'a encore ete teste en jeu** - prochaine
+etape : regenerer un filtre Strict reel et l'importer pour verifier visuellement les 4 nouvelles
+couleurs/paliers et confirmer que l'affichage/les cases a cocher se comportent comme prevu.
