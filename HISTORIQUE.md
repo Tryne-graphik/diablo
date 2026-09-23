@@ -4698,11 +4698,47 @@ detectera pas la mise a jour. Le depot a aussi une branche `main` orpheline (cre
 creation du repo, historique different de `master`) - non utilisee, laissee telle quelle, ne pas la
 confondre avec `master` qui est la branche suivie par `@updateURL`.
 
-**Bilan de fin de session 2026-09-23** : le filtre de butin - casse depuis le tout debut du projet a
-cause du mauvais ordre des regles - fonctionne desormais entierement, de bout en bout, sans aucune
-intervention manuelle : ordre des regles correct, regles precises par emplacement (Rare et desormais
-Unique nomme), ciblage d'Uniques nommes, activation automatique fiable de l'onglet Stat Priority.
-Traduction ("Traduire") confirmee 100% correcte des le premier clic. Couverture de traduction du
-dictionnaire fermee (2503 entrees). Le userscript se met desormais a jour automatiquement via un depot
-GitHub public. Une tres grosse session de corrections de fond - a documenter comme reference si un
-doute revient sur le fonctionnement du filtre de butin.
+## 2026-09-23 (suite) - TROUVAILLE MAJEURE : la limite native de 25 regles par filtre tronquait tout
+
+Utilisateur a signale que le ciblage d'Unique par emplacement (fonctionnalite du jour) ne marchait
+pas - Helm cherchait toujours un Rare generique. Decodage du filtre fourni a revele la vraie cause :
+son **nom** etait "Filtre de butin #8" - pas le nom que notre outil genere ("[MR] Dance of Knives...")
+- preuve que ce code est un **reexport depuis le jeu apres import**, pas la sortie brute de l'outil.
+Et le filtre s'arretait a **exactement 25 regles**, la limite native de D4 documentee depuis les
+tout premiers travaux de recherche de ce projet (2026-09-16). Tout ce qui suit la 25e regle est
+tronque SILENCIEUSEMENT a l'import - dans ce cas Codex Upgrade, Legendaries - Keep All, Greater
+Affix, ET Hide Junk (toujours poussees en dernier depuis le fix d'ordre du matin meme) : le filtre
+entier etait donc casse pour ce build, pas juste le ciblage d'Unique.
+
+**Cause reelle** : les regles precises par emplacement a elles seules (jusqu'a 11 emplacements x 2
+paliers = 22 regles) approchaient deja la limite AVANT tout ajout d'aujourd'hui - la fonctionnalite
+de ciblage d'Unique par emplacement de ce matin (2 regles en plus par Unique reconnu) n'a fait que
+pousser des builds au-dela.
+
+**Solution en 2 temps, avec l'utilisateur** :
+1. Sa propre idee : regrouper TOUS les Uniques reconnus dans **2 regles seulement** (au lieu d'une
+   paire par Unique) - un pool d'ids SpecificUnique (kind=8) partage, meme technique que sa regle
+   "Uniques de Base" faite main plus tot dans la session. Cout fixe de 2 regles quel que soit le
+   nombre d'Uniques trouves : une regle SHOW inconditionnelle (filet de securite) + une regle
+   RECOLOR si 2+ affixes prioritaires du build (pool global, pas par-emplacement - une seule regle
+   ne peut pas porter une liste d'affixes differente par Unique).
+2. Meme avec ce regroupement, le calcul montre qu'un build avec ~11 emplacements couverts atteint
+   encore 30+ regles au total. Ajoute un vrai **systeme de priorite/troncature** : chaque regle
+   generee est marquee "trimmable" ou non (`tagRule()`). Seul le palier le plus permissif par
+   emplacement ("Precis 2+ - X") est trimmable ; toutes les regles de securite, les regles Uniques
+   regroupees et le palier "3+" (le plus precis) sont toujours gardes. Si le total depasse 25 apres
+   assemblage complet, retire les regles trimmable en partant de la fin jusqu'a rentrer dans la
+   limite. Le panneau affiche desormais combien de regles "2+" ont ete retirees, le cas echeant.
+
+Version bump 2.44 -> **2.45**, pousse sur GitHub (auto-update Tampermonkey testee pour la premiere
+fois en conditions reelles). Pas encore reteste en jeu.
+
+**Bilan de fin de session 2026-09-23** : le filtre de butin - casse depuis le tout debut du projet
+d'abord a cause du mauvais ordre des regles, puis a cause d'un depassement silencieux de la limite
+native de 25 regles - fonctionne desormais entierement, de bout en bout, sans aucune intervention
+manuelle et sans jamais depasser la limite du jeu : ordre des regles correct, regles precises par
+emplacement (Rare et Uniques regroupes), activation automatique fiable de l'onglet Stat Priority,
+plafond de 25 regles respecte intelligemment. Traduction ("Traduire") confirmee 100% correcte des le
+premier clic. Couverture de traduction du dictionnaire fermee (2503 entrees). Le userscript se met
+desormais a jour automatiquement via un depot GitHub public. Une tres grosse session de corrections
+de fond - a documenter comme reference si un doute revient sur le fonctionnement du filtre de butin.
