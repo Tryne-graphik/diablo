@@ -4670,10 +4670,39 @@ Les regles Rare/ItemType existantes pour ce meme emplacement restent aussi gener
 si un Rare non-Unique du meme emplacement est une meilleure alternative temporaire). Pas encore teste
 en jeu.
 
+## 2026-09-23 (suite) - Depot GitHub public + mise a jour automatique du userscript
+
+Utilisateur a demande si la mise a jour de Tampermonkey pouvait etre automatisee via GitHub - oui,
+Tampermonkey supporte nativement `@updateURL`/`@downloadURL` : verifie periodiquement (et sur demande,
+Dashboard > Utilities > "Check for userscript updates") si `@version` a augmente sur l'URL donnee, et
+propose de telecharger la nouvelle version - plus besoin de reimporter le fichier a la main a chaque
+changement.
+
+**Mis en place** : `gh` CLI absent de la machine, donc l'utilisateur a cree le depot lui-meme sur
+github.com (`Tryne-graphik/diablo`, public - defaut GitHub est Private, mis a jour ensuite dans les
+reglages apres un premier essai qui donnait un 404 sur l'URL brute). Remote `origin` ajoute, push
+initial de tout l'historique local reussi via le Git Credential Manager de Windows (deja configure,
+aucune authentification interactive necessaire). Ajoute au header du userscript :
+```
+@updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
+@downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
+```
+Version bump 2.43 -> **2.44** (cumule aussi toutes les corrections de fond de la session : ordre des
+regles, ciblage d'Unique via Stat Priority, traduction, precision par emplacement Unique). Verifie
+apres coup : l'URL brute renvoie bien le contenu avec `@version 2.44` une fois le depot passe en
+public.
+
+**A retenir pour les prochaines sessions** : desormais, apres tout changement du userscript destine a
+etre utilise en jeu, **incrementer `@version`** avant de pousser sur `master` - sinon Tampermonkey ne
+detectera pas la mise a jour. Le depot a aussi une branche `main` orpheline (creee par GitHub a la
+creation du repo, historique different de `master`) - non utilisee, laissee telle quelle, ne pas la
+confondre avec `master` qui est la branche suivie par `@updateURL`.
+
 **Bilan de fin de session 2026-09-23** : le filtre de butin - casse depuis le tout debut du projet a
 cause du mauvais ordre des regles - fonctionne desormais entierement, de bout en bout, sans aucune
 intervention manuelle : ordre des regles correct, regles precises par emplacement (Rare et desormais
 Unique nomme), ciblage d'Uniques nommes, activation automatique fiable de l'onglet Stat Priority.
 Traduction ("Traduire") confirmee 100% correcte des le premier clic. Couverture de traduction du
-dictionnaire fermee (2503 entrees). Une tres grosse session de corrections de fond - a documenter comme
-reference si un doute revient sur le fonctionnement du filtre de butin.
+dictionnaire fermee (2503 entrees). Le userscript se met desormais a jour automatiquement via un depot
+GitHub public. Une tres grosse session de corrections de fond - a documenter comme reference si un
+doute revient sur le fonctionnement du filtre de butin.
