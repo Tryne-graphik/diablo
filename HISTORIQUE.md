@@ -4904,3 +4904,13 @@ Deux demandes de suivi envoyees pendant que ce fix etait en cours :
    distinctes : la legende de couleurs reste en 2 colonnes, les explications repassent en 1 colonne.
 
 `node --check` vert. Reste a valider visuellement en jeu au prochain test.
+
+## 2026-09-23 (suite) - v2.51 : "En savoir plus sur les tiers" deplace au-dessus de la legende
+
+Demande de suivi immediate : "deplace 'en savoir plus sur les tiers' au dessus de legende des
+couleurs". L'ordre precedent etait deja techniquement "au-dessus" au sens large (avant la legende dans
+le flux), mais avec la rangee de couleurs intercalee entre les deux. Reinterprete comme "juste
+au-dessus, adjacent" : la rangee de couleurs passe maintenant AVANT le bloc "En savoir plus sur les
+tiers", qui se retrouve directement colle a "Legende des couleurs" juste en dessous - les 2 `<details>`
+d'information (tiers + legende) sont maintenant groupes ensemble a la fin, apres les controles
+interactifs (Tier A/B, pickers de couleur). `node --check` vert.
