@@ -4885,3 +4885,22 @@ Nouvelle serie de demandes basee sur 2 captures d'ecran supplementaires du panne
 `node --check` vert, tous les ids HTML<->JS revérifiés par grep. **Toujours rien de verifie dans un
 vrai navigateur** - accumulation de 4 versions (v2.46-v2.49) de retouches UI en attente du prochain
 test en jeu.
+
+## 2026-09-23 (suite) - v2.50 : 3e passe basee sur une vraie capture d'ecran en jeu, corrections rapides
+
+Premiere capture d'ecran du panneau REELLEMENT affiche (pas juste decrit) fournie par l'utilisateur.
+A revele un vrai defaut visuel que ni l'un ni l'autre n'avait anticipe : les labels "Tier A"/"Tier B"
+cote-a-cote avec leur `<select>` n'avaient pas assez de place dans le panneau de 300px et le texte du
+label lui-meme se coupait en 2 lignes ("Tier" / "A"). Corrige en empilant Tier A et Tier B verticalement
+(meme motif que la rangee de couleurs), au lieu de les mettre cote a cote.
+
+Deux demandes de suivi envoyees pendant que ce fix etait en cours :
+1. "range les couleurs des tiers en 2 colonnes" - `.d4a-color-row` (la liste Tier 2/3/4/5 avec pastille
+   de couleur) passe d'une colonne empilee a une grille 2x2.
+2. "remet les tiers sur une meme colonne" - la grille 2x2 des EXPLICATIONS de tiers (`.d4a-tier-grid`,
+   dans "En savoir plus sur les tiers", section differente de la precedente) est revertie en colonne
+   unique - les 4 descriptions ont des longueurs de texte inegales (1-2 lignes), la version 2 colonnes
+   rendait mal (desalignement). Les deux sections portent toutes les deux le mot "tier" mais sont
+   distinctes : la legende de couleurs reste en 2 colonnes, les explications repassent en 1 colonne.
+
+`node --check` vert. Reste a valider visuellement en jeu au prochain test.

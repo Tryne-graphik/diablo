@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.49
+// @version      2.50
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2517,25 +2517,35 @@
       .d4a-help p { text-align: left; }
       /* 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la
          regle des 25" - 2 dropdowns instead of always generating all 4
-         tiers, see buildPerSlotRules()'s docstring. */
-      .d4a-tier-select { display: flex; justify-content: center; gap: 10px; margin: 4px 0; }
-      .d4a-tier-select label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
+         tiers, see buildPerSlotRules()'s docstring. 2026-09-23 (follow-up,
+         screenshot): "Tier A"/"Tier B" side-by-side was wrapping its own
+         text onto 2 lines (not enough width for label+select x2 in a
+         300px panel) - stacked vertically instead, same fix already
+         applied to the color rows below. */
+      .d4a-tier-select { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 4px 0; }
+      .d4a-tier-select label { display: flex; align-items: center; gap: 6px; font-size: 12px; margin: 0; }
       .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; }
       /* 2026-09-23 (follow-up): "separe les paliers en deux colonnes, laisse
-         une ligne vide entre chaque entree" - 2x2 grid for the 4 tier
-         explanations inside the "En savoir plus sur les tiers" details,
-         extra row-gap standing in for the requested blank line. */
-      .d4a-tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; margin-top: 8px; }
+         une ligne vide entre chaque entree" - was a 2x2 grid briefly, but
+         the 4 tier descriptions have uneven line counts (1-2 lines each)
+         so the 2-column version looked ragged/misaligned - user asked
+         ("remet les tiers sur une meme colonne") to revert this ONE
+         section back to a single column; the row-gap still stands in for
+         the requested blank line between entries. The tier COLOR legend
+         below (.d4a-color-row) is a DIFFERENT section and stays 2-column
+         per a separate, later request - don't conflate the two. */
+      .d4a-tier-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 8px; }
       .d4a-tier-grid p { margin: 0; }
       /* 2026-09-23 (follow-up): "aligne tous les palier et commence par la
          couleur ... fait en sorte que tous les texte des palier ai le meme
          nombre de caractere" - one row per tier, color swatch FIRST then
-         the label, stacked (not wrapped inline) and centered as a block;
-         all 4 labels are now literally "Tier 2".."Tier 5" (identical
+         the label; all 4 labels are literally "Tier 2".."Tier 5" (identical
          length, only the digit changes) and rendered in a monospace font
          so they line up character-for-character regardless of what number
-         is showing. */
-      .d4a-color-row { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 6px auto 0; border-top: 1px solid #333; padding-top: 6px; width: fit-content; }
+         is showing. 2026-09-23 (later, screenshot): "range les couleurs des
+         tiers en 2 colonnes" - grid instead of a single stacked column,
+         same 2x2 idiom as .d4a-tier-grid above. */
+      .d4a-color-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; margin: 6px auto 0; border-top: 1px solid #333; padding-top: 6px; width: fit-content; }
       .d4a-tier-color { display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 13px; }
       .d4a-tier-color input[type="color"] { width: 20px; height: 20px; padding: 0; border: none; border-radius: 3px; background: none; cursor: pointer; }
       .d4a-legend { display: flex; flex-direction: column; gap: 4px; font-size: 12px; opacity: .9; margin: 4px 0 0; text-align: left; }
