@@ -4846,3 +4846,42 @@ cocher avec texte qui retombe sur 2 lignes) et demande plusieurs ajustements :
 `node --check` vert. **Rien de tout ca (comme le reste de la session) n'a encore ete verifie dans un
 vrai navigateur** - a valider visuellement des le prochain test en jeu, en meme temps que le reste des
 changements de la journee (paliers, options toujours visibles, boutons en grille).
+
+## 2026-09-23 (suite) - v2.49 : 2e passe de retouches (captures d'ecran fournies) - retours a la ligne, colonnes, renommage Tier, reorganisation des boutons
+
+Nouvelle serie de demandes basee sur 2 captures d'ecran supplementaires du panneau reel :
+
+1. **"En savoir plus" (exception GA) reformate** : le paragraphe dense d'origine est eclate en 3
+   lignes distinctes, chacune prefixee par l'icone correspondant a la case a cocher concernee (⚔️ pour
+   la condition "Greater Affix exige", 💎 x2 pour l'effet "Exception bonnes stats") au lieu d'un seul
+   bloc de texte compact.
+2. **Explication des tiers en 2 colonnes** : les 4 paragraphes Tier 2/3/4/5 (dans "En savoir plus sur
+   les tiers") passent d'un empilement vertical a une grille 2x2 (`.d4a-tier-grid`), avec un `row-gap`
+   genereux (14px) faisant office de ligne vide entre chaque entree, comme demande.
+3. **Renommage "Palier" -> "Tier" partout dans l'UI** (idee venue en cours de demande) : labels des 2
+   listes deroulantes ("Tier A"/"Tier B"), titre du bloc d'aide, texte des 4 explications, libelles de
+   la rangee de couleurs ("Tier 2".."Tier 5" - toujours 8/6 caracteres identiques, l'alignement
+   monospace de la session precedente reste valide), legende des couleurs, et la note de troncature du
+   filtre Strict. Les commentaires de code historiques (sessions precedentes) ne sont PAS retouches -
+   seuls le HTML/texte affiche a l'utilisateur et les commentaires ecrits dans CETTE session l'ont ete.
+4. **Precision explicite ajoutee** : "⚠️ Le jeu limite un filtre a 25 regles : seuls 2 tiers sur les 4
+   peuvent etre actifs a la fois" - phrase dediee plutot que noyee dans un paragraphe plus long.
+5. **Recherche de traduction deplacee et transformee en toggle** : la section (form + resultats) qui
+   etait toujours visible pres du bas devient `hidden` par defaut, revelee par un nouveau bouton
+   "🔍 Recherche" qui prend la place laissee libre par "Filtre" dans la grille d'action du haut (grille
+   2x2 inchangee : Traduire / Recherche / Classement / Comparer). Les resultats de recherche restent
+   affiches sur leur propre ligne sous le champ, comme avant.
+6. **"Générer le filtre" divise en 2 boutons** ("⚔ Filtre Ouvert" / "🛡 Filtre Strict"), deplaces a
+   l'endroit precis ou vivait l'ancienne section "Recherche de traduction" (entre le classement et "Mes
+   Builds"). `runGenerateFilter()` prend maintenant un parametre `mode` ("open"/"strict") : toute la
+   detection partagee (Stat Priority, scan par emplacement, matching des Uniques) reste faite dans tous
+   les cas (les Uniques et le matching par emplacement servent aux DEUX filtres), seul l'appel final a
+   `generateFilterCode()` et le bloc affiche sont desormais specifiques au mode demande - un clic ne
+   genere/affiche plus que le filtre demande au lieu des deux a la fois. Bonus coherence : le detail
+   "par emplacement" dans le panneau de detection est maintenant explicitement marque "Strict
+   uniquement" quand on genere le filtre Ouvert, au lieu de laisser croire que ces regles s'y
+   appliquent aussi.
+
+`node --check` vert, tous les ids HTML<->JS revérifiés par grep. **Toujours rien de verifie dans un
+vrai navigateur** - accumulation de 4 versions (v2.46-v2.49) de retouches UI en attente du prochain
+test en jeu.

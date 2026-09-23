@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.48
+// @version      2.49
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2521,11 +2521,17 @@
       .d4a-tier-select { display: flex; justify-content: center; gap: 10px; margin: 4px 0; }
       .d4a-tier-select label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
       .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; }
+      /* 2026-09-23 (follow-up): "separe les paliers en deux colonnes, laisse
+         une ligne vide entre chaque entree" - 2x2 grid for the 4 tier
+         explanations inside the "En savoir plus sur les tiers" details,
+         extra row-gap standing in for the requested blank line. */
+      .d4a-tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; margin-top: 8px; }
+      .d4a-tier-grid p { margin: 0; }
       /* 2026-09-23 (follow-up): "aligne tous les palier et commence par la
          couleur ... fait en sorte que tous les texte des palier ai le meme
          nombre de caractere" - one row per tier, color swatch FIRST then
          the label, stacked (not wrapped inline) and centered as a block;
-         all 4 labels are now literally "Palier 2".."Palier 5" (identical
+         all 4 labels are now literally "Tier 2".."Tier 5" (identical
          length, only the digit changes) and rendered in a monospace font
          so they line up character-for-character regardless of what number
          is showing. */
@@ -3457,9 +3463,18 @@
     `);
   }
 
-  // "Générer le filtre" button - same translation, plus the loot filter
-  // code built from the English skill names.
-  async function runGenerateFilter() {
+  // "Filtre Ouvert" / "Filtre Strict" buttons - same translation, plus the
+  // loot filter code built from the English skill names. 2026-09-23: split
+  // from a single "Générer le filtre" button (which generated and showed
+  // BOTH presets at once) into 2 buttons/one per mode, per the user's
+  // explicit request - all the detection work (Stat Priority, per-slot
+  // scrape, Unique matching) stays unconditional either way since both
+  // presets need it (Uniques are shown in both, and per-slot detection
+  // also carries the Unique item names used by buildUniqueItemRules());
+  // only the FINAL generateFilterCode() call and rendered block are
+  // mode-specific now.
+  async function runGenerateFilter(mode) {
+    const isStrict = mode === "strict";
     renderPanel("<h3>Diablo IV Assistant</h3><p>Recherche du build équivalent...</p>");
     let result;
     try {
@@ -3554,39 +3569,46 @@
     const SITE_ABBREV = { Maxroll: "MR", InfinityBuilds: "IB", "kami-labs": "KL" };
     const siteTag = SITE_ABBREV[result.sourceLabel] || result.sourceLabel.slice(0, 2).toUpperCase();
     const baseName = `[${siteTag}] ${result.match.title.slice(0, 18)}`;
-    const openResult = generateFilterCode(`${baseName} Ouvert`, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorGA });
-    const strictResult = generateFilterCode(`${baseName} Strict`, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules], {
-      requireAncestral: optAncestral,
-      hideLegendaryWithoutGA: optHideNoGA,
-      keepGoodStatsNoGA: optKeepGoodStatsNoGA,
-      colorBis,
-      colorGood,
-      colorGA,
-    });
+    const filterResult = isStrict
+      ? generateFilterCode(`${baseName} Strict`, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules], {
+          requireAncestral: optAncestral,
+          hideLegendaryWithoutGA: optHideNoGA,
+          keepGoodStatsNoGA: optKeepGoodStatsNoGA,
+          colorBis,
+          colorGood,
+          colorGA,
+        })
+      : generateFilterCode(`${baseName} Ouvert`, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorGA });
 
     const detailNote = result.hasDetail
       ? ""
       : `<p style="color:#c9a227">Impossible de lire le détail du build (l'onglet d'analyse n'a pas répondu à temps) - le filtre ci-dessous est basé sur les compétences seules si trouvées, sinon vide.</p>`;
 
-    const unresolvedNote = openResult.unresolvedSkills.length
-      ? `<p style="color:#c9a227">${openResult.unresolvedSkills.length} compétence(s) sans affixe "+X compétences" reconnu pour cette classe (normal, la plupart n'en ont pas, ou classe non encore confirmée).</p>`
+    const unresolvedNote = filterResult.unresolvedSkills.length
+      ? `<p style="color:#c9a227">${filterResult.unresolvedSkills.length} compétence(s) sans affixe "+X compétences" reconnu pour cette classe (normal, la plupart n'en ont pas, ou classe non encore confirmée).</p>`
       : "";
 
     // 2026-09-22: "il faudrait simplifier l'affichage" - the priority/per-slot
     // detail used to always be shown in full (a long wall of text). Now just
     // a one-line summary, with the full breakdown behind a native <details>
     // toggle so it's there when needed without cluttering the default view.
+    // 2026-09-23: per-slot precision is Strict-only (see buildPerSlotRules()'s
+    // docstring) - gated on `isStrict` too now that Open/Strict generate
+    // separately, so the Open filter's detail panel doesn't claim
+    // per-emplacement rules that only ever apply to Strict.
     const perSlotMatched = perSlot.filter((e) => ITEM_TYPE_IDS[e.slot] && e.ids.length >= 2);
     const detectionSummary =
-      (optPerSlot
+      (isStrict && optPerSlot
         ? `${priority.names.length} stat(s) de priorité détectée(s), ${perSlotMatched.length} emplacement(s) précis`
         : `${priority.names.length} stat(s) de priorité détectée(s)`) +
       (uniqueRulesResult.matched.length ? `, ${uniqueRulesResult.matched.length} unique(s) reconnu(s)` : "");
     const detectionDetails = `
       ${priority.names.length
         ? `<p>Pool : ${priority.names.join(", ")}</p>`
-        : `<p style="color:#c9a227">Aucune liste de priorité trouvée sur cette page - le filtre se base uniquement sur les compétences${openResult.resolvedAffixCount < 2 ? " (règle simple ≥1 affixe)" : ""}.</p>`}
-      ${optPerSlot
+        : `<p style="color:#c9a227">Aucune liste de priorité trouvée sur cette page - le filtre se base uniquement sur les compétences${filterResult.resolvedAffixCount < 2 ? " (règle simple ≥1 affixe)" : ""}.</p>`}
+      ${!isStrict
+        ? `<p style="opacity:.7">Règles précises par emplacement : Strict uniquement.</p>`
+        : optPerSlot
         ? perSlotRulesResult.rules.length
           ? `<p>Par emplacement : ${perSlotMatched.map((e) => `${e.slot} (${e.names.join(", ")})`).join(" · ")}</p>${
               perSlotRulesResult.skippedSlots.length ? `<p style="opacity:.7">Ignorés (pas d'ID de type ou pas assez de stats reconnues) : ${perSlotRulesResult.skippedSlots.join(", ")}</p>` : ""
@@ -3616,6 +3638,13 @@
       <textarea rows="4" readonly id="d4a-code-${key}" hidden>${code}</textarea>
     `;
 
+    const key = isStrict ? "strict" : "open";
+    const label = isStrict ? "Strict" : "Ouvert";
+    const description = isStrict
+      ? "Endgame T12+ / farm intensif (options dans le panneau)." +
+        (filterResult.trimmedForRuleCap ? ` <span style="color:#c9a227">${filterResult.trimmedForRuleCap} règle(s) de précision par emplacement (Tiers, les plus larges d'abord) retirée(s) pour respecter la limite de 25 règles du jeu.</span>` : "")
+      : "Leveling / early endgame / chasse aux aspects : masque juste Commun-Magique-Rare hors-build, garde toutes les Légendaires et Uniques pour inspection.";
+
     renderPanel(`
       <h3>Diablo IV Assistant</h3>
       <p>Traduit via <a href="${result.match.url}" target="_blank" rel="noopener noreferrer">${result.match.title} (${result.sourceLabel})</a> - termes exacts du client FR</p>
@@ -3631,21 +3660,18 @@
         <p>🔎 ${detectionSummary}</p>
         ${detectionDetails}
       </details>
-      ${filterBlock("open", "Ouvert", "Leveling / early endgame / chasse aux aspects : masque juste Commun-Magique-Rare hors-build, garde toutes les Légendaires et Uniques pour inspection.", openResult.code)}
-      ${filterBlock("strict", "Strict", "Endgame T12+ / farm intensif (options dans le panneau)." + (strictResult.trimmedForRuleCap ? ` <span style="color:#c9a227">${strictResult.trimmedForRuleCap} règle(s) de précision par emplacement (Paliers 2-4, les plus larges d'abord) retirée(s) pour respecter la limite de 25 règles du jeu.</span>` : ""), strictResult.code)}
+      ${filterBlock(key, label, description, filterResult.code)}
     `);
 
-    for (const key of ["open", "strict"]) {
-      const textarea = document.getElementById(`d4a-code-${key}`);
-      document.getElementById(`d4a-copy-${key}-btn`).onclick = (e) => {
-        navigator.clipboard.writeText(textarea.value);
-        e.target.textContent = "✅ Copié !";
-      };
-      document.getElementById(`d4a-toggle-${key}-btn`).onclick = (e) => {
-        textarea.hidden = !textarea.hidden;
-        e.target.textContent = textarea.hidden ? "📄 Voir le texte" : "🙈 Masquer le texte";
-      };
-    }
+    const textarea = document.getElementById(`d4a-code-${key}`);
+    document.getElementById(`d4a-copy-${key}-btn`).onclick = (e) => {
+      navigator.clipboard.writeText(textarea.value);
+      e.target.textContent = "✅ Copié !";
+    };
+    document.getElementById(`d4a-toggle-${key}-btn`).onclick = (e) => {
+      textarea.hidden = !textarea.hidden;
+      e.target.textContent = textarea.hidden ? "📄 Voir le texte" : "🙈 Masquer le texte";
+    };
   }
 
   // ---------------------------------------------------------------------
@@ -3850,9 +3876,16 @@
       <div id="d4a-buildinfo-section"></div>
       <div class="d4a-action-grid">
         <button id="d4a-btn-translate">🇫🇷 Traduire</button>
-        <button id="d4a-btn-filter">⚔ Filtre</button>
+        <button id="d4a-btn-search-toggle">🔍 Recherche</button>
         <button id="d4a-btn-ranking">🏆 Classement</button>
         <button id="d4a-btn-compare">🔬 Comparer</button>
+      </div>
+      <div id="d4a-search-section" hidden>
+        <div id="d4a-search-form">
+          <input id="d4a-search-input" type="text" placeholder="Nom en anglais ou français...">
+          <button id="d4a-search-btn">Chercher</button>
+        </div>
+        <div id="d4a-search-results"></div>
       </div>
       <div id="d4a-filter-options">
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
@@ -3862,16 +3895,18 @@
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
-          <p>"Exception bonnes stats" ne s'applique que si "Greater Affix exigé" est coché : sans elle, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot ; avec elle, il reste visible (couleur "Bon") au lieu d'être masqué.</p>
+          <p>⚔️ Ne s'applique que si "Greater Affix exigé" est coché.</p>
+          <p>💎 Sans cette exception : un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot.</p>
+          <p>💎 Avec elle : il reste visible (couleur "Bon") au lieu d'être masqué.</p>
         </details>
         <div class="d4a-tier-select">
-          <label>Palier A <select id="d4a-tier-a">
+          <label>Tier A <select id="d4a-tier-a">
             <option value="2">2 (2 affixes)</option>
             <option value="3">3 (3 affixes)</option>
             <option value="4">4 (Parfait)</option>
             <option value="5">5 (Supérieur)</option>
           </select></label>
-          <label>Palier B <select id="d4a-tier-b">
+          <label>Tier B <select id="d4a-tier-b">
             <option value="2">2 (2 affixes)</option>
             <option value="3">3 (3 affixes)</option>
             <option value="4">4 (Parfait)</option>
@@ -3879,39 +3914,37 @@
           </select></label>
         </div>
         <details class="d4a-help">
-          <summary>ℹ️ En savoir plus sur les paliers</summary>
-          <p>Le jeu limite un filtre à 25 règles - seuls 2 paliers de précision par emplacement peuvent donc être actifs à la fois (Palier A et Palier B ci-dessus). Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement (Anneau, Amulette, Torse...) reçoit une règle pour chacun des 2 paliers choisis, le plus élevé qui correspond l'emporte :</p>
-          <p><strong>Palier 2</strong> : le Rare a 2 des affixes prioritaires de l'emplacement.</p>
-          <p><strong>Palier 3</strong> : 3 affixes prioritaires.</p>
-          <p><strong>Palier 4 (Parfait)</strong> : les 4 affixes prioritaires connus pour cet emplacement.</p>
-          <p><strong>Palier 5 (Supérieur)</strong> : 2+ affixes prioritaires ET au moins un Greater Affix.</p>
+          <summary>ℹ️ En savoir plus sur les tiers</summary>
+          <p>⚠️ Le jeu limite un filtre à 25 règles : seuls 2 tiers sur les 4 peuvent être actifs à la fois (Tier A et Tier B ci-dessus). Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement reçoit une règle pour chacun des 2 tiers choisis, le plus élevé qui correspond l'emporte.</p>
+          <div class="d4a-tier-grid">
+            <p><strong>Tier 2</strong><br>Le Rare a 2 des affixes prioritaires de l'emplacement.</p>
+            <p><strong>Tier 3</strong><br>3 affixes prioritaires.</p>
+            <p><strong>Tier 4 (Parfait)</strong><br>Les 4 affixes prioritaires connus pour cet emplacement.</p>
+            <p><strong>Tier 5 (Supérieur)</strong><br>2+ affixes prioritaires ET au moins un Greater Affix.</p>
+          </div>
         </details>
         <div class="d4a-color-row">
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Palier 2</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Palier 3</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Palier 4</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Palier 5</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Tier 3</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Tier 4</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Tier 5</span></div>
         </div>
         <details class="d4a-legend-details">
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">
-            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Palier 2 : 2+ affixes du build (par emplacement, ou pool général "Bon")</span>
-            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Palier 3 : 3+ affixes du build (pool général "BiS" : + Ancestral et Greater Affix)</span>
-            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Palier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Palier 5 (Supérieur) : affixes du build + Greater Affix (ou n'importe quel objet avec un Greater Affix, pool général)</span>
+            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Tier 2 : 2+ affixes du build (par emplacement, ou pool général "Bon")</span>
+            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build (pool général "BiS" : + Ancestral et Greater Affix)</span>
+            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 (Supérieur) : affixes du build + Greater Affix (ou n'importe quel objet avec un Greater Affix, pool général)</span>
             <span><i style="background:#00c800"></i>Codex à améliorer / Légendaire-Unique-Mythique à garder</span>
           </div>
         </details>
       </div>
       <div id="d4a-panel-section"></div>
       <div id="d4a-ranking-section"></div>
-      <div id="d4a-search-section">
-        <strong>🔍 Recherche de traduction</strong>
-        <div id="d4a-search-form">
-          <input id="d4a-search-input" type="text" placeholder="Nom en anglais ou français...">
-          <button id="d4a-search-btn">Chercher</button>
-        </div>
-        <div id="d4a-search-results"></div>
+      <div class="d4a-action-grid">
+        <button id="d4a-btn-filter-open">⚔ Filtre Ouvert</button>
+        <button id="d4a-btn-filter-strict">🛡 Filtre Strict</button>
       </div>
       <div id="d4a-mybuilds-section">
         <strong>📌 Mes Builds</strong>
@@ -3927,9 +3960,31 @@
     const translateBtn = document.getElementById("d4a-btn-translate");
     translateBtn.title = "Traduit les objets/compétences avec les termes exacts du client FR, puis le reste du texte de la page via Google";
     translateBtn.onclick = runTranslateAll;
-    const filterBtn = document.getElementById("d4a-btn-filter");
-    filterBtn.title = "Génère les filtres de butin Ouvert et Strict à partir des options ci-dessous";
-    filterBtn.onclick = runGenerateFilter;
+
+    // 2026-09-23: "deplace le bouton ... pour faire la recherche et
+    // afficher le resultat sur une ligne en dessous" - the search
+    // form/results (#d4a-search-section) used to always be visible near
+    // the bottom; now a toggle button in the top grid (replacing the old
+    // spot "Filtre" used to occupy) shows/hides it, results still render
+    // on their own line below the form exactly as before.
+    const searchToggleBtn = document.getElementById("d4a-btn-search-toggle");
+    const searchSection = document.getElementById("d4a-search-section");
+    searchToggleBtn.title = "Afficher/masquer la recherche de traduction manuelle";
+    searchToggleBtn.onclick = () => {
+      searchSection.hidden = !searchSection.hidden;
+    };
+
+    // 2026-09-23: "divise [Filtre] en deux boutons, un pour le filtre
+    // simple et l'autre pour le filtre strict" - moved down to where the
+    // search section used to sit, split into 2 buttons instead of 1 (see
+    // runGenerateFilter()'s docstring for why the shared detection work
+    // stays unconditional either way).
+    const filterOpenBtn = document.getElementById("d4a-btn-filter-open");
+    filterOpenBtn.title = "Génère le filtre Ouvert (leveling / early endgame / chasse aux aspects)";
+    filterOpenBtn.onclick = () => runGenerateFilter("open");
+    const filterStrictBtn = document.getElementById("d4a-btn-filter-strict");
+    filterStrictBtn.title = "Génère le filtre Strict (endgame T12+) à partir des options ci-dessus";
+    filterStrictBtn.onclick = () => runGenerateFilter("strict");
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
     // filtre avant de le lancer" - 3 options for the Strict filter, default
@@ -3942,7 +3997,7 @@
       cb.onchange = () => GM_setValue(id, cb.checked);
     }
     // 2026-09-23: the 2 tier dropdowns (see buildPerSlotRules()'s docstring)
-    // - same GM_setValue persistence, default Palier A=2/B=3 (matches the
+    // - same GM_setValue persistence, default Tier A=2/B=3 (matches the
     // 2-tier behavior already validated in-game before this feature grew).
     const tierA = document.getElementById("d4a-tier-a");
     const tierB = document.getElementById("d4a-tier-b");
@@ -3950,8 +4005,8 @@
     tierB.value = GM_getValue("d4a-tier-b", "3");
     tierA.onchange = () => GM_setValue("d4a-tier-a", tierA.value);
     tierB.onchange = () => GM_setValue("d4a-tier-b", tierB.value);
-    // Same persistence for the 4 color pickers (Palier 2/Bon, Palier 3/BiS,
-    // Palier 4/Parfait - added 2026-09-23, Palier 5/Greater Affix). Legend
+    // Same persistence for the 4 color pickers (Tier 2/Bon, Tier 3/BiS,
+    // Tier 4/Parfait - added 2026-09-23, Tier 5/Greater Affix). Legend
     // swatches live next to the pickers now (moved there 2026-09-22, "juste
     // en dessous du choix des couleurs") and must stay in sync with
     // whatever the user picks, not just show the hardcoded defaults.
