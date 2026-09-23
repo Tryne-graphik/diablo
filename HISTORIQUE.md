@@ -4923,3 +4923,13 @@ A/Tier B juste en dessous, puis les 2 `<details>` d'info ("En savoir plus sur le
 "Legende des couleurs") a la fin - inchange depuis v2.51. Le texte "(Tier A et Tier B ci-dessus)" dans
 le bloc d'aide reste correct puisque les selecteurs sont toujours au-dessus de ce bloc, juste dans un
 ordre different par rapport a la rangee de couleurs. `node --check` vert.
+
+## 2026-09-23 (suite) - v2.53 : Tier A/B remis sur une seule ligne (avec vraie capture confirmant "ca commence a etre net")
+
+Utilisateur confirme que le panneau commence a avoir fiere allure, et redemande Tier A/Tier B sur une
+seule ligne (le stacking vertical de v2.50 etait un correctif d'urgence, pas la destination finale).
+Cette fois corrige la CAUSE du retour a la ligne au lieu de re-empiler : `.d4a-tier-select select`
+recoit un `max-width: 92px`, et le texte des options est raccourci ("2 (2 affixes)" -> "2", "3 (3
+affixes)" -> "3", "4 (Parfait)" -> "4 Parfait", "5 (Supérieur)" -> "5 Sup.") - le detail complet reste
+de toute facon dans "En savoir plus sur les tiers" juste en dessous, les options n'ont plus besoin
+d'etre auto-suffisantes. `node --check` vert.

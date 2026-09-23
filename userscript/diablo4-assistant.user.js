@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.52
+// @version      2.53
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2520,11 +2520,14 @@
          tiers, see buildPerSlotRules()'s docstring. 2026-09-23 (follow-up,
          screenshot): "Tier A"/"Tier B" side-by-side was wrapping its own
          text onto 2 lines (not enough width for label+select x2 in a
-         300px panel) - stacked vertically instead, same fix already
-         applied to the color rows below. */
-      .d4a-tier-select { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 4px 0; }
-      .d4a-tier-select label { display: flex; align-items: center; gap: 6px; font-size: 12px; margin: 0; }
-      .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; }
+         300px panel) - stacked vertically as a stopgap. 2026-09-23 (later,
+         "remet les selecteur tier A et B sur une seule ligne"): back to a
+         single row, made to fit this time by capping each select's width
+         and shortening its option text (see the HTML) instead of just
+         hoping it fits. */
+      .d4a-tier-select { display: flex; flex-direction: row; justify-content: center; gap: 10px; margin: 4px 0; }
+      .d4a-tier-select label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
+      .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; max-width: 92px; }
       /* 2026-09-23 (follow-up): "separe les paliers en deux colonnes, laisse
          une ligne vide entre chaque entree" - was a 2x2 grid briefly, but
          the 4 tier descriptions have uneven line counts (1-2 lines each)
@@ -3917,16 +3920,16 @@
         </div>
         <div class="d4a-tier-select">
           <label>Tier A <select id="d4a-tier-a">
-            <option value="2">2 (2 affixes)</option>
-            <option value="3">3 (3 affixes)</option>
-            <option value="4">4 (Parfait)</option>
-            <option value="5">5 (Supérieur)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4 Parfait</option>
+            <option value="5">5 Sup.</option>
           </select></label>
           <label>Tier B <select id="d4a-tier-b">
-            <option value="2">2 (2 affixes)</option>
-            <option value="3">3 (3 affixes)</option>
-            <option value="4">4 (Parfait)</option>
-            <option value="5">5 (Supérieur)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4 Parfait</option>
+            <option value="5">5 Sup.</option>
           </select></label>
         </div>
         <details class="d4a-help">
