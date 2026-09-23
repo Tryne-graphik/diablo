@@ -4914,3 +4914,12 @@ au-dessus, adjacent" : la rangee de couleurs passe maintenant AVANT le bloc "En 
 tiers", qui se retrouve directement colle a "Legende des couleurs" juste en dessous - les 2 `<details>`
 d'information (tiers + legende) sont maintenant groupes ensemble a la fin, apres les controles
 interactifs (Tier A/B, pickers de couleur). `node --check` vert.
+
+## 2026-09-23 (suite) - v2.52 : Tier A/B deplaces sous les selecteurs de couleurs
+
+Suite immediate : "deplace les tiers A et Tiers B sous les selecteur des couleurs". Nouvel ordre dans
+le panneau d'options : rangee de couleurs (color-row) D'ABORD, puis les 2 listes deroulantes Tier
+A/Tier B juste en dessous, puis les 2 `<details>` d'info ("En savoir plus sur les tiers" +
+"Legende des couleurs") a la fin - inchange depuis v2.51. Le texte "(Tier A et Tier B ci-dessus)" dans
+le bloc d'aide reste correct puisque les selecteurs sont toujours au-dessus de ce bloc, juste dans un
+ordre different par rapport a la rangee de couleurs. `node --check` vert.

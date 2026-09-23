@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.51
+// @version      2.52
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3909,6 +3909,12 @@
           <p>💎 Sans cette exception : un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot.</p>
           <p>💎 Avec elle : il reste visible (couleur "Bon") au lieu d'être masqué.</p>
         </details>
+        <div class="d4a-color-row">
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Tier 3</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Tier 4</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Tier 5</span></div>
+        </div>
         <div class="d4a-tier-select">
           <label>Tier A <select id="d4a-tier-a">
             <option value="2">2 (2 affixes)</option>
@@ -3922,12 +3928,6 @@
             <option value="4">4 (Parfait)</option>
             <option value="5">5 (Supérieur)</option>
           </select></label>
-        </div>
-        <div class="d4a-color-row">
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Tier 3</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Tier 4</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Tier 5</span></div>
         </div>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus sur les tiers</summary>
