@@ -4742,3 +4742,11 @@ plafond de 25 regles respecte intelligemment. Traduction ("Traduire") confirmee 
 premier clic. Couverture de traduction du dictionnaire fermee (2503 entrees). Le userscript se met
 desormais a jour automatiquement via un depot GitHub public. Une tres grosse session de corrections
 de fond - a documenter comme reference si un doute revient sur le fonctionnement du filtre de butin.
+
+**Dernier test du jour** : filtre regenere apres le fix de troncature - 25 regles exactement, toutes
+nommees correctement (confirme que les "(sans nom)" vus dans des decodages precedents etaient bien
+un artefact de mon script de decodage maison, pas un vrai probleme), Hide Junk/Codex/Legendaries/GA
+tous presents. Un seul Unique reconnu cette fois (Sea Lord's Fine Gloves, pas Cowl of the Nameless) -
+utilisateur pense que c'est probablement une erreur de sa part (peut-etre variante Midgame au lieu
+d'Endgame active au moment de la generation, comme observe plus tot dans la session) plutot qu'un
+bug - **a reverifier la prochaine session**, pas urgent. Session arretee ici pour la soiree.
