@@ -4787,6 +4787,31 @@ scenario volontairement pathologique (11 emplacements x 4 affixes chacun = 44 re
 12 de base = 56 au total) : le nouveau systeme de troncature multi-niveaux ramene correctement a
 exactement 25, en ne touchant JAMAIS au Palier 5. Script de test dans le scratchpad de la session (non
 committe, jetable). `node --check` vert, aucun artefact de corruption trouve en grep (lecon de
-l'incident de perte de donnees du 22/09). **Rien de tout ca n'a encore ete teste en jeu** - prochaine
-etape : regenerer un filtre Strict reel et l'importer pour verifier visuellement les 4 nouvelles
-couleurs/paliers et confirmer que l'affichage/les cases a cocher se comportent comme prevu.
+l'incident de perte de donnees du 22/09).
+
+## 2026-09-23 (suite) - Correctif v2.46 : on ne peut choisir que 2 paliers, pas les 4 en meme temps
+
+L'utilisateur a precise juste apres coup une contrainte oubliee au moment de la demande initiale :
+"on ne peut choisir que 2 paliers pour respecter la regle des 25". La version precedente generait
+TOUJOURS les 4 paliers pour chaque emplacement et comptait entierement sur la troncature algorithmique
+pour rentrer sous la limite - ce n'etait jamais l'intention, juste un effet de bord du systeme de
+troncature. Corrige :
+
+- `buildPerSlotRules()` prend maintenant un parametre `selectedTiers` (au plus 2 valeurs parmi
+  {2,3,4,5}) et ne genere QUE les regles pour ces paliers-la, plus aucune generation systematique des
+  4. Le panneau a 2 nouveaux `<select>` ("Palier A" / "Palier B", options 2/3/4/5), persistes via
+  GM_setValue, defaut A=2/B=3 (comportement identique a l'ancien systeme 2-paliers deja valide en jeu
+  avant cette feature).
+- Le systeme de priorite de troncature (`tagRule`) reste en place mais seulement comme **filet de
+  securite** (pas le controle principal) : parmi les 2 paliers choisis, le plus petit numero est
+  considere le plus "large" et retire en premier si le filtre depasse quand meme 25 regles pour une
+  autre raison (beaucoup d'Uniques, pool d'affixes du build long, etc).
+- Bloc d'aide "En savoir plus sur les paliers" mis a jour pour expliquer la limite a 2 paliers.
+
+**Reteste hors-jeu** avec les 4 paires de paliers possibles dans le pire cas pathologique (11
+emplacements x 4 affixes connus chacun) : chaque paire termine a exactement 25 regles apres troncature,
+jamais au-dessus. Cas realiste (9 emplacements, 2-3 affixes connus, paliers 2+3 par defaut) : 12 regles
+de precision, bien en dessous du plafond. `node --check` vert. **Rien de tout ca n'a encore ete teste
+en jeu** - prochaine etape : regenerer un filtre Strict reel avec les paliers A/B choisis et l'importer
+pour verifier visuellement les couleurs/paliers et confirmer que l'affichage/les cases a cocher se
+comportent comme prevu.

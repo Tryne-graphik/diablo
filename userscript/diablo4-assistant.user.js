@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.46
+// @version      2.47
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2291,22 +2291,37 @@
   // perfect roll on every known affix an item can have), and "Palier 5"
   // (the slot's affixes PLUS a Greater Affix - the best possible signal).
   // Palier 5 only requires 2+ matching affixes (the same floor as Palier
-  // 2, always true inside this loop) rather than 4 - a GA on a merely-good
-  // roll is still worth calling out distinctly, and demanding a full
-  // 4-affix match on top of a GA would make this tier fire so rarely it's
-  // not worth a dedicated rule. Colors: Palier 5 reuses colorGA (the same
-  // flat "Greater Affix - Loot" rule's color in generateFilterCode()) so
-  // "this item has a Greater Affix" always reads as the same color
-  // everywhere in the filter, not just at the flat-pool level. Order is
-  // most-specific-first (5 > 4 > 3 > 2), same first-match-wins reasoning
-  // as the CORRECTION above. Trim priority (see tagRule()'s docstring):
-  // Palier 2 (3, dropped first) > Palier 3 (2) > Palier 4 (1) > Palier 5
-  // (0, never dropped) - going from 2 to 4 tiers roughly doubles the
-  // worst-case per-slot rule count, so more tiers had to become
-  // expendable to still reliably fit D4's 25-rule cap; Palier 5 is kept
-  // safe since it only ever emits one rule per slot (worst case ~9-11
-  // rules total) and is the rarest/most valuable signal.
-  function buildPerSlotRules(perSlotData, requireAncestral = true, colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
+  // 2) rather than 4 - a GA on a merely-good roll is still worth calling
+  // out distinctly, and demanding a full 4-affix match on top of a GA
+  // would make this tier fire so rarely it's not worth a dedicated rule.
+  // Colors: Palier 5 reuses colorGA (the same flat "Greater Affix - Loot"
+  // rule's color in generateFilterCode()) so "this item has a Greater
+  // Affix" always reads as the same color everywhere in the filter, not
+  // just at the flat-pool level.
+  // 2026-09-23 CORRECTION (same day, user follow-up): the first version of
+  // this function always emitted ALL 4 tiers per slot, relying entirely on
+  // generateFilterCode()'s trim loop to fit D4's 25-rule cap - user
+  // clarified after the fact that this was never the intent: "on ne peut
+  // choisir que 2 paliers pour respecter la regle des 25" (only 2 tiers
+  // should ever be selectable at once, BY DESIGN, not as an emergent
+  // effect of algorithmic trimming). Reworked to take `selectedTiers` (at
+  // most 2 of {2,3,4,5}, enforced by the two <select> dropdowns in the
+  // panel - see their wiring in init()) and only ever emit rules for
+  // those. Order is still most-specific-first (highest tier number first)
+  // for first-match-wins. The tagRule() trim-priority mechanism is kept
+  // as a defense-in-depth backstop only (not the primary control anymore):
+  // among the (at most 2) selected tiers, the LOWER tier number is the
+  // "loosest" one and gets the higher trim priority (dropped first) if
+  // the filter would still exceed 25 rules for some other reason (many
+  // Uniques, a long build-affix pool, etc).
+  function buildPerSlotRules(perSlotData, requireAncestral = true, selectedTiers = [2, 3], colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
+    const tierColors = { 2: colorGood, 3: colorBis, 4: colorPerfect, 5: colorGA };
+    const tierLabels = { 2: "Precis 2", 3: "Precis 3", 4: "Precis 4 (Parfait)", 5: "Precis 5 (Superieur)" };
+    const tiersDesc = Array.from(new Set(selectedTiers)).filter((t) => t >= 2 && t <= 5).sort((a, b) => b - a);
+    const tiersAsc = [...tiersDesc].sort((a, b) => a - b);
+    const trimPriorityByTier = {};
+    tiersAsc.forEach((t, i) => { trimPriorityByTier[t] = tiersAsc.length - i; });
+
     const rules = [];
     const skippedSlots = [];
     for (const entry of perSlotData) {
@@ -2315,23 +2330,16 @@
         skippedSlots.push(entry.slot);
         continue;
       }
-      const condGA = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2), conditionGreaterAffix(1)];
-      if (requireAncestral) condGA.push(conditionAncestral());
-      rules.push(tagRule(makeRule(`Precis 5 (Superieur) - ${entry.slot}`, RECOLOR, condGA, colorGA), 0));
-
-      if (entry.ids.length >= 4) {
-        const cond4 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 4)];
-        if (requireAncestral) cond4.push(conditionAncestral());
-        rules.push(tagRule(makeRule(`Precis 4 (Parfait) - ${entry.slot}`, RECOLOR, cond4, colorPerfect), 1));
+      for (const tier of tiersDesc) {
+        if (tier === 4 && entry.ids.length < 4) continue;
+        if (tier === 3 && entry.ids.length < 3) continue;
+        const conditions =
+          tier === 5
+            ? [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2), conditionGreaterAffix(1)]
+            : [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, tier)];
+        if (requireAncestral) conditions.push(conditionAncestral());
+        rules.push(tagRule(makeRule(`${tierLabels[tier]} - ${entry.slot}`, RECOLOR, conditions, tierColors[tier]), trimPriorityByTier[tier]));
       }
-      if (entry.ids.length >= 3) {
-        const cond3 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 3)];
-        if (requireAncestral) cond3.push(conditionAncestral());
-        rules.push(tagRule(makeRule(`Precis 3 - ${entry.slot}`, RECOLOR, cond3, colorBis), 2));
-      }
-      const cond2 = [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2)];
-      if (requireAncestral) cond2.push(conditionAncestral());
-      rules.push(tagRule(makeRule(`Precis 2 - ${entry.slot}`, RECOLOR, cond2, colorGood), 3));
     }
     return { rules, skippedSlots };
   }
@@ -2499,6 +2507,12 @@
       #d4a-filter-options label input[type="checkbox"] { margin-right: 5px; vertical-align: middle; }
       .d4a-section-title { color: #03d0fc; font-weight: bold; font-size: 13px; }
       .d4a-help { margin: 2px 0 6px 18px; }
+      /* 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la
+         regle des 25" - 2 dropdowns instead of always generating all 4
+         tiers, see buildPerSlotRules()'s docstring. */
+      .d4a-tier-select { display: flex; gap: 10px; margin: 4px 0; }
+      .d4a-tier-select label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
+      .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; }
       .d4a-color-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; border-top: 1px solid #333; padding-top: 6px; }
       .d4a-color-row label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
       .d4a-color-row input[type="color"] { width: 20px; height: 20px; padding: 0; border: none; border-radius: 3px; background: none; cursor: pointer; }
@@ -3451,6 +3465,14 @@
     const optHideNoGA = document.getElementById("d4a-opt-hide-no-ga")?.checked ?? true;
     const optKeepGoodStatsNoGA = document.getElementById("d4a-opt-keep-good-no-ga")?.checked ?? true;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
+    // 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la regle
+    // des 25" - the 2 dropdowns below replace the old "all 4 tiers +
+    // algorithmic trim" approach as the primary control (see
+    // buildPerSlotRules()'s docstring).
+    const selectedTiers = [
+      parseInt(document.getElementById("d4a-tier-a")?.value, 10) || 2,
+      parseInt(document.getElementById("d4a-tier-b")?.value, 10) || 3,
+    ];
     const hexBis = document.getElementById("d4a-color-bis")?.value || COLOR_HEX_DEFAULTS.bis;
     const hexGood = document.getElementById("d4a-color-good")?.value || COLOR_HEX_DEFAULTS.good;
     const hexGA = document.getElementById("d4a-color-ga")?.value || COLOR_HEX_DEFAULTS.ga;
@@ -3483,7 +3505,7 @@
     let perSlotRulesResult = { rules: [], skippedSlots: [] };
     try {
       perSlot = await findPerSlotStatPriority();
-      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, colorGood, colorBis, colorPerfect, colorGA);
+      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, selectedTiers, colorGood, colorBis, colorPerfect, colorGA);
     } catch (e) {
       // ignore - same as above, a bonus signal, not required
     }
@@ -3826,13 +3848,27 @@
           <p>Ne s'applique que si "Masquer Légendaires/Uniques sans Greater Affix" est coché juste au-dessus. Sans cette option, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot. Avec elle, il reste visible (couleur "Bon") au lieu d'être masqué.</p>
         </details>
         <label><input type="checkbox" id="d4a-opt-perslot"> Règles précises par emplacement (Maxroll)</label>
+        <div class="d4a-tier-select">
+          <label>Palier A <select id="d4a-tier-a">
+            <option value="2">2 (2 affixes)</option>
+            <option value="3">3 (3 affixes)</option>
+            <option value="4">4 (Parfait)</option>
+            <option value="5">5 (Supérieur)</option>
+          </select></label>
+          <label>Palier B <select id="d4a-tier-b">
+            <option value="2">2 (2 affixes)</option>
+            <option value="3">3 (3 affixes)</option>
+            <option value="4">4 (Parfait)</option>
+            <option value="5">5 (Supérieur)</option>
+          </select></label>
+        </div>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus sur les paliers</summary>
-          <p>Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement (Anneau, Amulette, Torse...) reçoit jusqu'à 4 règles de précision, la plus haute qui correspond l'emporte :</p>
+          <p>Le jeu limite un filtre à 25 règles - seuls 2 paliers de précision par emplacement peuvent donc être actifs à la fois (Palier A et Palier B ci-dessus). Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement (Anneau, Amulette, Torse...) reçoit une règle pour chacun des 2 paliers choisis, le plus élevé qui correspond l'emporte :</p>
           <p><strong>Palier 2</strong> : le Rare a 2 des affixes prioritaires de l'emplacement.</p>
           <p><strong>Palier 3</strong> : 3 affixes prioritaires.</p>
           <p><strong>Palier 4 (Parfait)</strong> : les 4 affixes prioritaires connus pour cet emplacement.</p>
-          <p><strong>Palier 5 (Supérieur)</strong> : 2+ affixes prioritaires ET au moins un Greater Affix - le signal le plus rare, toujours prioritaire sur les autres paliers.</p>
+          <p><strong>Palier 5 (Supérieur)</strong> : 2+ affixes prioritaires ET au moins un Greater Affix.</p>
         </details>
         <div class="d4a-color-row">
           <label>Palier 2/Bon <input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"></label>
@@ -3889,6 +3925,15 @@
       cb.checked = GM_getValue(id, true);
       cb.onchange = () => GM_setValue(id, cb.checked);
     }
+    // 2026-09-23: the 2 tier dropdowns (see buildPerSlotRules()'s docstring)
+    // - same GM_setValue persistence, default Palier A=2/B=3 (matches the
+    // 2-tier behavior already validated in-game before this feature grew).
+    const tierA = document.getElementById("d4a-tier-a");
+    const tierB = document.getElementById("d4a-tier-b");
+    tierA.value = GM_getValue("d4a-tier-a", "2");
+    tierB.value = GM_getValue("d4a-tier-b", "3");
+    tierA.onchange = () => GM_setValue("d4a-tier-a", tierA.value);
+    tierB.onchange = () => GM_setValue("d4a-tier-b", tierB.value);
     // Same persistence for the 4 color pickers (Palier 2/Bon, Palier 3/BiS,
     // Palier 4/Parfait - added 2026-09-23, Palier 5/Greater Affix). Legend
     // swatches live next to the pickers now (moved there 2026-09-22, "juste
