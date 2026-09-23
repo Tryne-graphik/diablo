@@ -4815,3 +4815,34 @@ de precision, bien en dessous du plafond. `node --check` vert. **Rien de tout ca
 en jeu** - prochaine etape : regenerer un filtre Strict reel avec les paliers A/B choisis et l'importer
 pour verifier visuellement les couleurs/paliers et confirmer que l'affichage/les cases a cocher se
 comportent comme prevu.
+
+## 2026-09-23 (suite) - v2.48 : retouches visuelles du panneau d'options (capture d'ecran fournie)
+
+L'utilisateur a fourni une capture d'ecran du panneau d'options tel qu'affiche reellement (cases a
+cocher avec texte qui retombe sur 2 lignes) et demande plusieurs ajustements :
+
+1. **Titres evocateurs pour les 4 cases a cocher** - textes raccourcis avec icone, le detail complet
+   reste dans les blocs "En savoir plus" :
+   - "Ancestral uniquement" -> "🔱 Ancestral uniquement" (inchange, deja court)
+   - "Masquer Legendaires/Uniques sans Greater Affix" -> "⚔️ Greater Affix exige"
+   - "...mais garder si 2+ bonnes stats meme sans GA" -> "💎 Exception bonnes stats"
+   - "Regles precises par emplacement (Maxroll)" -> "🎯 Precision par emplacement"
+2. **"En savoir plus" (exception GA) deplace** pour se trouver juste sous la case "Precision par
+   emplacement" au lieu d'etre coince entre "Exception bonnes stats" et elle - les 4 cases a cocher
+   sont maintenant groupees ensemble sans rien entre elles.
+3. **Panneau centre** - `#d4a-filter-options` passe en `text-align: center`, chaque case a cocher en
+   `display: inline-flex` (au lieu de `block`) pour que le couple case+texte soit centre comme un bloc
+   plutot qu'etire sur toute la largeur. Les paragraphes d'explication ("En savoir plus", legende)
+   restent volontairement alignes a gauche - du texte de plusieurs lignes centre est illisible, seuls
+   les elements courts/structures suivent la demande de centrage a la lettre.
+4. **Rangee des couleurs de paliers refaite** : passee d'une ligne flex-wrap ("Palier 2/Bon", "Palier
+   3/BiS", "Palier 4", "Palier 5/GA" - longueurs inegales) a une colonne centree, une ligne par palier,
+   **couleur d'abord puis texte** ("commence par la couleur"). Les 4 libelles sont simplifies a "Palier
+   2"/"Palier 3"/"Palier 4"/"Palier 5" - exactement 8 caracteres chacun, seul le chiffre change - et
+   affiches en police monospace pour un alignement caractere-par-caractere garanti ("le meme nombre de
+   caractere pour pouvoir aligner proprement"). Legende des couleurs mise a jour pour rester coherente
+   avec ces libelles simplifies.
+
+`node --check` vert. **Rien de tout ca (comme le reste de la session) n'a encore ete verifie dans un
+vrai navigateur** - a valider visuellement des le prochain test en jeu, en meme temps que le reste des
+changements de la journee (paliers, options toujours visibles, boutons en grille).

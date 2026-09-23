@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.47
+// @version      2.48
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2501,25 +2501,41 @@
       /* 2026-09-23: "laisse les options du filtre toujours ouverte" - was a
          collapsed <details>, now a permanently-visible <div> (no more
          summary/toggle at this level - only the NESTED .d4a-help/legend
-         explanations inside it still collapse, see above). */
-      #d4a-filter-options { background: #0c0c14; border: 1px solid #333; border-radius: 6px; padding: 6px 8px; margin: 2px 0; }
-      #d4a-filter-options label { display: block; font-size: 13px; margin: 4px 0; cursor: pointer; }
-      #d4a-filter-options label input[type="checkbox"] { margin-right: 5px; vertical-align: middle; }
+         explanations inside it still collapse, see above). 2026-09-23
+         (later, follow-up): "centre l'ensemble du menu" - text-align:center
+         on the container centers every inline/inline-flex child (title,
+         each checkbox row, the tier dropdowns, the color rows) as a unit
+         without breaking them apart. Explanatory PROSE (.d4a-help p, the
+         legend) is deliberately re-left-aligned further down - centered
+         multi-line paragraphs read poorly, so only the short/structured
+         rows follow the "centre tout" request literally. */
+      #d4a-filter-options { background: #0c0c14; border: 1px solid #333; border-radius: 6px; padding: 6px 8px; margin: 2px 0; text-align: center; }
+      #d4a-filter-options label { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; margin: 4px 0; cursor: pointer; }
+      #d4a-filter-options label input[type="checkbox"] { margin: 0; }
       .d4a-section-title { color: #03d0fc; font-weight: bold; font-size: 13px; }
-      .d4a-help { margin: 2px 0 6px 18px; }
+      .d4a-help { margin: 2px auto 6px; text-align: left; }
+      .d4a-help p { text-align: left; }
       /* 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la
          regle des 25" - 2 dropdowns instead of always generating all 4
          tiers, see buildPerSlotRules()'s docstring. */
-      .d4a-tier-select { display: flex; gap: 10px; margin: 4px 0; }
+      .d4a-tier-select { display: flex; justify-content: center; gap: 10px; margin: 4px 0; }
       .d4a-tier-select label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
       .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; }
-      .d4a-color-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; border-top: 1px solid #333; padding-top: 6px; }
-      .d4a-color-row label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
-      .d4a-color-row input[type="color"] { width: 20px; height: 20px; padding: 0; border: none; border-radius: 3px; background: none; cursor: pointer; }
-      .d4a-legend { display: flex; flex-direction: column; gap: 4px; font-size: 12px; opacity: .9; margin: 4px 0 0; }
+      /* 2026-09-23 (follow-up): "aligne tous les palier et commence par la
+         couleur ... fait en sorte que tous les texte des palier ai le meme
+         nombre de caractere" - one row per tier, color swatch FIRST then
+         the label, stacked (not wrapped inline) and centered as a block;
+         all 4 labels are now literally "Palier 2".."Palier 5" (identical
+         length, only the digit changes) and rendered in a monospace font
+         so they line up character-for-character regardless of what number
+         is showing. */
+      .d4a-color-row { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 6px auto 0; border-top: 1px solid #333; padding-top: 6px; width: fit-content; }
+      .d4a-tier-color { display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 13px; }
+      .d4a-tier-color input[type="color"] { width: 20px; height: 20px; padding: 0; border: none; border-radius: 3px; background: none; cursor: pointer; }
+      .d4a-legend { display: flex; flex-direction: column; gap: 4px; font-size: 12px; opacity: .9; margin: 4px 0 0; text-align: left; }
       .d4a-legend span { display: flex; align-items: center; gap: 5px; }
       .d4a-legend i { flex: none; display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
-      .d4a-legend-details { border: none; padding: 0; margin-top: 6px; }
+      .d4a-legend-details { border: none; padding: 0; margin-top: 6px; text-align: left; }
       .d4a-legend-details > summary { font-size: 11px; }
     `;
     document.head.appendChild(style);
@@ -3840,14 +3856,14 @@
       </div>
       <div id="d4a-filter-options">
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
-        <label><input type="checkbox" id="d4a-opt-ancestral"> Ancestral uniquement</label>
-        <label><input type="checkbox" id="d4a-opt-hide-no-ga"> Masquer Légendaires/Uniques sans Greater Affix</label>
-        <label><input type="checkbox" id="d4a-opt-keep-good-no-ga"> ...mais garder si 2+ bonnes stats même sans GA</label>
+        <label><input type="checkbox" id="d4a-opt-ancestral"> 🔱 Ancestral uniquement</label>
+        <label><input type="checkbox" id="d4a-opt-hide-no-ga"> ⚔️ Greater Affix exigé</label>
+        <label><input type="checkbox" id="d4a-opt-keep-good-no-ga"> 💎 Exception bonnes stats</label>
+        <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
-          <p>Ne s'applique que si "Masquer Légendaires/Uniques sans Greater Affix" est coché juste au-dessus. Sans cette option, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot. Avec elle, il reste visible (couleur "Bon") au lieu d'être masqué.</p>
+          <p>"Exception bonnes stats" ne s'applique que si "Greater Affix exigé" est coché : sans elle, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot ; avec elle, il reste visible (couleur "Bon") au lieu d'être masqué.</p>
         </details>
-        <label><input type="checkbox" id="d4a-opt-perslot"> Règles précises par emplacement (Maxroll)</label>
         <div class="d4a-tier-select">
           <label>Palier A <select id="d4a-tier-a">
             <option value="2">2 (2 affixes)</option>
@@ -3871,18 +3887,18 @@
           <p><strong>Palier 5 (Supérieur)</strong> : 2+ affixes prioritaires ET au moins un Greater Affix.</p>
         </details>
         <div class="d4a-color-row">
-          <label>Palier 2/Bon <input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"></label>
-          <label>Palier 3/BiS <input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"></label>
-          <label>Palier 4 <input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"></label>
-          <label>Palier 5/GA <input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"></label>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Palier 2</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Palier 3</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Palier 4</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Palier 5</span></div>
         </div>
         <details class="d4a-legend-details">
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">
-            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Palier 2 / Bon : 2+ affixes du build (par emplacement, ou pool général)</span>
-            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Palier 3 / BiS : 3+ affixes du build (pool général : + Ancestral et Greater Affix)</span>
-            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Palier 4 / Parfait : les 4 affixes du build sur cet emplacement</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Palier 5 / Supérieur : affixes du build + Greater Affix (ou n'importe quel objet avec un Greater Affix, pool général)</span>
+            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Palier 2 : 2+ affixes du build (par emplacement, ou pool général "Bon")</span>
+            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Palier 3 : 3+ affixes du build (pool général "BiS" : + Ancestral et Greater Affix)</span>
+            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Palier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Palier 5 (Supérieur) : affixes du build + Greater Affix (ou n'importe quel objet avec un Greater Affix, pool général)</span>
             <span><i style="background:#00c800"></i>Codex à améliorer / Légendaire-Unique-Mythique à garder</span>
           </div>
         </details>
