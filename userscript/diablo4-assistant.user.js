@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.68
+// @version      2.69
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3062,8 +3062,36 @@
   // hydrated by the time a user clicks a panel button (the polling in that
   // other function exists specifically for a tab that JUST opened
   // programmatically, with no such guarantee).
+  // 2026-09-24: found live (screenshot of the real page) that InfinityBuilds
+  // splits GEAR and SKILLS into separate tabs ("GEAR / SKILLS / PARAGON /
+  // TALISMAN / ...") - React only renders the active tab's content, so
+  // extractSkillsRaw()'s selector (a <p> with a specific Tailwind class,
+  // only present under the Skills tab) found nothing while the user was
+  // looking at the Gear tab, explaining 0 resolved build affixes even
+  // though item/Unique extraction worked correctly. Same root cause and
+  // same fix as ensureStatPriorityTabActive() (Maxroll's "Stat Priority"
+  // tab, 2026-09-22/23) - candidate labels include the French label too
+  // since infinitybuilds.gg has a /fr/ locale, not just Chrome-translated
+  // text like the Maxroll case.
+  const IB_SKILLS_TAB_LABELS = new Set(["skills", "compétences"]);
+  async function ensureInfinityBuildsSkillsTabActive() {
+    if (extractSkillsRaw().length) return;
+    const tabCandidate = Array.from(document.querySelectorAll("*")).find(
+      (e) => e.children.length === 0 && IB_SKILLS_TAB_LABELS.has(e.textContent.trim().toLowerCase())
+    );
+    if (!tabCandidate) return;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      for (const target of [tabCandidate, tabCandidate.parentElement, tabCandidate.parentElement?.parentElement]) {
+        if (target) target.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      }
+      await sleep(1000 + attempt * 500);
+      if (extractSkillsRaw().length) return;
+    }
+  }
+
   async function extractInfinityBuildsDetail() {
     const itemsEn = gearNames(extractGearRaw());
+    await ensureInfinityBuildsSkillsTabActive();
     const skillsEn = skillNames(extractSkillsRaw());
     if (skillsEn.length === 0 && itemsEn.length === 0) return null;
     return {
