@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.56
+// @version      2.57
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2362,6 +2362,20 @@
     const rules = [];
     const skippedSlots = [];
     for (const entry of perSlotData) {
+      // 2026-09-24: skip a slot entirely when its currently-equipped item
+      // is a recognized Unique (same UNIQUE_ITEM_IDS lookup as
+      // buildUniqueItemRules()) - the user pointed out a per-slot Rare-
+      // precision rule there is dead weight: the build calls for that
+      // exact Unique, never a replacement Rare, so the rule would never
+      // matter even if it could theoretically match (and a Unique-rarity
+      // item never matches these Rare-only conditions in the first place).
+      // Freeing that rule budget lets other slots that DO need precision
+      // fit under D4's 25-rule cap instead of being trimmed away.
+      const equippedUnique = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get((entry.itemName || "").trim().toLowerCase());
+      if (equippedUnique) {
+        skippedSlots.push(`${entry.slot} (Unique: ${equippedUnique})`);
+        continue;
+      }
       const typeIds = ITEM_TYPE_IDS[entry.slot];
       if (!typeIds || entry.ids.length < 2) {
         skippedSlots.push(entry.slot);
@@ -3690,7 +3704,7 @@
         : optPerSlot
         ? perSlotRulesResult.rules.length
           ? `<p>Par emplacement : ${perSlotMatched.map((e) => `${e.slot} (${e.names.join(", ")})`).join(" · ")}</p>${
-              perSlotRulesResult.skippedSlots.length ? `<p style="opacity:.7">Ignorés (pas d'ID de type ou pas assez de stats reconnues) : ${perSlotRulesResult.skippedSlots.join(", ")}</p>` : ""
+              perSlotRulesResult.skippedSlots.length ? `<p style="opacity:.7">Ignorés (Unique déjà équipé, pas d'ID de type, ou pas assez de stats reconnues) : ${perSlotRulesResult.skippedSlots.join(", ")}</p>` : ""
             }`
           : perSlot.length
             ? `<p style="color:#c9a227">Panneau détecté mais aucune règle précise générée.</p>`
