@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.70
+// @version      2.71
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3073,6 +3073,14 @@
   // tab, 2026-09-22/23) - candidate labels include the French label too
   // since infinitybuilds.gg has a /fr/ locale, not just Chrome-translated
   // text like the Maxroll case.
+  // 2026-09-24 CORRECTION: the element-finding logic was always correct
+  // (confirmed live via DevTools: `found: true`, a real
+  // `<span class="whitespace-nowrap">Skills</span>`) - the bug was in how
+  // it was clicked. Dispatching a synthetic MouseEvent on 3 different
+  // targets at once (the span, its parent, its grandparent) didn't switch
+  // tabs at all; the user's own `tabCandidate.click()` test on the exact
+  // same element DID switch tabs immediately. Simplified to that - one
+  // real `.click()` call on the found element, nothing more.
   const IB_SKILLS_TAB_LABELS = new Set(["skills", "compétences"]);
   async function ensureInfinityBuildsSkillsTabActive() {
     if (extractSkillsRaw().length) return;
@@ -3081,9 +3089,7 @@
     );
     if (!tabCandidate) return;
     for (let attempt = 0; attempt < 3; attempt++) {
-      for (const target of [tabCandidate, tabCandidate.parentElement, tabCandidate.parentElement?.parentElement]) {
-        if (target) target.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-      }
+      tabCandidate.click();
       await sleep(1000 + attempt * 500);
       if (extractSkillsRaw().length) return;
     }
