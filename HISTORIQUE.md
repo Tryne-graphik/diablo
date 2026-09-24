@@ -5073,3 +5073,33 @@ cotes, rien d'autre a modifier. Verifie en Python que la resolution fonctionne. 
 v2.57 (skip des regles par emplacement si le slot a deja un Unique reconnu), les 2 anneaux du build
 devraient maintenant sortir des regles de precision generiques et rejoindre le pool d'Uniques groupe -
 a confirmer au prochain test en jeu. `node --check` vert, commit `e6e58d6`, pousse.
+
+## 2026-09-24 (suite) - v2.59 : bouton retour d'experience + README d'installation
+
+Pendant que l'utilisateur teste v2.58 en jeu, 2 demandes paralleles, sans lien avec la generation de
+filtre en cours de test :
+
+- **Retour d'experience relie a GitHub** : discute d'abord l'approche avant de coder (question
+  exploratoire) - explique que le seul moyen sain sans exposer de token GitHub dans un userscript
+  public (n'importe qui peut lire la source) ni heberger de serveur est un lien "GitHub Issue
+  pre-rempli" (`github.com/.../issues/new?title=...&body=...`), qui ouvre un nouvel onglet ou le
+  rapporteur clique lui-meme "Submit" avec son propre compte GitHub. Contrepartie acceptee : il faut
+  un compte GitHub, pas un vrai formulaire anonyme en un clic. **v2.59** : nouvelle section repliable
+  "💬 Retour d'expérience" dans le panneau (titre pre-rempli "Retour d'expérience", zone de texte),
+  bouton "Envoyer sur GitHub" qui construit l'URL avec le titre/message + contexte auto-ajoute
+  (version du script via `GM_info`, URL de la page courante) et l'ouvre via `window.open`.
+
+- **Installation facilitee pour les amis testeurs + "connecter toutes les installations pour la
+  mise a jour"** : verifie et confirme que le 2e point est **deja resolu** depuis la creation du
+  depot GitHub (v2.44-ish, `@updateURL`/`@downloadURL` pointant sur `master`) - Tampermonkey verifie
+  et applique les mises a jour automatiquement pour toute installation faite via ce depot, rien de
+  plus a construire. Un "module d'installation automatique" au sens strict (zero-clic, installer
+  Tampermonkey lui-meme sans intervention) n'est pas possible : les navigateurs interdisent
+  l'installation silencieuse d'extensions depuis une page web, pour des raisons de securite. A la
+  place, cree `README.md` a la racine du depot (jusqu'ici absent - le depot n'affichait rien de
+  convivial pour un visiteur) avec un guide en 3 etapes : lien vers la fiche Tampermonkey du store
+  (Chrome/Edge/Firefox), lien direct vers le `.user.js` brut sur GitHub (Tampermonkey intercepte ce
+  type de lien et affiche automatiquement sa page d'installation - le plus proche d'"automatique"
+  que permettent les navigateurs), et confirmation que la mise a jour ulterieure est automatique.
+  Verifie que les Issues sont bien activees sur le depot (`api.github.com/repos/.../` `has_issues:
+  true`) avant de m'appuyer dessus. `node --check` vert, commit `4e06230`, pousse.
