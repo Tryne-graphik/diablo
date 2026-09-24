@@ -5033,3 +5033,26 @@ devenue inutilisee, retiree ; le color picker "GA" (cyan) reste utilise ailleurs
 - elle decrivait la regle plate qui vient d'etre supprimee. `node --check`/`python3 -c "import ..."`
 verts des deux cotes. Commit `2b58c8e`, pousse. Toujours pas re-teste en jeu - le prochain test sera
 celui de Stone of Jordan (point 2), a la demande de l'utilisateur une fois tous ses retours donnes.
+
+## 2026-09-24 (suite) - v2.57 : plus de regle par emplacement pour un slot deja couvert par un Unique
+
+Nouveau retour utilisateur, toujours avant le test Stone of Jordan : les regles "Précis - Main 1/
+Main 2/Casque/Pantalon" n'ont pas lieu d'etre sur ce build, ces 4 emplacements sont deja des Uniques
+identifies (coherent avec le point 2 - les anneaux ont le meme probleme, en attente de l'id sno).
+Observation cle de l'utilisateur : regrouper tous les Uniques dans une seule regle (deja fait depuis
+plus tot - `buildUniqueItemRules()` pool tous les Uniques matches en 1-2 regles fixes) libere du
+budget sous le plafond de 25 regles - une fois qu'un Unique est identifie sur un emplacement, cet
+emplacement n'a plus besoin d'une regle de precision en plus.
+
+Diagnostic : la regle de precision par emplacement (`buildPerSlotRules()`) ne verifiait jamais si
+l'objet actuellement equipe sur ce slot etait un Unique connu - elle generait une regle "Rare X+
+affixes" meme pour un emplacement dont le build ne remplacera jamais l'Unique par un Rare (et un
+objet de rarete Unique ne matche de toute facon jamais la condition Rare-only de ces regles - la
+regle etait donc du poids mort, jamais vraiment "fausse" fonctionnellement, juste du gaspillage de
+budget). **v2.57** : `buildPerSlotRules()` verifie maintenant `entry.itemName` contre
+`UNIQUE_ITEM_IDS_BY_LOWER_NAME` (le meme lookup que `buildUniqueItemRules()`, donc coherent avec ce
+qui finit dans le pool d'Uniques) et saute entierement le slot si identifie, avec le nom de l'Unique
+dans la liste "Ignorés" affichee dans le panneau pour que ce soit visible. Solution generique
+(pas de liste d'emplacements en dur) : sautera automatiquement n'importe quel slot dont l'objet
+equipe est reconnu, pas seulement les 4 cites. `node --check` vert, commit `84cc5b8`, pousse. Pas
+encore re-teste en jeu.
