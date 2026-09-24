@@ -28,9 +28,13 @@ before looser ones that could also match the same item):
   3. Recolor orange- Rare with >= 1 of any build-relevant affix
   4. Recolor green - Codex upgrade
   5. Recolor green - Legendary and above
-  6. Recolor cyan  - any Greater Affix
-  7. Hide          - Common/Magic/Rare junk (last: only reached by an
+  6. Hide          - Common/Magic/Rare junk (last: only reached by an
                       item that matched none of the keep rules above it)
+
+2026-09-24: dropped the old unconditional "any rarity with a Greater
+Affix" recolor step - the user pointed out D4 already marks GA affixes
+with a star directly on the item/tooltip, so it only duplicated a signal
+the game already shows.
 """
 
 from __future__ import annotations
@@ -130,7 +134,10 @@ def generate_filter_code(
         )
     rules.append(codec.make_rule("Codex : Mise à jour", codec.RECOLOR, [codec.condition_codex_upgrade()], codec.COLOR_GREEN))
     rules.append(codec.make_rule("Légendaires - Garder", codec.RECOLOR, [codec.condition_rarity(codec.LEGENDARY_PLUS)], codec.COLOR_GREEN))
-    rules.append(codec.make_rule("Affixe Majeur - Butin", codec.RECOLOR, [codec.condition_greater_affix(1)], codec.COLOR_CYAN))
+    # 2026-09-24: removed the old unconditional "any rarity with a Greater
+    # Affix" recolor - D4 already marks GA affixes with a star directly on
+    # the item/tooltip, so this duplicated a signal the game already shows
+    # (see the userscript's generateFilterCode() for the fuller writeup).
     rules.append(
         codec.make_rule("Cacher Détritus", codec.HIDE_ALL, [codec.condition_rarity(codec.COMMON | codec.MAGIC | codec.RARE)])
     )

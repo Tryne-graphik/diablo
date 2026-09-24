@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.55
+// @version      2.56
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2167,7 +2167,6 @@
     // original hardcoded colors when not supplied.
     const colorBis = options.colorBis ?? COLOR_GOLD;
     const colorGood = options.colorGood ?? COLOR_ORANGE;
-    const colorGA = options.colorGA ?? COLOR_CYAN;
 
     // 2026-09-23: rebuilt in first-match-wins order (see the CORRECTION
     // comment above this function) - every specific keep/recolor rule
@@ -2222,7 +2221,16 @@
     } else {
       rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN)));
     }
-    rules.push(tagRule(makeRule("Affixe Majeur - Butin", RECOLOR, [conditionGreaterAffix(1)], colorGA)));
+    // 2026-09-24: removed the old unconditional "any rarity with a Greater
+    // Affix" recolor - the user pointed out D4 already marks GA affixes
+    // with a star directly on the item/tooltip, so a filter rule
+    // duplicating that signal added nothing. Legendary/Unique GA coverage
+    // is unaffected (handled above by the dedicated Legendary/Unique
+    // branch); this only stops separately flagging a Rare that has a GA
+    // but doesn't also match enough build affixes to hit a Precis/Rare
+    // tier - that Rare now just falls through to Hide Junk like any other
+    // non-matching Rare, same as the user's own stated filtering logic
+    // ("a Rare only matters if it's a GA, and I can already see that").
     // Hide Junk LAST (see the CORRECTION comment above this function) -
     // only reached by an item that matched none of the keep/recolor rules
     // above it. No trailing catch-all SHOW needed: an item matching no
@@ -2399,7 +2407,20 @@
   // BEFORE the plain SHOW rule (first-match-wins, see the CORRECTION
   // comment above generateFilterCode()) so a good roll gets the distinct
   // color and a middling one still falls through to the safety net.
-  function buildUniqueItemRules(itemNamesEn, color = COLOR_GOLD, buildAffixIds = []) {
+  // 2026-09-24: the plain SHOW safety-net rule is now conditional on
+  // `needsShowSafetyNet` - the user correctly pointed out that RECOLOR
+  // already displays an item (it doesn't need a separate SHOW), so the
+  // safety net is only real dead weight UNLESS a Unique that misses the
+  // RECOLOR condition could still get hidden downstream. That only
+  // happens when generateFilterCode()'s hideLegendaryWithoutGA branch is
+  // active (its Hide Junk mask then includes the Unique rarity bit) - in
+  // the other branch, "Légendaires - Garder" unconditionally recolors
+  // every Legendary/Unique right after this block anyway, so the safety
+  // net would never even be reached. Caller passes
+  // `isStrict && hideLegendaryWithoutGA` (the exact same condition
+  // generateFilterCode() itself branches on) so this stays correct if
+  // that logic ever changes.
+  function buildUniqueItemRules(itemNamesEn, color = COLOR_GOLD, buildAffixIds = [], needsShowSafetyNet = true) {
     const matched = [];
     const seen = new Set();
     const pooledSnoIds = [];
@@ -2418,7 +2439,9 @@
       if (buildAffixIds.length) {
         rules.push(tagRule(makeRule("Uniques - 2+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 2)], color), false));
       }
-      rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], color), false));
+      if (needsShowSafetyNet) {
+        rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], color), false));
+      }
     }
     return { rules, matched };
   }
@@ -3601,7 +3624,11 @@
     // buildUniqueItemRules() needs it too, ahead of that call.
     const { ids: allSkillIds } = resolveSkillIds(result.resolvedClass || "", result.skillsEn);
     const allBuildIds = Array.from(new Set([...allSkillIds, ...priority.ids]));
-    const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorBis, allBuildIds);
+    // Matches generateFilterCode()'s own `hideLegendaryWithoutGA` condition -
+    // see buildUniqueItemRules()'s docstring for why the SHOW safety net is
+    // only needed in that branch.
+    const needsUniqueShowSafetyNet = isStrict && optHideNoGA;
+    const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorBis, allBuildIds, needsUniqueShowSafetyNet);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
     // vient de façon abrégée" - the site is a 2-letter tag rather than the
@@ -3629,9 +3656,8 @@
           keepGoodStatsNoGA: optKeepGoodStatsNoGA,
           colorBis,
           colorGood,
-          colorGA,
         })
-      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorGA });
+      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood });
 
     const detailNote = result.hasDetail
       ? ""
@@ -3988,7 +4014,7 @@
             <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Tier 2 : 2+ affixes du build (par emplacement, ou pool général "Bon")</span>
             <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build (pool général "BiS" : + Ancestral et Greater Affix)</span>
             <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 (Supérieur) : affixes du build + Greater Affix (ou n'importe quel objet avec un Greater Affix, pool général)</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 (Supérieur) : affixes du build + Greater Affix (par emplacement)</span>
             <span><i style="background:#00c800"></i>Codex à améliorer / Légendaire-Unique-Mythique à garder</span>
           </div>
         </details>
