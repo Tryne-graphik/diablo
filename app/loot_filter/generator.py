@@ -68,7 +68,7 @@ def build_unique_item_rules(item_names: list[str], color: int = codec.COLOR_GOLD
         matched.append(canonical)
         rules.append(
             codec.make_rule(
-                f"Keep Unique - {canonical}", codec.SHOW,
+                f"Garder - {canonical}", codec.SHOW,
                 [codec.condition_specific_unique(UNIQUE_ITEM_IDS[canonical])], color,
             )
         )
@@ -108,14 +108,14 @@ def generate_filter_code(
 
     rules.append(
         codec.make_rule(
-            "Legendary Talismans", codec.SHOW,
+            "Talismans Légendaires", codec.SHOW,
             [codec.condition_rarity(codec.LEGENDARY_PLUS), codec.condition_item_types([codec.CHARM, codec.SEAL])],
         )
     )
     if len(core_ids) >= gold_threshold:
         rules.append(
             codec.make_rule(
-                f"BiS Rare - {gold_threshold}+ Dmg Stats", codec.RECOLOR,
+                f"Rare {gold_threshold}+ Stats (BiS)", codec.RECOLOR,
                 [codec.condition_rarity(codec.RARE), codec.condition_affixes(core_ids, gold_threshold)],
                 codec.COLOR_GOLD,
             )
@@ -123,16 +123,16 @@ def generate_filter_code(
     if all_build_ids:
         rules.append(
             codec.make_rule(
-                "Check Rare - Build Affix", codec.RECOLOR,
+                "Rare 1+ Affixe", codec.RECOLOR,
                 [codec.condition_rarity(codec.RARE), codec.condition_affixes(all_build_ids, 1)],
                 codec.COLOR_ORANGE,
             )
         )
-    rules.append(codec.make_rule("Codex Upgrade", codec.RECOLOR, [codec.condition_codex_upgrade()], codec.COLOR_GREEN))
-    rules.append(codec.make_rule("Legendaries - Keep All", codec.RECOLOR, [codec.condition_rarity(codec.LEGENDARY_PLUS)], codec.COLOR_GREEN))
-    rules.append(codec.make_rule("Greater Affix - Loot", codec.RECOLOR, [codec.condition_greater_affix(1)], codec.COLOR_CYAN))
+    rules.append(codec.make_rule("Codex : Mise à jour", codec.RECOLOR, [codec.condition_codex_upgrade()], codec.COLOR_GREEN))
+    rules.append(codec.make_rule("Légendaires - Garder", codec.RECOLOR, [codec.condition_rarity(codec.LEGENDARY_PLUS)], codec.COLOR_GREEN))
+    rules.append(codec.make_rule("Affixe Majeur - Butin", codec.RECOLOR, [codec.condition_greater_affix(1)], codec.COLOR_CYAN))
     rules.append(
-        codec.make_rule("Hide Junk", codec.HIDE_ALL, [codec.condition_rarity(codec.COMMON | codec.MAGIC | codec.RARE)])
+        codec.make_rule("Cacher Détritus", codec.HIDE_ALL, [codec.condition_rarity(codec.COMMON | codec.MAGIC | codec.RARE)])
     )
 
     code = codec.make_filter(filter_name, rules)

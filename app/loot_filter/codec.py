@@ -175,7 +175,12 @@ def condition_specific_unique(sno_ids: list[int]) -> bytes:
 
 
 def make_rule(name: str, visibility: int, conditions: list[bytes], color: int = COLOR_DEFAULT) -> bytes:
-    body = _field_string(1, name) + _field_varint(2, visibility) + _field_fixed32(3, color)
+    # 2026-09-24: D4's in-game rule-name field shares the filter-name's real
+    # 24-character cap (confirmed by decoding a user's own re-exported
+    # filter - 2 rules with longer names had their name field completely
+    # absent, silently dropped by the game on save). Truncate defensively
+    # so no caller can hit this again.
+    body = _field_string(1, (name or "")[:24]) + _field_varint(2, visibility) + _field_fixed32(3, color)
     for condition in conditions:
         body += condition
     body += _field_varint(5, 1)

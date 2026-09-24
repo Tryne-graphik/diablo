@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.54
+// @version      2.55
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1227,6 +1227,25 @@
     "Ranged Weapon": [0x0006d167 /* Bow, confirmed */, 0x0006d169 /* unconfirmed name, likely Crossbow */],
   };
 
+  // 2026-09-24: short French labels for the in-game rule names generated
+  // by buildPerSlotRules() (these keys are ITEM_TYPE_IDS keys, kept in
+  // English for the DOM-matching logic elsewhere - only the display label
+  // shown inside the actual D4 filter list needs to be French/short, see
+  // that function's 24-char rule-name budget).
+  const SLOT_LABELS_FR = {
+    "Helm": "Casque",
+    "Chest Armor": "Torse",
+    "Gloves": "Gants",
+    "Pants": "Pantalon",
+    "Boots": "Bottes",
+    "Amulet": "Amulette",
+    "Left Ring": "Anneau G",
+    "Right Ring": "Anneau D",
+    "Mainhand": "Arme 1",
+    "Offhand": "Arme 2",
+    "Ranged Weapon": "Distance",
+  };
+
   function encodeVarint(value) {
     value = value >>> 0;
     const out = [];
@@ -1322,8 +1341,14 @@
   function conditionAncestral() {
     return fieldBytes(4, fieldVarint(1, 2).concat(fieldVarint(4, 4)));
   }
+  // 2026-09-24: D4's in-game rule-name field shares the filter-name's real
+  // 24-character cap (confirmed by decoding the user's own re-exported
+  // filter - 2 rules with longer names had their name field completely
+  // absent, silently dropped by the game on save). Truncate defensively
+  // here so no future rule name can hit this again, rather than relying on
+  // every call site to stay under budget by hand.
   function makeRule(name, visibility, conditions, color = COLOR_DEFAULT) {
-    let body = fieldString(1, name).concat(fieldVarint(2, visibility)).concat(fieldFixed32(3, color));
+    let body = fieldString(1, (name || "").slice(0, 24)).concat(fieldVarint(2, visibility)).concat(fieldFixed32(3, color));
     for (const cond of conditions) body = body.concat(cond);
     body = body.concat(fieldVarint(5, 1));
     return fieldBytes(1, body);
@@ -2151,7 +2176,7 @@
     // 2+/3+ tiers, the Legendary GA/no-GA tiers), the MORE SPECIFIC/
     // BETTER one is pushed first so it wins the match.
     const rules = [];
-    rules.push(tagRule(makeRule("Legendary Talismans", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])])));
+    rules.push(tagRule(makeRule("Talismans Légendaires", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])])));
 
     if (allBuildIds.length >= 3) {
       // Strict mode only has this 3+ tier - the looser 2+ bar is dropped
@@ -2161,10 +2186,10 @@
       // drop is Ancestral-capable, so a non-Ancestral Rare is never BiS.
       const bisConditions = [conditionRarity(RARE), conditionAffixes(allBuildIds, 3)];
       if (requireAncestral) bisConditions.push(conditionAncestral());
-      rules.push(tagRule(makeRule("Check Rare - 3+ Build Affixes (BiS)", RECOLOR, bisConditions, colorBis)));
+      rules.push(tagRule(makeRule("Rare 3+ Affixes (BiS)", RECOLOR, bisConditions, colorBis)));
     }
     if (!strict && allBuildIds.length >= 2) {
-      rules.push(tagRule(makeRule("Check Rare - 2+ Build Affixes", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 2)], colorGood)));
+      rules.push(tagRule(makeRule("Rare 2+ Affixes", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 2)], colorGood)));
     } else if (!strict && allBuildIds.length === 1) {
       // Only one affix known in total - a ">=2" requirement could never
       // match anything, so fall back to the simple ">=1" check rather
@@ -2172,7 +2197,7 @@
       // mode skips this too: with only 1 known affix, a strict farmer is
       // better served by relying on the GA/BiS rules than a ">=1" Rare
       // rule that would light up almost every Rare that drops.
-      rules.push(tagRule(makeRule("Check Rare - Build Affix", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 1)], colorGood)));
+      rules.push(tagRule(makeRule("Rare 1+ Affixe", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 1)], colorGood)));
     }
     // Per-slot rules (buildPerSlotRules(), when supplied) slot in here,
     // before the flat build-affix Rare rules would matter less since
@@ -2180,24 +2205,24 @@
     // Legendary rules below is what matters (must stay before Hide Junk).
     // Already tagRule()-wrapped by buildPerSlotRules()/buildUniqueItemRules().
     for (const r of extraRules) rules.push(r);
-    rules.push(tagRule(makeRule("Codex Upgrade", RECOLOR, [conditionCodexUpgrade()], COLOR_GREEN)));
+    rules.push(tagRule(makeRule("Codex : Mise à jour", RECOLOR, [conditionCodexUpgrade()], COLOR_GREEN)));
     if (hideLegendaryWithoutGA) {
-      rules.push(tagRule(makeRule("Mythic - Always Keep", RECOLOR, [conditionRarity(MYTHIC)], COLOR_GREEN)));
+      rules.push(tagRule(makeRule("Mythique - Garder", RECOLOR, [conditionRarity(MYTHIC)], COLOR_GREEN)));
       // GA-keep pushed BEFORE the no-GA-but-good-stats rule (so GA still
       // wins gold when an item has both) - more specific/better tier first,
       // same idiom as the Rare 2+/3+ tiers above.
       const gaKeepConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionGreaterAffix(1)];
       if (requireAncestral) gaKeepConditions.push(conditionAncestral());
-      rules.push(tagRule(makeRule("Legendary/Unique - Keep only with Greater Affix", RECOLOR, gaKeepConditions, colorBis)));
+      rules.push(tagRule(makeRule("Légendaire - Aff. Majeur", RECOLOR, gaKeepConditions, colorBis)));
       if (keepGoodStatsNoGA && allBuildIds.length >= 2) {
         const noGaConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionAffixes(allBuildIds, 2)];
         if (requireAncestral) noGaConditions.push(conditionAncestral());
-        rules.push(tagRule(makeRule("Legendary/Unique - Keep with Build Affixes (no GA)", RECOLOR, noGaConditions, colorGood)));
+        rules.push(tagRule(makeRule("Légendaire - 2+ sans AM", RECOLOR, noGaConditions, colorGood)));
       }
     } else {
-      rules.push(tagRule(makeRule("Legendaries - Keep All", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN)));
+      rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN)));
     }
-    rules.push(tagRule(makeRule("Greater Affix - Loot", RECOLOR, [conditionGreaterAffix(1)], colorGA)));
+    rules.push(tagRule(makeRule("Affixe Majeur - Butin", RECOLOR, [conditionGreaterAffix(1)], colorGA)));
     // Hide Junk LAST (see the CORRECTION comment above this function) -
     // only reached by an item that matched none of the keep/recolor rules
     // above it. No trailing catch-all SHOW needed: an item matching no
@@ -2210,7 +2235,7 @@
     // Talismans excluded on purpose - always kept); off, and it behaves like
     // Open for that rarity tier (already unconditionally kept above).
     const hideMask = COMMON | MAGIC | RARE | (hideLegendaryWithoutGA ? LEGENDARY | UNIQUE : 0);
-    rules.push(tagRule(makeRule("Hide Junk", HIDE_ALL, [conditionRarity(hideMask)])));
+    rules.push(tagRule(makeRule("Cacher Détritus", HIDE_ALL, [conditionRarity(hideMask)])));
 
     // 2026-09-23: D4's native filter import silently truncates anything
     // past rule 25 (see tagRule()'s docstring) - confirmed live: a build
@@ -2316,7 +2341,11 @@
   // Uniques, a long build-affix pool, etc).
   function buildPerSlotRules(perSlotData, requireAncestral = true, selectedTiers = [2, 3], colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
     const tierColors = { 2: colorGood, 3: colorBis, 4: colorPerfect, 5: colorGA };
-    const tierLabels = { 2: "Precis 2", 3: "Precis 3", 4: "Precis 4 (Parfait)", 5: "Precis 5 (Superieur)" };
+    // 2026-09-24: translated to French (rule names shown inside the actual
+    // game's filter list, not just this panel) and shortened to fit D4's
+    // real 24-character rule-name cap once combined with a slot label
+    // (see SLOT_LABELS_FR below and makeRule()'s truncation comment).
+    const tierLabels = { 2: "Préc.2", 3: "Préc.3", 4: "Parfait", 5: "Supérieur" };
     const tiersDesc = Array.from(new Set(selectedTiers)).filter((t) => t >= 2 && t <= 5).sort((a, b) => b - a);
     const tiersAsc = [...tiersDesc].sort((a, b) => a - b);
     const trimPriorityByTier = {};
@@ -2338,7 +2367,7 @@
             ? [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2), conditionGreaterAffix(1)]
             : [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, tier)];
         if (requireAncestral) conditions.push(conditionAncestral());
-        rules.push(tagRule(makeRule(`${tierLabels[tier]} - ${entry.slot}`, RECOLOR, conditions, tierColors[tier]), trimPriorityByTier[tier]));
+        rules.push(tagRule(makeRule(`${tierLabels[tier]} - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, RECOLOR, conditions, tierColors[tier]), trimPriorityByTier[tier]));
       }
     }
     return { rules, skippedSlots };
@@ -2387,9 +2416,9 @@
       // matter how many Uniques matched, and a build's core Uniques are
       // worth keeping regardless of filter budget pressure.
       if (buildAffixIds.length) {
-        rules.push(tagRule(makeRule("Uniques - 2+ Build Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 2)], color), false));
+        rules.push(tagRule(makeRule("Uniques - 2+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 2)], color), false));
       }
-      rules.push(tagRule(makeRule("Keep Uniques - All", SHOW, [conditionSpecificUnique(pooledSnoIds)], color), false));
+      rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], color), false));
     }
     return { rules, matched };
   }
