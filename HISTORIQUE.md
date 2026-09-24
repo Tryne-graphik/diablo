@@ -5137,3 +5137,17 @@ pousses. **Pas encore fonctionnel de bout en bout** : il reste a l'utilisateur d
 Sheet, coller son ID dans `SHEET_ID`, et redeployer une nouvelle version (editer le code seul ne
 suffit pas, il faut Deployer > Gerer les deploiements > nouvelle version pour que `/exec` serve le
 code a jour) avant que le bouton "Envoyer" marche reellement.
+
+**2026-09-24 (suite) - v2.62 : testé bout en bout, ça marche**. Utilisateur donne l'ID du Sheet
+(`1GT9UjN-JCK454fmPTyXlPdbw1OxwYDrfJZl972WKts0`), renseigné dans `SHEET_ID`, fichier remis sur le
+Bureau. Puis l'URL du nouveau déploiement (différente de la précédente - l'utilisateur a créé un
+nouveau déploiement plutôt qu'une nouvelle version du même, ce qui change l'URL `/exec`). Testé en
+curl : la 1ère tentative de test POST donnait des erreurs trompeuses (411 "Content-Length required",
+puis une page Drive "Page introuvable" avec `--post301/302/303`) - toutes deux des artefacts de la
+façon dont curl suit une redirection 302 sur une requête POST, pas de vrais bugs. Résolu en suivant
+la redirection manuellement (POST initial → lit l'en-tête `Location` → GET simple sur cette URL
+`script.googleusercontent.com/macros/echo?...`, qui contient déjà le résultat pré-calculé) : réponse
+`{"status":"ok"}`, confirmant que `doPost()` écrit maintenant correctement dans le Sheet. URL mise à
+jour dans `FEEDBACK_ENDPOINT_URL`, commit `7d10a24`, poussé. Le circuit complet retour d'expérience
+(bouton panneau → Apps Script → Google Sheet, sans compte requis côté testeur) est maintenant
+fonctionnel de bout en bout.
