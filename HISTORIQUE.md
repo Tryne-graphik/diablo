@@ -5275,3 +5275,38 @@ exactement la demande de l'utilisateur. Repositionnement pur, aucune nouvelle re
 regles inchange. `node --check` vert, commit `0562a91`, pousse. Pas encore reteste en jeu - le
 Python `generator.py` (chemin legacy, pas la logique de qualite/hide de v2.65) n'a pas ce bug de la
 meme facon donc pas touche.
+
+## 2026-09-24 (suite) - v2.67 : palier 3+ Uniques, option "une regle par Unique", noms d'armes
+
+Utilisateur donne 4 demandes de retouche sur les noms/structure des regles, plus une question
+d'avis : "je me dis quand on arrive au endgame chercher un unique precis avec les bonnes stats peut
+etre une bonne idee, je veux bien ton avis". **Avis donne avant de coder** : oui, ca a du sens - a
+l'endgame, savoir PRECISEMENT lequel de ses Uniques a de bonnes stats est plus actionnable qu'un
+"un Unique quelconque du pool en a" ; seul risque, le plafond de 25 regles sur un build avec
+beaucoup d'Uniques reconnus - donc implemente comme option (pas par defaut), avec les memes
+garde-fous de troncature deja eprouves ailleurs dans le projet.
+
+**Implemente** :
+1. `SLOT_LABELS_FR` : "Arme 1"/"Arme 2" -> "Main Princ."/"Main Sec." - verifie programmatiquement
+   le budget de 24 caracteres sur toutes les combinaisons de tiers (max reel : 23, "Supérieur -
+   Main Princ.").
+2/3. `buildUniqueItemRules()` gagne un palier "-3 Affixes" en plus du "-2 Affixes" existant (meme
+   idiome que le pool plat de Rares), applique aux 2 filtres (Ouvert et Strict) puisque cette
+   fonction n'a jamais ete filtree par mode.
+4. Nouvelle option panneau "🔍 Une regle par Unique" (defaut OFF, comme "Cacher les Legendaires
+   faibles") : genere une paire de regles PAR Unique nomme au lieu d'une regle partagee groupant
+   tous les Uniques reconnus - nommees "<nom> - 2/3 Affixes". Marquees trimmables avec des
+   priorites dediees (20 pour le palier 2, 10 pour le palier 3 - plus expendables que les tiers par
+   emplacement qui vont de 1 a 4), verifie que la boucle de troncature generique (deja existante,
+   triee par priorite decroissante) les traite correctement sans collision avec le systeme par
+   emplacement.
+
+**Trouvaille en cours de route** : verifie contre `UNIQUE_ITEM_IDS` que 264 noms d'Uniques sur 336
+sont trop longs pour tenir avec le suffixe " - 3 Affixes" (12 caracteres) dans la limite reelle de
+24 caracteres du jeu - la troncature par defaut de `makeRule()` coupe depuis la fin, ce qui aurait
+silencieusement supprime le suffixe de palier (l'info la plus importante) au lieu du nom, pour la
+majorite des Uniques reels. Corrige en tronquant le NOM en priorite (reserve 12 caracteres pour le
+suffixe) avant l'appel a `makeRule()`, plutot que de laisser sa troncature par defaut s'appliquer
+betement a la fin de la chaine complete.
+
+`node --check` vert, commit `b3a7df1`, pousse. Pas encore reteste en jeu.
