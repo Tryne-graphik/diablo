@@ -5453,3 +5453,20 @@ booleen indiquant si elle a du cliquer, pour eviter un clic inutile si l'utilisa
 Skills pour sa propre raison). `node --check` vert, commit `e693484`, pousse. Pas encore reteste en
 jeu - prochain test : confirmer que le panneau reste fonctionnel ET que le filtre contient bien les
 regles basees sur les 6 competences, sur un rechargement complet de la page apres generation.
+
+## 2026-09-24 (suite) - v2.73 : course entre lecture du Gear et des Skills sur InfinityBuilds
+
+Utilisateur teste v2.72 - **panneau stable, plus de plantage confirme**. Mais decodage du filtre
+genere revele un nouveau probleme : cette fois les regles basees sur les competences sont bien la
+("Rare 3+ Affixes (BiS)" avec les 5 stats attendues), mais **les Uniques ont disparu** - l'inverse
+exact du test precedent (Uniques presents, 0 competence). Diagnostic : `gearNames(extractGearRaw())`
+etait un appel synchrone sans la moindre attente, contrairement a la lecture des competences qui
+retente deja avec une pause croissante (a cause de l'hydratation React pas instantanee, deja
+documentee). Pas un bug structurel des selecteurs - une vraie course entre les deux lectures selon
+l'instant exact ou chacune s'executait par rapport au rendu de la page.
+
+**v2.73** : ajoute la meme boucle de retry (jusqu'a 3 tentatives, pause croissante 600/1000/1400ms)
+avant de lire le gear, alignee sur le pattern deja utilise pour les competences juste apres. Les 2
+lectures devraient desormais etre egalement robustes au meme genre de delai de rendu. `node --check`
+vert, commit `a44d6e6`, pousse. Pas encore reteste en jeu - prochain test : confirmer que Uniques
+ET regles basees sur les competences apparaissent ENSEMBLE dans le meme filtre.
