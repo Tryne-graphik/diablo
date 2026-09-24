@@ -5358,3 +5358,38 @@ inchange pour ces 2 sites specifiquement) - seulement le cas "on est deja sur In
 `node --check` vert, commit `d1c3900`, pousse. Pas encore reteste en jeu - prochain test logique :
 revisiter la page InfinityBuilds pour confirmer que l'erreur a disparu, et si les Uniques sont
 toujours a 0, creuser via DevTools ce que `gearNames()` recoit vraiment sur une tuile Unique.
+
+## 2026-09-24 (suite) - v2.69 : active l'onglet SKILLS avant lecture (InfinityBuilds)
+
+Utilisateur teste v2.68 sur InfinityBuilds - 1er filtre colle par erreur (le mauvais), corrige
+immediatement avec le bon. **Uniques bien detectes cette fois** : "Garder Uniques" avec Cowl of the
+Nameless (x5 ids poolees), Shrouded Gift, Etna's Lost Dagger, et **Asheara's Khanjar** en plus
+(absent de la version Maxroll du meme build). Mais toujours 0 regle basee sur les affixes du build
+(pas de "Uniques - 2+ Affixes", pas de regle par emplacement, pas de "Legendaire - 2+ sans AM") -
+`allBuildIds` totalement vide.
+
+Utilisateur precise "il n'y a pas cet onglet sur InfinityBuilds, il faut lire chaque item" (pas de
+panneau Stat Priority consolide comme Maxroll) et signale une piste separee : InfinityBuilds a
+aussi une grosse bibliotheque de "loot filters" communautaires (`infinitybuilds.gg/en/loot-filters`,
+verifie via curl - des dizaines d'entrees) et un champ "Loot filter (optional)" dans son formulaire
+de soumission de build - pas evident si un filtre est systematiquement rattache a chaque build (ce
+build-ci n'en montre pas dans ses onglets) ni si ce serait une source fiable vs generer le notre -
+**note pour plus tard, pas creusee davantage maintenant**.
+
+Utilisateur envoie ensuite une vraie capture d'ecran de l'onglet GEAR d'InfinityBuilds - **confirme
+que la detection d'Uniques est parfaite** : les 4 objets en violet (Cowl of the Nameless, Shrouded
+Gift, Asheara's Khanjar, Etna's Lost Dagger) sont exactement les 4 trouves dans le filtre decode,
+les 7 autres emplacements affichent des noms d'**Aspect** (Legendaire) - aucun bug de detection.
+**Mais la capture revele la vraie cause du "0 affixe"** : GEAR et SKILLS sont 2 onglets separes
+sur InfinityBuilds (React ne monte que le contenu actif) - `extractSkillsRaw()` cible un `<p>`
+present uniquement sous l'onglet Skills, qui n'existait pas dans le DOM pendant que l'utilisateur
+regardait Gear. **Exactement la meme cause racine et le meme fix deja appliques pour le "Stat
+Priority" de Maxroll** (2026-09-22/23, `ensureStatPriorityTabActive()`).
+
+**v2.69** : `ensureInfinityBuildsSkillsTabActive()`, meme pattern (cherche un element feuille dont
+le texte vaut "skills" ou "compétences" - les 2 locales du site, pas juste une traduction Chrome
+comme pour Maxroll - clique dessus, retry avec attente croissante). Extraction du gear faite AVANT
+le changement d'onglet dans `extractInfinityBuildsDetail()`, pour ne pas perdre les objets deja lus
+si React demonte l'onglet Gear au switch. `node --check` vert, commit `87f45db`, pousse. Pas encore
+reteste en jeu - prochain test logique : regenerer le filtre sur cette meme page InfinityBuilds et
+verifier que les regles basees sur les affixes (per-slot ou pool) apparaissent enfin.
