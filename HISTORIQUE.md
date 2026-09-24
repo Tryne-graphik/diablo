@@ -5310,3 +5310,18 @@ suffixe) avant l'appel a `makeRule()`, plutot que de laisser sa troncature par d
 betement a la fin de la chaine complete.
 
 `node --check` vert, commit `b3a7df1`, pousse. Pas encore reteste en jeu.
+
+## 2026-09-24 (suite) - README : section Utilisation completee pour les amis testeurs
+
+Utilisateur demande un avis exploratoire ("autre chose a ameliorer pour que les amis testeurs ne se
+perdent pas dans les filtres/menus ?"). Recommandation donnee avant d'agir : les tooltips au survol
+existent deja et sont clairs, mais un ami n'y pense pas forcement ; le README ne dit que "un panneau
+apparait" sans rien expliquer - point le plus utile a corriger. Suggere aussi de ne pas sur-
+investir dans l'onboarding avant d'avoir de vrais retours, le bouton "Retour d'experience" (v2.60-
+2.62) etant justement fait pour capter la confusion reelle plutot que de la deviner a l'avance.
+Utilisateur valide, README complete : nouvelle section detaillant les 4 boutons principaux
+(Traduire/Recherche/Classement/Comparer), la difference Ouvert vs Strict (avec la note "les
+reglages par defaut conviennent a la plupart des builds, pas besoin de tout comprendre avant de
+cliquer"), et "Mes Builds". Corrige au passage la section Retour d'experience, restee obsolete
+depuis le passage a l'envoi direct via Google Apps Script - mentionnait encore l'ancien lien GitHub
+necessitant un compte. Commit `0904ca4`, pousse.
