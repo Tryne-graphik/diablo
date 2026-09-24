@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.65
+// @version      2.66
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2229,7 +2229,6 @@
     // 2+/3+ tiers, the Legendary GA/no-GA tiers), the MORE SPECIFIC/
     // BETTER one is pushed first so it wins the match.
     const rules = [];
-    rules.push(tagRule(makeRule("Talismans Légendaires", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])])));
 
     if (allBuildIds.length >= 3) {
       // Strict mode only has this 3+ tier - the looser 2+ bar is dropped
@@ -2276,6 +2275,26 @@
         rules.push(tagRule(makeRule("Légendaire - 2+ sans AM", RECOLOR, noGaConditions, colorGood)));
       }
     }
+    // 2026-09-24: moved here from the very top of the rule list (was
+    // rule #1, unconditional, ahead of EVERYTHING) - the user pointed out
+    // Charms/Seals never got any build-specific distinction because this
+    // rule, being first-match-wins' very first rule, intercepted every
+    // single Legendary+ Charm/Seal before the Uniques pool (extraRules,
+    // above) or the quality tiers (also above) ever got a chance to give
+    // one a better color. No ItemType restriction on those rules, so a
+    // Charm/Seal that's a named build Unique or has a Greater Affix/good
+    // stats now reaches them first and gets distinguished like any other
+    // slot - this rule is now only the generic fallback for whichever
+    // Charm/Seal didn't match anything more specific. Kept UNCONDITIONAL
+    // (not gated by hideWeakLegendaries, unlike "Légendaires - Garder"
+    // below) on purpose: the user wants every other Legendary+ Charm/Seal
+    // to always stay visible regardless of the hide option, since they're
+    // still a meaningful material source ("c'est une source de matériaux
+    // importante") even when not build-relevant - Magic/Rare Charms/Seals
+    // are already covered by the existing Hide Junk mask (or the flat Rare
+    // build-affix rules above, if they happen to match), no separate
+    // option needed for those.
+    rules.push(tagRule(makeRule("Talismans Légendaires", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])])));
     // Flat "keep everything else" catch-all - only skipped when
     // hideWeakLegendaries is on, so a Legendary/Unique that didn't match
     // either tier above falls through to Hide Junk instead (whose mask
