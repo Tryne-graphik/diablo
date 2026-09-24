@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.66
+// @version      2.67
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1261,8 +1261,8 @@
     "Amulet": "Amulette",
     "Left Ring": "Anneau G",
     "Right Ring": "Anneau D",
-    "Mainhand": "Arme 1",
-    "Offhand": "Arme 2",
+    "Mainhand": "Main Princ.",
+    "Offhand": "Main Sec.",
     "Ranged Weapon": "Distance",
   };
 
@@ -2519,27 +2519,66 @@
   // reached. Caller passes `isStrict && hideWeakLegendaries` (the exact
   // same condition generateFilterCode() itself branches on) so this stays
   // correct if that logic ever changes.
-  function buildUniqueItemRules(itemNamesEn, color = COLOR_GOLD, buildAffixIds = [], needsShowSafetyNet = true) {
+  // 2026-09-24: added a 3+ tier alongside the existing 2+ (same idiom as
+  // the flat Rare pool's own 2+/3+ tiers), on BOTH Open and Strict (this
+  // function isn't mode-gated) per the user's ask "faire les uniques - 3
+  // Affiches sur tous les filtres". Also added `perItemRules`: instead of
+  // pooling every matched Unique into one shared condition, emit a
+  // separate 2+/3+ pair PER Unique, named after that Unique specifically
+  // ("<name> - 2 Affixes") - the user's reasoning: at endgame, knowing
+  // WHICH specific Unique rolled well is more actionable than "some
+  // Unique in my pool did". Unlike the pooled rules, these ARE trimmable
+  // (high priority numbers = dropped first, see tagRule()'s docstring) -
+  // a build with many recognized Uniques could otherwise push well past
+  // the 25-rule cap the way the original 2026-09-23 per-Unique attempt
+  // did before it was reverted to pooling. The SHOW safety net always
+  // stays pooled regardless of this option - visibility only needs ONE
+  // cheap rule, no reason to multiply it per item too.
+  function buildUniqueItemRules(itemNamesEn, colorGood, colorBis, buildAffixIds = [], needsShowSafetyNet = true, perItemRules = false) {
     const matched = [];
     const seen = new Set();
     const pooledSnoIds = [];
+    const canonicalIds = [];
     for (const rawName of itemNamesEn) {
       const canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(rawName));
       if (!canonical || seen.has(canonical.toLowerCase())) continue;
       seen.add(canonical.toLowerCase());
       matched.push(canonical);
       pooledSnoIds.push(...UNIQUE_ITEM_IDS[canonical]);
+      canonicalIds.push({ name: canonical, ids: UNIQUE_ITEM_IDS[canonical] });
     }
     const rules = [];
     if (pooledSnoIds.length) {
-      // Never trimmable (see tagRule()'s docstring) - fixed at 2 rules no
-      // matter how many Uniques matched, and a build's core Uniques are
-      // worth keeping regardless of filter budget pressure.
       if (buildAffixIds.length) {
-        rules.push(tagRule(makeRule("Uniques - 2+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 2)], color), false));
+        if (perItemRules) {
+          // 2026-09-24: most real Unique names (264/336, checked against
+          // UNIQUE_ITEM_IDS) are too long to fit alongside " - 3 Affixes"
+          // (12 chars) within D4's 24-char rule-name cap - makeRule()'s own
+          // defensive truncation cuts from the END, which would silently
+          // drop the tier suffix instead of the name for most of them
+          // (worse than the pooled naming this option replaces). Truncate
+          // the NAME here instead, reserving room for the suffix, so the
+          // tier info always survives even if the name gets shortened.
+          const SUFFIX_LEN = " - 3 Affixes".length;
+          for (const { name, ids } of canonicalIds) {
+            const shortName = name.length > 24 - SUFFIX_LEN ? name.slice(0, 24 - SUFFIX_LEN) : name;
+            if (buildAffixIds.length >= 3) {
+              rules.push(tagRule(makeRule(`${shortName} - 3 Affixes`, RECOLOR, [conditionSpecificUnique(ids), conditionAffixes(buildAffixIds, 3)], colorBis), 10));
+            }
+            rules.push(tagRule(makeRule(`${shortName} - 2 Affixes`, RECOLOR, [conditionSpecificUnique(ids), conditionAffixes(buildAffixIds, 2)], colorGood), 20));
+          }
+        } else {
+          // Never trimmable (see tagRule()'s docstring) - fixed cost no
+          // matter how many Uniques matched, and a build's core Uniques
+          // are worth keeping regardless of filter budget pressure.
+          if (buildAffixIds.length >= 3) {
+            rules.push(tagRule(makeRule("Uniques - 3+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 3)], colorBis), false));
+          }
+          rules.push(tagRule(makeRule("Uniques - 2+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 2)], colorGood), false));
+        }
       }
       if (needsShowSafetyNet) {
-        rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], color), false));
+        rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], colorBis), false));
       }
     }
     return { rules, matched };
@@ -3673,6 +3712,11 @@
     // the user's stated preference: always show quality via color, don't
     // hide anything unless explicitly asked to.
     const optHideWeak = document.getElementById("d4a-opt-hide-weak")?.checked ?? false;
+    // 2026-09-24: "une regle pour chaque unique" - default OFF like
+    // hideWeak, same reasoning: a real behavior change (more/renamed
+    // rules, real risk of hitting the 25-rule cap on a build with many
+    // recognized Uniques) shouldn't surprise a first-time user.
+    const optUniquePerItem = document.getElementById("d4a-opt-unique-per-item")?.checked ?? false;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
     // 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la regle
     // des 25" - the 2 dropdowns below replace the old "all 4 tiers +
@@ -3741,7 +3785,7 @@
     // see buildUniqueItemRules()'s docstring for why the SHOW safety net is
     // only needed when weak Legendaries/Uniques can actually get hidden.
     const needsUniqueShowSafetyNet = isStrict && optHideWeak;
-    const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorBis, allBuildIds, needsUniqueShowSafetyNet);
+    const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorGood, colorBis, allBuildIds, needsUniqueShowSafetyNet, optUniquePerItem);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
     // vient de façon abrégée" - the site is a 2-letter tag rather than the
@@ -4088,11 +4132,13 @@
         <label><input type="checkbox" id="d4a-opt-keep-good-no-ga"> 💎 Exception bonnes stats</label>
         <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
+        <label><input type="checkbox" id="d4a-opt-unique-per-item"> 🔍 Une règle par Unique</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
           <p>🎨 Colore différemment les Légendaires/Uniques selon leur qualité (Greater Affix ou bonnes stats) au lieu de tout recolorer pareil - utile pour comparer directement une pièce upgradée à ce que tu portes déjà, sans devoir inspecter chaque objet un par un.</p>
           <p>💎 Ne s'applique que si "Distinguer les Légendaires par qualité" est coché. Sans elle, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste dans la couleur par défaut au lieu de ressortir.</p>
           <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont ni Greater Affix ni bonnes stats, au lieu de les laisser visibles dans la couleur par défaut. Indépendant de "Distinguer par qualité" - active les deux ensemble pour ne garder visible que ce qui compte vraiment.</p>
+          <p>🔍 Au lieu d'une seule règle "Uniques - 2+/3+ Affixes" regroupant tous tes Uniques reconnus, génère une règle par Unique nommé (ex. "Grief - 3 Affixes") - utile en fin de partie pour savoir exactement lequel a de bonnes stats. S'applique sur les 2 filtres (Ouvert et Strict). Si un build a beaucoup d'Uniques reconnus, les règles les moins précises sont retirées en premier pour respecter la limite de 25 règles du jeu (comme pour la précision par emplacement).</p>
         </details>
         <div class="d4a-color-row">
           <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
@@ -4253,6 +4299,7 @@
       "d4a-opt-keep-good-no-ga": true,
       "d4a-opt-hide-weak": false,
       "d4a-opt-perslot": true,
+      "d4a-opt-unique-per-item": false,
     };
     for (const [id, defaultValue] of Object.entries(OPT_DEFAULTS)) {
       const cb = document.getElementById(id);
