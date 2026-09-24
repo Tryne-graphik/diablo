@@ -5103,3 +5103,37 @@ filtre en cours de test :
   que permettent les navigateurs), et confirmation que la mise a jour ulterieure est automatique.
   Verifie que les Issues sont bien activees sur le depot (`api.github.com/repos/.../` `has_issues:
   true`) avant de m'appuyer dessus. `node --check` vert, commit `4e06230`, pousse.
+
+## 2026-09-24 (suite) - v2.60/v2.61 : retour d'experience sans compte, via Google Apps Script
+
+Utilisateur demande si les retours d'experience peuvent eviter d'exiger un compte GitHub, suggere
+Google Drive. Explique l'option la plus adaptee avant de coder : un **Google Apps Script deploye en
+Application Web** qui ecrit dans un Google Sheet (plus pratique qu'un fichier texte brut - une ligne
+par retour, triable) - aucun identifiant a exposer dans le userscript public (contrairement a un
+acces direct a l'API Drive/Sheets), le script tourne cote serveur avec les droits du proprietaire.
+Contrepartie : configuration ponctuelle que seul l'utilisateur peut faire (vit sous son compte
+Google) - creer le script, deployer, donner l'URL generee.
+
+**v2.60** : cree `google-apps-script/feedback-collector.gs` (`doPost` qui ajoute une ligne a la
+feuille active) a coller dans le projet deja cree par l'utilisateur. Cote userscript : nouveau
+`gmPostJson()` (meme pattern que `gmGet()`, POST + `GM_xmlhttpRequest` - pas de souci CORS cote
+Apps Script). Bouton "Envoyer" poste directement, plus de nouvel onglet ni de compte GitHub - repli
+automatique sur l'ancien lien GitHub tant que `FEEDBACK_ENDPOINT_URL` reste un placeholder.
+
+Utilisateur ne pouvait pas ouvrir le `.gs` depuis le lien du projet (fichier local, pas
+d'association Windows pour cette extension) - copie sur le Bureau en `.txt` pour ouverture directe
+au Bloc-notes.
+
+**Test du endpoint deploye** : `doGet` repond bien ("endpoint de retours OK" via curl), mais `doPost`
+plantait (`TypeError: Cannot read properties of null (reading 'getActiveSheet')`, ligne 26) - cause
+identifiee : `SpreadsheetApp.getActiveSpreadsheet()` ne fonctionne QUE pour un script Apps Script
+**lie** a un Google Sheet (cree depuis Extensions > Apps Script a l'interieur du Sheet) ; le projet
+de l'utilisateur, cree directement sur script.google.com, est **autonome** et n'a pas de "feuille
+active". **v2.61** : corrige avec `SpreadsheetApp.openById(SHEET_ID)` (marche dans les deux cas,
+lie ou autonome), `SHEET_ID` reste un placeholder a renseigner (creer un Sheet, copier son id dans
+l'URL). Copie mise a jour sur le Bureau. Cote userscript, `FEEDBACK_ENDPOINT_URL` branchee sur l'URL
+`/exec` reelle et deja testee pour `doGet`. `node --check` vert, commits `2aafefc` puis `7f02794`,
+pousses. **Pas encore fonctionnel de bout en bout** : il reste a l'utilisateur de creer un Google
+Sheet, coller son ID dans `SHEET_ID`, et redeployer une nouvelle version (editer le code seul ne
+suffit pas, il faut Deployer > Gerer les deploiements > nouvelle version pour que `/exec` serve le
+code a jour) avant que le bouton "Envoyer" marche reellement.
