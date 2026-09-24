@@ -4995,3 +4995,41 @@ de first-match-wins a craindre avec la future regle d'Unique. Prochaine etape (m
 sur Helm/Pants et plusieurs ids de competences) : demander a l'utilisateur un filtre de test en jeu
 a une seule condition (SpecificUnique = Stone of Jordan seul), export colle ici pour en extraire
 l'id sno reel et l'ajouter a `UNIQUE_ITEM_IDS`.
+
+## 2026-09-24 (suite) - v2.56 : suppression de la regle Greater Affix plate + safety-net Uniques conditionnel
+
+Utilisateur donne 2 retours supplementaires sur le filtre teste en jeu, avant de passer au test
+Stone of Jordan (2) :
+
+- La regle "Greater Affix - Loot" (toute rarete, recolor cyan des qu'un objet a 1+ Greater Affix)
+  ne sert a rien : le jeu affiche deja les Greater Affix avec une etoile directement sur l'objet/
+  l'infobulle - cette regle ne fait que dupliquer un signal deja visible. Meme raisonnement etaye
+  par "les items rares ne sont utiles que s'ils sont GA" (leur reperage se fait deja via l'etoile,
+  pas besoin d'une regle de filtre en plus). **Supprimee** dans le userscript et `generator.py`.
+  Legendaire/Unique avec GA reste couvert ailleurs (branche dediee "Légendaire - Aff. Majeur"
+  quand l'option est active) - seul un Rare qui a un GA mais aucun affixe du build correspondant
+  perd desormais sa mise en avant distincte et tombe dans Hide Junk comme n'importe quel autre
+  Rare non retenu (compromis assume, coherent avec la logique de filtrage explicite du joueur).
+
+- La regle "Garder Uniques - All" (SHOW) est redondante car la regle qui la precede ("Uniques -
+  2+ Affixes", RECOLOR) affiche deja l'item quand elle matche - un RECOLOR affiche l'item, un SHOW
+  separe derriere n'ajoute rien pour ce cas-la. Verifie que c'est vrai dans TOUS les cas avant de
+  supprimer purement et simplement : quand `hideLegendaryWithoutGA` est desactive (le cas du
+  filtre teste hier soir), la regle catch-all "Legendaires - Garder" qui suit de toute facon
+  recolore TOUT Legendaire/Unique inconditionnellement, donc le safety-net SHOW n'est jamais
+  atteint meme s'il matche 0 affixe du build - suppression 100% sans risque dans ce cas. Mais
+  quand `hideLegendaryWithoutGA` EST actif, aucune regle suivante ne couvre plus tous les
+  Legendaire/Unique sans condition - un Unique nomme qui ne matche ni GA ni 2+ affixes tomberait
+  alors dans Hide Junk (qui inclut la rarete Unique dans ce mode) et serait reellement cache, ce
+  qui serait une vraie regression. **Rendu conditionnel** (`needsShowSafetyNet = isStrict &&
+  hideLegendaryWithoutGA`, calcule au point d'appel avec la meme condition exacte que
+  `generateFilterCode()`) plutot que supprime purement, pour honorer le retour utilisateur sans
+  introduire ce risque dans l'autre mode.
+
+Nettoyage associe : la variable locale `colorGA` de `generateFilterCode()` (userscript) est
+devenue inutilisee, retiree ; le color picker "GA" (cyan) reste utilise ailleurs (Tier 5
+"Supérieur" des regles par emplacement, `buildPerSlotRules()`), donc conserve. Legende du panneau
+("Tier 5 (Supérieur) : ... ou n'importe quel objet avec un Greater Affix, pool général") corrigee
+- elle decrivait la regle plate qui vient d'etre supprimee. `node --check`/`python3 -c "import ..."`
+verts des deux cotes. Commit `2b58c8e`, pousse. Toujours pas re-teste en jeu - le prochain test sera
+celui de Stone of Jordan (point 2), a la demande de l'utilisateur une fois tous ses retours donnes.
