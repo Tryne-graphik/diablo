@@ -5470,3 +5470,52 @@ avant de lire le gear, alignee sur le pattern deja utilise pour les competences 
 lectures devraient desormais etre egalement robustes au meme genre de delai de rendu. `node --check`
 vert, commit `a44d6e6`, pousse. Pas encore reteste en jeu - prochain test : confirmer que Uniques
 ET regles basees sur les competences apparaissent ENSEMBLE dans le meme filtre.
+
+## 2026-09-24 (suite) - v2.74 : la vraie condition de retry etait encore fausse
+
+Meme test qu'avant, meme resultat exact (competences oui, Uniques non) malgre v2.73. Cause reelle :
+la boucle de retry du Gear verifiait si des elements `.gear-paperdoll-tile` EXISTAIENT dans le DOM
+(`gearRaw.length`), pas si `gearNames()` pouvait en extraire un vrai nom - une tuile peut se monter
+avant que son texte interne (le nom de l'objet, l'heuristique 5-lignes de `gearNames()`) finisse de
+s'hydrater, donc la boucle sortait des la 1ere tentative meme en plein rendu partiel - le meme bug
+que celui cense etre corrige en v2.73, juste deguise differemment. Corrige pour verifier
+`gearNames(...).length` (la vraie cible) au lieu du comptage intermediaire de tuiles. Meme
+correction appliquee par coherence a `ensureInfinityBuildsSkillsTabActive()` (verifiait
+`extractSkillsRaw().length`, qui accepte un bloc partiellement rendu du genre juste "SKILLS"+""
+sans rien d'autre) - verifie maintenant `skillNames(...).length`. Commit `7464f2e`, pousse.
+
+## 2026-09-24 (suite) - Le seul moyen de lire les vraies stats sur InfinityBuilds : survoler chaque objet
+
+Utilisateur envoie une capture confirmant qu'InfinityBuilds n'a aucune liste de stats consolidee -
+chaque objet doit etre survole individuellement pour voir son infobulle detaillee (stats precises,
+texte d'effet complet). Confirme la limitation structurelle deja identifiee (pas de regles de
+precision par emplacement possibles sur ce site pour l'instant). Simuler un survol sur les 11
+emplacements + lire chaque infobulle serait un chantier separe, plus lourd et plus risque (meme
+genre de risque de plantage React que celui deja corrige) - **mis de cote pour l'instant**, pas
+implemente.
+
+## 2026-09-24 (suite) - v2.75 : retrait de "Comparer", extension de la position officielle (fosse + temps)
+
+Discussion sur ce que "Comparer" devrait faire (expliquer les differences mecaniques, pas juste les
+noms) - explique la vraie limite deja actee du projet (pas de verdict "objet A meilleur que B" sans
+vrai simulateur de DPS, ecarte depuis le 2026-09-19) et propose d'enrichir avec les vraies
+descriptions d'effet (source d4base.fr, deja utilisee pour les traductions) sans jamais declarer de
+gagnant. **Utilisateur tranche : laisse tomber, la fonction reste obsolete sans un vrai comparateur
+de DPS, on la retire.**
+
+Supprime proprement : bouton "🔬 Comparer" + cablage, `runCompareVariants()`,
+`renderVariantComparison()`, `diffVariantField()`, `countPlayersUsingSkill()`, `EXTRACTABLE_SOURCES`,
+`MAX_COMPARED_OTHER_SOURCES` - verifie au prealable que `findCrossSiteLinks`/`chipList`/
+`SOURCE_LABELS`/`compareTierCounts` sont partages avec d'autres fonctionnalites actives ("Aussi vu
+sur", "Classement") avant de les garder. README mis a jour (3 boutons au lieu de 4, section
+Utilisation).
+
+**Nouvelle question posee en echange** : chercher dans le classement complet ou se situe le build,
+quel niveau de fosse et en combien de temps - possible ? Verifie en direct sur les donnees brutes
+du leaderboard (curl sur `helltides.com/tower`, grep du payload `__NUXT__` server-rendu pour des
+noms de champs plausibles) : confirme qu'un champ `run_time_ms` existe bien a cote de `rank`/`tier`
+(deja capture), jamais lu jusqu'ici. `bestOfficialRank()` retourne maintenant aussi `tier`,
+`runTimeMs` (formate en mm:ss via `formatRunTime()`) et `totalClassRuns` (pour contextualiser le
+rang - "#47/230 Rogues" plutot que juste "#47", qui ne veut rien dire seul). Affiche dans la ligne
+"position officielle" deja existante sous le titre du panneau. `node --check` vert, commit
+`4c586e8`, pousse. Pas encore reteste en jeu.
