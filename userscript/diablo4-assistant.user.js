@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.58
+// @version      2.59
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2542,6 +2542,13 @@
       .d4a-rank-links a { color: #03d0fc; margin-right: 4px; }
       #d4a-search-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
+      #d4a-feedback-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
+      #d4a-feedback-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+      #d4a-feedback-form input, #d4a-feedback-form textarea {
+        width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
+        background: #000; color: #eee; font-size: 13px; font-family: inherit; resize: vertical;
+      }
+      #d4a-feedback-note { font-size: 11px; color: #9aa0ab; margin: 0; }
       #d4a-mybuilds-select {
         width: 100%; margin: 6px 0; padding: 6px 8px; border-radius: 4px; border: none;
         background: #000; color: #eee; font-size: 13px;
@@ -4052,6 +4059,15 @@
         </select>
         <div id="d4a-mybuilds-result"></div>
       </div>
+      <div id="d4a-feedback-section">
+        <button id="d4a-btn-feedback-toggle">💬 Retour d'expérience</button>
+        <div id="d4a-feedback-form" hidden>
+          <input id="d4a-feedback-title" type="text" value="Retour d'expérience">
+          <textarea id="d4a-feedback-body" rows="4" placeholder="Décris le problème ou la suggestion (un lien vers le build ou le filtre concerné aide beaucoup)..."></textarea>
+          <button id="d4a-feedback-send">📤 Envoyer sur GitHub</button>
+          <p id="d4a-feedback-note">Ouvre une Issue GitHub pré-remplie dans un nouvel onglet - un compte GitHub (gratuit) est nécessaire pour valider l'envoi.</p>
+        </div>
+      </div>
     `;
     document.body.appendChild(column);
 
@@ -4070,6 +4086,33 @@
     searchToggleBtn.title = "Afficher/masquer la recherche de traduction manuelle";
     searchToggleBtn.onclick = () => {
       searchSection.hidden = !searchSection.hidden;
+    };
+
+    // 2026-09-24: "zone de texte a afficher au besoin, titre : retour
+    // d'experience" - opens a pre-filled GitHub Issue instead of storing
+    // anything ourselves: no token to expose in a public userscript (a
+    // GM_xmlhttpRequest call with a real GitHub API token embedded here
+    // would let anyone extract it from the script source and abuse the
+    // repo), no server to host. The reporter needs their own GitHub
+    // account to actually submit it - a real but acceptable friction for
+    // a small group of friends testing, not worth building/hosting a
+    // proxy server to remove.
+    const feedbackToggleBtn = document.getElementById("d4a-btn-feedback-toggle");
+    const feedbackForm = document.getElementById("d4a-feedback-form");
+    feedbackToggleBtn.onclick = () => {
+      feedbackForm.hidden = !feedbackForm.hidden;
+    };
+    document.getElementById("d4a-feedback-send").onclick = () => {
+      const title = document.getElementById("d4a-feedback-title").value.trim() || "Retour d'expérience";
+      const body = document.getElementById("d4a-feedback-body").value.trim();
+      if (!body) {
+        alert("Écris un message avant d'envoyer.");
+        return;
+      }
+      const version = (typeof GM_info !== "undefined" && GM_info.script && GM_info.script.version) || "?";
+      const context = `\n\n---\nVersion du script : ${version}\nPage : ${location.href}`;
+      const url = `https://github.com/Tryne-graphik/diablo/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body + context)}`;
+      window.open(url, "_blank");
     };
 
     // 2026-09-23: "divise [Filtre] en deux boutons, un pour le filtre
