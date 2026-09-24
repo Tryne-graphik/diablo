@@ -5196,3 +5196,50 @@ Node et Python que la normalisation fait bien correspondre les 2 variantes au m�
 **La vraie cause pour Offhand reste une hypothèse non confirmée** (pas d'accès direct au DOM Maxroll
 pour vérifier laquelle des 2 sources avait le mauvais caractère) - à revalider au prochain test en
 jeu. `node --check`/`python3 -c "import ..."` verts, commit `4476431`, poussé.
+
+## 2026-09-24 (suite) - Detour Season 15 Runewords (fausse alerte corrigee) + v2.65 : decouplage qualite/masquage
+
+**Detour, sans code** : utilisateur colle une traduction d'un guide externe sur les "Mots Runiques"
+via le Cube Horadrique - a premiere vue ca ressemblait a du contenu Diablo II pur (Enigma, Spirit,
+Infinity, Grief, runes Ort/Sol/Jah/Ith/Ber... sont des noms et recettes exacts de D2 LoD, inchanges
+depuis 2003), donc signale une possible erreur avant d'integrer quoi que ce soit a la base du projet.
+Utilisateur confirme et demande de verifier - **recherche web confirme qu'il avait raison** : la
+Season 15 "Hell's Legacy" de Diablo IV a reellement reintroduit ce systeme (verifie via patch notes
+Maxroll 3.2.1, Icy Veins, D4Guides, Mobalytics) - 19 recettes Legacy Runeword + 52 nouvelles runes de
+rarete **Unique** (donc jamais cachees par "Cacher Détritus" qui ne touche que Commun/Magique/Rare -
+pas de casse immediate sur le filtre actuel). Trouvaille bonus : D4 avait DEJA un systeme de runes
+distinct depuis le Patch 2.0/Vessel of Hatred (runes Rituel + Invocation, mecanique differente) - donc
+2 systemes de runes coexistent maintenant. Recherche de sources FR pour la traduction : d4base.fr pas
+encore mis a jour (toujours 612 objets, aucune categorie rune), d4guides.gg a une base complete "64
+Runes (Season 15)" mais en anglais seulement (pas de version FR, `/fr/` redirige vers `/en/`), Wowhead
+FR a des pages individuelles d'objets runes (confirme par recherche) mais pas verifie si ca couvre les
+nouvelles runes Season 15 specifiquement - necessiterait un vrai scraping (nouveau script, meme
+methode que les competences Wowhead). **Utilisateur choisit de reporter ce chantier** ("2" = continuer
+la validation du filtre en jeu d'abord) - a reprendre plus tard, pas de code ecrit sur ce sujet.
+
+**v2.65** : utilisateur signale qu'une piece Rare coloree violet (Tier 3, `#ee00ff`) redevient verte
+comme n'importe quel autre Legendaire des qu'il l'ameliore (Rare -> Legendaire au Forgeron) - demande
+pourquoi. Diagnostic : les regles de precision par emplacement/pool plat ne ciblent que la rarete Rare
+(`conditionRarity(RARE)`) ; une fois passee Legendaire, l'objet tombe sur "Legendaires - Garder" (vert,
+INCONDITIONNEL pour tout Legendaire) puisque l'ancienne case "Greater Affix exige" etait decochee dans
+sa config. Explique que la mise a niveau garde les memes affixes deja roules (juste un Aspect en plus),
+donc une regle existe deja pour ce cas ("Legendaire - 2+ sans AM") mais elle n'etait accessible qu'en
+activant "Greater Affix exige" - qui fait AUSSI cacher les Legendaires faibles en meme temps, un
+changement de comportement plus large que voulu. Utilisateur clarifie sa vraie preference : toujours
+voir la qualite via la couleur (comparaison directe entre pieces equivalentes) SANS forcement vouloir
+cacher quoi que ce soit, et demande que ce choix soit facilement identifiable/parametrable au moment
+de creer le filtre.
+
+**Implementation** : decouple les 2 concepts qui etaient fusionnes dans une seule case a cocher.
+`showLegendaryQuality` (nouveau, defaut ON) controle si les tiers Aff. Majeur / 2+ sans AM sont emis
+du tout ; `hideWeakLegendaries` (renomme depuis `hideLegendaryWithoutGA`, defaut OFF - contrairement
+aux autres options) controle uniquement si le masque de "Cacher Détritus" inclut Legendaire|Unique.
+"Mythique - Garder" est desormais TOUJOURS emis (avant, seulement dans l'ancienne branche). Le
+catch-all plat "Legendaires - Garder" n'est saute QUE si hideWeakLegendaries est actif - sinon il sert
+de filet de securite apres que les tiers de qualite aient eu leur chance de donner une meilleure
+couleur (au lieu d'etre une alternative exclusive comme avant). Panneau : case renommee "🎨 Distinguer
+les Legendaires par qualite" (nouvelle position/role, remplace "Greater Affix exige"), nouvelle case
+"🙈 Cacher les Legendaires faibles" (seule a defaut decoche - masquer reste un choix explicite), texte
+d'aide reecrit pour expliquer les 2 options independamment. `needsUniqueShowSafetyNet` (filet de
+securite du pool d'Uniques groupe) suit maintenant `hideWeakLegendaries`. `node --check` vert, commit
+`0723d29`, pousse. Pas encore reteste en jeu.
