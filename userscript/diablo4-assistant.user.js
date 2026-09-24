@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.59
+// @version      2.60
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -286,6 +286,26 @@
       GM_xmlhttpRequest({
         method: "GET",
         url,
+        onload: (res) => resolve(res.responseText),
+        onerror: () => reject(new Error(`Impossible de joindre ${url}`)),
+        ontimeout: () => reject(new Error(`Délai dépassé pour ${url}`)),
+        timeout: 20000,
+      });
+    });
+  }
+
+  // 2026-09-24: same Promise wrapper, POST + JSON body - used to submit
+  // feedback to the Google Apps Script endpoint (see
+  // google-apps-script/feedback-collector.gs). GM_xmlhttpRequest bypasses
+  // CORS entirely (unlike a plain fetch()), so the Apps Script side needs
+  // no CORS handling.
+  function gmPostJson(url, data) {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        method: "POST",
+        url,
+        data: JSON.stringify(data),
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         onload: (res) => resolve(res.responseText),
         onerror: () => reject(new Error(`Impossible de joindre ${url}`)),
         ontimeout: () => reject(new Error(`Délai dépassé pour ${url}`)),
@@ -4064,8 +4084,8 @@
         <div id="d4a-feedback-form" hidden>
           <input id="d4a-feedback-title" type="text" value="Retour d'expérience">
           <textarea id="d4a-feedback-body" rows="4" placeholder="Décris le problème ou la suggestion (un lien vers le build ou le filtre concerné aide beaucoup)..."></textarea>
-          <button id="d4a-feedback-send">📤 Envoyer sur GitHub</button>
-          <p id="d4a-feedback-note">Ouvre une Issue GitHub pré-remplie dans un nouvel onglet - un compte GitHub (gratuit) est nécessaire pour valider l'envoi.</p>
+          <button id="d4a-feedback-send">📤 Envoyer</button>
+          <p id="d4a-feedback-note">Envoyé directement, aucun compte nécessaire.</p>
         </div>
       </div>
     `;
@@ -4089,20 +4109,27 @@
     };
 
     // 2026-09-24: "zone de texte a afficher au besoin, titre : retour
-    // d'experience" - opens a pre-filled GitHub Issue instead of storing
-    // anything ourselves: no token to expose in a public userscript (a
-    // GM_xmlhttpRequest call with a real GitHub API token embedded here
-    // would let anyone extract it from the script source and abuse the
-    // repo), no server to host. The reporter needs their own GitHub
-    // account to actually submit it - a real but acceptable friction for
-    // a small group of friends testing, not worth building/hosting a
-    // proxy server to remove.
+    // d'experience" - posts straight to a Google Apps Script Web App
+    // (google-apps-script/feedback-collector.gs) that appends a row to a
+    // Google Sheet the project owner controls. No GitHub account needed
+    // from the reporter (the earlier v2.59 approach required one), and no
+    // secret exposed in this public userscript either: the Apps Script
+    // deployment itself holds the write access (it runs as its owner),
+    // the client only ever sees the public /exec URL, not a credential.
+    // GM_xmlhttpRequest (gmPostJson) bypasses CORS entirely, so no
+    // special handling is needed on the Apps Script side.
+    // Falls back to the old GitHub-Issue link (no account-free option,
+    // but works with zero setup) if FEEDBACK_ENDPOINT_URL is still the
+    // placeholder - fill it in with the deployed Apps Script /exec URL.
+    const FEEDBACK_ENDPOINT_URL = "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE";
     const feedbackToggleBtn = document.getElementById("d4a-btn-feedback-toggle");
     const feedbackForm = document.getElementById("d4a-feedback-form");
     feedbackToggleBtn.onclick = () => {
       feedbackForm.hidden = !feedbackForm.hidden;
     };
-    document.getElementById("d4a-feedback-send").onclick = () => {
+    const feedbackSendBtn = document.getElementById("d4a-feedback-send");
+    const feedbackNote = document.getElementById("d4a-feedback-note");
+    feedbackSendBtn.onclick = async () => {
       const title = document.getElementById("d4a-feedback-title").value.trim() || "Retour d'expérience";
       const body = document.getElementById("d4a-feedback-body").value.trim();
       if (!body) {
@@ -4110,9 +4137,24 @@
         return;
       }
       const version = (typeof GM_info !== "undefined" && GM_info.script && GM_info.script.version) || "?";
-      const context = `\n\n---\nVersion du script : ${version}\nPage : ${location.href}`;
-      const url = `https://github.com/Tryne-graphik/diablo/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body + context)}`;
-      window.open(url, "_blank");
+      if (FEEDBACK_ENDPOINT_URL.startsWith("PASTE_")) {
+        const context = `\n\n---\nVersion du script : ${version}\nPage : ${location.href}`;
+        const url = `https://github.com/Tryne-graphik/diablo/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body + context)}`;
+        window.open(url, "_blank");
+        return;
+      }
+      feedbackSendBtn.disabled = true;
+      feedbackSendBtn.textContent = "⏳ Envoi...";
+      try {
+        await gmPostJson(FEEDBACK_ENDPOINT_URL, { title, body, version, page: location.href });
+        feedbackNote.textContent = "✅ Merci, envoyé !";
+        document.getElementById("d4a-feedback-body").value = "";
+      } catch (err) {
+        feedbackNote.textContent = `❌ Échec de l'envoi (${err.message}) - réessaie plus tard.`;
+      } finally {
+        feedbackSendBtn.disabled = false;
+        feedbackSendBtn.textContent = "📤 Envoyer";
+      }
     };
 
     // 2026-09-23: "divise [Filtre] en deux boutons, un pour le filtre
