@@ -5432,3 +5432,24 @@ directement, plus de dispatchEvent ni de clics multiples sur plusieurs niveaux d
 exactement la methode validee en direct par l'utilisateur. `node --check` vert, commit `353b1cc`,
 pousse. Prochain test : regenerer le filtre Strict sur InfinityBuilds et confirmer que les regles
 basees sur les affixes du build (per-slot ou pool d'Uniques) apparaissent enfin.
+
+## 2026-09-24 (suite) - v2.72 : le clic sur l'onglet SKILLS faisait planter InfinityBuilds au reload
+
+Utilisateur teste v2.71 - **le panneau ne s'affiche plus du tout sur InfinityBuilds** (toujours
+visible sur Maxroll). Capture de la console DevTools montre la vraie cause : "Uncaught Error:
+Minified React error #418" (mismatch d'hydratation React) sur l'URL
+`dG9XrHqBAL?variant=v_vt8&tab=skilltree` - le clic sur l'onglet SKILLS change l'URL (InfinityBuilds
+ajoute son propre parametre `tab=skilltree` via son routeur client), et RECHARGER la page avec ce
+parametre plante l'app React d'InfinityBuilds elle-meme (pas notre script directement, mais notre
+panneau ne peut plus fonctionner une fois que la page hote a plante). Confirme en 1 aller-retour :
+l'URL propre (sans `?variant=...&tab=...`) refait fonctionner le panneau normalement - pas une
+casse permanente, mais un vrai piege que notre propre clic laissait derriere lui pour le prochain
+chargement de cette URL precise (rechargement, lien partage, marque-page...).
+
+**v2.72** : `extractInfinityBuildsDetail()` reclique desormais sur l'onglet GEAR juste apres avoir
+lu les competences, ramenant l'URL dans l'etat connu pour charger proprement - seulement si un
+vrai changement d'onglet a eu lieu (`ensureInfinityBuildsSkillsTabActive()` retourne maintenant un
+booleen indiquant si elle a du cliquer, pour eviter un clic inutile si l'utilisateur etait deja sur
+Skills pour sa propre raison). `node --check` vert, commit `e693484`, pousse. Pas encore reteste en
+jeu - prochain test : confirmer que le panneau reste fonctionnel ET que le filtre contient bien les
+regles basees sur les 6 competences, sur un rechargement complet de la page apres generation.
