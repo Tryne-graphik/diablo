@@ -361,4 +361,14 @@ UNIQUE_ITEM_IDS: dict[str, list[int]] = {
 }
 # fmt: on
 
-UNIQUE_ITEM_IDS_BY_LOWER_NAME: dict[str, str] = {name.lower(): name for name in UNIQUE_ITEM_IDS}
+def normalize_unique_name(name: str) -> str:
+    """Mirrors the userscript's normalizeUniqueName() (2026-09-24) - scraped
+    page text and this table's own keys mix straight (') and curly (’)
+    apostrophes, and a few keys carry a stray zero-width character, so an
+    exact-match lookup can silently miss otherwise-identical names."""
+    for zwc in ("​", "‌", "‍", "﻿"):
+        name = name.replace(zwc, "")
+    return name.replace("‘", "'").replace("’", "'").strip().lower()
+
+
+UNIQUE_ITEM_IDS_BY_LOWER_NAME: dict[str, str] = {normalize_unique_name(name): name for name in UNIQUE_ITEM_IDS}

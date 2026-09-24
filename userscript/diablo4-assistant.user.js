@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.63
+// @version      2.64
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1909,8 +1909,24 @@
     "Yen's Blessing": [0x001c5cb4],
   };
   // fmt: on
+  // 2026-09-24: found while chasing why a per-slot Unique skip (Offhand,
+  // "Etna's Lost Dagger") didn't trigger even though the SAME name matched
+  // fine via the pooled Unique rule - the pooled path has 2 redundant name
+  // sources (Equipment tab + Stat Priority widget) so one working source
+  // can mask the other being broken, but the per-slot skip only has the
+  // widget's own name with no fallback. Same known bug class already hit
+  // this project for Aspect-prefix stripping (see ASPECT_PREFIX_RE's
+  // docstring, 2026-09-21/23): fr_en_dictionary.json and scraped page text
+  // mix straight (') and curly (’) apostrophes depending on source, so an
+  // exact-match lookup silently fails on whichever variant it doesn't
+  // expect. Also strips zero-width characters (found stray U+200D on a
+  // handful of UNIQUE_ITEM_IDS' own keys, e.g. "Esadora's Overflowing
+  // Cameo") so a page's clean text still matches those entries.
+  function normalizeUniqueName(name) {
+    return (name || "").replace(/[​-‍﻿]/g, "").replace(/[‘’]/g, "'").trim().toLowerCase();
+  }
   const UNIQUE_ITEM_IDS_BY_LOWER_NAME = new Map();
-  for (const name of Object.keys(UNIQUE_ITEM_IDS)) UNIQUE_ITEM_IDS_BY_LOWER_NAME.set(name.toLowerCase(), name);
+  for (const name of Object.keys(UNIQUE_ITEM_IDS)) UNIQUE_ITEM_IDS_BY_LOWER_NAME.set(normalizeUniqueName(name), name);
 
   // A few affixes are shown with a class-specific display name in-game
   // (found on Rogue: crit chance is labelled "Deadly Strike Chance", not
@@ -2396,7 +2412,7 @@
       // item never matches these Rare-only conditions in the first place).
       // Freeing that rule budget lets other slots that DO need precision
       // fit under D4's 25-rule cap instead of being trimmed away.
-      const equippedUnique = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get((entry.itemName || "").trim().toLowerCase());
+      const equippedUnique = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(entry.itemName));
       if (equippedUnique) {
         skippedSlots.push(`${entry.slot} (Unique: ${equippedUnique})`);
         continue;
@@ -2464,7 +2480,7 @@
     const seen = new Set();
     const pooledSnoIds = [];
     for (const rawName of itemNamesEn) {
-      const canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get((rawName || "").trim().toLowerCase());
+      const canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(rawName));
       if (!canonical || seen.has(canonical.toLowerCase())) continue;
       seen.add(canonical.toLowerCase());
       matched.push(canonical);

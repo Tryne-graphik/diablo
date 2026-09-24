@@ -43,7 +43,7 @@ from dataclasses import dataclass, field
 
 from app.loot_filter import codec
 from app.loot_filter.data import AFFIX_IDS, GENERIC_SKILL_AFFIX_IDS, SKILL_AFFIX_IDS
-from app.loot_filter.uniques import UNIQUE_ITEM_IDS_BY_LOWER_NAME, UNIQUE_ITEM_IDS
+from app.loot_filter.uniques import UNIQUE_ITEM_IDS_BY_LOWER_NAME, UNIQUE_ITEM_IDS, normalize_unique_name
 
 
 @dataclass
@@ -65,7 +65,7 @@ def build_unique_item_rules(item_names: list[str], color: int = codec.COLOR_GOLD
     matched: list[str] = []
     seen_lower: set[str] = set()
     for raw_name in item_names:
-        canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(raw_name.strip().lower())
+        canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalize_unique_name(raw_name))
         if canonical is None or canonical.lower() in seen_lower:
             continue
         seen_lower.add(canonical.lower())
