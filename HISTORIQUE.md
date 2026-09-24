@@ -4933,3 +4933,34 @@ recoit un `max-width: 92px`, et le texte des options est raccourci ("2 (2 affixe
 affixes)" -> "3", "4 (Parfait)" -> "4 Parfait", "5 (Supérieur)" -> "5 Sup.") - le detail complet reste
 de toute facon dans "En savoir plus sur les tiers" juste en dessous, les options n'ont plus besoin
 d'etre auto-suffisantes. `node --check` vert.
+
+## 2026-09-24 - Premier retour de la session de jeu du soir + v2.54 : le vrai plafond de nom de filtre est 24 caracteres
+
+Utilisateur revient de la session de jeu annoncee la veille ("le filtre se comporte super bien") et
+colle son vrai filtre re-exporte par le jeu (build Dance Of Knives Rogue, maxroll.gg). Decodage
+byte-a-byte (script Python ad hoc, scratchpad) confirme beaucoup de choses positives : 25 regles
+exactement (plafond natif atteint), ordre correct (Hide Junk en dernier), systeme de trim qui
+fonctionne (6 emplacements ont les 2 paliers, 5 autres n'ont garde que le palier 3, le palier 2 coupe
+pour respecter la limite), et les 4 Uniques du build tous correctement cibles (mieux que la derniere
+fois ou un seul avait matche).
+
+Deux anomalies trouvees au decodage, presentees a l'utilisateur avant sa propre liste de retours :
+2 regles ("Check Rare - 3+ Build Affixes (BiS)" et "Uniques - 2+ Build Affixes", les 2 avec le plus
+de conditions/ids) ont un champ nom **completement absent** des bytes bruts (verifie en hex, pas un
+artefact du script cette fois - contredit une note de la session du 2026-09-23 qui avait ecarte ce
+même symptome comme "artefact du script jetable"), et la regle "Precis 3 - Left Ring" a un masque de
+rarete Rare+Legendary au lieu de Rare seul, alors qu'aucun appel du generateur ne produit cette
+combinaison - cause non elucidee, possible edition manuelle en jeu par l'utilisateur.
+
+**Premier retour concret de l'utilisateur : le build n'a pas de titre en jeu.** Diagnostic confirme
+la vraie cause : `runGenerateFilter()` construisait le nom via `[XX] Titre(18 car max) Strict/Ouvert`,
+soit jusqu'a ~30 caracteres - au-dela de ce que D4 accepte reellement. Le jeu rejette silencieusement
+un nom trop long a l'import/sauvegarde et retombe sur son propre nom auto-genere ("Filtre de butin #8"
+etc) - c'est tres probablement l'explication de TOUS les noms auto-generes observes depuis le debut du
+projet, pas seulement un signe de re-export comme suppose jusqu'ici. **v2.54** : nouveau budget fixe
+de 24 caracteres exactement - `[XX] ` (5) + ` X` (2, lettre S/O pour Strict/Ouvert) = 7 caracteres
+fixes, le reste (17 caracteres) va au titre du build. Verifie avec un titre de 42 caracteres reel :
+sortie exactement 24 caracteres. `node --check` vert, commit `ebaf224`, pousse.
+
+Reste a traiter : les 2 autres points remontes par l'utilisateur ne sont pas encore donnes (il a
+commence par le titre du filtre en premier) - a suivre dans la meme session.
