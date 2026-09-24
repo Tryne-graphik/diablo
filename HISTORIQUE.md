@@ -5056,3 +5056,20 @@ dans la liste "Ignorés" affichee dans le panneau pour que ce soit visible. Solu
 (pas de liste d'emplacements en dur) : sautera automatiquement n'importe quel slot dont l'objet
 equipe est reconnu, pas seulement les 4 cites. `node --check` vert, commit `84cc5b8`, pousse. Pas
 encore re-teste en jeu.
+
+## 2026-09-24 (suite) - v2.58 : Stone of Jordan ajoute a la base des Uniques
+
+Utilisateur fournit le filtre de test a une seule condition demande plus tot (point 2, anneaux).
+Decode byte-a-byte : `kind=8 (SpecificUnique)`, un seul id fixed32 = `0x0028647E` (2647166 decimal).
+Rule name absent des bytes (encore une fois - coherent avec le plafond de 24 caracteres trouve plus
+tot, ou simplement un rule jamais nomme dans l'editeur du jeu), `rule_count` du top-level ne
+correspond pas au nombre reel de regles (1) - deux anomalies deja connues et documentees, rien de
+nouveau. Ajoute `"Stone of Jordan": [0x0028647E]` a `app/loot_filter/uniques.py` (ordre alphabetique,
+juste avant "Stone of Vehemen" qui existait deja - un Unique different) et mirrore manuellement dans
+le userscript (pas de script de sync pour `UNIQUE_ITEM_IDS`, contrairement a
+`UNIQUE_ITEM_SOURCES`/`sync_unique_item_sources.py` qui est une table differente, pour la fonction
+"survol = voir ou ca drop"). `UNIQUE_ITEM_IDS_BY_LOWER_NAME` est derive automatiquement des deux
+cotes, rien d'autre a modifier. Verifie en Python que la resolution fonctionne. Combine avec le fix
+v2.57 (skip des regles par emplacement si le slot a deja un Unique reconnu), les 2 anneaux du build
+devraient maintenant sortir des regles de precision generiques et rejoindre le pool d'Uniques groupe -
+a confirmer au prochain test en jeu. `node --check` vert, commit `e6e58d6`, pousse.
