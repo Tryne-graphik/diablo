@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.67
+// @version      2.68
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3049,9 +3049,37 @@
     };
   }
 
+  // 2026-09-24: found while investigating why InfinityBuilds itself showed
+  // "Aucun build équivalent trouvé sur InfinityBuilds pour <this page's own
+  // title>" - extractNativeDetail() had no branch for infinitybuilds.gg,
+  // so even being ON the right page forced resolveTranslation() to go
+  // searching InfinityBuilds' own curated build list (findBestTitleMatch())
+  // for a title match, which can fail even for a page already open in
+  // front of it. Reuses the same .gear-paperdoll-tile/skill-block
+  // selectors already proven inside runInfinityBuildsExtraction() (used
+  // from a background tab opened on some OTHER site's matched build) - no
+  // polling loop needed here since the current page is already loaded and
+  // hydrated by the time a user clicks a panel button (the polling in that
+  // other function exists specifically for a tab that JUST opened
+  // programmatically, with no such guarantee).
+  async function extractInfinityBuildsDetail() {
+    const itemsEn = gearNames(extractGearRaw());
+    const skillsEn = skillNames(extractSkillsRaw());
+    if (skillsEn.length === 0 && itemsEn.length === 0) return null;
+    return {
+      sourceLabel: "InfinityBuilds",
+      sourceUrl: location.href,
+      skillsEn,
+      itemsEn,
+      skillsFr: skillsEn.map(lookupFr),
+      itemsFr: itemsEn.map(lookupFr),
+    };
+  }
+
   async function extractNativeDetail() {
     if (location.hostname === "kami-labs.fr") return extractKamiLabsDetail();
     if (location.hostname === "maxroll.gg" || location.hostname === "www.maxroll.gg") return extractMaxrollDetail();
+    if (location.hostname === "infinitybuilds.gg") return extractInfinityBuildsDetail();
     return null;
   }
 
