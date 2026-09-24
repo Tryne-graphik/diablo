@@ -5151,3 +5151,48 @@ la redirection manuellement (POST initial → lit l'en-tête `Location` → GET 
 jour dans `FEEDBACK_ENDPOINT_URL`, commit `7d10a24`, poussé. Le circuit complet retour d'expérience
 (bouton panneau → Apps Script → Google Sheet, sans compte requis côté testeur) est maintenant
 fonctionnel de bout en bout.
+
+## 2026-09-24 (suite) - v2.63/v2.64 : numero de version affiche + diagnostic Offhand corrige par capture d'ecran
+
+**v2.63** : ajoute un petit "vX.XX" discret sous le titre du panneau (via `GM_info.script.version`),
+suite à la question "as-tu quelque chose à ajouter avant que je partage" - facilite le tri des
+retours par version une fois plusieurs amis en train de tester.
+
+**Décodage du filtre généré (fourni par l'utilisateur avant sa propre relecture détaillée)** :
+22 règles (bien sous les 25), noms tous traduits, ordre correct, règle GA plate absente comme prévu.
+Casque et Pantalon absents des règles par emplacement (Uniques détectés, skip v2.57 fonctionne) -
+mais Gants, Arme 1, Arme 2 et un des deux Anneaux gardaient leurs règles de précision malgré 5
+Uniques dans le pool (Shrouded Gift, Etna's Lost Dagger, Sea Lord's Fine Gloves, Cowl of the
+Nameless, Stone of Jordan) - diagnostiqué à tort comme "le skip par emplacement est cassé pour
+plusieurs slots".
+
+**Capture d'écran du panneau Stat Priority réel a corrigé le diagnostic** : les noms en orange
+("Debilitating Toxins", "Imitated Imbuement", "Channeling") sont des noms d'**Aspect** (objet
+Légendaire), pas des Uniques - Gants et Arme à Distance n'ont donc jamais eu d'Unique équipé,
+`entry.itemName` (qui ne lit QUE `.d4-color-unique`, la classe violette) est correcte de ne rien
+y trouver, pas un bug. Mainhand affiche "Grief" (un vrai Unique, en violet) mais absent de notre
+base (`UNIQUE_ITEM_IDS`) - même lacune que Stone of Jordan avant v2.58, pas un bug de skip non plus
+(on ne peut pas sauter un slot qu'on ne sait pas reconnaître). **Seul Offhand restait un vrai
+problème** : "Etna's Lost Dagger" y est bien équipé (violet, confirmé par capture) ET déjà résolu
+dans le pool groupé, mais le skip par emplacement ne s'est pas déclenché pour ce slot précis.
+
+**v2.64** : cause probable identifiée par analogie avec un bug déjà connu de ce projet (le strip du
+préfixe "Aspect de", 2026-09-21/23, voir `ASPECT_PREFIX_RE`) - le pool d'Uniques a 2 sources
+redondantes (onglet Équipement + widget Stat Priority), donc si l'une des deux a une apostrophe
+courbe (') au lieu de droite (') pour "Etna's Lost Dagger", l'autre source masque le problème pour
+le pool groupé - mais le skip par emplacement n'a qu'UNE source (le widget), rien pour masquer le
+même décalage. Ajouté `normalizeUniqueName()` (userscript) / `normalize_unique_name()` (Python,
+mirroir dans `uniques.py`/`generator.py`) : normalise apostrophes courbes→droites et retire les
+caractères invisibles (trouvé un U+200D parasite sur quelques clés déjà existantes de
+`UNIQUE_ITEM_IDS`, ex. "Esadora's Overflowing Cameo" - bonus, sans lien direct avec Etna's Lost
+Dagger). Appliqué à la construction de `UNIQUE_ITEM_IDS_BY_LOWER_NAME` et aux 2 points de lookup.
+**Incident de tooling pendant l'implémentation** : la 1ère tentative d'écrire le regex de guillemets
+courbes a silencieusement corrompu les caractères en U+FFFD (remplacement) via le pipeline de l'outil
+d'édition - repéré en vérifiant les bytes UTF-8 bruts du fichier après coup (`.encode('utf-8').hex()`)
+plutôt que de faire confiance à l'affichage terminal, qui montrait les mêmes caractères invisibles
+des deux côtés et ne permettait pas de voir la différence. Corrigé en réécrivant la ligne directement
+via un script Python avec des échappements `‘’` explicites, revérifié en bytes. Testé en
+Node et Python que la normalisation fait bien correspondre les 2 variantes au même résultat.
+**La vraie cause pour Offhand reste une hypothèse non confirmée** (pas d'accès direct au DOM Maxroll
+pour vérifier laquelle des 2 sources avait le mauvais caractère) - à revalider au prochain test en
+jeu. `node --check`/`python3 -c "import ..."` verts, commit `4476431`, poussé.
