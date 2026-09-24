@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.72
+// @version      2.73
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3115,7 +3115,20 @@
   }
 
   async function extractInfinityBuildsDetail() {
-    const itemsEn = gearNames(extractGearRaw());
+    // 2026-09-24: found live - the Skills read already retried with a
+    // growing wait (React hydration isn't instant), but this Gear read
+    // was a single synchronous call with no wait at all. Confirmed real:
+    // one generation right after a fresh page load found skills but 0
+    // items/Uniques, a later one on the same page found Uniques but 0
+    // skills - not a structural bug, a timing race between which part of
+    // the page had actually rendered at the exact instant each read ran.
+    // Same retry pattern as ensureInfinityBuildsSkillsTabActive() below.
+    let gearRaw = extractGearRaw();
+    for (let attempt = 0; attempt < 3 && gearRaw.length === 0; attempt++) {
+      await sleep(600 + attempt * 400);
+      gearRaw = extractGearRaw();
+    }
+    const itemsEn = gearNames(gearRaw);
     const switchedToSkills = await ensureInfinityBuildsSkillsTabActive();
     const skillsEn = skillNames(extractSkillsRaw());
     if (switchedToSkills) clickInfinityBuildsTab(IB_GEAR_TAB_LABELS);
