@@ -5243,3 +5243,35 @@ les Legendaires par qualite" (nouvelle position/role, remplace "Greater Affix ex
 d'aide reecrit pour expliquer les 2 options independamment. `needsUniqueShowSafetyNet` (filet de
 securite du pool d'Uniques groupe) suit maintenant `hideWeakLegendaries`. `node --check` vert, commit
 `0723d29`, pousse. Pas encore reteste en jeu.
+
+## 2026-09-24 (suite) - v2.66 : Charmes/Sceaux enfin distingues par qualite (pas d'option en plus)
+
+Utilisateur demande des precisions sur les Charmes/Sceaux : ceux du build devraient changer de
+couleur, mais les autres Legendaires/Uniques de ce type doivent rester visibles ("source de
+materiaux importante"), les Magiques/Rares etant moins prioritaires - demande si des options
+supplementaires sont necessaires pour tout ca.
+
+**Diagnostic avant de repondre** (verifie le code au lieu de deviner) : "Talismans Legendaires"
+(SHOW, `conditionItemTypes([CHARM, SEAL])`) est la toute PREMIERE regle du filtre depuis l'origine
+du projet (`rules.push(...)` juste apres `const rules = []`). En premier-match-gagne, ca voulait
+dire qu'elle interceptait TOUT Charme/Sceau Legendaire+ avant que le pool d'Uniques (`extraRules`)
+ou les tiers de qualite (Aff. Majeur / 2+ sans AM - aucun des deux n'a de restriction de type
+d'objet, ils s'appliqueraient deja normalement) n'aient la moindre chance de le colorer autrement -
+un Charme nomme reconnu comme Unique recevait donc le meme traitement generique "juste visible"
+que n'importe quel autre Charme, jamais la couleur distincte du pool d'Uniques. **Bug reel, pas
+juste une lacune de donnees.**
+
+Verifie aussi les Magiques/Rares avant de proposer une nouvelle option : deja couverts par le
+masque existant de "Cacher Detritus" (aucune restriction de type d'objet dessus), sauf un Rare qui
+matche deja le pool plat d'affixes du build (deja garde et colore - comportement existant, pas une
+regression a corriger). **Conclusion : aucune option supplementaire necessaire**, juste un bug de
+positionnement a corriger.
+
+**v2.66** : deplace "Talismans Legendaires" apres le pool d'Uniques et les tiers de qualite, avant
+le catch-all plat "Legendaires - Garder" - reste INCONDITIONNELLE (pas soumise a
+`hideWeakLegendaries`, contrairement a "Legendaires - Garder") pour que tout Charme/Sceau non
+distingue reste quand meme toujours visible, meme si "Cacher les Legendaires faibles" est actif -
+exactement la demande de l'utilisateur. Repositionnement pur, aucune nouvelle regle, budget de 25
+regles inchange. `node --check` vert, commit `0562a91`, pousse. Pas encore reteste en jeu - le
+Python `generator.py` (chemin legacy, pas la logique de qualite/hide de v2.65) n'a pas ce bug de la
+meme facon donc pas touche.
