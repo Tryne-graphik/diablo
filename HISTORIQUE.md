@@ -5393,3 +5393,42 @@ le changement d'onglet dans `extractInfinityBuildsDetail()`, pour ne pas perdre 
 si React demonte l'onglet Gear au switch. `node --check` vert, commit `87f45db`, pousse. Pas encore
 reteste en jeu - prochain test logique : regenerer le filtre sur cette meme page InfinityBuilds et
 verifier que les regles basees sur les affixes (per-slot ou pool) apparaissent enfin.
+
+## 2026-09-24 (suite) - v2.71 : vraie session de debug DevTools pas a pas avec l'utilisateur
+
+Utilisateur reteste v2.69 sur InfinityBuilds - **filtre identique byte-a-byte a la version d'avant
+le fix** (verifie 2 fois, apres refresh force et reclic frais sur "Filtre Strict"). Le fix ne se
+declenchait donc pas du tout en conditions reelles, contrairement a ce que le raisonnement statique
+laissait supposer.
+
+**Vraie capture d'ecran de l'onglet SKILLS d'InfinityBuilds** (le "j'aurais du verifier plus tot"
+de l'utilisateur) : revele une structure d'arbre de competences avec icones (6 tuiles : Smoke
+Grenade/Poison Imbuement/Dark Shroud/Concealment/Shadow Clone/Dance of Knives), pas une liste
+texte - remet en question si `extractSkillsRaw()` lit encore la bonne chose.
+
+**Session de debug DevTools guidee pas a pas** (l'utilisateur execute des snippets Console fournis
+un par un, capture d'ecran de chaque resultat) :
+1. Inventaire des `<p>` courts de la page -> confirme que l'element cible existe bien tel quel :
+   `text-[10px] font-semibold uppercase tracking-wider text-[#b7b0a6] => Skills`.
+2. Simulation exacte de `extractSkillsRaw()` (meme classe, meme remontee de 3 parents) avec l'onglet
+   Skills actif manuellement -> retourne `["SKILLS","","Smoke Grenade","1","Poison Imbuement","2",
+   "Dark Shroud","3","Concealment","4","Shadow Clone","Dance of Knives"]` - **la lecture fonctionne
+   parfaitement**, `skillNames()` en extrairait bien les 6 noms. Le bug n'est donc pas cote lecture.
+3. Recherche de l'onglet SKILLS depuis l'onglet GEAR (etat de depart reel) avec la logique exacte de
+   `ensureInfinityBuildsSkillsTabActive()` -> `found: true`, un vrai
+   `<span class="whitespace-nowrap" style="font-family:var(--font-display)">Skills</span>` - element
+   trouve correctement aussi.
+4. Test manuel de `tabCandidate.click()` sur cet element precis -> **bascule bien visuellement sur
+   l'onglet SKILLS**.
+
+**Conclusion, confirmee etape par etape plutot que devinee** : ni la recherche d'element ni la
+lecture des donnees n'etaient en cause - le vrai bug etait dans le MECANISME DE CLIC de v2.69 :
+`dispatchEvent(new MouseEvent(...))` sur 3 cibles a la fois (l'element, son parent, son
+grand-parent) ne declenchait rien du tout sur cette page, alors qu'un simple `.click()` sur le
+MEME element fonctionne immediatement.
+
+**v2.71** : `ensureInfinityBuildsSkillsTabActive()` simplifiee pour appeler `tabCandidate.click()`
+directement, plus de dispatchEvent ni de clics multiples sur plusieurs niveaux de parents. Reprend
+exactement la methode validee en direct par l'utilisateur. `node --check` vert, commit `353b1cc`,
+pousse. Prochain test : regenerer le filtre Strict sur InfinityBuilds et confirmer que les regles
+basees sur les affixes du build (per-slot ou pool d'Uniques) apparaissent enfin.
