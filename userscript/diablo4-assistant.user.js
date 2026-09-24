@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.74
+// @version      2.75
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -941,6 +941,12 @@
         battleTag: r.battle_tag,
         gameClass: r.class,
         tier: r.tier,
+        // 2026-09-24: "quel niveau de fosse et en combien de temps" - found
+        // live in the raw __NUXT__ payload (curl on the server-rendered
+        // page, grepped for *time*/*duration* key names) that a
+        // `run_time_ms` field exists alongside rank/tier, just never
+        // captured here before.
+        runTimeMs: r.run_time_ms,
         skills: (r.skillDetails || []).filter(Boolean).map((s) => ({ name: s.name, type: s.type })),
       }));
       GM_setValue("d4a_lbresult_" + requestId, JSON.stringify(runs));
@@ -1043,23 +1049,23 @@
       if (!confirmed) continue;
       if (best === null || (run.rank ?? Infinity) < (best.rank ?? Infinity)) best = run;
     }
-    return best ? { rank: best.rank, battleTag: best.battleTag, tier: best.tier } : null;
+    if (!best) return null;
+    // 2026-09-24: "chercher où se situe le build dans le classement, quel
+    // niveau de fosse et en combien de temps" - totalClassRuns gives the
+    // rank some context (#47 means little without knowing out of how many
+    // Rogues), runTimeMs is the Pit clear time for that specific run.
+    const totalClassRuns = runs.filter((r) => r.gameClass === gameClass).length;
+    return { rank: best.rank, battleTag: best.battleTag, tier: best.tier, runTimeMs: best.runTimeMs, totalClassRuns };
   }
 
-  // "Comparer les variantes" (demande utilisateur 2026-09-22) - combien
-  // des joueurs réels du classement officiel (déjà récupérés par
-  // fetchTowerRuns ci-dessus) utilisent une compétence donnée, pour
-  // objectiver un choix entre deux variantes qui ne diffèrent que par
-  // UNE compétence. Comparaison par nom exact (replié/normalisé), pas
-  // par sous-ensemble de mots comme bestOfficialRank - ici on compare
-  // deux noms de compétence précis l'un à l'autre (déjà extraits
-  // proprement), pas un nom de compétence à un titre de build en texte
-  // libre, donc pas besoin de la tolérance du sous-ensemble.
-  function countPlayersUsingSkill(runs, gameClass, skillName) {
-    const target = fold(skillName);
-    const classRuns = runs.filter((r) => r.gameClass === gameClass);
-    const count = classRuns.filter((r) => (r.skills || []).some((s) => fold(s.name) === target)).length;
-    return { count, total: classRuns.length };
+  // "3:24" for 204000 - Tower/Pit runs are always well under an hour, no
+  // need for an hours segment.
+  function formatRunTime(ms) {
+    if (!ms && ms !== 0) return null;
+    const totalSeconds = Math.round(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, "0")}`;
   }
 
   const HOSTNAME_TO_SOURCE = {
@@ -1178,8 +1184,14 @@
       findCrossSiteLinks(title, gameClass).catch(() => []),
     ]);
 
+    // 2026-09-24: "quel niveau de fosse et en combien de temps" - the rank
+    // alone doesn't say much without knowing out of how many players of
+    // this class, or what that run actually achieved.
     const rankHtml = rank
-      ? `🏆 <a href="${TOWER_URL}" target="_blank" rel="noopener noreferrer">#${rank.rank} au classement officiel</a> (${rank.battleTag || "joueur anonyme"})`
+      ? `🏆 <a href="${TOWER_URL}" target="_blank" rel="noopener noreferrer">#${rank.rank}${rank.totalClassRuns ? `/${rank.totalClassRuns}` : ""} au classement officiel</a> ` +
+        `(${rank.battleTag || "joueur anonyme"})` +
+        (rank.tier != null ? ` — Fosse ${rank.tier}` : "") +
+        (formatRunTime(rank.runTimeMs) ? `, en ${formatRunTime(rank.runTimeMs)}` : "")
       : "Aucun joueur du classement officiel identifié avec ce build.";
 
     const linksHtml = links.length
@@ -4019,162 +4031,6 @@
     };
   }
 
-  // ---------------------------------------------------------------------
-  // "Comparer les variantes" (demande utilisateur 2026-09-22) - pour un
-  // même build, plusieurs sites (ou parfois le même site) proposent des
-  // versions légèrement différentes (un objet différent, une option de
-  // compétence différente, une priorité de stats différente). Objectif :
-  // montrer les écarts précis entre variantes, pas désigner LA meilleure
-  // - ça demanderait un vrai simulateur de dégâts, explicitement écarté
-  // du périmètre de ce projet depuis le 2026-09-19 (voir HISTORIQUE.md).
-  // Seul signal objectif ajouté : la popularité de chaque compétence
-  // parmi les VRAIS joueurs du classement Tower officiel (countPlayersUsingSkill
-  // ci-dessus) - aucune donnée équivalente n'existe pour les objets (le
-  // classement n'expose que les compétences équipées, pas l'équipement).
-  //
-  // Ne compare que les sources pour lesquelles une extraction de détail
-  // existe déjà (kami-labs, Maxroll : natif ; InfinityBuilds : onglet
-  // caché) - D4Builds/D4Guides/talion.tv n'ont jamais eu cette extraction
-  // construite (seulement titre/tier/lien), donc restent hors comparaison
-  // pour l'instant, signalé à l'utilisateur plutôt que silencieusement
-  // ignoré.
-  // ---------------------------------------------------------------------
-  const EXTRACTABLE_SOURCES = new Set(["kamilabs", "maxroll", "infinitybuilds"]);
-  const MAX_COMPARED_OTHER_SOURCES = 3; // borne le coût (chaque onglet caché prend ~5-12s)
-
-  function diffVariantField(variants, field) {
-    const byName = new Map(); // nom replié -> { display, sources: Set }
-    for (const v of variants) {
-      for (const raw of v[field] || []) {
-        const name = (raw || "").trim();
-        if (!name) continue;
-        const key = fold(name);
-        if (!byName.has(key)) byName.set(key, { display: name, sources: new Set() });
-        byName.get(key).sources.add(v.source);
-      }
-    }
-    const common = [];
-    const differing = [];
-    for (const entry of byName.values()) {
-      (entry.sources.size === variants.length ? common : differing).push(entry);
-    }
-    return { common, differing };
-  }
-
-  function renderVariantComparison(variants, gameClass, runs, skippedLinks) {
-    const sourceLinksHtml = variants
-      .map((v) => `<a href="${v.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[v.source] || v.source}</a>`)
-      .join(" · ");
-
-    const skillsDiff = diffVariantField(variants, "skillsEn");
-    const itemsDiff = diffVariantField(variants, "itemsEn");
-
-    const renderCommon = (entries) => (entries.length ? chipList(entries.map((e) => e.display)) : "<em>aucun point commun trouvé</em>");
-
-    // Compétences : peu nombreuses (5-8 en général), une ligne détaillée
-    // par compétence avec sa popularité réelle vaut le coup.
-    const renderDifferingSkills = (entries) => {
-      if (entries.length === 0) return "<p><em>Aucune différence - toutes les variantes comparées utilisent exactement les mêmes.</em></p>";
-      return entries
-        .map((e) => {
-          const sourcesTxt = Array.from(e.sources).map((s) => SOURCE_LABELS[s] || s).join(", ");
-          const { count, total } = countPlayersUsingSkill(runs, gameClass, e.display);
-          const popTxt = total > 0 ? ` — <span class="d4a-rank-meta">${count}/${total} joueurs du top classement officiel</span>` : "";
-          return `<div class="d4a-rank-row"><strong>${e.display}</strong><br><span class="d4a-rank-meta">présent chez : ${sourcesTxt}</span>${popTxt}</div>`;
-        })
-        .join("");
-    };
-
-    // Objets : peuvent être nombreux, pas de popularité à afficher -
-    // regroupés par ensemble de sources ("chez Maxroll uniquement : ...")
-    // plutôt qu'une ligne par objet, bien plus compact à parcourir.
-    const renderDifferingItems = (entries) => {
-      if (entries.length === 0) return "<p><em>Aucune différence - toutes les variantes comparées utilisent exactement les mêmes.</em></p>";
-      const groups = new Map();
-      for (const e of entries) {
-        const sortedSources = Array.from(e.sources).sort();
-        const key = sortedSources.join("|");
-        if (!groups.has(key)) groups.set(key, { label: sortedSources.map((s) => SOURCE_LABELS[s] || s).join(", "), names: [] });
-        groups.get(key).names.push(e.display);
-      }
-      return Array.from(groups.values())
-        .map((g) => `<div class="d4a-rank-row"><span class="d4a-rank-meta">Chez ${g.label} uniquement (${g.names.length})</span>${chipList(g.names)}</div>`)
-        .join("");
-    };
-
-    const skippedNote = skippedLinks.length
-      ? `<p style="color:#c9a227">${skippedLinks.length} autre(s) site(s) ont aussi ce build (${skippedLinks.map((l) => SOURCE_LABELS[l.source] || l.source).join(", ")}) mais leur détail ne peut pas encore être lu par ce script - non inclus dans la comparaison.</p>`
-      : "";
-    const noPopularityNote = itemsDiff.differing.length
-      ? `<p class="d4a-rank-meta">Pas de donnée de popularité pour les objets - le classement officiel n'expose que les compétences équipées, pas l'équipement.</p>`
-      : "";
-    const noLeaderboardNote = runs.length === 0 && skillsDiff.differing.length
-      ? `<p style="color:#c9a227">Classement officiel indisponible cette fois - comparaison des compétences sans données de popularité réelle.</p>`
-      : "";
-
-    return `
-      <p class="d4a-rank-meta">Sources comparées : ${sourceLinksHtml}</p>
-      ${skippedNote}
-      <strong>Compétences communes à toutes les variantes</strong>
-      ${renderCommon(skillsDiff.common)}
-      <strong>Compétences qui diffèrent</strong>
-      ${renderDifferingSkills(skillsDiff.differing)}
-      ${noLeaderboardNote}
-      <strong>Objets communs à toutes les variantes</strong>
-      ${renderCommon(itemsDiff.common)}
-      <strong>Objets qui diffèrent</strong>
-      ${renderDifferingItems(itemsDiff.differing)}
-      ${noPopularityNote}
-    `;
-  }
-
-  async function runCompareVariants() {
-    const title = guessTitle();
-    const gameClass = guessClass();
-    if (!gameClass) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p style="color:#c9a227">Classe non détectée sur cette page.</p>`);
-      return;
-    }
-    renderPanel(`<h3>Diablo IV Assistant</h3><p>Recherche des variantes de ce build sur les autres sites...</p>`);
-
-    const [mine, links] = await Promise.all([
-      resolveTranslation().catch(() => null),
-      findCrossSiteLinks(title, gameClass).catch(() => []),
-    ]);
-    if (!mine || (!mine.itemsEn.length && !mine.skillsEn.length)) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p style="color:#c9a227">Impossible de lire le détail de CE build - rien à comparer.</p>`);
-      return;
-    }
-
-    const extractableLinks = links.filter((l) => EXTRACTABLE_SOURCES.has(l.source));
-    const others = extractableLinks.slice(0, MAX_COMPARED_OTHER_SOURCES);
-    const skippedLinks = links.filter((l) => !EXTRACTABLE_SOURCES.has(l.source)).concat(extractableLinks.slice(MAX_COMPARED_OTHER_SOURCES));
-
-    const mySource = currentSourceId() || "infinitybuilds";
-    const variants = [{ source: mySource, url: location.href, skillsEn: mine.skillsEn, itemsEn: mine.itemsEn }];
-
-    if (others.length) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p>Lecture de ${others.length} variante(s) sur les autres sites (ouverture d'onglet(s) en arrière-plan, ~5-15s)...</p>`);
-      const results = await Promise.all(others.map((l) => openExtractionTab(l.url).catch(() => null)));
-      results.forEach((r, i) => {
-        if (r && ((r.items && r.items.length) || (r.skills && r.skills.length))) {
-          variants.push({ source: others[i].source, url: others[i].url, skillsEn: r.skills || [], itemsEn: r.items || [] });
-        } else {
-          skippedLinks.push(others[i]);
-        }
-      });
-    }
-
-    if (variants.length < 2) {
-      renderPanel(`<h3>Diablo IV Assistant</h3><p>Aucune autre variante lisible trouvée pour ce build - rien à comparer pour l'instant.</p>`);
-      return;
-    }
-
-    const runs = await fetchTowerRuns().catch(() => []);
-    const html = renderVariantComparison(variants, gameClass, runs, skippedLinks);
-    renderPanel(`<h3>Diablo IV Assistant</h3><p>Comparaison de ${variants.length} variante(s) de ce build :</p>${html}`);
-  }
-
   function init() {
     const extractRequestId = new URLSearchParams(location.search).get("d4a_extract");
     if (extractRequestId) {
@@ -4224,7 +4080,6 @@
         <button id="d4a-btn-translate">🇫🇷 Traduire</button>
         <button id="d4a-btn-search-toggle">🔍 Recherche</button>
         <button id="d4a-btn-ranking">🏆 Classement</button>
-        <button id="d4a-btn-compare">🔬 Comparer</button>
       </div>
       <div id="d4a-search-section" hidden>
         <div id="d4a-search-form">
@@ -4447,10 +4302,6 @@
     const rankingBtn = document.getElementById("d4a-btn-ranking");
     rankingBtn.title = "Classe les meilleurs builds de la classe détectée sur cette page, par consensus entre 6 sites (InfinityBuilds, kami-labs, Maxroll, D4Builds, D4Guides, talion.tv)";
     rankingBtn.onclick = runRanking;
-
-    const compareBtn = document.getElementById("d4a-btn-compare");
-    compareBtn.title = "Compare ce build à ses variantes sur les autres sites (objets/compétences qui diffèrent) et à la popularité réelle des compétences chez les joueurs du classement officiel";
-    compareBtn.onclick = runCompareVariants;
 
     document.getElementById("d4a-search-btn").onclick = runLiveSearch;
     document.getElementById("d4a-search-input").onkeydown = (e) => {

@@ -5,7 +5,6 @@ Extension de navigateur (via [Tampermonkey](https://www.tampermonkey.net/)) qui,
 - traduit automatiquement les objets/compétences EN→FR (Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides, talion.tv)
 - génère un filtre de butin natif D4 (import direct en jeu) adapté au build affiché
 - calcule un classement consensus multi-sources pour une classe donnée
-- compare les variantes d'un même build entre sites
 
 ## Installation (2 minutes)
 
@@ -24,12 +23,11 @@ Le script se met ensuite à jour **automatiquement** (Tampermonkey vérifie rég
 
 Va sur une page de build sur Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides ou talion.tv : un panneau **"Diablo IV Assistant"** apparaît en bas à droite de la page (bouton ☰ pour l'afficher/masquer), avec le numéro de version affiché sous le titre.
 
-### Les 4 boutons principaux
+### Les 3 boutons principaux
 
 - **🇫🇷 Traduire** - traduit les objets/compétences avec les termes exacts du client FR, puis le reste de la page via Google. À cliquer en premier sur une page anglaise.
 - **🔍 Recherche** - déplie un petit champ pour chercher la traduction d'un terme précis (EN ou FR) sans traduire toute la page.
 - **🏆 Classement** - classe les meilleurs builds de la classe détectée, par consensus entre 6 sites de guides.
-- **🔬 Comparer** - compare le build affiché à ses variantes sur les autres sites (objets/compétences qui diffèrent).
 
 ### Générer un filtre de butin
 
