@@ -5325,3 +5325,36 @@ reglages par defaut conviennent a la plupart des builds, pas besoin de tout comp
 cliquer"), et "Mes Builds". Corrige au passage la section Retour d'experience, restee obsolete
 depuis le passage a l'envoi direct via Google Apps Script - mentionnait encore l'ancien lien GitHub
 necessitant un compte. Commit `0904ca4`, pousse.
+
+## 2026-09-24 (suite) - v2.68 : verification multi-sites - extraction native InfinityBuilds
+
+Utilisateur teste le meme build (Dance of Knives Rogue) sur 3 sites (en excluant mobalytics, non
+supporte) : infinitybuilds.gg, d4builds.gg, d4guides.gg. Traduction confirmee bonne partout.
+
+**Filtres de D4Guides et D4Builds strictement identiques byte-a-byte** (verifie) - normal, pas un
+bug : les deux passent par le meme mecanisme de secours (recherche d'un build au titre equivalent
+sur InfinityBuilds, extraction depuis un onglet cache la-bas), donc resolvent a la MEME source.
+Decodage du contenu : 7 regles seulement (contre 22 pour la version Maxroll du meme build) - pas de
+regles par emplacement (le widget "Stat Priority" tiers de Maxroll n'existe pas sur InfinityBuilds,
+limitation inherente pas un bug) ET **zero Unique nomme detecte**, alors que la version Maxroll du
+meme build en trouvait 5 (Etna's Lost Dagger, Stone of Jordan, Cowl of the Nameless...) - cause non
+confirmee sans acces DevTools reel (vrai gap de donnee sur ce guide InfinityBuilds, ou heuristique
+`gearNames()` qui rate le nom sur les tuiles d'objets Uniques specifiquement).
+
+**Sur InfinityBuilds lui-meme : vrai bug trouve et corrige**. Le panneau affichait "Aucun build
+equivalent trouve sur InfinityBuilds pour <titre>" - alors qu'on est deja sur la bonne page !
+Cause : `extractNativeDetail()` n'avait de branche que pour kami-labs.fr et maxroll.gg - meme en
+etant sur la bonne page InfinityBuilds, `resolveTranslation()` repartait chercher un match par
+titre dans la liste curatee d'InfinityBuilds (~25 builds) au lieu de lire directement la page
+courante, pouvant echouer meme la ou ca aurait du marcher a coup sur.
+
+**v2.68** : nouvelle `extractInfinityBuildsDetail()`, reutilise les memes selecteurs deja eprouves
+dans `runInfinityBuildsExtraction()` (utilisee depuis un onglet cache pour les autres sites) sans
+la boucle de polling (page deja chargee au moment du clic, contrairement a un onglet fraichement
+ouvert par le script). `sourceLabel: "InfinityBuilds"` deja reconnu par `SITE_ABBREV`, rien d'autre
+a changer en aval. Ne resout pas le gap regles-par-emplacement/Uniques constate plus haut (meme
+fonctions d'extraction sous-jacentes que l'ancien chemin pour D4Guides/D4Builds, donc comportement
+inchange pour ces 2 sites specifiquement) - seulement le cas "on est deja sur InfinityBuilds".
+`node --check` vert, commit `d1c3900`, pousse. Pas encore reteste en jeu - prochain test logique :
+revisiter la page InfinityBuilds pour confirmer que l'erreur a disparu, et si les Uniques sont
+toujours a 0, creuser via DevTools ce que `gearNames()` recoit vraiment sur une tuile Unique.
