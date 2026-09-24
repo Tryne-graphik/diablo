@@ -5519,3 +5519,53 @@ noms de champs plausibles) : confirme qu'un champ `run_time_ms` existe bien a co
 rang - "#47/230 Rogues" plutot que juste "#47", qui ne veut rien dire seul). Affiche dans la ligne
 "position officielle" deja existante sous le titre du panneau. `node --check` vert, commit
 `4c586e8`, pousse. Pas encore reteste en jeu.
+
+## 2026-09-25 - v2.76 : partage de filtre (bouton "Partager") termine cote backend
+
+Suite de session : le bouton "🔗 Partager" (a cote de "Copier"/"Voir le texte" sur chaque filtre
+genere) avait ete cable cote userscript en fin de session precedente, mais laisse non fonctionnel -
+`feedback-collector.gs` ne geraiit qu'un seul usage (retour d'experience) et n'avait aucune notion
+d'`action`, donc un POST `{action:"share",...}` aurait fini par polluer la feuille "Feedback" avec
+une ligne mal remplie plutot que de creer un partage.
+
+**Complete cote Apps Script** : `doPost` discrimine maintenant sur `data.action` ("share" vs
+"feedback", feedback par defaut pour compatibilite). `handleShare()` ecrit dans une nouvelle feuille
+"Partages" (creee automatiquement au 1er partage via `getOrCreateSharesSheet()`, rien a preparer a
+la main contrairement a "Feedback" qui exigeait un Sheet ID pre-rempli) et renvoie `{id}` = le
+numero de ligne, utilise comme identifiant court dans l'URL (`?share=<id>`) - pas d'UUID, plus
+simple, coherent avec le fait que cet outil n'a pas de vrai besoin de pemanence forte. `doGet`
+route vers `renderSharePage(id)` quand `?share=` est present : verifie que l'id est un numero de
+ligne valide dans la feuille, puis rend une page HTML autonome (sombre, coherente avec le style du
+panneau) avec le titre/lien du build, le mode (Ouvert/Strict), le code dans une zone de texte en
+lecture seule et un bouton copier (`navigator.clipboard` avec repli `execCommand('copy')`) - aucun
+compte ni extension necessaire pour la lire, exactement l'objectif du depart. Toutes les valeurs
+injectees dans le HTML passent par `escapeHtml()` (le titre de build vient du scraping d'un site
+externe, pas une donnee de confiance).
+
+**Correction au passage d'un commentaire trompeur** laisse dans le userscript en fin de session
+precedente : il affirmait qu'un lien partage serait lu via "l'aube dispatch de `init()` (avant que
+le panneau existe, voir la branche du parametre `share`)" - cette branche n'a jamais existe, la
+lecture d'un lien partage se fait entierement cote Apps Script (`doGet`), pas par le userscript.
+Corrige pour refleter la reelle architecture avant que ca n'induise en erreur une future session.
+
+**Trouvaille annexe, pertinente pour les amis testeurs** : `@connect script.google.com` et
+`@connect script.googleusercontent.com` etaient absents des metadonnees du userscript alors que le
+bouton "Retour d'experience" (v2.60-2.62) tapait deja sur ce domaine - a fonctionne jusqu'ici
+probablement parce que l'autorisation avait deja ete accordee manuellement dans Tampermonkey lors
+du developpement, pas parce que ce n'etait pas necessaire. Ajoutes pour que les futures installations
+(amis testeurs) n'aient pas a debloquer manuellement l'acces au premier clic sur "Partager" ou
+"Envoyer".
+
+Copie de secours sur le Bureau (`feedback-collector.txt`, la seule facon dont l'utilisateur peut
+ouvrir ce fichier sans association Windows pour `.gs`) resynchronisee avec le nouveau contenu.
+`node --check` vert (userscript) et verification syntaxique equivalente pour le `.gs` (pas de
+runtime Apps Script local disponible pour un vrai test). Version bumpee 2.75->2.76.
+
+**Reste a faire, cote utilisateur, avant que ca marche reellement en jeu** : coller le nouveau
+contenu de `feedback-collector.gs` (ou de la copie Bureau) dans l'editeur Apps Script existant a la
+place de l'ancien, puis Deployer > Gerer les deploiements > icone crayon > **Nouvelle version**
+(editer le code seul ne suffit pas, deja documente le 2026-09-24 pour ce meme script) - l'URL `/exec`
+reste identique, pas besoin de remettre a jour `APPS_SCRIPT_ENDPOINT_URL` cote userscript. Puis
+forcer la mise a jour Tampermonkey (dashboard > Utilities > "Check for userscript updates now") pour
+recevoir la v2.76, et tester un vrai partage de bout en bout (generer un filtre, cliquer Partager,
+ouvrir le lien copie dans un autre navigateur/navigation privee pour simuler un ami sans le script).

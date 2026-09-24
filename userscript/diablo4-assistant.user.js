@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.75
+// @version      2.76
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -21,6 +21,8 @@
 // @connect      api.talion.tv
 // @connect      translate.googleapis.com
 // @connect      helltides.com
+// @connect      script.google.com
+// @connect      script.googleusercontent.com
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
 // @grant        GM_setValue
@@ -896,6 +898,17 @@
   const TOWER_CACHE_KEY = "d4a_lb_cache";
   const TOWER_CACHE_TTL_MS = 30 * 60 * 1000; // matches app/leaderboard.py's CACHE_TTL_SECONDS
   const GENERIC_UTILITY_SKILL_TYPES = new Set(["Imbuement", "Subterfuge"]);
+
+  // 2026-09-24: moved to top-level scope (was a local const inside the
+  // feedback button's wiring) - now shared between the feedback form's
+  // "Envoyer" handler and the generated filter's "Partager" button. Same
+  // Google Apps Script deployment (google-apps-script/feedback-collector.gs)
+  // handles both: POST {action:"feedback",...} appends a feedback row, POST
+  // {action:"share",...} stores a shared filter and returns an id, GET
+  // ?share=<id> serves back a plain HTML page (hosted by Apps Script itself,
+  // not this userscript) with that filter's code and a copy button - no
+  // account or extension needed to read a shared link.
+  const APPS_SCRIPT_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwlgssmlCyGde4ulCfmB3It27I1bOp7tlvRpW9TbMndu9g-wjt03IHyxN62-bQyM6l6/exec";
 
   function skillTokens(skillName) {
     const words = new Set();
@@ -2655,6 +2668,8 @@
       .d4a-filter-actions { display: flex; gap: 6px; margin: 4px 0 8px; }
       .d4a-filter-actions button { flex: 1; }
       #d4a-column button.d4a-toggle-text { background: #2a2a35; color: #eee; }
+      #d4a-column button.d4a-share { background: #7b5cff; color: #fff; font-weight: bold; }
+      .d4a-share-note { font-size: 11px; word-break: break-all; margin: 2px 0 8px; }
       #d4a-column a { color: #03d0fc; }
       #d4a-item-tooltip {
         position: fixed; z-index: 1000000; max-width: 260px;
@@ -3991,8 +4006,10 @@
       <div class="d4a-filter-actions">
         <button class="d4a-copy" id="d4a-copy-${key}-btn">📋 Copier</button>
         <button class="d4a-toggle-text" id="d4a-toggle-${key}-btn">📄 Voir le texte</button>
+        <button class="d4a-share" id="d4a-share-${key}-btn">🔗 Partager</button>
       </div>
       <textarea rows="4" readonly id="d4a-code-${key}" hidden>${code}</textarea>
+      <p class="d4a-share-note" id="d4a-share-note-${key}" hidden></p>
     `;
 
     const key = isStrict ? "strict" : "open";
@@ -4028,6 +4045,46 @@
     document.getElementById(`d4a-toggle-${key}-btn`).onclick = (e) => {
       textarea.hidden = !textarea.hidden;
       e.target.textContent = textarea.hidden ? "📄 Voir le texte" : "🙈 Masquer le texte";
+    };
+
+    // 2026-09-24: "partager un filtre qui marche" - POSTs the generated
+    // code to the same Apps Script deployment as the feedback button
+    // (action:"share" instead of action:"feedback", see
+    // google-apps-script/feedback-collector.gs), gets back a short id, and
+    // copies a link built from it. Opening that link works for ANYONE
+    // (Apps Script's doGet serves a plain HTML page with the code and a
+    // copy button, see APPS_SCRIPT_ENDPOINT_URL's docstring) - no account,
+    // no extension needed on the receiving end.
+    const shareBtn = document.getElementById(`d4a-share-${key}-btn`);
+    const shareNote = document.getElementById(`d4a-share-note-${key}`);
+    shareBtn.onclick = async () => {
+      shareBtn.disabled = true;
+      shareBtn.textContent = "⏳ Partage...";
+      try {
+        const response = await gmPostJson(APPS_SCRIPT_ENDPOINT_URL, {
+          action: "share",
+          filterName: baseName,
+          filterCode: filterResult.code,
+          buildTitle: result.match.title,
+          buildUrl: result.match.url,
+          mode: label,
+        });
+        const { id } = JSON.parse(response);
+        const shareUrl = `${APPS_SCRIPT_ENDPOINT_URL}?share=${id}`;
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          shareNote.textContent = `✅ Lien copié : ${shareUrl}`;
+        } catch (clipErr) {
+          shareNote.textContent = `✅ Lien créé : ${shareUrl}`;
+        }
+        shareNote.hidden = false;
+      } catch (err) {
+        shareNote.textContent = `❌ Échec du partage (${err.message}) - réessaie plus tard.`;
+        shareNote.hidden = false;
+      } finally {
+        shareBtn.disabled = false;
+        shareBtn.textContent = "🔗 Partager";
+      }
     };
   }
 
@@ -4198,9 +4255,8 @@
     // GM_xmlhttpRequest (gmPostJson) bypasses CORS entirely, so no
     // special handling is needed on the Apps Script side.
     // Falls back to the old GitHub-Issue link (no account-free option,
-    // but works with zero setup) if FEEDBACK_ENDPOINT_URL is still the
+    // but works with zero setup) if APPS_SCRIPT_ENDPOINT_URL is still the
     // placeholder - fill it in with the deployed Apps Script /exec URL.
-    const FEEDBACK_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwlgssmlCyGde4ulCfmB3It27I1bOp7tlvRpW9TbMndu9g-wjt03IHyxN62-bQyM6l6/exec";
     const feedbackToggleBtn = document.getElementById("d4a-btn-feedback-toggle");
     const feedbackForm = document.getElementById("d4a-feedback-form");
     feedbackToggleBtn.onclick = () => {
@@ -4216,7 +4272,7 @@
         return;
       }
       const version = (typeof GM_info !== "undefined" && GM_info.script && GM_info.script.version) || "?";
-      if (FEEDBACK_ENDPOINT_URL.startsWith("PASTE_")) {
+      if (APPS_SCRIPT_ENDPOINT_URL.startsWith("PASTE_")) {
         const context = `\n\n---\nVersion du script : ${version}\nPage : ${location.href}`;
         const url = `https://github.com/Tryne-graphik/diablo/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body + context)}`;
         window.open(url, "_blank");
@@ -4225,7 +4281,7 @@
       feedbackSendBtn.disabled = true;
       feedbackSendBtn.textContent = "⏳ Envoi...";
       try {
-        await gmPostJson(FEEDBACK_ENDPOINT_URL, { title, body, version, page: location.href });
+        await gmPostJson(APPS_SCRIPT_ENDPOINT_URL, { action: "feedback", title, body, version, page: location.href });
         feedbackNote.textContent = "✅ Merci, envoyé !";
         document.getElementById("d4a-feedback-body").value = "";
       } catch (err) {
