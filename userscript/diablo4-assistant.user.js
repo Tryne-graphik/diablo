@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.53
+// @version      2.54
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3575,15 +3575,26 @@
     const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorBis, allBuildIds);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
-    // vient de façon abrégée" - D4's in-game filter name field is short, so
-    // the site is a 2-letter tag rather than the full label, and the build
-    // title is trimmed to leave it room. sourceLabel is always one of these
-    // 3 (see resolveTranslation()/extractNativeDetail()).
+    // vient de façon abrégée" - the site is a 2-letter tag rather than the
+    // full label, and the build title is trimmed to leave it room.
+    // sourceLabel is always one of these 3 (see
+    // resolveTranslation()/extractNativeDetail()).
+    // 2026-09-24 CORRECTION: D4's real in-game filter-name cap is 24
+    // characters, confirmed by the user decoding their own re-exported
+    // filter - a longer name is silently rejected on import and the game
+    // falls back to its own auto-name ("Filtre de butin #8" etc). The old
+    // "[XX] Title Strict/Ouvert" scheme could reach ~30 chars, well past
+    // that, which is why the build title was never sticking in-game.
+    // Budget: "[XX] " (5) + " X" (2, single-letter mode code) = 7 fixed
+    // chars, the rest goes to the title.
     const SITE_ABBREV = { Maxroll: "MR", InfinityBuilds: "IB", "kami-labs": "KL" };
     const siteTag = SITE_ABBREV[result.sourceLabel] || result.sourceLabel.slice(0, 2).toUpperCase();
-    const baseName = `[${siteTag}] ${result.match.title.slice(0, 18)}`;
+    const modeLetter = isStrict ? "S" : "O";
+    const fixedPart = `[${siteTag}]  ${modeLetter}`;
+    const titleBudget = Math.max(1, 24 - fixedPart.length);
+    const baseName = `[${siteTag}] ${result.match.title.slice(0, titleBudget)} ${modeLetter}`;
     const filterResult = isStrict
-      ? generateFilterCode(`${baseName} Strict`, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules], {
+      ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules], {
           requireAncestral: optAncestral,
           hideLegendaryWithoutGA: optHideNoGA,
           keepGoodStatsNoGA: optKeepGoodStatsNoGA,
@@ -3591,7 +3602,7 @@
           colorGood,
           colorGA,
         })
-      : generateFilterCode(`${baseName} Ouvert`, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorGA });
+      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorGA });
 
     const detailNote = result.hasDetail
       ? ""
