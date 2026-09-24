@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.64
+// @version      2.65
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2197,12 +2197,25 @@
     const allBuildIds = Array.from(new Set([...skillIds, ...priorityAffixIds]));
     const strict = mode === "strict";
     const requireAncestral = strict && options.requireAncestral !== false;
-    const hideLegendaryWithoutGA = strict && options.hideLegendaryWithoutGA !== false;
-    // 2026-09-22: "voir les Légendaires/Uniques sans Greater Affix mais au
-    // moins avec les bonnes stats" - only meaningful when
-    // hideLegendaryWithoutGA is on (otherwise every Legendary is already
-    // kept unconditionally). Only ignored, not asked for, before today.
-    const keepGoodStatsNoGA = hideLegendaryWithoutGA && options.keepGoodStatsNoGA !== false;
+    // 2026-09-24 CORRECTION: these 2 concerns used to be a single toggle
+    // (hideLegendaryWithoutGA) that both (a) gave GA/good-stats Legendaries
+    // a distinct color AND (b) hid everything else - the user pointed out
+    // that's actually two separate decisions bundled together. They want
+    // (a) ALWAYS on ("je préférerais toujours savoir si les items que je
+    // porte ont les affixes requis") so a Rare they upgrade to Legendary
+    // keeps showing its real quality instead of collapsing into the same
+    // flat green as every other Legendary - but do NOT want (b) on right
+    // now (nothing hidden, just better information). Split into two
+    // independent options: showLegendaryQuality controls whether the GA/
+    // good-stats tiers are emitted at all (default true - the "always
+    // know" behavior), hideWeakLegendaries controls only whether Hide
+    // Junk's mask folds in Legendary|Unique (default false). Either can be
+    // on/off independently of the other now.
+    const showLegendaryQuality = options.showLegendaryQuality !== false;
+    const hideWeakLegendaries = strict && options.hideWeakLegendaries === true;
+    // "voir les Légendaires/Uniques sans Greater Affix mais au moins avec
+    // les bonnes stats" - only meaningful when showLegendaryQuality is on.
+    const keepGoodStatsNoGA = showLegendaryQuality && options.keepGoodStatsNoGA !== false;
     // 2026-09-22: user-customizable swatches (3 color pickers in the panel,
     // "pour que les gens puissent personnaliser un peu") - default to the
     // original hardcoded colors when not supplied.
@@ -2246,8 +2259,11 @@
     // Already tagRule()-wrapped by buildPerSlotRules()/buildUniqueItemRules().
     for (const r of extraRules) rules.push(r);
     rules.push(tagRule(makeRule("Codex : Mise à jour", RECOLOR, [conditionCodexUpgrade()], COLOR_GREEN)));
-    if (hideLegendaryWithoutGA) {
-      rules.push(tagRule(makeRule("Mythique - Garder", RECOLOR, [conditionRarity(MYTHIC)], COLOR_GREEN)));
+    // Mythic always gets its own guaranteed-visible rule, independent of
+    // both options below - a Mythic is always worth a look regardless of
+    // whether quality-coloring or hiding is enabled.
+    rules.push(tagRule(makeRule("Mythique - Garder", RECOLOR, [conditionRarity(MYTHIC)], COLOR_GREEN)));
+    if (showLegendaryQuality) {
       // GA-keep pushed BEFORE the no-GA-but-good-stats rule (so GA still
       // wins gold when an item has both) - more specific/better tier first,
       // same idiom as the Rare 2+/3+ tiers above.
@@ -2259,7 +2275,15 @@
         if (requireAncestral) noGaConditions.push(conditionAncestral());
         rules.push(tagRule(makeRule("Légendaire - 2+ sans AM", RECOLOR, noGaConditions, colorGood)));
       }
-    } else {
+    }
+    // Flat "keep everything else" catch-all - only skipped when
+    // hideWeakLegendaries is on, so a Legendary/Unique that didn't match
+    // either tier above falls through to Hide Junk instead (whose mask
+    // then includes Legendary|Unique, see below). When off (the default),
+    // this is the same safety net the old "else" branch always was, now
+    // reached AFTER the quality tiers get first shot at a better color
+    // instead of only existing as an alternative to them.
+    if (!hideWeakLegendaries) {
       rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN)));
     }
     // 2026-09-24: removed the old unconditional "any rarity with a Greater
@@ -2279,11 +2303,13 @@
     // default (confirmed against the user's own hand-built filters, none
     // of which end in an explicit catch-all Show either).
     // Open: hide Common/Magic/Rare only - every Legendary+ stays visible
-    // via "Legendaries - Keep All" above. Strict: when hideLegendaryWithoutGA
-    // is on, also fold Legendary|Unique into the same broad hide (Mythic and
-    // Talismans excluded on purpose - always kept); off, and it behaves like
-    // Open for that rarity tier (already unconditionally kept above).
-    const hideMask = COMMON | MAGIC | RARE | (hideLegendaryWithoutGA ? LEGENDARY | UNIQUE : 0);
+    // via "Légendaires - Garder" above (hideWeakLegendaries forces false in
+    // Open mode, see above). Strict: when hideWeakLegendaries is on, also
+    // fold Legendary|Unique into the same broad hide (Mythic and Talismans
+    // excluded on purpose - always kept); off, and it behaves like Open for
+    // that rarity tier (already unconditionally kept above, now AFTER the
+    // quality tiers get a chance to give it a better color).
+    const hideMask = COMMON | MAGIC | RARE | (hideWeakLegendaries ? LEGENDARY | UNIQUE : 0);
     rules.push(tagRule(makeRule("Cacher Détritus", HIDE_ALL, [conditionRarity(hideMask)])));
 
     // 2026-09-23: D4's native filter import silently truncates anything
@@ -2467,14 +2493,13 @@
   // already displays an item (it doesn't need a separate SHOW), so the
   // safety net is only real dead weight UNLESS a Unique that misses the
   // RECOLOR condition could still get hidden downstream. That only
-  // happens when generateFilterCode()'s hideLegendaryWithoutGA branch is
-  // active (its Hide Junk mask then includes the Unique rarity bit) - in
-  // the other branch, "Légendaires - Garder" unconditionally recolors
-  // every Legendary/Unique right after this block anyway, so the safety
-  // net would never even be reached. Caller passes
-  // `isStrict && hideLegendaryWithoutGA` (the exact same condition
-  // generateFilterCode() itself branches on) so this stays correct if
-  // that logic ever changes.
+  // happens when generateFilterCode()'s hideWeakLegendaries option is on
+  // (its Hide Junk mask then includes the Unique rarity bit) - when off,
+  // "Légendaires - Garder" unconditionally recolors every Legendary/Unique
+  // right after this block anyway, so the safety net would never even be
+  // reached. Caller passes `isStrict && hideWeakLegendaries` (the exact
+  // same condition generateFilterCode() itself branches on) so this stays
+  // correct if that logic ever changes.
   function buildUniqueItemRules(itemNamesEn, color = COLOR_GOLD, buildAffixIds = [], needsShowSafetyNet = true) {
     const matched = [];
     const seen = new Set();
@@ -3621,8 +3646,14 @@
     // render) - see their wiring in ensurePanelToggleButton()/wherever the
     // column is built.
     const optAncestral = document.getElementById("d4a-opt-ancestral")?.checked ?? true;
-    const optHideNoGA = document.getElementById("d4a-opt-hide-no-ga")?.checked ?? true;
+    const optShowQuality = document.getElementById("d4a-opt-show-quality")?.checked ?? true;
     const optKeepGoodStatsNoGA = document.getElementById("d4a-opt-keep-good-no-ga")?.checked ?? true;
+    // 2026-09-24: default UNCHECKED (unlike the others) - hiding weak
+    // Legendaries/Uniques is now opt-in, decoupled from quality-coloring
+    // (see generateFilterCode()'s 2026-09-24 CORRECTION comment). Matches
+    // the user's stated preference: always show quality via color, don't
+    // hide anything unless explicitly asked to.
+    const optHideWeak = document.getElementById("d4a-opt-hide-weak")?.checked ?? false;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
     // 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la regle
     // des 25" - the 2 dropdowns below replace the old "all 4 tiers +
@@ -3687,10 +3718,10 @@
     // buildUniqueItemRules() needs it too, ahead of that call.
     const { ids: allSkillIds } = resolveSkillIds(result.resolvedClass || "", result.skillsEn);
     const allBuildIds = Array.from(new Set([...allSkillIds, ...priority.ids]));
-    // Matches generateFilterCode()'s own `hideLegendaryWithoutGA` condition -
+    // Matches generateFilterCode()'s own `hideWeakLegendaries` condition -
     // see buildUniqueItemRules()'s docstring for why the SHOW safety net is
-    // only needed in that branch.
-    const needsUniqueShowSafetyNet = isStrict && optHideNoGA;
+    // only needed when weak Legendaries/Uniques can actually get hidden.
+    const needsUniqueShowSafetyNet = isStrict && optHideWeak;
     const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorBis, allBuildIds, needsUniqueShowSafetyNet);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
@@ -3715,7 +3746,8 @@
     const filterResult = isStrict
       ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules], {
           requireAncestral: optAncestral,
-          hideLegendaryWithoutGA: optHideNoGA,
+          showLegendaryQuality: optShowQuality,
+          hideWeakLegendaries: optHideWeak,
           keepGoodStatsNoGA: optKeepGoodStatsNoGA,
           colorBis,
           colorGood,
@@ -4033,14 +4065,15 @@
       <div id="d4a-filter-options">
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
         <label><input type="checkbox" id="d4a-opt-ancestral"> 🔱 Ancestral uniquement</label>
-        <label><input type="checkbox" id="d4a-opt-hide-no-ga"> ⚔️ Greater Affix exigé</label>
+        <label><input type="checkbox" id="d4a-opt-show-quality"> 🎨 Distinguer les Légendaires par qualité</label>
         <label><input type="checkbox" id="d4a-opt-keep-good-no-ga"> 💎 Exception bonnes stats</label>
+        <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
-          <p>⚔️ Ne s'applique que si "Greater Affix exigé" est coché.</p>
-          <p>💎 Sans cette exception : un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste caché avec le reste du loot.</p>
-          <p>💎 Avec elle : il reste visible (couleur "Bon") au lieu d'être masqué.</p>
+          <p>🎨 Colore différemment les Légendaires/Uniques selon leur qualité (Greater Affix ou bonnes stats) au lieu de tout recolorer pareil - utile pour comparer directement une pièce upgradée à ce que tu portes déjà, sans devoir inspecter chaque objet un par un.</p>
+          <p>💎 Ne s'applique que si "Distinguer les Légendaires par qualité" est coché. Sans elle, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste dans la couleur par défaut au lieu de ressortir.</p>
+          <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont ni Greater Affix ni bonnes stats, au lieu de les laisser visibles dans la couleur par défaut. Indépendant de "Distinguer par qualité" - active les deux ensemble pour ne garder visible que ce qui compte vraiment.</p>
         </details>
         <div class="d4a-color-row">
           <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
@@ -4188,13 +4221,23 @@
     filterStrictBtn.onclick = () => runGenerateFilter("strict");
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
-    // filtre avant de le lancer" - 3 options for the Strict filter, default
-    // ON (matches the behavior that existed before these were added),
-    // persisted via GM_setValue the same way "Mes Builds" already does so
-    // they survive across page loads instead of resetting every time.
-    for (const id of ["d4a-opt-ancestral", "d4a-opt-hide-no-ga", "d4a-opt-keep-good-no-ga", "d4a-opt-perslot"]) {
+    // filtre avant de le lancer" - options for the Strict filter, persisted
+    // via GM_setValue the same way "Mes Builds" already does so they
+    // survive across page loads instead of resetting every time.
+    // 2026-09-24: "d4a-opt-hide-weak" defaults to OFF, unlike the others -
+    // hiding weak Legendaries/Uniques is now opt-in (see
+    // generateFilterCode()'s 2026-09-24 CORRECTION comment), so a first-time
+    // user isn't surprised by items disappearing.
+    const OPT_DEFAULTS = {
+      "d4a-opt-ancestral": true,
+      "d4a-opt-show-quality": true,
+      "d4a-opt-keep-good-no-ga": true,
+      "d4a-opt-hide-weak": false,
+      "d4a-opt-perslot": true,
+    };
+    for (const [id, defaultValue] of Object.entries(OPT_DEFAULTS)) {
       const cb = document.getElementById(id);
-      cb.checked = GM_getValue(id, true);
+      cb.checked = GM_getValue(id, defaultValue);
       cb.onchange = () => GM_setValue(id, cb.checked);
     }
     // 2026-09-23: the 2 tier dropdowns (see buildPerSlotRules()'s docstring)
