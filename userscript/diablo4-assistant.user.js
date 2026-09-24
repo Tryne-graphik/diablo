@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.73
+// @version      2.74
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3104,12 +3104,18 @@
     return !!tabCandidate;
   }
   async function ensureInfinityBuildsSkillsTabActive() {
-    if (extractSkillsRaw().length) return false;
+    // 2026-09-24 CORRECTION: same fix as the Gear retry below - checking
+    // extractSkillsRaw().length (the raw header-walk line count) accepts
+    // a partially-rendered block (e.g. just "SKILLS" + "" with nothing
+    // else yet), not the actual parsed skill names. Check
+    // skillNames(...).length instead so a mid-render read doesn't get
+    // mistaken for a finished one.
+    if (skillNames(extractSkillsRaw()).length) return false;
     let switched = false;
     for (let attempt = 0; attempt < 3; attempt++) {
       switched = clickInfinityBuildsTab(IB_SKILLS_TAB_LABELS) || switched;
       await sleep(1000 + attempt * 500);
-      if (extractSkillsRaw().length) return switched;
+      if (skillNames(extractSkillsRaw()).length) return switched;
     }
     return switched;
   }
@@ -3123,12 +3129,19 @@
     // skills - not a structural bug, a timing race between which part of
     // the page had actually rendered at the exact instant each read ran.
     // Same retry pattern as ensureInfinityBuildsSkillsTabActive() below.
-    let gearRaw = extractGearRaw();
-    for (let attempt = 0; attempt < 3 && gearRaw.length === 0; attempt++) {
+    // 2026-09-24 CORRECTION: the retry condition checked whether ANY
+    // `.gear-paperdoll-tile` existed, not whether gearNames() could
+    // actually pull a name out of them - the tiles themselves can mount
+    // before their inner text (the item name, gearNames()'s 5-line
+    // heuristic) finishes rendering, so the loop was exiting on the first
+    // attempt every time even mid-render, same bug in different clothes.
+    // Check the real target (parsed names) instead of the intermediate
+    // DOM count.
+    let itemsEn = gearNames(extractGearRaw());
+    for (let attempt = 0; attempt < 3 && itemsEn.length === 0; attempt++) {
       await sleep(600 + attempt * 400);
-      gearRaw = extractGearRaw();
+      itemsEn = gearNames(extractGearRaw());
     }
-    const itemsEn = gearNames(gearRaw);
     const switchedToSkills = await ensureInfinityBuildsSkillsTabActive();
     const skillsEn = skillNames(extractSkillsRaw());
     if (switchedToSkills) clickInfinityBuildsTab(IB_GEAR_TAB_LABELS);
