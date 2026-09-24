@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.62
+// @version      2.63
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2514,6 +2514,7 @@
         font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5;
       }
       #d4a-column-title { font-weight: bold; color: #03d0fc; font-size: 14px; text-align: center; }
+      #d4a-version { font-size: 10px; color: #666; text-align: center; margin-top: -4px; }
       /* 2026-09-23: "un peu petit" - bumped +1/+2px across the board
          (button/checkbox-label text +2, everything else +1), and the
          action buttons moved into a 2-column grid (.d4a-action-grid,
@@ -3998,6 +3999,7 @@
     column.id = "d4a-column";
     column.innerHTML = `
       <div id="d4a-column-title">Diablo IV Assistant</div>
+      <div id="d4a-version">v${(typeof GM_info !== "undefined" && GM_info.script && GM_info.script.version) || "?"}</div>
       <div id="d4a-buildinfo-section"></div>
       <div class="d4a-action-grid">
         <button id="d4a-btn-translate">🇫🇷 Traduire</button>
