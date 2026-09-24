@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.71
+// @version      2.72
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3081,24 +3081,44 @@
   // tabs at all; the user's own `tabCandidate.click()` test on the exact
   // same element DID switch tabs immediately. Simplified to that - one
   // real `.click()` call on the found element, nothing more.
+  // 2026-09-24: clicking the Skills tab changes the URL (a `tab=skilltree`
+  // query param gets added by InfinityBuilds' own router) - found live
+  // that RELOADING the page with that param still in the URL crashes
+  // InfinityBuilds' own React app entirely (hydration mismatch, "Minified
+  // React error #418"), which took our panel down with it since nothing
+  // on the page works once that happens. A page refresh (or the user just
+  // revisiting a link they'd copied/bookmarked mid-session) could hit
+  // this, not just our own script re-running - clicking back to the Gear
+  // tab afterward (see restoreInfinityBuildsGearTab()) restores the URL
+  // to the state that's actually known to load cleanly, so this doesn't
+  // leave a landmine behind. Only restores if a switch actually happened
+  // (skip a needless click if the user was already on Skills for their
+  // own reason before generating).
   const IB_SKILLS_TAB_LABELS = new Set(["skills", "compétences"]);
-  async function ensureInfinityBuildsSkillsTabActive() {
-    if (extractSkillsRaw().length) return;
+  const IB_GEAR_TAB_LABELS = new Set(["gear", "équipement"]);
+  function clickInfinityBuildsTab(labels) {
     const tabCandidate = Array.from(document.querySelectorAll("*")).find(
-      (e) => e.children.length === 0 && IB_SKILLS_TAB_LABELS.has(e.textContent.trim().toLowerCase())
+      (e) => e.children.length === 0 && labels.has(e.textContent.trim().toLowerCase())
     );
-    if (!tabCandidate) return;
+    if (tabCandidate) tabCandidate.click();
+    return !!tabCandidate;
+  }
+  async function ensureInfinityBuildsSkillsTabActive() {
+    if (extractSkillsRaw().length) return false;
+    let switched = false;
     for (let attempt = 0; attempt < 3; attempt++) {
-      tabCandidate.click();
+      switched = clickInfinityBuildsTab(IB_SKILLS_TAB_LABELS) || switched;
       await sleep(1000 + attempt * 500);
-      if (extractSkillsRaw().length) return;
+      if (extractSkillsRaw().length) return switched;
     }
+    return switched;
   }
 
   async function extractInfinityBuildsDetail() {
     const itemsEn = gearNames(extractGearRaw());
-    await ensureInfinityBuildsSkillsTabActive();
+    const switchedToSkills = await ensureInfinityBuildsSkillsTabActive();
     const skillsEn = skillNames(extractSkillsRaw());
+    if (switchedToSkills) clickInfinityBuildsTab(IB_GEAR_TAB_LABELS);
     if (skillsEn.length === 0 && itemsEn.length === 0) return null;
     return {
       sourceLabel: "InfinityBuilds",
