@@ -4964,3 +4964,34 @@ sortie exactement 24 caracteres. `node --check` vert, commit `ebaf224`, pousse.
 
 Reste a traiter : les 2 autres points remontes par l'utilisateur ne sont pas encore donnes (il a
 commence par le titre du filtre en premier) - a suivre dans la meme session.
+
+**2026-09-24 (suite) - v2.55 + diagnostic Stone of Jordan (point 2 non resolu, bloque sur une vraie donnee manquante)**
+
+Utilisateur donne ses 3 autres retours d'un coup : (2) les 2 regles "Precis - Left/Right Ring"
+devraient plutot etre une regle d'Unique (le build utilise "Stone of Jordan" / "Pierre de Jordanie"
+aux deux anneaux) ; (3) les noms de regles generes sont en anglais, a traduire ; (4) certaines regles
+n'ont pas de nom du tout (confirme au decodage plus tot dans la journee - pas un artefact de script,
+verifie en hex).
+
+**v2.55** traite (3) et (4) ensemble, meme cause probable : traduction complete des 12 noms de regles
+generes (filtre Ouvert/Strict, `buildPerSlotRules()`, `buildUniqueItemRules()`) en francais court -
+nouveau `SLOT_LABELS_FR` (Casque/Torse/Gants/Pantalon/Bottes/Amulette/Anneau G/Anneau D/Arme 1/
+Arme 2/Distance) et tiers raccourcis (Préc.2/Préc.3/Parfait/Supérieur). Verifie programmatiquement :
+pire combinaison possible ("Supérieur - Pantalon") = 20 caracteres, sous la limite. Ajout d'une
+troncature defensive `.slice(0, 24)` directement dans `makeRule()` (userscript) et `make_rule()`
+(`codec.py`, cote backend Python aussi par coherence) - meme plafond que le nom de filtre trouve en
+v2.54, cette fois applique a CHAQUE regle individuelle pour empecher toute recurrence future du
+symptome (4), quel que soit le nom fourni par un futur appelant. Commit `1ef67de`, pousse.
+
+**(2) reste bloque sur une vraie lacune de donnees, pas un bug de code** : verifie que "Stone of
+Jordan" n'existe dans AUCUNE des sources dont depend `uniques.py`/`UNIQUE_ITEM_IDS` (ni le snapshot
+D4LootBench de 771 uniques, ni le bulk-decode diablofilter.com) - meme situation que "Grief" trouvee
+en v2.40, notre generateur ne peut tout simplement pas construire de condition SpecificUnique sans
+son id sno. Le dictionnaire de traduction FR/EN, lui, CONNAIT deja la paire ("Stone of Jordan" /
+"Pierre de Jordanie") - ce sont deux tables differentes, l'une pour la traduction textuelle, l'autre
+pour le ciblage de regle. Verifie aussi qu'il n'y a pas de risque d'ordre une fois l'id ajoute : les
+regles par emplacement (Precis 2/3) ne ciblent que la rarete Rare, jamais Unique, donc pas de conflit
+de first-match-wins a craindre avec la future regle d'Unique. Prochaine etape (methode deja eprouvee
+sur Helm/Pants et plusieurs ids de competences) : demander a l'utilisateur un filtre de test en jeu
+a une seule condition (SpecificUnique = Stone of Jordan seul), export colle ici pour en extraire
+l'id sno reel et l'ajouter a `UNIQUE_ITEM_IDS`.
