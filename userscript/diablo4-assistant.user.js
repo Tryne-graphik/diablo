@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.61
+// @version      2.62
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4121,7 +4121,7 @@
     // Falls back to the old GitHub-Issue link (no account-free option,
     // but works with zero setup) if FEEDBACK_ENDPOINT_URL is still the
     // placeholder - fill it in with the deployed Apps Script /exec URL.
-    const FEEDBACK_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbw6txoLYjnhZVWxfDLxAF8tczRfSp9Smo7XR3270mPmjXspHNNv_An58_cbLFQRdHm4/exec";
+    const FEEDBACK_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwlgssmlCyGde4ulCfmB3It27I1bOp7tlvRpW9TbMndu9g-wjt03IHyxN62-bQyM6l6/exec";
     const feedbackToggleBtn = document.getElementById("d4a-btn-feedback-toggle");
     const feedbackForm = document.getElementById("d4a-feedback-form");
     feedbackToggleBtn.onclick = () => {
