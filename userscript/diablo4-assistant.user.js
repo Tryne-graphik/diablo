@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.57
+// @version      2.58
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1812,6 +1812,11 @@
     "Staff of Lam Esen": [0x0013eec7, 0x0024bc4b, 0x0024bc61, 0x0024bc63, 0x0024bc66, 0x0024bc68],
     "Staff of Zerae": [0x00277549],
     "Starfall Coronet": [0x001a2442, 0x0024bccd, 0x0024bcf1, 0x0024bcf6, 0x0024bcff],
+    // 2026-09-24: not in D4LootBench's data (missing entirely, same gap as
+    // "Grief" found in v2.40) - resolved via the project's proven method
+    // instead: user built a single-condition in-game test filter
+    // (SpecificUnique = this item only), exported, decoded byte-for-byte.
+    "Stone of Jordan": [0x0028647e],
     "Stone of Vehemen": [0x001f2ea3],
     "Storm's Companion": [0x000d6fce],
     "Strides of War": [0x00205bd2],

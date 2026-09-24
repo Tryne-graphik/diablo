@@ -283,6 +283,11 @@ UNIQUE_ITEM_IDS: dict[str, list[int]] = {
     "Staff of Lam Esen": [0x0013EEC7, 0x0024BC4B, 0x0024BC61, 0x0024BC63, 0x0024BC66, 0x0024BC68],
     "Staff of Zerae": [0x00277549],
     "Starfall Coronet": [0x001A2442, 0x0024BCCD, 0x0024BCF1, 0x0024BCF6, 0x0024BCFF],
+    # 2026-09-24: not in D4LootBench's data (missing entirely, same gap as
+    # "Grief" found in v2.40) - resolved via the project's proven method
+    # instead: user built a single-condition in-game test filter
+    # (SpecificUnique = this item only), exported, decoded byte-for-byte.
+    "Stone of Jordan": [0x0028647E],
     "Stone of Vehemen": [0x001F2EA3],
     "Storm's Companion": [0x000D6FCE],
     "Strides of War": [0x00205BD2],
