@@ -5985,3 +5985,10 @@ d4builds.gg (deja confirme avoir la donnee) ou un autre site s'avere valoir la p
 `findPerSlotStatPriority()`/`extractStatPriorityFromD4ToolsWidget()` a ce site serait un chantier
 separe (nouveaux selecteurs DOM a confirmer en reel, pas un simple ajustement de regle) - pas encore
 demarre, en attente du retour de l'utilisateur sur quels sites valent le coup.
+
+**2026-09-25 (suite) - d4guides.gg confirme aussi avoir des donnees par emplacement**. Screenshot de
+d4guides.gg/en/build/rogue-dance-of-knives-endgame-build (onglet "Gear") : une etoile marque la stat
+prioritaire par piece d'equipement (ex. "Skill Ranks to Imbuements Skills" sur le Casque, "Dexterity"
+sur le Pantalon). 3 sites sur 6 desormais confirmes avec donnees exploitables (Maxroll, d4builds.gg,
+d4guides.gg), InfinityBuilds confirme sans. Reste a verifier : kami-labs, talion.tv. Rien d'implemente
+- l'utilisateur termine son tour des sites avant qu'on decide ensemble du perimetre.
