@@ -6086,3 +6086,40 @@ Scream", "Demonform") dans un champ "affixId" par erreur de leur cote.
 
 **Verifie** : re-execution du meme harness Node sur les 9 builds/104 ids - **89/104 (86%) resolus**,
 contre 76% avant cette passe. Version 2.88, `node --check` vert. **Toujours pas teste en jeu.**
+
+## 2026-09-25 (suite) - v2.89 : premier vrai test navigateur d'InfinityBuilds - vrai bug trouve et corrige
+
+Premier test en conditions reelles (vrai Tampermonkey, vraie page) de la fonctionnalite InfinityBuilds
+ajoutee en v2.87/2.88. Utilisateur teste sur https://infinitybuilds.gg/en/builds/mekunas-blazing-scream-warlock-rn824uhPl3
+(Demoniste). Resultat : "Traduire" fonctionne, mais le filtre genere ne contient QUE les 3 regles
+toujours-presentes (Codex/Talismans/Cacher Detritus) - aucune regle de precision par emplacement,
+aucun Unique. La toute nouvelle fonctionnalite etait donc completement silencieuse sur ce build.
+
+**Diagnostic** : recupere la vraie page (`curl`), confirme que les donnees `"slot"`/`"affixId"` sont
+bien presentes dans le HTML brut (comme prevu). Mais en simulant precisement `extractInfinityBuildsRawSlotAffixes()` -
+qui lit chaque balise `<script>` INDIVIDUELLEMENT et exige que `"slot"` ET `"affixId"` soient tous les
+deux presents dans la MEME balise avant de tenter l'extraction - **0 slot trouve**, reproduisant
+exactement le bug reel. Cause : le protocole de streaming RSC (React Server Components) de Next.js
+fragmente les donnees de la page sur PLUSIEURS balises `<script>` distinctes (58 sur cette page) - le
+JSON d'un seul emplacement peut se retrouver coupe en deux balises differentes, invisible a un scan
+balise-par-balise. Le build de reference utilise pour construire la fonctionnalite (Voleur, plus petit
+build) n'avait pas ce probleme par chance (donnees compactes dans une seule balise) - jamais reproduit
+avant ce test reel, la recherche via `curl` (qui telecharge le HTML complet comme UNE seule chaine,
+sans frontieres de balises) ne pouvait pas non plus le detecter.
+
+**Corrige** : concatener le texte de TOUTES les balises `<script>` en une seule chaine AVANT de lancer
+la regex, au lieu de traiter chaque balise separement. Reverifie avec les vraies donnees de la page qui
+a echoue : 0 emplacement trouve avec l'ancienne methode (bug reproduit), **9 emplacements trouves**
+(sur 11 - Main Princ./Main Sec. toujours absents pour ce build precis, piste secondaire non
+poursuivie) avec la methode corrigee. La resolution des labels (26/29 ids reels de ce build) confirmee
+fonctionner correctement une fois les emplacements trouves.
+
+Explique aussi pourquoi le filtre etait totalement vide (pas seulement incomplet) : sans donnees par
+emplacement, aucun Unique n'a de correlation d'emplacement, et sans l'option "Cacher les Legendaires
+faibles"/"Mode Farm" (off par defaut), le filet de securite "Garder Uniques" n'est meme pas genere -
+tout decoulait de cette seule cause.
+
+Version 2.89, `node --check` vert. **Premiere fois que cette fonctionnalite est testee en conditions
+reelles depuis sa creation (v2.87/2.88) - confirme le bug ET valide le diagnostic/correctif contre les
+vraies donnees de la page qui a echoue. Prochaine etape : regenerer sur ce meme build InfinityBuilds
+pour confirmer que le correctif marche vraiment en conditions reelles.**

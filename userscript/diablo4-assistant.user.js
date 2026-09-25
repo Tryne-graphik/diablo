@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.88
+// @version      2.89
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2410,25 +2410,40 @@
     amulet: "Amulet", ring1: "Left Ring", ring2: "Right Ring",
     mainhand: "Mainhand", offhandWeapon: "Offhand", weapon: "Ranged Weapon",
   };
+  // 2026-09-25 CORRECTION (real bug, found live the same day this shipped):
+  // used to scan each <script> tag's textContent INDIVIDUALLY, requiring a
+  // single tag to contain both '"slot"' and '"affixId"' before even trying
+  // the regex on it - worked on the one build tested before shipping, but
+  // failed completely (0 slots, so 0 per-slot rules AND 0 Uniques matched -
+  // the InfinityBuilds Warlock build the user tested v2.87/2.88 with)
+  // because Next.js's RSC flight protocol streams the page's data across
+  // MANY separate <script> tags (58 on that page), splitting a single
+  // slot/affixes JSON object across tag boundaries the per-tag scan could
+  // never see whole. Fixed by concatenating every <script> tag's text into
+  // ONE string first, then running the regex against that - confirmed live
+  // against the actual failing page (0 slots found the old way, 9 slots
+  // found - correctly - the concatenated way, matching the direct `curl`
+  // research that never hit this because a downloaded HTML file has no tag
+  // boundaries to accidentally split across).
   function extractInfinityBuildsRawSlotAffixes() {
     const slotAffixIds = new Map();
+    let combined = "";
+    for (const script of document.querySelectorAll("script")) {
+      if (script.textContent) combined += script.textContent;
+    }
+    if (!combined.includes('"affixId"') || !combined.includes('"slot"')) return slotAffixIds;
+    const unescaped = combined.replace(/\\"/g, '"');
     const slotRe = /"slot":"(\w+)"[\s\S]{0,200}?"affixes":\[([\s\S]*?)\]/g;
     const affixIdRe = /"affixId":"([a-z0-9\-]+)"/g;
-    for (const script of document.querySelectorAll("script")) {
-      const text = script.textContent;
-      if (!text || !text.includes('"affixId"') || !text.includes('"slot"')) continue;
-      const unescaped = text.replace(/\\"/g, '"');
-      slotRe.lastIndex = 0;
-      let m;
-      while ((m = slotRe.exec(unescaped))) {
-        const ourSlot = INFINITYBUILDS_SLOT_MAP[m[1]];
-        if (!ourSlot) continue;
-        const ids = [];
-        affixIdRe.lastIndex = 0;
-        let am;
-        while ((am = affixIdRe.exec(m[2]))) ids.push(am[1]);
-        if (ids.length) slotAffixIds.set(ourSlot, ids); // later occurrence wins (last variant tab)
-      }
+    let m;
+    while ((m = slotRe.exec(unescaped))) {
+      const ourSlot = INFINITYBUILDS_SLOT_MAP[m[1]];
+      if (!ourSlot) continue;
+      const ids = [];
+      affixIdRe.lastIndex = 0;
+      let am;
+      while ((am = affixIdRe.exec(m[2]))) ids.push(am[1]);
+      if (ids.length) slotAffixIds.set(ourSlot, ids); // later occurrence wins (last variant tab)
     }
     return slotAffixIds;
   }
