@@ -5992,3 +5992,64 @@ prioritaire par piece d'equipement (ex. "Skill Ranks to Imbuements Skills" sur l
 sur le Pantalon). 3 sites sur 6 desormais confirmes avec donnees exploitables (Maxroll, d4builds.gg,
 d4guides.gg), InfinityBuilds confirme sans. Reste a verifier : kami-labs, talion.tv. Rien d'implemente
 - l'utilisateur termine son tour des sites avant qu'on decide ensemble du perimetre.
+
+## 2026-09-25 (suite) - verification kami-labs/talion.tv + CORRECTION : InfinityBuilds a bien des donnees par emplacement
+
+Demande de l'utilisateur : verifier que le script est bien 100% compatible sur kami-labs.fr et
+talion.tv pendant qu'il continue son tour des sites.
+
+**kami-labs.fr** : confirme 100% fonctionnel avec un vrai build Saison 15 (BUILD-10358) - le vrai
+`build_id` recupere depuis la page, l'endpoint `equipment-grid.html` teste directement, structure
+exactement conforme a ce que le code attend (`skills[].name_en/name_fr`, `slots.{helm,...}.name/nameFr`).
+Bonus trouve : chaque objet a un `tooltip.mods[]` avec les vrais affixes roules et un flag `greater` -
+piste pour un futur per-slot kami-labs, deja accessible via le JSON (pas besoin de simuler le survol
+que l'interface exige pour un humain, confirme par l'utilisateur avec un screenshot).
+
+**talion.tv** : pas d'extraction native dans notre code - repose entierement sur le matching de titre
+avec InfinityBuilds (`findBestTitleMatch()`). Verifie que ca marche pour "Danse des Poignards" -> le
+dictionnaire FR/EN existant traduit le titre avant comparaison, score de similarite ~0.67 (seuil 0.5).
+Defaut mineur trouve : `guessTitle()` ne nettoie que le suffixe "Titre | Site" (format Maxroll), pas
+"Titre - Diablo 4 - TalionTV" (format talion) - sans consequence sur ce build (marge suffisante) mais
+pourrait fragiliser un titre moins distinctif.
+
+**CORRECTION IMPORTANTE, meme session** : l'utilisateur a montre que talion.tv a en fait SON PROPRE
+tableau detaille par emplacement (etoile pour l'affixe prioritaire, code couleur) - contredit
+l'hypothese initiale "talion.tv n'a rien de natif". Et concernant InfinityBuilds (que l'utilisateur a
+anticipe comme ayant "le meme probleme" que kami-labs, cache derriere une interaction) : **en fait
+RIEN n'est cache du tout**. Inspection du HTML brut (simple `curl`, sans navigateur) de
+infinitybuilds.gg/en/builds/dG9XrHqBAL a revele que chaque objet equipe est deja embarque dans le
+payload Next.js RSC de la page, avec structure `{"slot":"helm","itemId":"...","affixes":[{"value":121,"affixId":"affix-s04-corestat-dexterity",...}, ...]}`
+- les 11 emplacements standards presents, ids d'affixes opaques mais resolubles via l'API publique
+`data.infinitybuilds.gg/api/games/diablo4/build-data?...&affixIds=...` (confirme : interroger avec le
+jeu EXACT d'ids trouves sur la page resout fiablement tous les labels, contrairement a une requete
+partielle/generique).
+
+## 2026-09-25 (suite) - v2.87 : precision par emplacement ajoutee pour InfinityBuilds
+
+Chantier lance suite a la decouverte ci-dessus. Nouvelles fonctions : `extractInfinityBuildsRawSlotAffixes()`
+(regex tolerante sur le texte des balises `<script>` de la page courante, aucune requete reseau
+necessaire pour cette partie - la donnee est deja dans le HTML charge ; la page repete cette structure
+plusieurs fois, une par variante Starter/Midgame/Endgame/Bossing, le dernier passage gagne - meme
+heuristique que kami-labs `steps[steps.length-1]`), `fetchInfinityBuildsAffixLabels()` (une seule
+requete GET vers l'API publique de resolution, avec cache par page via `findInfinityBuildsPerSlotAffixesCached()`
+pour eviter de la refaire 2 fois - `findPriorityAffixIds()` et `findPerSlotStatPriority()` en ont
+chacun besoin), et une reutilisation directe de `resolveStatPriorityText()` (deja construite pour les
+affixes de competence "Ranks to X" de Maxroll v2.82) en prefixant les labels `kind:"skillrank"` de IB
+("to Imbuement Skills") avec "Ranks " pour matcher le meme format. `@connect data.infinitybuilds.gg`
+ajoute aux metadonnees du script.
+
+**Verifie hors navigateur, en 2 temps** : (1) la regex d'extraction testee contre le vrai HTML capture
+du build de reference - les 11 emplacements resolus correctement, derniere variante (Endgame/Bossing)
+correctement retenue ; (2) la resolution testee a grande echelle sur **9 builds reels de classes
+differentes** (104 ids d'affixes distincts au total) via le meme harness Node que precedemment (extrait
+les vraies fonctions du fichier source) - **79/104 (76%) resolus correctement** en testant chaque classe
+(la vraie implementation utilise la classe detectee du build, contrairement au test qui a du essayer
+toutes les classes faute de suivre precisement laquelle appartient a quel echantillon).
+
+Pas de detection de nom d'Unique par emplacement dans cette passe (`itemName` reste `null`) - les
+Uniques d'InfinityBuilds restent matches via la liste de noms de l'onglet Equipement existante
+(`extractInfinityBuildsDetail()`), sans correlation d'emplacement - lacune reelle, laissee pour une
+passe future.
+
+Version 2.87, `node --check` vert. **Pas encore teste en jeu ni meme dans le vrai Tampermonkey** -
+seules les briques (extraction + resolution) ont ete verifiees isolement hors navigateur.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.86
+// @version      2.87
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -13,6 +13,7 @@
 // @match        *://infinitybuilds.gg/*/builds/*
 // @match        *://helltides.com/tower*
 // @connect      infinitybuilds.gg
+// @connect      data.infinitybuilds.gg
 // @connect      kami-labs.fr
 // @connect      maxroll.gg
 // @connect      assets-ng.maxroll.gg
@@ -2172,6 +2173,23 @@
       return { ids: Array.from(ids), names: Array.from(matchedNames) };
     }
 
+    // 2026-09-25: InfinityBuilds equivalent - see findInfinityBuildsPerSlotAffixesCached()'s
+    // docstring. Same flattening idiom as the widget branch above.
+    if (location.hostname === "infinitybuilds.gg") {
+      try {
+        const fromInfinityBuilds = await findInfinityBuildsPerSlotAffixesCached(gameClass);
+        if (fromInfinityBuilds.length) {
+          for (const entry of fromInfinityBuilds) {
+            for (const name of entry.names) matchedNames.add(name);
+            for (const id of entry.ids) ids.add(id);
+          }
+          return { ids: Array.from(ids), names: Array.from(matchedNames) };
+        }
+      } catch (e) {
+        // ignore - bonus signal, not required
+      }
+    }
+
     const text = document.body.innerText;
     for (const m of text.matchAll(/^\s*\d+\.\s*(.+)$/gm)) {
       const name = normalizeAffixText(m[1]);
@@ -2316,7 +2334,123 @@
     await ensureStatPriorityTabActive();
     const fromWidget = extractStatPriorityFromD4ToolsWidget(gameClass);
     if (fromWidget.length) return fromWidget;
+    if (location.hostname === "infinitybuilds.gg") {
+      try {
+        const fromInfinityBuilds = await findInfinityBuildsPerSlotAffixesCached(gameClass);
+        if (fromInfinityBuilds.length) return fromInfinityBuilds;
+      } catch (e) {
+        // ignore - bonus signal, not required
+      }
+    }
     return extractStatPriorityByTextHeuristic();
+  }
+
+  // 2026-09-25: InfinityBuilds equivalent of extractStatPriorityFromD4ToolsWidget()
+  // - found via `curl` of a real build page (no browser/DOM interaction
+  // needed, same "curl works, no JS execution required" pattern already used
+  // for diablofilter.com): each equipment slot's ACTUAL affixes are embedded
+  // directly in the page's own Next.js RSC payload, a <script> tag doing
+  // `self.__next_f.push([1, "...escaped JSON..."])`. A slot entry looks like
+  // `"slot":"helm","itemId":"...","affixes":[{"value":121,"affixId":"affix-s04-corestat-dexterity",...}, ...]`.
+  // Unlike Maxroll's Stat Priority widget (an explicit RANKED list of what
+  // to look for), this is "what affixes does the guide's own recommended
+  // item for this slot actually have" - a real but weaker signal (no
+  // explicit rank order; the affix array's order is used as a best-effort
+  // substitute for ranking, unconfirmed). The page embeds this multiple
+  // times (once per build-variant tab - Starter/Midgame/Endgame/Bossing);
+  // later occurrences overwrite earlier ones for the same slot in the Map
+  // below, landing on the LAST (most endgame-complete) variant - same
+  // heuristic as kami-labs' `steps[steps.length-1]`.
+  //
+  // affixId values are opaque slugs ("affix-s04-corestat-dexterity"), not
+  // directly usable - resolved via InfinityBuilds' own public reference API
+  // (`data.infinitybuilds.gg/api/games/diablo4/build-data`, queried with the
+  // exact affixIds found - confirmed live that querying with the full exact
+  // set reliably resolves all of them, whereas a partial/generic query
+  // doesn't) into human-readable labels ("Armor", "Maximum Life", "to
+  // Imbuement Skills" for kind="skillrank") that match our own AFFIX_IDS
+  // table almost verbatim - reuses resolveStatPriorityText() (built for
+  // Maxroll's "Ranks to X" skill affixes) by prefixing skillrank labels with
+  // "Ranks " first (IB's own label omits it: "to Imbuement Skills" vs our
+  // expected "Ranks to Imbuement Skills").
+  const INFINITYBUILDS_SLOT_MAP = {
+    helm: "Helm", chest: "Chest Armor", gloves: "Gloves", pants: "Pants", boots: "Boots",
+    amulet: "Amulet", ring1: "Left Ring", ring2: "Right Ring",
+    mainhand: "Mainhand", offhandWeapon: "Offhand", weapon: "Ranged Weapon",
+  };
+  function extractInfinityBuildsRawSlotAffixes() {
+    const slotAffixIds = new Map();
+    const slotRe = /"slot":"(\w+)"[\s\S]{0,200}?"affixes":\[([\s\S]*?)\]/g;
+    const affixIdRe = /"affixId":"([a-z0-9\-]+)"/g;
+    for (const script of document.querySelectorAll("script")) {
+      const text = script.textContent;
+      if (!text || !text.includes('"affixId"') || !text.includes('"slot"')) continue;
+      const unescaped = text.replace(/\\"/g, '"');
+      slotRe.lastIndex = 0;
+      let m;
+      while ((m = slotRe.exec(unescaped))) {
+        const ourSlot = INFINITYBUILDS_SLOT_MAP[m[1]];
+        if (!ourSlot) continue;
+        const ids = [];
+        affixIdRe.lastIndex = 0;
+        let am;
+        while ((am = affixIdRe.exec(m[2]))) ids.push(am[1]);
+        if (ids.length) slotAffixIds.set(ourSlot, ids); // later occurrence wins (last variant tab)
+      }
+    }
+    return slotAffixIds;
+  }
+  async function fetchInfinityBuildsAffixLabels(gameClass, affixIds) {
+    const url = `https://data.infinitybuilds.gg/api/games/diablo4/build-data?classId=${encodeURIComponent(gameClass || "")}&mode=view&shape=2&locale=en&slim=1&affixIds=${encodeURIComponent(affixIds.join(","))}`;
+    const data = JSON.parse(await gmGet(url));
+    const map = new Map();
+    for (const a of (data.dataset && data.dataset.gear && data.dataset.gear.affixes) || []) {
+      map.set(a.id, { label: a.label, kind: a.kind });
+    }
+    return map;
+  }
+  async function findInfinityBuildsPerSlotAffixes(gameClass) {
+    const slotAffixIds = extractInfinityBuildsRawSlotAffixes();
+    if (slotAffixIds.size === 0) return [];
+    const allIds = Array.from(new Set(Array.from(slotAffixIds.values()).flat()));
+    const labelMap = await fetchInfinityBuildsAffixLabels(gameClass, allIds);
+    const results = [];
+    for (const [ourSlot, ids] of slotAffixIds) {
+      const resolvedIds = new Set();
+      const names = new Set();
+      let unresolvedCount = 0;
+      for (const affixId of ids) {
+        const info = labelMap.get(affixId);
+        if (!info) { unresolvedCount++; continue; }
+        const text = info.kind === "skillrank" ? `Ranks ${info.label}` : info.label;
+        const resolved = resolveStatPriorityText(text, gameClass);
+        if (resolved) {
+          resolvedIds.add(resolved.id);
+          names.add(resolved.name);
+        } else {
+          unresolvedCount++;
+        }
+      }
+      // 2026-09-25: no per-slot Unique-name detection here yet (itemName
+      // stays null) - InfinityBuilds Uniques are still matched separately
+      // via the pre-existing Equipment-tab name scrape
+      // (extractInfinityBuildsDetail()'s gearNames(), fed into
+      // buildUniqueItemRules() as itemNamesEnFallback) - without slot
+      // correlation there, so a Unique found only this way still gets
+      // pooled into the generic "Garder Uniques" safety net rather than its
+      // own "U <slot>" rule. Real gap, deliberately left for a future pass.
+      results.push({ slot: ourSlot, ids: Array.from(resolvedIds), names: Array.from(names), unresolvedCount, itemName: null });
+    }
+    return results;
+  }
+  // Per-page-load cache - findPriorityAffixIds() and findPerSlotStatPriority()
+  // both need this during one filter generation; without caching, each
+  // would independently re-parse the page AND re-fetch the label-resolve
+  // API (a real network cost, unlike Maxroll's pure-DOM equivalent).
+  let infinityBuildsPerSlotCachePromise = null;
+  function findInfinityBuildsPerSlotAffixesCached(gameClass) {
+    if (!infinityBuildsPerSlotCachePromise) infinityBuildsPerSlotCachePromise = findInfinityBuildsPerSlotAffixes(gameClass);
+    return infinityBuildsPerSlotCachePromise;
   }
 
   function resolveSkillIds(gameClass, skillNamesList) {
