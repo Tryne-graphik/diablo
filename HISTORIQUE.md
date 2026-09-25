@@ -5569,3 +5569,75 @@ reste identique, pas besoin de remettre a jour `APPS_SCRIPT_ENDPOINT_URL` cote u
 forcer la mise a jour Tampermonkey (dashboard > Utilities > "Check for userscript updates now") pour
 recevoir la v2.76, et tester un vrai partage de bout en bout (generer un filtre, cliquer Partager,
 ouvrir le lien copie dans un autre navigateur/navigation privee pour simuler un ami sans le script).
+
+## 2026-09-25 - 3 filtres reels decodes (Rogue test, Druide fin de saison precedente, Auradin) - v2.77
+
+Poursuite de l'exercice "construis ton filtre ideal a la main" propose la veille : l'utilisateur a
+fourni 3 filtres reels d'un coup, decodes byte-a-byte a chaque fois (script Python ad hoc, scratchpad,
+meme methode que d'habitude). Trouvailles majeures, confirmees independamment par 2-3 filtres
+differents (pas des coincidences isolees) :
+
+**Double groupe d'affixes requis+optionnel dans une seule regle** - jamais utilise par ce projet avant
+aujourd'hui, mais present sur QUASIMENT CHAQUE regle par emplacement des 3 filtres (Torse, Anneau,
+Amulette, Arme, Botte, Jambe, Gant, Bouclier...) : un petit groupe "obligatoire" (kind=6,
+`RequiredAffixes`, souvent 1 seule stat, ex. Critical Strike Chance) ET un groupe "optionnel" plus
+large (kind=7, `OptionalAffixes`, avec son propre seuil) dans la MEME regle, les deux relies par ET.
+Le kind=7 n'avait jamais ete observe avant (seulement theorise dans le docstring de `codec.py` depuis
+Upsilon72, jamais implemente). **Implemente en v2.77** : nouvelle primitive `conditionOptionalAffixes()`
+(userscript) / `condition_optional_affixes()` (`codec.py`, kind=7) ; `buildPerSlotRules()` decoupe
+maintenant `entry.ids` (deja classe par rang via le widget Stat Priority de Maxroll) en
+`required = [entry.ids[0]]` (la stat la mieux classee, toujours obligatoire) et
+`optional = entry.ids.slice(1)` (le seuil du palier moins 1) - le total de stats desirees par palier
+(2/3/4) ne change pas, seule la repartition devient plus stricte/precise. Verifie par un round-trip
+Python (encode puis decode) avant de considerer l'implementation fiable.
+
+**"Mode Farm"** : l'utilisateur a explique sa vraie logique de fin de partie ("je cache les legendaires
+quand j'estime avoir assez de materiaux ou vouloir me concentrer sur un farm, je ne garde que les
+ancestraux du build et le codex, le reste juste l'essentiel") et confirme que le seuil de puissance
+850 est **fixe**, lie au niveau max (70) du jeu et pas a la puissance saisonniere - un objet non-
+Ancestral plafonne a 850, Ancestral a 900, donc pas besoin de reglage. **Implemente en v2.77** :
+nouvelles primitives `conditionNonAncestral()` (kind=2, arg4=1, confirmee par le filtre de test ET
+par l'explication de l'utilisateur pour arg4=5=1|4="les deux acceptes") et `conditionItemPowerRange()`
+(kind=0, deja dans `codec.py` depuis le 2026-09-22 mais jamais utilisee jusqu'ici) ; nouvelle case a
+cocher "🌾 Mode Farm" (defaut OFF) qui remplace la regle "Cacher Détritus" par
+ItemPowerRange(≥850) + NonAncestral + Rarete(Commun→Unique, jamais Mythique/Talisman) - implique
+automatiquement le meme comportement que "Cacher les Legendaires faibles" (nouvelle variable
+`effectiveHideWeak`), sinon le catch-all "Legendaires - Garder" interceptait tout avant que la regle
+de mode farm ne soit jamais atteinte.
+
+**Couleur du Codex personnalisable** : 5eme color picker ajoute (les 2 autres regles qui partageaient
+le meme vert fixe, "Mythique - Garder" et "Legendaires - Garder", restent fixes - seul le Codex a ete
+demande).
+
+**Confirmation independante en decodant le 3eme filtre ("Auradin")** : le nouveau systeme requis+
+optionnel et la technique Unique+palier-d'affixes (deja vue sur le filtre Druide) reapparaissent
+quasi-identiques sur un 3eme filtre construit par une autre personne (ou a un autre moment) - pas une
+coincidence, une vraie convention de l'utilisateur. Confirme aussi que `ItemPowerRange>=900` est
+utilise EN PRATIQUE comme equivalent direct d'"Ancestral" (puisqu'un objet non-Ancestral ne peut pas
+depasser 850) - premiere confirmation reelle de cette primitive, ajoutee en 2026-09-22 mais jamais vue
+utilisee avant aujourd'hui.
+
+**Nouvelles donnees resolues gratuitement via D4LootBench** (deja utilisee comme source ce projet) :
+- `"Cooldown Reduction": 0x001BEAB8` ajoutee a `AFFIX_IDS` (id trouve non-resolu dans le filtre
+  Auradin, confirme via le `snoName` `S04_CooldownReductionCDR`).
+- Table `itemTypes` complete de D4LootBench trouvee : confirme `0x0006D14C`="Sword" (Mainhand,
+  precedemment "nom non confirme"), revele plusieurs ids manquants utiles pour une future extension
+  du per-slot (Shield `0x0006D172` - absent du filtre "Legend Shield" de l'utilisateur lui-meme,
+  probablement un oubli de sa part -, Hand Crossbow `0x0006D168` distinct du Crossbow2H `0x0006D169`
+  deja connu, Axe/Axe2H/Mace2H/Staff/Scythe/Polearm/Wand/Focus/OffHandTotem pour les autres classes).
+  **Pas encore integre a `ITEM_TYPE_IDS`** - la question de comment Maxroll etiquette un slot
+  d'arme a 2 mains (un seul slot "2 mains" ou toujours Mainhand+Offhand ?) n'est pas confirmee, donc
+  pas implemente sans verification pour eviter une regression silencieuse.
+- La regle "Legend 1Hander" du filtre Auradin cible en fait `0x0006D152` = **Two-Handed Axe** d'apres
+  cette meme table - un vrai nom trompeur dans le filtre de l'utilisateur (mineur, sans consequence
+  fonctionnelle puisque la regle matche quand meme le bon type d'objet).
+
+Petits ecarts releves sans en tirer de conclusion (a confirmer avec l'utilisateur si utile) : les
+regles "Anneaux X3/X4" du filtre Auradin n'ont pas de condition ItemPowerRange (toutes les autres
+regles en ont une) ; les regles "Legend Shield" n'ont aucune condition ItemType du tout.
+
+`node --check` vert sur le userscript, round-trip Python verifie sur les nouvelles primitives kind=7/
+NonAncestral/ItemPowerRange, aucun artefact de corruption trouve en re-verifiant l'UTF-8 des 3 fichiers
+modifies. Rien de tout ca teste en jeu pour l'instant - prochaine etape logique : regenerer un filtre
+Strict avec le nouveau systeme requis/optionnel et confirmer en jeu que les regles par emplacement
+matchent comme attendu, puis tester le Mode Farm separement.

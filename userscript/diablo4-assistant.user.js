@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.76
+// @version      2.77
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1342,7 +1342,11 @@
   // strings persisted with GM_setValue. These are the swatch DEFAULTS,
   // matching the previously-hardcoded COLOR_GOLD/COLOR_ORANGE/COLOR_CYAN.
   // 2026-09-23: added `perfect` (per-slot Palier 4 - see buildPerSlotRules()).
-  const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff", perfect: "#ff2fd1" };
+  // 2026-09-25: added `codex` - user asked specifically for the Codex-upgrade
+  // rule to get its own picker (the other two rules that used to share this
+  // same fixed green, "Mythique - Garder" and "Légendaires - Garder", stay
+  // fixed on purpose - only Codex was asked for).
+  const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff", perfect: "#ff2fd1", codex: "#00c800" };
   function hexToColor(hex, fallback) {
     const m = /^#?([0-9a-f]{6})$/i.exec(hex || "");
     if (!m) return fallback;
@@ -1370,6 +1374,21 @@
     inner = inner.concat(fieldVarint(4, requiredCount));
     return fieldBytes(4, inner);
   }
+  // kind=7 (OptionalAffixes) - same shape as conditionAffixes()/kind=6, a
+  // SECOND independent affix pool with its own required count, ANDed with
+  // whatever else is in the rule (including a kind=6 pool). Never used by
+  // this project before 2026-09-25: decoded from 2 real user filters that
+  // day (a Rogue test filter and a full Druid endgame build) which both
+  // combine a small "must-have" pool (kind=6, count>=1, e.g. one specific
+  // skill-rank affix) with a larger "nice-to-have" pool (kind=7, count>=N)
+  // in the SAME rule - a real, load-bearing technique across nearly every
+  // slot in the Druid filter, not a one-off.
+  function conditionOptionalAffixes(affixIds, requiredCount) {
+    let inner = fieldVarint(1, 7);
+    for (const id of affixIds) inner = inner.concat(fieldFixed32(2, id));
+    inner = inner.concat(fieldVarint(4, requiredCount));
+    return fieldBytes(4, inner);
+  }
   function conditionItemTypes(typeIds) {
     let inner = fieldVarint(1, 5);
     for (const id of typeIds) inner = inner.concat(fieldFixed32(2, id));
@@ -1385,6 +1404,28 @@
   // New 2026-09-22, reverse-engineered alongside the kind=3/4 fix (see above).
   function conditionAncestral() {
     return fieldBytes(4, fieldVarint(1, 2).concat(fieldVarint(4, 4)));
+  }
+  // kind=2 (ItemProperties) arg4=1 - the "None" (non-Ancestral) counterpart
+  // to conditionAncestral()'s arg4=4. New 2026-09-25, confirmed two ways on
+  // the same day: (1) a real user filter's own "Cacher" rule uses exactly
+  // this to hide non-Ancestral endgame drops, and (2) the user separately
+  // confirmed arg4=5 (seen on a real "Précis - Torse Tiers 2" rule) is
+  // simply 1|4 - both bits set, i.e. "accept non-Ancestral OR Ancestral",
+  // used deliberately on their loosest per-slot tier. A 3rd real value, 36
+  // (=4|32), appears on nearly every Tier 3/4 rule in a real endgame build
+  // but bit 32's meaning is still unconfirmed (hypothesis: Masterworked) -
+  // not implemented here, only the 2 confirmed bits are.
+  function conditionNonAncestral() {
+    return fieldBytes(4, fieldVarint(1, 2).concat(fieldVarint(4, 1)));
+  }
+  // kind=0 (ItemPowerRange), arg4=min, arg6=max (0 = no upper bound). New
+  // 2026-09-25, used by the "mode farm" hide rule below - the user
+  // confirmed item power is capped at 850 (non-Ancestral) or 900
+  // (Ancestral) once a character reaches the level cap (70), so 850 is a
+  // stable threshold tied to the level cap, not something that needs to
+  // scale with seasonal power creep.
+  function conditionItemPowerRange(minPower, maxPower) {
+    return fieldBytes(4, fieldVarint(1, 0).concat(fieldVarint(4, minPower)).concat(fieldVarint(6, maxPower || 0)));
   }
   // 2026-09-24: D4's in-game rule-name field shares the filter-name's real
   // 24-character cap (confirmed by decoding the user's own re-exported
@@ -1569,6 +1610,12 @@
     "Wrath every 10 Kills": 0x0026a374, "Resource Cost Reduction": 0x001d3a11, "Resource Generation": 0x001beb20,
     "Lucky Hit Restore Primary Resource": 0x0024527f, "Potion Capacity": 0x001beae2, "Lucky Hit Chance": 0x001beadc,
     "Healing Received": 0x001bfcbf, "Fortify Generation": 0x00266b1e, "Barrier Generation": 0x00266b22,
+    // 2026-09-25: found decoding a real "Auradin" filter (0x001beab8 in an
+    // optional-affixes pool alongside Strength/Crit Chance) - resolved for
+    // free against D4LootBench's own data (displayName "%Cooldown
+    // Reduction", snoName S04_CooldownReductionCDR), same confidence level
+    // as the rest of this table's D4LootBench-sourced entries.
+    "Cooldown Reduction": 0x001beab8,
     "Movement Speed": 0x001beade, "Attacks Reduce Evade Cooldown": 0x0026c56c, "Maximum Evade Charge": 0x0026c56e,
     "Evade Grants Movement Speed": 0x0026c570,
     // 2026-09-22: found decoding the user's own Helm rule (unresolved at
@@ -2241,6 +2288,26 @@
     // "voir les Légendaires/Uniques sans Greater Affix mais au moins avec
     // les bonnes stats" - only meaningful when showLegendaryQuality is on.
     const keepGoodStatsNoGA = showLegendaryQuality && options.keepGoodStatsNoGA !== false;
+    // 2026-09-25: "mode farm" - user's own explanation: once they've got
+    // enough crafting materials or want to focus a farming session, they
+    // hide everything except Ancestral build-relevant items (already
+    // handled above/by extraRules) and Codex upgrades, "pour les autres je
+    // ne ramasse que l'essentiel". Decoded from their own real filter: a
+    // broad Hide rule gated on ItemPowerRange>=850 (the level-70 power cap
+    // for non-Ancestral drops, confirmed by the user - not seasonal power
+    // creep, so safe to hardcode) AND non-Ancestral, covering EVERY rarity
+    // up to Unique (never Mythic/Talisman) and every item type. Implies the
+    // same "don't unconditionally keep every Legendary+" behavior as
+    // hideWeakLegendaries (see effectiveHideWeak below), regardless of that
+    // checkbox's own state - farm mode's whole point is that broader hide.
+    const farmMode = strict && options.farmMode === true;
+    const effectiveHideWeak = hideWeakLegendaries || farmMode;
+    const FARM_MIN_ITEM_POWER = 850;
+    // 2026-09-25: 5th user-customizable swatch (Codex upgrade rule only -
+    // the other 2 rules that used to share this same fixed green,
+    // "Mythique - Garder" and "Légendaires - Garder", stay fixed on
+    // purpose, only Codex was asked for).
+    const colorCodex = options.colorCodex ?? COLOR_GREEN;
     // 2026-09-22: user-customizable swatches (3 color pickers in the panel,
     // "pour que les gens puissent personnaliser un peu") - default to the
     // original hardcoded colors when not supplied.
@@ -2282,7 +2349,7 @@
     // Legendary rules below is what matters (must stay before Hide Junk).
     // Already tagRule()-wrapped by buildPerSlotRules()/buildUniqueItemRules().
     for (const r of extraRules) rules.push(r);
-    rules.push(tagRule(makeRule("Codex : Mise à jour", RECOLOR, [conditionCodexUpgrade()], COLOR_GREEN)));
+    rules.push(tagRule(makeRule("Codex : Mise à jour", RECOLOR, [conditionCodexUpgrade()], colorCodex)));
     // Mythic always gets its own guaranteed-visible rule, independent of
     // both options below - a Mythic is always worth a look regardless of
     // whether quality-coloring or hiding is enabled.
@@ -2327,7 +2394,7 @@
     // this is the same safety net the old "else" branch always was, now
     // reached AFTER the quality tiers get first shot at a better color
     // instead of only existing as an alternative to them.
-    if (!hideWeakLegendaries) {
+    if (!effectiveHideWeak) {
       rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN)));
     }
     // 2026-09-24: removed the old unconditional "any rarity with a Greater
@@ -2353,8 +2420,19 @@
     // excluded on purpose - always kept); off, and it behaves like Open for
     // that rarity tier (already unconditionally kept above, now AFTER the
     // quality tiers get a chance to give it a better color).
-    const hideMask = COMMON | MAGIC | RARE | (hideWeakLegendaries ? LEGENDARY | UNIQUE : 0);
-    rules.push(tagRule(makeRule("Cacher Détritus", HIDE_ALL, [conditionRarity(hideMask)])));
+    const hideMask = COMMON | MAGIC | RARE | (effectiveHideWeak ? LEGENDARY | UNIQUE : 0);
+    // 2026-09-25: "mode farm" - a much broader hide, decoded from a real
+    // user filter: ItemPowerRange>=850 (the level-70 non-Ancestral cap) AND
+    // non-Ancestral AND any rarity up to Unique (never Mythic/Talisman,
+    // matching the real sample) AND every item type (no ItemType condition
+    // = matches all, same as the normal hide rule below). Everything the
+    // user actually wants during a farm pass already got a better color
+    // above (build-relevant Ancestral gear via extraRules, Codex upgrades),
+    // so this is meant to fire on almost everything else that reaches it.
+    const hideConditions = farmMode
+      ? [conditionItemPowerRange(FARM_MIN_ITEM_POWER, 0), conditionNonAncestral(), conditionRarity(COMMON | MAGIC | RARE | LEGENDARY | UNIQUE)]
+      : [conditionRarity(hideMask)];
+    rules.push(tagRule(makeRule("Cacher Détritus", HIDE_ALL, hideConditions)));
 
     // 2026-09-23: D4's native filter import silently truncates anything
     // past rule 25 (see tagRule()'s docstring) - confirmed live: a build
@@ -2492,13 +2570,30 @@
         skippedSlots.push(entry.slot);
         continue;
       }
+      // 2026-09-25: split into a required pool (just the #1-ranked stat,
+      // count>=1) + an optional pool (every other known stat, count>=N-1)
+      // instead of one flat "any N of the whole list" condition - decoded
+      // from 2 real user filters the same day, both of which build almost
+      // every per-slot rule this exact way (a small kind=6 "must-have" pool
+      // + a larger kind=7 "nice-to-have" pool, see conditionOptionalAffixes()).
+      // `entry.ids` is already RANKED (Maxroll's Stat Priority widget order,
+      // see findPerSlotStatPriority()), so "top-ranked stat is mandatory" is
+      // a direct read of that ranking, not a guess. Total desired-affix
+      // count per tier is UNCHANGED (2/3/4) - this only makes the strongest
+      // stat mandatory instead of merely one-of-many, a strict quality
+      // improvement with no new UI/tier-naming needed.
       for (const tier of tiersDesc) {
         if (tier === 4 && entry.ids.length < 4) continue;
         if (tier === 3 && entry.ids.length < 3) continue;
+        const requiredIds = entry.ids.slice(0, 1);
+        const optionalIds = entry.ids.slice(1);
+        const optionalCount = Math.min(tier === 5 ? 1 : tier - 1, optionalIds.length);
+        const affixConditions = [conditionAffixes(requiredIds, 1)];
+        if (optionalIds.length) affixConditions.push(conditionOptionalAffixes(optionalIds, optionalCount));
         const conditions =
           tier === 5
-            ? [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, 2), conditionGreaterAffix(1)]
-            : [conditionRarity(RARE), conditionItemTypes(typeIds), conditionAffixes(entry.ids, tier)];
+            ? [conditionRarity(RARE), conditionItemTypes(typeIds), ...affixConditions, conditionGreaterAffix(1)]
+            : [conditionRarity(RARE), conditionItemTypes(typeIds), ...affixConditions];
         if (requireAncestral) conditions.push(conditionAncestral());
         rules.push(tagRule(makeRule(`${tierLabels[tier]} - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, RECOLOR, conditions, tierColors[tier]), trimPriorityByTier[tier]));
       }
@@ -3853,6 +3948,9 @@
     // recognized Uniques) shouldn't surprise a first-time user.
     const optUniquePerItem = document.getElementById("d4a-opt-unique-per-item")?.checked ?? false;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
+    // 2026-09-25: "mode farm" - default OFF like hideWeak/uniquePerItem, a
+    // real behavior change (see generateFilterCode()'s farmMode comment).
+    const optFarmMode = document.getElementById("d4a-opt-farm-mode")?.checked ?? false;
     // 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la regle
     // des 25" - the 2 dropdowns below replace the old "all 4 tiers +
     // algorithmic trim" approach as the primary control (see
@@ -3865,10 +3963,12 @@
     const hexGood = document.getElementById("d4a-color-good")?.value || COLOR_HEX_DEFAULTS.good;
     const hexGA = document.getElementById("d4a-color-ga")?.value || COLOR_HEX_DEFAULTS.ga;
     const hexPerfect = document.getElementById("d4a-color-perfect")?.value || COLOR_HEX_DEFAULTS.perfect;
+    const hexCodex = document.getElementById("d4a-color-codex")?.value || COLOR_HEX_DEFAULTS.codex;
     const colorBis = hexToColor(hexBis, COLOR_GOLD);
     const colorGood = hexToColor(hexGood, COLOR_ORANGE);
     const colorGA = hexToColor(hexGA, COLOR_CYAN);
     const colorPerfect = hexToColor(hexPerfect, COLOR_PERFECT);
+    const colorCodex = hexToColor(hexCodex, COLOR_GREEN);
 
     // Read the CURRENT page's own "Stat Priority" list, if it has one -
     // see findPriorityAffixIds()'s docstring. Never blocks filter
@@ -3916,10 +4016,12 @@
     // buildUniqueItemRules() needs it too, ahead of that call.
     const { ids: allSkillIds } = resolveSkillIds(result.resolvedClass || "", result.skillsEn);
     const allBuildIds = Array.from(new Set([...allSkillIds, ...priority.ids]));
-    // Matches generateFilterCode()'s own `hideWeakLegendaries` condition -
+    // Matches generateFilterCode()'s own `effectiveHideWeak` condition -
     // see buildUniqueItemRules()'s docstring for why the SHOW safety net is
     // only needed when weak Legendaries/Uniques can actually get hidden.
-    const needsUniqueShowSafetyNet = isStrict && optHideWeak;
+    // Farm mode implies the same broader hide as hideWeak (see
+    // generateFilterCode()'s farmMode comment), so it needs the safety net too.
+    const needsUniqueShowSafetyNet = isStrict && (optHideWeak || optFarmMode);
     const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorGood, colorBis, allBuildIds, needsUniqueShowSafetyNet, optUniquePerItem);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
@@ -3947,10 +4049,12 @@
           showLegendaryQuality: optShowQuality,
           hideWeakLegendaries: optHideWeak,
           keepGoodStatsNoGA: optKeepGoodStatsNoGA,
+          farmMode: optFarmMode,
           colorBis,
           colorGood,
+          colorCodex,
         })
-      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood });
+      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorCodex });
 
     const detailNote = result.hasDetail
       ? ""
@@ -4153,18 +4257,21 @@
         <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <label><input type="checkbox" id="d4a-opt-unique-per-item"> 🔍 Une règle par Unique</label>
+        <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
           <p>🎨 Colore différemment les Légendaires/Uniques selon leur qualité (Greater Affix ou bonnes stats) au lieu de tout recolorer pareil - utile pour comparer directement une pièce upgradée à ce que tu portes déjà, sans devoir inspecter chaque objet un par un.</p>
           <p>💎 Ne s'applique que si "Distinguer les Légendaires par qualité" est coché. Sans elle, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste dans la couleur par défaut au lieu de ressortir.</p>
           <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont ni Greater Affix ni bonnes stats, au lieu de les laisser visibles dans la couleur par défaut. Indépendant de "Distinguer par qualité" - active les deux ensemble pour ne garder visible que ce qui compte vraiment.</p>
           <p>🔍 Au lieu d'une seule règle "Uniques - 2+/3+ Affixes" regroupant tous tes Uniques reconnus, génère une règle par Unique nommé (ex. "Grief - 3 Affixes") - utile en fin de partie pour savoir exactement lequel a de bonnes stats. S'applique sur les 2 filtres (Ouvert et Strict). Si un build a beaucoup d'Uniques reconnus, les règles les moins précises sont retirées en premier pour respecter la limite de 25 règles du jeu (comme pour la précision par emplacement).</p>
+          <p>🌾 Pour une session de farm une fois que tu as assez de matériaux : cache tout objet non-Ancestral de puissance ≥850 (le plafond au niveau 70), toutes raretés jusqu'à Unique incluse - il ne reste visible que les Ancestraux du build (déjà couverts ailleurs) et les mises à jour de Codex. Active automatiquement le même comportement que "Cacher les Légendaires faibles".</p>
         </details>
         <div class="d4a-color-row">
           <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Tier 3</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Tier 4</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Tier 5</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-codex" value="${COLOR_HEX_DEFAULTS.codex}"><span>Codex</span></div>
         </div>
         <div class="d4a-tier-select">
           <label>Tier A <select id="d4a-tier-a">
@@ -4197,7 +4304,8 @@
             <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build (pool général "BiS" : + Ancestral et Greater Affix)</span>
             <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
             <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 (Supérieur) : affixes du build + Greater Affix (par emplacement)</span>
-            <span><i style="background:#00c800"></i>Codex à améliorer / Légendaire-Unique-Mythique à garder</span>
+            <span><i id="d4a-legend-codex" style="background:${COLOR_HEX_DEFAULTS.codex}"></i>Codex à améliorer</span>
+            <span><i style="background:#00c800"></i>Légendaire/Unique/Mythique à garder</span>
           </div>
         </details>
       </div>
@@ -4319,6 +4427,9 @@
       "d4a-opt-hide-weak": false,
       "d4a-opt-perslot": true,
       "d4a-opt-unique-per-item": false,
+      // 2026-09-25: "mode farm" - real behavior change (broader hide), OFF
+      // by default like the other opt-in behavior changes above.
+      "d4a-opt-farm-mode": false,
     };
     for (const [id, defaultValue] of Object.entries(OPT_DEFAULTS)) {
       const cb = document.getElementById(id);
@@ -4344,6 +4455,7 @@
       ["d4a-color-good", "good", "d4a-legend-good"],
       ["d4a-color-perfect", "perfect", "d4a-legend-perfect"],
       ["d4a-color-ga", "ga", "d4a-legend-ga"],
+      ["d4a-color-codex", "codex", "d4a-legend-codex"],
     ]) {
       const input = document.getElementById(id);
       const swatch = document.getElementById(legendId);

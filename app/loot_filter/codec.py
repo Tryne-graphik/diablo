@@ -132,7 +132,26 @@ def condition_codex_upgrade() -> bytes:
 
 
 def condition_affixes(affix_ids: list[int], required_count: int) -> bytes:
+    """kind=6 (RequiredAffixes)."""
     inner = _field_varint(1, 6)
+    for affix_id in affix_ids:
+        inner += _field_fixed32(2, affix_id)
+    inner += _field_varint(4, required_count)
+    return _field_bytes(4, inner)
+
+
+def condition_optional_affixes(affix_ids: list[int], required_count: int) -> bytes:
+    """kind=7 (OptionalAffixes) - same shape as condition_affixes()/kind=6, a
+    SECOND independent affix pool with its own required count, ANDed with
+    whatever else is in the rule (including a kind=6 pool in the same rule).
+    New 2026-09-25: decoded from 2 real user filters that day (a Rogue test
+    filter and a full Druid endgame build), both of which combine a small
+    "must-have" pool (kind=6, count>=1) with a larger "nice-to-have" pool
+    (kind=7, count>=N) in the SAME rule - a load-bearing technique across
+    nearly every slot in the Druid filter, not a one-off. Only wired into
+    the userscript's buildPerSlotRules() so far (see its 2026-09-25
+    comment) - generator.py doesn't use this yet."""
+    inner = _field_varint(1, 7)
     for affix_id in affix_ids:
         inner += _field_fixed32(2, affix_id)
     inner += _field_varint(4, required_count)
@@ -143,6 +162,20 @@ def condition_ancestral() -> bytes:
     """kind=2 (ItemProperties), arg4=4 (Ancestral bit) - new 2026-09-22, reverse-
     engineered from a real user filter (see module docstring)."""
     return _field_bytes(4, _field_varint(1, 2) + _field_varint(4, 4))
+
+
+def condition_non_ancestral() -> bytes:
+    """kind=2 (ItemProperties), arg4=1 - the "None" (non-Ancestral)
+    counterpart to condition_ancestral()'s arg4=4. New 2026-09-25, confirmed
+    two ways the same day: (1) a real user filter's own "Cacher" rule uses
+    exactly this to hide non-Ancestral endgame drops, and (2) the user
+    separately confirmed arg4=5 (seen on a real per-slot Tier 2 rule) is
+    simply 1|4 - both bits set, i.e. "accept non-Ancestral OR Ancestral",
+    used deliberately on their loosest per-slot tier. A 3rd real value, 36
+    (=4|32), appears on nearly every Tier 3/4 rule in a real endgame build
+    but bit 32's meaning is still unconfirmed (hypothesis: Masterworked) -
+    not implemented here, only the 2 confirmed bits are."""
+    return _field_bytes(4, _field_varint(1, 2) + _field_varint(4, 1))
 
 
 def condition_item_power_range(min_power: int, max_power: int | None = None) -> bytes:

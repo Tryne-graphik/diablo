@@ -102,6 +102,11 @@ AFFIX_IDS: dict[str, int] = {
     "Healing Received":                   0x001BFCBF,
     "Fortify Generation":                 0x00266B1E,
     "Barrier Generation":                 0x00266B22,
+    # 2026-09-25: found decoding a real "Auradin" filter (0x001BEAB8 in an
+    # optional-affixes pool alongside Strength/Crit Chance) - resolved for
+    # free against D4LootBench's own data (displayName "%Cooldown
+    # Reduction", snoName S04_CooldownReductionCDR).
+    "Cooldown Reduction":                 0x001BEAB8,
     # Found decoding a real user filter and independently re-confirmed
     # bulk-decoding diablofilter.com filters (2026-09-22) - a "Ranks to X
     # Skills" category affix, same shape as the entries above, not tied to
