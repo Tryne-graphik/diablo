@@ -5965,3 +5965,23 @@ effectivement retiree, et un ⚠️ ajoute pour plus de visibilite.
 
 Version 2.86, `node --check` vert. **Pas encore teste en jeu** (visuellement, ce changement n'affecte
 que le texte du panneau, pas le contenu du filtre lui-meme).
+
+**2026-09-25 (suite) - discussion "Garder Uniques"/"Talismans Legendaires" - gardees telles quelles**
+
+L'utilisateur a suggere de supprimer ces 2 regles (redondantes en apparence puisque chaque emplacement
+a deja sa propre regle). Analyse : les deux ne sont en fait DEJA generees QUE quand "Cacher les
+Legendaires faibles" ou "Mode Farm" est actif (sinon 0 cout) - et dans ce cas precis, elles restent la
+SEULE protection pour un Unique/Talisman sur un site SANS widget de stats par emplacement (contrairement
+a "Mythique - Garder", retiree en v2.83, qui elle etait morte a 100% du temps). Verification faite :
+InfinityBuilds n'a aucun panneau equivalent (deja confirme session precedente). L'utilisateur a montre
+un screenshot de d4builds.gg qui EN A un ("Gear Stats", par emplacement, avec indication explicite des
+Great Affix en orange - donnee que Maxroll ne donne meme pas directement) - mais ca ne couvre qu'1 site
+de plus sur 6, pas suffisant pour retirer le filet de securite partout.
+
+**Decision** : garder les 2 regles telles quelles (cout nul par defaut). L'utilisateur va lui-meme vérifier
+kami-labs/D4Guides/talion.tv pour voir lesquels ont un panneau de stats par emplacement exploitable,
+dans le but de faire fonctionner la generation de filtre precise sur le plus de sites possible. Si
+d4builds.gg (deja confirme avoir la donnee) ou un autre site s'avere valoir la peine, l'extension de
+`findPerSlotStatPriority()`/`extractStatPriorityFromD4ToolsWidget()` a ce site serait un chantier
+separe (nouveaux selecteurs DOM a confirmer en reel, pas un simple ajustement de regle) - pas encore
+demarre, en attente du retour de l'utilisateur sur quels sites valent le coup.
