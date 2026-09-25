@@ -5690,3 +5690,27 @@ widget Stat Priority du tout, non confirme). Labels FR ajoutes ("Contondant"/"Tr
 --check` vert. **Rien de tout ca teste en jeu** - le Barbare (4 slots) et les nouvelles armes 2 mains
 non-Rogue en particulier meritent un vrai test avant de faire confiance a ces regles precises par
 emplacement pour ces classes.
+
+## 2026-09-25 - v2.79 : Bouclier confirme, et une vraie erreur de v2.78 corrigee le jour meme
+
+Filtre de test reel de l'utilisateur (4 regles) decode octet par octet :
+- **Regle "shield" (condition unique)** : `ItemType = 0x0006D172` seul - **confirme en jeu** l'id du
+  Bouclier deja utilise depuis D4LootBench, jamais teste individuellement avant. Ajoute a
+  `ITEM_TYPE_IDS["Offhand"]` (etait volontairement absent en v2.78, faute de confirmation).
+- **Regle "Toutes les armes" (categorie native du jeu)** : une seule condition `ItemType` qui pool 20
+  ids a la fois - correspond a la categorie "Toutes les armes" du filtre en jeu. Recoupee avec la table
+  complete D4LootBench, **a revele une vraie erreur introduite dans v2.78 le message precedent** :
+  `0x0006D144` etait etiquete "Sword2H" dans le code alors qu'il s'agit en realite de **Mace2H**
+  (Masse a 2 mains) - le vrai id d'Epee a 2 mains, `0x0006D14F`, etait totalement absent de la table.
+  Corrige dans `ITEM_TYPE_IDS["Mainhand"]` et les 2 nouveaux slots Barbare. Meme type d'erreur que les
+  inversions Codex/GreaterAffix et CHARM/SEAL trouvees plus tot ce projet - heureusement rattrapee le
+  jour meme grace a ce test, avant tout usage reel.
+- 3 ids de cette meme liste "Toutes les armes" restent non identifies (absents aussi de D4LootBench) :
+  `0x00165271`, `0x0016D22D`, `0x00234A98` - magnitude tres differente du cluster serre `0x0006D1xx`,
+  pas creuse plus loin (aucune regle de ce projet n'utilise "toutes les armes" comme categorie unique).
+- **2 regles sans nom** (kind=2 `ItemProperties`, arg4 absent=0 et arg4=1) etaient aussi presentes dans
+  le code colle par l'utilisateur - ne montrent PAS le bit 32 recherche. A clarifier avec l'utilisateur :
+  soit un essai infructueux pour isoler une autre case a cocher, soit la preuve que la section
+  "Proprietes" du filtre en jeu n'a que 2 options (Aucune/Ancestral) et que le bit 32 vient d'ailleurs.
+
+`node --check` vert, commite/pushe.

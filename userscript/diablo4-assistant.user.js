@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.78
+// @version      2.79
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1268,15 +1268,25 @@
     // in the slot list at all when 2H is equipped (not empty, absent). So
     // "Mainhand" needs the FULL weapon-subtype id pool (1H and 2H alike),
     // not just Dagger/Sword. Ids below are all from the D4LootBench
-    // itemTypes snapshot (research/d4lootbench-data-2026-09-22.json),
-    // cross-checked as internally consistent (armor slots' own ids from that
-    // same table matched already-confirmed values) but NOT independently
-    // single-condition-tested in-game like Helm/Pants/Dagger/Bow/Sword were.
+    // itemTypes snapshot (research/d4lootbench-data-2026-09-22.json).
+    // 2026-09-25 (later): cross-checked for real against an in-game filter
+    // using the game's own "All Weapons" ItemType category (a single kind=5
+    // condition pooling 20 ids at once) - confirmed every weapon id below
+    // matches, AND caught a real bug this same session had just introduced:
+    // 0x0006D144 was mislabeled "Sword2H" (it's actually Mace2H) and the real
+    // Sword2H (0x0006D14F) was missing entirely - fixed. 3 ids from that
+    // in-game "All Weapons" list are still unidentified (not in D4LootBench's
+    // table either): 0x00165271, 0x0016D22D, 0x00234A98 - structurally very
+    // different magnitude from the tight 0x0006D1xx weapon cluster, not
+    // chased further this session (no rule in this project uses "all
+    // weapons" as a single category, so not urgent).
     "Mainhand": [
       0x0006d159 /* Dagger, confirmed in-game */,
       0x0006d14c /* Sword, confirmed in-game (was "unconfirmed name" before 2026-09-25) */,
       0x0006d13a /* Mace */, 0x0006d151 /* Axe */, 0x0006d163 /* Wand */,
-      0x0006d144 /* Sword2H */, 0x0006d152 /* Axe2H */,
+      0x0006d144 /* Mace2H - was mislabeled "Sword2H" until 2026-09-25's in-game "Toutes les armes" cross-check */,
+      0x0006d14f /* Sword2H, confirmed via the same cross-check (was missing entirely before) */,
+      0x0006d152 /* Axe2H */,
       0x0006d153 /* Staff */, 0x0006d154 /* Scythe */, 0x0006d155 /* Scythe2H */, 0x0006d15d /* Polearm */,
     ],
     // 2026-09-25: Barbarian-only "Arsenal" slots, found on a real Whirlwind
@@ -1290,18 +1300,16 @@
     // theoretically hold any weapon subtype.
     "Bludgeoning Weapon": [
       0x0006d159, 0x0006d14c, 0x0006d13a, 0x0006d151, 0x0006d163,
-      0x0006d144, 0x0006d152, 0x0006d153, 0x0006d154, 0x0006d155, 0x0006d15d,
+      0x0006d144, 0x0006d14f, 0x0006d152, 0x0006d153, 0x0006d154, 0x0006d155, 0x0006d15d,
     ],
     "Slicing Weapon": [
       0x0006d159, 0x0006d14c, 0x0006d13a, 0x0006d151, 0x0006d163,
-      0x0006d144, 0x0006d152, 0x0006d153, 0x0006d154, 0x0006d155, 0x0006d15d,
+      0x0006d144, 0x0006d14f, 0x0006d152, 0x0006d153, 0x0006d154, 0x0006d155, 0x0006d15d,
     ],
     "Offhand": [
       0x0006d159 /* Dagger */, 0x0006d14c /* Sword */, 0x0006d13a /* Mace */, 0x0006d151 /* Axe */,
       0x0006d16a /* Focus */, 0x0006d16b /* OffHandTotem */,
-      // Shield NOT included: inferred as offhand-only by elimination, but
-      // not confirmed live this session (a Paladin shield-build guide had no
-      // Stat Priority widget to check) - add 0x0006d172 once confirmed.
+      0x0006d172 /* Shield - confirmed in-game 2026-09-25 via a single-condition test filter (ItemType=Shield alone) */,
     ],
     "Ranged Weapon": [0x0006d167 /* Bow, confirmed */, 0x0006d169 /* Crossbow2H, from D4LootBench (was "likely Crossbow") */],
   };
