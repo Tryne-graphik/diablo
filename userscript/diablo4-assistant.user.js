@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.87
+// @version      2.88
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1542,7 +1542,13 @@
       "Wall of Agony": 0x0026ad71,
     },
     barbarian: {
-      "Ancients Skills": 0x002782a5, "Bash": 0x001c60bc, "Bludgeoning Skills": 0x00280b83,
+      "Ancients Skills": 0x002782a5,
+      // 2026-09-25: InfinityBuilds labels these same 2 categories "Ancient
+      // Skills"/"Martial Skills" instead - same ids, added as aliases
+      // rather than renaming the originals (unknown whether Maxroll's own
+      // widget text already depends on the existing spelling).
+      "Ancient Skills": 0x002782a5, "Martial Skills": 0x00280b85,
+      "Bash": 0x001c60bc, "Bludgeoning Skills": 0x00280b83,
       "Brawling Skills": 0x001d6e25, "Challenging Shout": 0x001c692a, "Charge": 0x001c692c,
       "Death Blow": 0x001c692e, "Defensive Skills": 0x001d6e2b, "Double Swing": 0x001c6908,
       "DualWield Skills": 0x00280b85, "Dust Devil": 0x002782a9, "Earthquake": 0x002782ab,
@@ -1661,6 +1667,12 @@
     // Reduction", snoName S04_CooldownReductionCDR), same confidence level
     // as the rest of this table's D4LootBench-sourced entries.
     "Cooldown Reduction": 0x001beab8,
+    // 2026-09-25: found researching InfinityBuilds affix labels (v2.87's
+    // follow-up) - D4LootBench's own displayName "%Impairment Reduction",
+    // snoName S04_CC_Duration_Reduction, id sits 2 below the already-
+    // confirmed Cooldown Reduction (consistent with that stat cluster's
+    // tight id spacing) - same confidence level as the rest of this table.
+    "Impairment Reduction": 0x001beab6,
     "Movement Speed": 0x001beade, "Attacks Reduce Evade Cooldown": 0x0026c56c, "Maximum Evade Charge": 0x0026c56e,
     "Evade Grants Movement Speed": 0x0026c570,
     // 2026-09-22: found decoding the user's own Helm rule (unresolved at
@@ -2048,7 +2060,23 @@
   // A few affixes are shown with a class-specific display name in-game
   // (found on Rogue: crit chance is labelled "Deadly Strike Chance", not
   // "Critical Strike Chance") - mapped to the underlying universal name.
-  const AFFIX_SYNONYMS = { "deadly strike chance": "Critical Strike Chance" };
+  const AFFIX_SYNONYMS = {
+    "deadly strike chance": "Critical Strike Chance",
+    // 2026-09-25: InfinityBuilds' Tempering-only affix labels drop the
+    // " Multiplier" suffix our own table's keys use for the same real stat
+    // ("Damage Over Time" vs "Damage Over Time Multiplier") - found while
+    // adding InfinityBuilds per-slot support (v2.87), confirmed same id via
+    // D4LootBench's snoName for each (S04_CritDamage/S04_Damage_DoT/
+    // X2_DamageType_Fire/X2_DamageType_Physical all already match our
+    // existing AFFIX_IDS entries exactly), not a new stat.
+    "critical strike damage": "Critical Strike Damage Multiplier",
+    "damage over time": "Damage Over Time Multiplier",
+    "fire damage": "Fire Damage Multiplier",
+    "physical damage": "Physical Damage Multiplier",
+    // InfinityBuilds says "Maximum Evade Charges" (plural), our table
+    // (matching D4LootBench's own displayName) has it singular.
+    "maximum evade charges": "Maximum Evade Charge",
+  };
 
   const AFFIX_IDS_BY_LOWER_NAME = new Map();
   for (const name of Object.keys(AFFIX_IDS)) AFFIX_IDS_BY_LOWER_NAME.set(name.toLowerCase(), name);
@@ -2244,7 +2272,11 @@
   function resolveStatPriorityText(rawText, gameClass) {
     const name = normalizeAffixText(rawText);
     if (name && AFFIX_IDS[name]) return { name, id: AFFIX_IDS[name] };
-    const m = /^ranks to (.+)$/i.exec(rawText.trim());
+    // 2026-09-25: "Ranks " is optional - Maxroll's widget always says "Ranks
+    // to X", but InfinityBuilds' own affix labels just say "to X" (found
+    // adding its per-slot support, v2.87) for the exact same kind of
+    // category/skill-rank stat.
+    const m = /^(?:ranks )?to (.+)$/i.exec(rawText.trim());
     if (m) {
       const skillName = m[1].trim();
       // "Ranks to X Skills" category affixes (e.g. "Imbuement Skills") live

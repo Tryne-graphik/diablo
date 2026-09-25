@@ -6053,3 +6053,36 @@ passe future.
 
 Version 2.87, `node --check` vert. **Pas encore teste en jeu ni meme dans le vrai Tampermonkey** -
 seules les briques (extraction + resolution) ont ete verifiees isolement hors navigateur.
+
+## 2026-09-25 (suite) - v2.88 : recherche des affixes manquants, 76% -> 86% de resolution
+
+Suite a la liste de 25 affixes non resolus (sur les 104 trouves via l'echantillon de 9 builds), recherche
+dans D4LootBench + analyse des labels eux-memes. Trouvailles :
+
+- **4 "faux manquants"** : "Critical Strike Damage"/"Damage Over Time"/"Fire Damage"/"Physical Damage"
+  (labels de Trempe d'InfinityBuilds, sans le suffixe " Multiplier") correspondaient en fait a 4 ids
+  DEJA dans notre table (`Critical Strike Damage Multiplier`, etc.) - confirme via les `snoName`
+  D4LootBench de chacun. Ajoutes comme synonymes dans `AFFIX_SYNONYMS`, pas de nouvel id necessaire.
+- **1 autre "faux manquant"** : "Maximum Evade Charges" (pluriel, InfinityBuilds) vs notre
+  "Maximum Evade Charge" (singulier, deja present) - synonyme ajoute.
+- **1 vrai bug de code trouve** : `resolveStatPriorityText()` n'acceptait que "Ranks to X" (format
+  Maxroll) - InfinityBuilds ecrit juste "to X" pour le meme type de stat (ex: une regle "Toutes les
+  competences" via runeword, kind="magic" pas "skillrank"). Regex assouplie a `(?:ranks )?to (.+)`,
+  retrocompatible avec Maxroll.
+- **2 categories de competences Barbare manquantes** : "Martial Skills"/"Ancient Skills" (libelles
+  InfinityBuilds) correspondent en fait a nos entrees existantes "DualWield Skills"/"Ancients Skills" -
+  ajoutees comme alias dans `SKILL_AFFIX_IDS.barbarian` (memes ids, pas de nouvelle donnee).
+- **1 vrai nouvel id ajoute** : "Impairment Reduction" (`0x001beab6`, D4LootBench `%Impairment
+  Reduction` / `S04_CC_Duration_Reduction`) - confirme absent de la table, ajoute avec le meme niveau
+  de confiance que le reste des entrees sourcees D4LootBench.
+
+**Reste non resolu** (recherche D4LootBench infructueuse, pas de source fiable trouvee) : Imbuement
+Potency (Trempe Voleur), Gem Strength, All Stats, Mobility Cooldown Reduction, Lucky Hit Stun/Freeze
+combo Barbare-Voleur, formulation exacte de "Lucky Hit: Up to X% Chance to Restore Primary Resource"
+(le pourcentage variable selon le palier de Trempe rend un synonyme litteral fragile). Egalement 4 cas
+sans consequence : "of Greed" (Gold Find, pas une stat de combat), 4 stats fixes propres a l'Uber-
+Unique "Ring of Starless Skies", et 2 cas ou InfinityBuilds fait fuiter le nom d'un Unique ("Blazing
+Scream", "Demonform") dans un champ "affixId" par erreur de leur cote.
+
+**Verifie** : re-execution du meme harness Node sur les 9 builds/104 ids - **89/104 (86%) resolus**,
+contre 76% avant cette passe. Version 2.88, `node --check` vert. **Toujours pas teste en jeu.**
