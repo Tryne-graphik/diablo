@@ -5943,3 +5943,25 @@ Suite a la confirmation ci-dessus, l'utilisateur a demande 3 ajustements cosmeti
    defaut (0 est falsy en JS) - remplace par une verification `Number.isNaN()` explicite.
 
 Version 2.85, `node --check` vert. **Pas encore teste en jeu.**
+
+**2026-09-25 (suite) - filtre v2.85 verifie structurellement, tout est bon** : decode complet, noms
+courts et propres ("Tier 4 - Torse", "U Casque - AFX3"), Tier B="Aucun" fonctionne, "Ranks to Dance of
+Knives"/"Ranks to All Skills" bien integres (juste affiches en id brut par mon script de decodage
+jetable, qui ne connait pas cette table - pas un bug du filtre). Confirme aussi une interaction subtile
+qui marche bien : Casque/Pantalon n'ont pas de regle "Tier X" classique parce qu'ils portent chacun un
+Unique reconnu (regle deja existante depuis v2.56/57 qui saute la precision par emplacement quand le
+slot a un Unique dessus) - "U Casque"/"U Pantalon" prennent le relais avec leurs propres affixes.
+
+## 2026-09-25 (suite) - v2.86 : message d'avertissement de troncature corrige (existait deja, devenu imprecis)
+
+L'utilisateur a demande si un message d'avertissement existait quand le filtre genere depasse la
+limite de 25 regles du jeu, pour eviter la confusion si une regle semble manquante. **Ce message
+existe deja depuis le 2026-09-24** (`trimmedForRuleCap`, affiche sous la description du filtre Strict)
+- mais son texte etait devenu incorrect : il disait explicitement "regles de precision par emplacement
+(Tiers)" alors que depuis v2.84, les regles Uniques (AFX2/AFX3) partagent le meme mecanisme de
+troncature et peuvent maintenant aussi etre sacrifiees (confirme dans le filtre teste juste avant :
+"U Anneau D - AFX2" a ete retiree). Texte generalise pour rester exact quel que soit le type de regle
+effectivement retiree, et un ⚠️ ajoute pour plus de visibilite.
+
+Version 2.86, `node --check` vert. **Pas encore teste en jeu** (visuellement, ce changement n'affecte
+que le texte du panneau, pas le contenu du filtre lui-meme).

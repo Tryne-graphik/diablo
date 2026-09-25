@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.85
+// @version      2.86
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4291,7 +4291,12 @@
     const label = isStrict ? "Strict" : "Ouvert";
     const description = isStrict
       ? "Endgame T12+ / farm intensif (options dans le panneau)." +
-        (filterResult.trimmedForRuleCap ? ` <span style="color:#c9a227">${filterResult.trimmedForRuleCap} règle(s) de précision par emplacement (Tiers, les plus larges d'abord) retirée(s) pour respecter la limite de 25 règles du jeu.</span>` : "")
+        // 2026-09-25: text used to say "règles de précision par emplacement
+        // (Tiers)" only - no longer accurate since v2.84 made buildUniqueItemRules()
+        // trimmable too (its AFX2/AFX3 rules share the same trim-priority
+        // pool as per-slot Tiers). Broadened the wording so it stays correct
+        // regardless of which kind actually got dropped.
+        (filterResult.trimmedForRuleCap ? ` <span style="color:#c9a227">⚠️ ${filterResult.trimmedForRuleCap} règle(s) de précision (Tiers par emplacement ou Uniques, les moins précises d'abord) retirée(s) pour respecter la limite de 25 règles du jeu - rien de grave, mais une couleur/tier attendu peut manquer.</span>` : "")
       : "Leveling / early endgame / chasse aux aspects : masque juste Commun-Magique-Rare hors-build, garde toutes les Légendaires et Uniques pour inspection.";
 
     renderPanel(`
