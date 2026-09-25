@@ -5641,3 +5641,52 @@ NonAncestral/ItemPowerRange, aucun artefact de corruption trouve en re-verifiant
 modifies. Rien de tout ca teste en jeu pour l'instant - prochaine etape logique : regenerer un filtre
 Strict avec le nouveau systeme requis/optionnel et confirmer en jeu que les regles par emplacement
 matchent comme attendu, puis tester le Mode Farm separement.
+
+## 2026-09-25 - v2.76 "Partager" confirme fonctionnel de bout en bout (deploiement Apps Script)
+
+Le bouton Partager (backend termine la veille) renvoyait un lien avec `share=undefined` au premier
+test reel. Diagnostic via curl direct sur l'endpoint `/exec` : un POST `{action:"share",...}` renvoyait
+`{"status":"ok"}` **sans champ `id`** - exactement la signature de l'ancienne `handleFeedback()` (qui
+ignore `data.action` et ne renvoie jamais d'id), pas de la nouvelle `handleShare()`. Confirme en
+comparant au code de l'ancien commit (`9b674b0`) : le texte par defaut de `doGet` est identique entre
+l'ancienne et la nouvelle version, ce qui masquait le probleme au premier coup d'oeil - seul le `doPost`
+avait vraiment change. Cause : le pense-bete deja documente ("editer Code.gs seul ne suffit pas, il faut
+publier une Nouvelle version via Deployer > Gerer les deploiements") n'avait pas ete applique la
+premiere fois. Une fois la nouvelle version publiee, re-teste en curl : `{"status":"ok","id":3}` -
+confirme cote serveur, puis confirme par l'utilisateur cote jeu ("super sa marche"). **Premiere
+confirmation reelle du flux de partage complet** (generer un filtre -> Partager -> lien -> page de
+lecture -> copier -> importer en jeu).
+
+Prochaine etape (ordre convenu) : investiguer comment Maxroll etiquette le slot d'une arme a 2 mains
+avant d'etendre `ITEM_TYPE_IDS` (Shield et la plupart des sous-types d'armes non-Rogue/Sorcerer restent
+non couverts).
+
+## 2026-09-25 - v2.78 : armes a 2 mains investiguees et `ITEM_TYPE_IDS` etendu a toutes les classes
+
+Verification reelle via Playwright (pas de navigateur utilisateur) sur 2 builds Maxroll live pour
+repondre a la question laissee ouverte la veille : comment le widget "Stat Priority" etiquette-t-il le
+slot d'une arme a 2 mains ?
+
+- **Barbare (Whirlwind, weapon-swap)** : 4 slots d'armes distincts trouves - "Mainhand"/"Offhand"
+  (paire 1 main classique) ET "Bludgeoning Weapon"/"Slicing Weapon" (2 slots supplementaires,
+  specifiques au Barbare et son mecanisme "Arsenal" qui permet d'equiper jusqu'a 4 armes en meme
+  temps). Sur ce build, Infinity (Masterisque Unique Mace a 2 mains) apparait sous "Bludgeoning
+  Weapon" et Insight (Unique Hallebarde a 2 mains) sous "Slicing Weapon" - bien distincts du
+  Mainhand/Offhand du meme build (une epee 1 main de chaque cote).
+- **Druide (Pulverize, arme a 2 mains simple)** : un seul slot d'arme, "Mainhand", contenant The
+  Basilisk (Masterisque Unique Hallebarde/2 mains). **Pas de slot "Offhand" du tout dans la liste**
+  (pas vide - absent). Confirme : une arme a 2 mains n'a PAS son propre libelle de slot, elle partage
+  juste "Mainhand" avec les armes a 1 main.
+
+**Consequence implementee** : `ITEM_TYPE_IDS["Mainhand"]` (userscript) etendu de 2 a 11 ids (toutes
+les armes principales 1 et 2 mains : Dague, Epee, Epee2M, Masse, Hache, Hache2M, Baguette, Baton,
+Faux, Faux2M, Hallebarde - ids tous issus de la table `itemTypes` de D4LootBench, deja utilisee ce
+projet, cross-verifies coherents avec les ids d'armure deja confirmes en jeu mais PAS testes
+individuellement en jeu comme Casque/Pantalon/Dague/Arc/Epee l'ont ete). Nouvelles cles
+`"Bludgeoning Weapon"`/`"Slicing Weapon"` ajoutees (propres au Barbare), meme pool complet d'ids que
+Mainhand. `"Offhand"` etendu aux armes 1 main duales possibles (Dague/Epee/Masse/Hache) + Focus +
+Totem (Druide) - Bouclier deliberement PAS ajoute (page Paladin "Blessed Shield" testee n'avait pas de
+widget Stat Priority du tout, non confirme). Labels FR ajoutes ("Contondant"/"Tranchant"). `node
+--check` vert. **Rien de tout ca teste en jeu** - le Barbare (4 slots) et les nouvelles armes 2 mains
+non-Rogue en particulier meritent un vrai test avant de faire confiance a ces regles precises par
+emplacement pour ces classes.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.77
+// @version      2.78
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1260,16 +1260,50 @@
     // random per-slot, it's sequential, at least for armor.
     "Helm": [0x0006d16e],
     "Pants": [0x0006d16f],
-    // Weapon slots: each maps to a SET of sub-type ids (any one-hander vs
-    // any ranged weapon), pooled the same way the user's own "Dual Weapon 1"
-    // and "Ranged Weapon" rules did (2 sub-type ids each). Dagger/Axe/Bow
-    // confirmed by the external docs; the second id alongside each in the
-    // user's filter is included too even though its own name isn't
-    // independently confirmed, since it appeared paired with a confirmed one
-    // in a real, presumably-working filter.
-    "Mainhand": [0x0006d159 /* Dagger, confirmed */, 0x0006d14c /* unconfirmed name */],
-    "Offhand": [0x0006d159, 0x0006d14c],
-    "Ranged Weapon": [0x0006d167 /* Bow, confirmed */, 0x0006d169 /* unconfirmed name, likely Crossbow */],
+    // Weapon slots: 2026-09-25 finding (real Playwright check against 2 live
+    // Maxroll builds, one Barbarian one Druid) - a 2-Handed weapon does NOT
+    // get its own slot label. It's simply labeled "Mainhand" too, same as a
+    // 1-Handed one (confirmed: Druid Pulverize build's Mainhand = "The
+    // Basilisk", a Mythic Unique Polearm/2H) - "Offhand" just doesn't appear
+    // in the slot list at all when 2H is equipped (not empty, absent). So
+    // "Mainhand" needs the FULL weapon-subtype id pool (1H and 2H alike),
+    // not just Dagger/Sword. Ids below are all from the D4LootBench
+    // itemTypes snapshot (research/d4lootbench-data-2026-09-22.json),
+    // cross-checked as internally consistent (armor slots' own ids from that
+    // same table matched already-confirmed values) but NOT independently
+    // single-condition-tested in-game like Helm/Pants/Dagger/Bow/Sword were.
+    "Mainhand": [
+      0x0006d159 /* Dagger, confirmed in-game */,
+      0x0006d14c /* Sword, confirmed in-game (was "unconfirmed name" before 2026-09-25) */,
+      0x0006d13a /* Mace */, 0x0006d151 /* Axe */, 0x0006d163 /* Wand */,
+      0x0006d144 /* Sword2H */, 0x0006d152 /* Axe2H */,
+      0x0006d153 /* Staff */, 0x0006d154 /* Scythe */, 0x0006d155 /* Scythe2H */, 0x0006d15d /* Polearm */,
+    ],
+    // 2026-09-25: Barbarian-only "Arsenal" slots, found on a real Whirlwind
+    // Barbarian build (weapon-swap loadout: Infinity, a Mythic Unique
+    // Two-Handed Mace, showed under "Bludgeoning Weapon"; Insight, a Unique
+    // Polearm, under "Slicing Weapon" - both 2H, both distinct from that same
+    // build's own separate "Mainhand"/"Offhand" 1H pair). Barbarian is the
+    // only class that can have up to 4 weapons equipped at once, so these are
+    // real additional slots, not an alias for Mainhand/Offhand. Pooled with
+    // the same full weapon id set as Mainhand since either damage type could
+    // theoretically hold any weapon subtype.
+    "Bludgeoning Weapon": [
+      0x0006d159, 0x0006d14c, 0x0006d13a, 0x0006d151, 0x0006d163,
+      0x0006d144, 0x0006d152, 0x0006d153, 0x0006d154, 0x0006d155, 0x0006d15d,
+    ],
+    "Slicing Weapon": [
+      0x0006d159, 0x0006d14c, 0x0006d13a, 0x0006d151, 0x0006d163,
+      0x0006d144, 0x0006d152, 0x0006d153, 0x0006d154, 0x0006d155, 0x0006d15d,
+    ],
+    "Offhand": [
+      0x0006d159 /* Dagger */, 0x0006d14c /* Sword */, 0x0006d13a /* Mace */, 0x0006d151 /* Axe */,
+      0x0006d16a /* Focus */, 0x0006d16b /* OffHandTotem */,
+      // Shield NOT included: inferred as offhand-only by elimination, but
+      // not confirmed live this session (a Paladin shield-build guide had no
+      // Stat Priority widget to check) - add 0x0006d172 once confirmed.
+    ],
+    "Ranged Weapon": [0x0006d167 /* Bow, confirmed */, 0x0006d169 /* Crossbow2H, from D4LootBench (was "likely Crossbow") */],
   };
 
   // 2026-09-24: short French labels for the in-game rule names generated
@@ -1289,6 +1323,8 @@
     "Mainhand": "Main Princ.",
     "Offhand": "Main Sec.",
     "Ranged Weapon": "Distance",
+    "Bludgeoning Weapon": "Contondant",
+    "Slicing Weapon": "Tranchant",
   };
 
   function encodeVarint(value) {
