@@ -5728,3 +5728,26 @@ PAS une propriete cochable manuellement - reste non resolu (pas re-examine faute
 bruts de ce filtre Druide sous la main), mais risque faible puisqu'aucun code de ce projet ne lit ou
 n'ecrit ce bit aujourd'hui. Docstring de `codec.py` mise a jour avec cette confirmation complete de
 l'enum kind + la clarification du mystere bit 32, pour reference future.
+
+## 2026-09-25 (suite) - v2.79 verifie structurellement sur un vrai filtre Barbare (Whirlwind)
+
+L'utilisateur a genere un vrai filtre Strict sur maxroll.gg/d4/build-guides/whirlwind-barbarian-guide
+(le meme build utilise pour la recherche Playwright plus tot) et colle le code avant import, comme
+convenu. Decode octet par octet (script ad hoc reutilisable, `/tmp/decode_full.py`) - **tout est
+structurellement correct** :
+- 25 regles exactement (limite native du jeu), ordre correct (precis d'abord, Cacher Detritus en
+  dernier).
+- Nouveaux slots Barbare "Contondant"/"Tranchant" presents, pool complet des 12 types d'armes avec
+  Masse2M et Epee2M desormais bien distincts (confirme la correction du mislabel faite plus tot dans
+  la session).
+- "Main Princ."/"Main Sec." corrects, "Main Sec." inclut bien le Bouclier.
+- Mecanisme de trim par priorite observe en conditions reelles pour la premiere fois : les 4 slots
+  d'armes n'ont recu que leur tier "Parfait" (le tier "Prec.3", priorite plus faible, a ete sacrifie
+  en premier pour tenir sous 25 regles) alors que les slots d'armure ont garde leurs 2 tiers - exactement
+  le comportement voulu depuis v2.46/v2.47.
+- (Accents mal affiches dans le terminal de decodage lors de la revue - verifie sur les octets bruts,
+  UTF-8 parfaitement valide, artefact d'affichage uniquement, pas un bug.)
+
+**Pas de Barbare a disposition** cote utilisateur pour la verification visuelle finale en jeu (armes
+recolorees, etc.) - **sera teste par un ami** a une date non precisee. A relancer si besoin dans une
+session future plutot que suppose valide sans ce retour visuel.
