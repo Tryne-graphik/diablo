@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.84
+// @version      2.85
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2658,7 +2658,11 @@
     // game's filter list, not just this panel) and shortened to fit D4's
     // real 24-character rule-name cap once combined with a slot label
     // (see SLOT_LABELS_FR below and makeRule()'s truncation comment).
-    const tierLabels = { 2: "Préc.2", 3: "Préc.3", 4: "Parfait", 5: "Supérieur" };
+    // 2026-09-25: simplified from named tiers ("Préc.2"/"Parfait"/
+    // "Supérieur") to just "Tier N" - the user found the named version
+    // harder to scan at a glance than a consistent numeric scheme, same
+    // reasoning as buildUniqueItemRules()'s "AFX" shortening below.
+    const tierLabels = { 2: "Tier 2", 3: "Tier 3", 4: "Tier 4", 5: "Tier 5" };
     const tiersDesc = Array.from(new Set(selectedTiers)).filter((t) => t >= 2 && t <= 5).sort((a, b) => b - a);
     const tiersAsc = [...tiersDesc].sort((a, b) => a - b);
     const trimPriorityByTier = {};
@@ -2807,7 +2811,7 @@
     const matched = [];
     const seen = new Set();
     const pooledSnoIds = [];
-    const groups = new Map(); // key: JSON.stringify(slot ids) -> { ids, uniques: [{name, snoIds}] }
+    const groups = new Map(); // key: JSON.stringify(slot ids) -> { ids, uniques: [{name, slot, snoIds}] }
     const NO_SLOT_DATA = "__no_slot_data__";
 
     for (const entry of perSlotData) {
@@ -2819,7 +2823,7 @@
       pooledSnoIds.push(...UNIQUE_ITEM_IDS[canonical]);
       const key = entry.ids.length >= 2 ? JSON.stringify(entry.ids) : NO_SLOT_DATA;
       if (!groups.has(key)) groups.set(key, { ids: entry.ids, uniques: [] });
-      groups.get(key).uniques.push({ name: canonical, snoIds: UNIQUE_ITEM_IDS[canonical] });
+      groups.get(key).uniques.push({ name: canonical, slot: entry.slot, snoIds: UNIQUE_ITEM_IDS[canonical] });
     }
     for (const rawName of itemNamesEnFallback) {
       const canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(rawName));
@@ -2828,29 +2832,37 @@
       matched.push(canonical);
       pooledSnoIds.push(...UNIQUE_ITEM_IDS[canonical]);
       if (!groups.has(NO_SLOT_DATA)) groups.set(NO_SLOT_DATA, { ids: [], uniques: [] });
-      groups.get(NO_SLOT_DATA).uniques.push({ name: canonical, snoIds: UNIQUE_ITEM_IDS[canonical] });
+      groups.get(NO_SLOT_DATA).uniques.push({ name: canonical, slot: null, snoIds: UNIQUE_ITEM_IDS[canonical] });
     }
 
     const rules = [];
-    const SUFFIX_LEN = " - 3 Affixes".length;
     for (const [key, group] of groups) {
       if (key === NO_SLOT_DATA) continue; // no reliable affix data - covered by the SHOW safety net only
       const snoIds = group.uniques.flatMap((u) => u.snoIds);
-      // Multiple Uniques sharing this exact slot-affix set (rare) share one
-      // rule labeled "Uniques"; the common single-Unique case names it
-      // directly, truncated to leave room for the tier suffix (most real
-      // Unique names don't fit D4's 24-char rule-name cap otherwise).
+      // 2026-09-25: named after the Unique's own SLOT ("U Anneau G") instead
+      // of the Unique's own name - the user pointed out most real names
+      // (264/336) get awkwardly truncated by D4's 24-char rule-name cap
+      // ("Cowl of the " with a trailing space, "Stone of Jor" mid-word),
+      // while a slot label is always short and never needs cutting. The "U"
+      // prefix distinguishes this from buildPerSlotRules()'s own per-slot
+      // rules for the same slot (e.g. "Tier 2 - Anneau G"). Multiple
+      // Uniques sharing this exact affix set (rare - would need 2 different
+      // slots to coincidentally rank identical priorities) fall back to a
+      // generic "U Multi" label rather than concatenating slot names, which
+      // could itself overflow the 24-char cap.
       const label = group.uniques.length === 1
-        ? (group.uniques[0].name.length > 24 - SUFFIX_LEN ? group.uniques[0].name.slice(0, 24 - SUFFIX_LEN) : group.uniques[0].name)
-        : "Uniques";
+        ? `U ${SLOT_LABELS_FR[group.uniques[0].slot] || group.uniques[0].slot}`
+        : "U Multi";
       const requiredIds = group.ids.slice(0, 1);
       const optionalIds = group.ids.slice(1);
+      // "AFX" instead of "Affixes" - shorter, and consistent with
+      // buildPerSlotRules()'s "Tier N" simplification the same day.
       if (group.ids.length >= 3) {
         const optionalCount = Math.min(2, optionalIds.length);
-        rules.push(tagRule(makeRule(`${label} - 3 Affixes`, RECOLOR, [conditionSpecificUnique(snoIds), conditionAffixes(requiredIds, 1), conditionOptionalAffixes(optionalIds, optionalCount)], colorBis), 10));
+        rules.push(tagRule(makeRule(`${label} - AFX3`, RECOLOR, [conditionSpecificUnique(snoIds), conditionAffixes(requiredIds, 1), conditionOptionalAffixes(optionalIds, optionalCount)], colorBis), 10));
       }
       const optionalCount2 = Math.min(1, optionalIds.length);
-      rules.push(tagRule(makeRule(`${label} - 2 Affixes`, RECOLOR, [conditionSpecificUnique(snoIds), conditionAffixes(requiredIds, 1), conditionOptionalAffixes(optionalIds, optionalCount2)], colorGood), 20));
+      rules.push(tagRule(makeRule(`${label} - AFX2`, RECOLOR, [conditionSpecificUnique(snoIds), conditionAffixes(requiredIds, 1), conditionOptionalAffixes(optionalIds, optionalCount2)], colorGood), 20));
     }
     if (pooledSnoIds.length && needsShowSafetyNet) {
       // Never trimmable (see tagRule()'s docstring) - fixed cost no matter
@@ -4118,10 +4130,16 @@
     // des 25" - the 2 dropdowns below replace the old "all 4 tiers +
     // algorithmic trim" approach as the primary control (see
     // buildPerSlotRules()'s docstring).
-    const selectedTiers = [
-      parseInt(document.getElementById("d4a-tier-a")?.value, 10) || 2,
-      parseInt(document.getElementById("d4a-tier-b")?.value, 10) || 3,
-    ];
+    // 2026-09-25: Tier B can now be "Aucun" (value "0") to run with just one
+    // tier - `|| fallback` would wrongly coerce a real "0" selection back to
+    // the default (0 is falsy in JS), so check for NaN specifically instead
+    // (buildPerSlotRules()'s own tiersDesc filter already drops anything
+    // outside 2-5, so a 0 here simply results in one fewer tier, not a bug).
+    const parseTierValue = (id, fallback) => {
+      const n = parseInt(document.getElementById(id)?.value, 10);
+      return Number.isNaN(n) ? fallback : n;
+    };
+    const selectedTiers = [parseTierValue("d4a-tier-a", 2), parseTierValue("d4a-tier-b", 3)];
     const hexBis = document.getElementById("d4a-color-bis")?.value || COLOR_HEX_DEFAULTS.bis;
     const hexGood = document.getElementById("d4a-color-good")?.value || COLOR_HEX_DEFAULTS.good;
     const hexGA = document.getElementById("d4a-color-ga")?.value || COLOR_HEX_DEFAULTS.ga;
@@ -4424,24 +4442,25 @@
           <label>Tier A <select id="d4a-tier-a">
             <option value="2">2</option>
             <option value="3">3</option>
-            <option value="4">4 Parfait</option>
-            <option value="5">5 Sup.</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select></label>
           <label>Tier B <select id="d4a-tier-b">
+            <option value="0">Aucun</option>
             <option value="2">2</option>
             <option value="3">3</option>
-            <option value="4">4 Parfait</option>
-            <option value="5">5 Sup.</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select></label>
         </div>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus sur les tiers</summary>
-          <p>⚠️ Le jeu limite un filtre à 25 règles : seuls 2 tiers sur les 4 peuvent être actifs à la fois (Tier A et Tier B ci-dessus). Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement reçoit une règle pour chacun des 2 tiers choisis, le plus élevé qui correspond l'emporte.</p>
+          <p>⚠️ Le jeu limite un filtre à 25 règles : au plus 2 tiers sur les 4 peuvent être actifs à la fois (Tier A et Tier B ci-dessus) - choisis "Aucun" pour Tier B pour n'en garder qu'un seul et libérer de la marge. Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement reçoit une règle pour chacun des tiers choisis, le plus élevé qui correspond l'emporte.</p>
           <div class="d4a-tier-grid">
             <p><strong>Tier 2</strong><br>Le Rare a 2 des affixes prioritaires de l'emplacement.</p>
             <p><strong>Tier 3</strong><br>3 affixes prioritaires.</p>
-            <p><strong>Tier 4 (Parfait)</strong><br>Les 4 affixes prioritaires connus pour cet emplacement.</p>
-            <p><strong>Tier 5 (Supérieur)</strong><br>2+ affixes prioritaires ET au moins un Greater Affix.</p>
+            <p><strong>Tier 4</strong><br>Les 4 affixes prioritaires connus pour cet emplacement.</p>
+            <p><strong>Tier 5</strong><br>2+ affixes prioritaires ET au moins un Greater Affix.</p>
           </div>
         </details>
         <details class="d4a-legend-details">
@@ -4449,8 +4468,8 @@
           <div class="d4a-legend">
             <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Tier 2 : 2+ affixes du build par emplacement (ou pool général "Bon" - Ouvert uniquement)</span>
             <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build par emplacement (ou pool général "BiS" - Ouvert uniquement)</span>
-            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 (Supérieur) : affixes du build + Greater Affix (par emplacement)</span>
+            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 : les 4 affixes du build sur cet emplacement</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 : affixes du build + Greater Affix (par emplacement)</span>
             <span><i id="d4a-legend-codex" style="background:${COLOR_HEX_DEFAULTS.codex}"></i>Codex à améliorer</span>
             <span><i style="background:#00c800"></i>Légendaire/Unique restant (Mythique : jamais recoloré, jamais caché)</span>
           </div>

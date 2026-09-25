@@ -5913,3 +5913,33 @@ retiree du panneau, avec son texte d'aide et sa valeur par defaut. Variables mor
 l'ancien appel).
 
 Version 2.84, `node --check` vert. **Pas encore teste en jeu.**
+
+**2026-09-25 (suite) - filtre v2.84 verifie structurellement, tres bon retour de l'utilisateur** :
+decode complet du 1er filtre genere avec toutes les corrections de la session (rarete=12 partout,
+plus de Mythique/Legendaire generiques, "Ranks to All Skills" utilise comme condition requise sur
+l'Anneau Droit, Uniques individuels avec leurs vrais affixes par emplacement) - 25/25 regles, le
+mecanisme de troncature a correctement sacrifie "Stone of Jordan - 2 Affixes" (priorite la plus
+faible) pour tenir sous la limite. Seul point cosmetique releve : les noms d'Uniques tronques
+donnent des trucs bizarres ("Cowl of the ", "Stone of Jor").
+
+## 2026-09-25 (suite) - v2.85 : simplification des noms de regles + choix d'un seul tier
+
+Suite a la confirmation ci-dessus, l'utilisateur a demande 3 ajustements cosmetiques/UX :
+
+1. **Regles Uniques nommees par EMPLACEMENT plutot que par nom d'Unique** ("U Anneau G" au lieu de
+   "Cowl of the ") - un nom de Unique reel (264/336) ne tient presque jamais dans la limite de 24
+   caracteres du jeu, un libelle d'emplacement tient toujours. Prefixe "U " pour distinguer de la
+   regle de precision normale du meme emplacement ("Tier 2 - Anneau G"). Cas rare de 2 Uniques
+   partageant le meme jeu d'affixes (differents emplacements) : libelle generique "U Multi" plutot
+   que de concatener les noms d'emplacement (risque de depasser 24 caracteres).
+2. **"Affixes" -> "AFX"** partout (regles Uniques : "AFX2"/"AFX3" au lieu de "2 Affixes"/"3 Affixes").
+3. **Tiers de precision par emplacement renommes** : "Prec.2"/"Prec.3"/"Parfait"/"Supérieur" ->
+   simplement "Tier 2"/"Tier 3"/"Tier 4"/"Tier 5", coherent avec le nouveau nommage des regles
+   Uniques (schema numerique unique plutot que des noms differents par tier).
+4. **Choix d'un seul tier** : nouvelle option "Aucun" pour le menu deroulant Tier B (Tier A reste
+   obligatoire) - permet de ne generer qu'un seul tier par emplacement au lieu de toujours 2, pour
+   liberer de la marge sous la limite de 25 regles. Piege evite : `parseInt(...) || fallback` aurait
+   traite un choix explicite de "0" (Aucun) comme "non defini" et serait retombe sur la valeur par
+   defaut (0 est falsy en JS) - remplace par une verification `Number.isNaN()` explicite.
+
+Version 2.85, `node --check` vert. **Pas encore teste en jeu.**
