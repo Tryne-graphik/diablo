@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.81
+// @version      2.82
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2148,7 +2148,7 @@
     }
   }
 
-  async function findPriorityAffixIds() {
+  async function findPriorityAffixIds(gameClass) {
     await ensureStatPriorityTabActive();
     const ids = new Set();
     const matchedNames = new Set();
@@ -2157,13 +2157,17 @@
     // extractStatPriorityFromD4ToolsWidget()'s docstring below) - the plain
     // innerText regex this used to rely on doesn't work there (the "1./2."
     // numbers are CSS list styling, not real text, confirmed 2026-09-22).
-    const fromWidget = extractStatPriorityFromD4ToolsWidget();
+    const fromWidget = extractStatPriorityFromD4ToolsWidget(gameClass);
     if (fromWidget.length) {
+      // 2026-09-25: use entry.ids directly (already resolved, skill-rank
+      // affixes included) instead of re-deriving via AFFIX_IDS[name] here -
+      // that re-lookup used to silently produce `undefined` for any skill
+      // name (they're never in AFFIX_IDS), see
+      // extractStatPriorityFromD4ToolsWidget()'s docstring for the bug this
+      // was part of.
       for (const entry of fromWidget) {
-        for (const name of entry.names) {
-          matchedNames.add(name);
-          ids.add(AFFIX_IDS[name]);
-        }
+        for (const name of entry.names) matchedNames.add(name);
+        for (const id of entry.ids) ids.add(id);
       }
       return { ids: Array.from(ids), names: Array.from(matchedNames) };
     }
@@ -2206,7 +2210,38 @@
     "Helm", "Chest Armor", "Gloves", "Pants", "Boots", "Ranged Weapon",
     "Mainhand", "Offhand", "Amulet", "Left Ring", "Right Ring", "Seal", "Charm 1", "Charm 2",
   ];
-  function extractStatPriorityFromD4ToolsWidget() {
+  // 2026-09-25: real bug found from a user screenshot of Maxroll's Stat
+  // Priority widget - Gloves/Amulet were stuck one affix short of Tier 4
+  // (needs 4 known affixes) because their 4th-ranked entry was a SKILL-RANK
+  // stat ("Ranks to Dance of Knives", "Ranks to All Skills") which AFFIX_IDS
+  // has no entry for at all (those live in SKILL_AFFIX_IDS/
+  // GENERIC_SKILL_AFFIX_IDS instead) - silently dropped as "unresolved"
+  // every time, even though this exact widget text ("Ranks to Imbuement
+  // Skills") was already spotted and documented back on 2026-09-22, just
+  // never actually wired up to resolve. Worse than a missed Tier 4: when the
+  // TOP-ranked stat for a slot is a skill-rank one (seen live: Right Ring's
+  // #1 priority was "Ranks to All Skills"), the "required" stat used by
+  // buildPerSlotRules() silently became whatever was actually #2, a real
+  // ranking-integrity bug, not just a missing-tier one.
+  function resolveStatPriorityText(rawText, gameClass) {
+    const name = normalizeAffixText(rawText);
+    if (name && AFFIX_IDS[name]) return { name, id: AFFIX_IDS[name] };
+    const m = /^ranks to (.+)$/i.exec(rawText.trim());
+    if (m) {
+      const skillName = m[1].trim();
+      // "Ranks to X Skills" category affixes (e.g. "Imbuement Skills") live
+      // in the flat AFFIX_IDS table, not SKILL_AFFIX_IDS - normalizeAffixText
+      // alone never found them because it doesn't strip the "Ranks to "
+      // prefix, only a leading number/percent.
+      const flatName = normalizeAffixText(skillName);
+      if (flatName && AFFIX_IDS[flatName]) return { name: flatName, id: AFFIX_IDS[flatName] };
+      const classTable = gameClass ? SKILL_AFFIX_IDS[gameClass] : null;
+      const id = (classTable && classTable[skillName]) ?? GENERIC_SKILL_AFFIX_IDS[skillName];
+      if (id != null) return { name: skillName, id };
+    }
+    return null;
+  }
+  function extractStatPriorityFromD4ToolsWidget(gameClass) {
     const results = [];
     for (const item of document.querySelectorAll(".d4t-item")) {
       const slotEl = item.querySelector(".d4t-slot");
@@ -2216,10 +2251,10 @@
       const names = new Set();
       let unresolvedCount = 0;
       for (const li of item.querySelectorAll("li.d4t-number")) {
-        const name = normalizeAffixText(li.textContent.trim());
-        if (name && AFFIX_IDS[name]) {
-          names.add(name);
-          ids.add(AFFIX_IDS[name]);
+        const resolved = resolveStatPriorityText(li.textContent.trim(), gameClass);
+        if (resolved) {
+          names.add(resolved.name);
+          ids.add(resolved.id);
         } else {
           unresolvedCount++;
         }
@@ -2277,9 +2312,9 @@
     }
     return results;
   }
-  async function findPerSlotStatPriority() {
+  async function findPerSlotStatPriority(gameClass) {
     await ensureStatPriorityTabActive();
-    const fromWidget = extractStatPriorityFromD4ToolsWidget();
+    const fromWidget = extractStatPriorityFromD4ToolsWidget(gameClass);
     if (fromWidget.length) return fromWidget;
     return extractStatPriorityByTextHeuristic();
   }
@@ -4081,7 +4116,7 @@
     // generation: an empty result just means fewer/simpler rules.
     let priority = { ids: [], names: [] };
     try {
-      priority = await findPriorityAffixIds();
+      priority = await findPriorityAffixIds(result.resolvedClass);
     } catch (e) {
       // ignore - stat-priority detection is a bonus signal, not required
     }
@@ -4098,7 +4133,7 @@
     let perSlot = [];
     let perSlotRulesResult = { rules: [], skippedSlots: [] };
     try {
-      perSlot = await findPerSlotStatPriority();
+      perSlot = await findPerSlotStatPriority(result.resolvedClass);
       if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, selectedTiers, colorGood, colorBis, colorPerfect, colorGA);
     } catch (e) {
       // ignore - same as above, a bonus signal, not required

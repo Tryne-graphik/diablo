@@ -5818,3 +5818,39 @@ qu'un seul tier avec la selection Tier A=3/B=4 - hypothese (pas encore confirmee
 ces emplacements n'ont que 3 affixes prioritaires connus sur le widget Stat Priority de Maxroll pour ce
 build, donc le Tier 4 (qui exige 4 affixes connus) est structurellement impossible a generer - a
 verifier directement sur la page Maxroll par l'utilisateur. **Pas encore teste en jeu.**
+
+## 2026-09-25 (suite) - v2.82 : hypothese confirmee - vrai bug trouve, les affixes "Ranks to X" etaient toujours ignores
+
+Utilisateur a fourni un screenshot reel du widget Stat Priority Maxroll pour confirmer l'hypothese ci-
+dessus. Resultat : **l'hypothese etait fausse, mais a mene a un vrai bug plus important**. Gants et
+Amulette ont bien 4 vraies stats prioritaires numerotees chacun, pas 3 - mais la 4eme est a chaque fois
+une stat de type "Ranks to X" (ex: "Ranks to Dance of Knives" pour Gants, "Ranks to All Skills" pour
+Amulette) - jamais resolue par `extractStatPriorityFromD4ToolsWidget()`, qui ne consultait que la table
+plate `AFFIX_IDS` (`Ranks to X` n'y est jamais present sous cette forme, meme quand X lui-meme y est
+une entree comme "Imbuement Skills"). Plus grave qu'un Tier 4 manquant : sur l'Anneau Droit, la stat
+prioritaire #1 (la plus importante, utilisee comme condition REQUISE par `buildPerSlotRules()`) etait
+justement "Ranks to All Skills" - silencieusement ignoree, ce qui decalait la vraie priorite #1 vers ce
+qui etait en realite la #2. Un vrai bug d'integrite du classement, pas seulement un tier manquant. Ce
+texte exact ("Ranks to Imbuement Skills") avait deja ete repere en DevTools des le 2026-09-22 mais
+seulement comme preuve que l'ancienne heuristique texte etait cassee - jamais reellement cable a une
+resolution.
+
+**Corrige** : nouvelle fonction `resolveStatPriorityText(rawText, gameClass)` - essaie d'abord la
+resolution normale (`AFFIX_IDS` via `normalizeAffixText`), puis si le texte commence par "Ranks to ",
+retire ce prefixe et reessaie sur le nom reste (couvre les categories comme "Imbuement Skills" qui
+vivent dans la table plate malgre le prefixe), puis en dernier recours consulte
+`SKILL_AFFIX_IDS[gameClass]`/`GENERIC_SKILL_AFFIX_IDS` (couvre les vrais noms de competence comme
+"Dance of Knives"). `extractStatPriorityFromD4ToolsWidget()` et `findPriorityAffixIds()`/
+`findPerSlotStatPriority()` prennent maintenant un parametre `gameClass`, branche depuis
+`result.resolvedClass` dans `runGenerateFilter()`. Bonus fix au passage : `findPriorityAffixIds()`
+re-derivait les ids via `AFFIX_IDS[name]` a partir des noms deja resolus par le widget au lieu de
+reutiliser directement `entry.ids` - aurait produit `undefined` pour toute stat de competence
+desormais resolue ; corrige pour utiliser `entry.ids` directement.
+
+**Verifie hors navigateur** via un script Node ad hoc (extrait les vraies tables/fonctions du fichier
+source, pas de reimplementation a la main) : "Ranks to Dance of Knives" -> id 0x1e7931 (Dance of Knives,
+Rogue) correct, "Ranks to All Skills" -> 0x273c0a correct, "Ranks to Core Skills" -> 0x1d6e31 correct,
+"Ranks to Imbuement Skills" -> 0x1d6e45 correct, tout en laissant "Unique Effect" correctement ignore
+(pas une vraie stat). Version 2.82, `node --check` vert. **Pas encore teste en jeu** - prochaine
+regeneration du filtre devrait montrer les Tiers 4 pour Gants/Amulette desormais possibles, et une
+priorite #1 correcte sur l'Anneau Droit.
