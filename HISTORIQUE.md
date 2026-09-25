@@ -5854,3 +5854,32 @@ Rogue) correct, "Ranks to All Skills" -> 0x273c0a correct, "Ranks to Core Skills
 (pas une vraie stat). Version 2.82, `node --check` vert. **Pas encore teste en jeu** - prochaine
 regeneration du filtre devrait montrer les Tiers 4 pour Gants/Amulette desormais possibles, et une
 priorite #1 correcte sur l'Anneau Droit.
+
+## 2026-09-25 (suite) - v2.83 : suppression de 3 regles generiques devenues redondantes/bruitees
+
+Suite logique de v2.81 (precision par emplacement = Rare+Legendaire) : l'utilisateur a identifie que
+3 regles plates du filtre Strict etaient devenues soit inutiles soit carrement nuisibles :
+
+- **"Mythique - Garder"** : totalement inutile - `hideMask` (Cacher Detritus) et le mode Farm
+  n'incluent JAMAIS la rarete Mythique dans aucune configuration, donc un Mythique reste toujours
+  visible avec ou sans cette regle. Pure perte de budget de regle (limite 25).
+- **"Legendaire - Aff. Majeur"** et **"Legendaire - 2+ sans AM"** : meme probleme que l'ancienne "Rare
+  3+ Affixes (BiS)" plus bas - ces regles piochent dans le pool APLATI de TOUS les affixes de TOUS les
+  emplacements combines. Un Pantalon Legendaire peut matcher "2+ sans AM" avec 2 stats qui appartiennent
+  en realite aux Anneaux/Amulette, se faisant flaguer "interessant" a tort. Argument de l'utilisateur :
+  vu que les regles de precision par emplacement couvrent DEJA Rare+Legendaire avec les VRAIES stats du
+  bon emplacement (depuis v2.81), ces 2 regles generiques ne servent plus a rien de fiable. Bonus
+  souleve par l'utilisateur : la couleur jaune/doree utilisee par "Aff. Majeur" (picker "Tier 3") n'etait
+  documentee nulle part comme etant aussi reutilisee pour cette regle - confusion supplementaire.
+- **"Rare 3+ Affixes (BiS)"** : meme defaut de pool aplati, mais l'utilisateur a precise ne vouloir la
+  retirer que du filtre **Strict** (ou la precision par emplacement existe en remplacement) - laissee
+  intacte pour le filtre **Ouvert**, qui n'a pas d'alternative par emplacement.
+
+**Implemente** : les 3 regles supprimees de `generateFilterCode()`. Les 2 cases a cocher devenues
+mortes ("🎨 Distinguer les Legendaires par qualite", "💎 Exception bonnes stats") retirees du panneau
+(options, textes d'aide, defauts GM_setValue) plutot que laissees presentes sans effet. Legende des
+couleurs mise a jour (Tier 2/3 precisent maintenant "Ouvert uniquement" pour leur usage en pool general ;
+la ligne verte fixe ne mentionne plus Mythique). Un Legendaire/Unique qui ne matche aucune regle precise
+retombe simplement sur "Legendaires - Garder" (vert uni, filet de securite inchange).
+
+Version 2.83, `node --check` vert. **Pas encore teste en jeu.**

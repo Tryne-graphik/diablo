@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.82
+// @version      2.83
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1387,9 +1387,9 @@
   // matching the previously-hardcoded COLOR_GOLD/COLOR_ORANGE/COLOR_CYAN.
   // 2026-09-23: added `perfect` (per-slot Palier 4 - see buildPerSlotRules()).
   // 2026-09-25: added `codex` - user asked specifically for the Codex-upgrade
-  // rule to get its own picker (the other two rules that used to share this
-  // same fixed green, "Mythique - Garder" and "Légendaires - Garder", stay
-  // fixed on purpose - only Codex was asked for).
+  // rule to get its own picker ("Légendaires - Garder" stays fixed green on
+  // purpose - only Codex was asked for; "Mythique - Garder" was removed
+  // entirely later the same day, see generateFilterCode()'s notes).
   const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff", perfect: "#ff2fd1", codex: "#00c800" };
   function hexToColor(hex, fallback) {
     const m = /^#?([0-9a-f]{6})$/i.exec(hex || "");
@@ -2381,25 +2381,16 @@
     const allBuildIds = Array.from(new Set([...skillIds, ...priorityAffixIds]));
     const strict = mode === "strict";
     const requireAncestral = strict && options.requireAncestral !== false;
-    // 2026-09-24 CORRECTION: these 2 concerns used to be a single toggle
-    // (hideLegendaryWithoutGA) that both (a) gave GA/good-stats Legendaries
-    // a distinct color AND (b) hid everything else - the user pointed out
-    // that's actually two separate decisions bundled together. They want
-    // (a) ALWAYS on ("je préférerais toujours savoir si les items que je
-    // porte ont les affixes requis") so a Rare they upgrade to Legendary
-    // keeps showing its real quality instead of collapsing into the same
-    // flat green as every other Legendary - but do NOT want (b) on right
-    // now (nothing hidden, just better information). Split into two
-    // independent options: showLegendaryQuality controls whether the GA/
-    // good-stats tiers are emitted at all (default true - the "always
-    // know" behavior), hideWeakLegendaries controls only whether Hide
-    // Junk's mask folds in Legendary|Unique (default false). Either can be
-    // on/off independently of the other now.
-    const showLegendaryQuality = options.showLegendaryQuality !== false;
+    // 2026-09-24: whether Hide Junk's mask folds in Legendary|Unique -
+    // default off (nothing hidden beyond the usual Common/Magic/Rare junk).
+    // 2026-09-25: used to sit alongside a "show Legendary quality via color"
+    // toggle (showLegendaryQuality/keepGoodStatsNoGA) controlling 2 flat
+    // Legendary rules ("Légendaire - Aff. Majeur"/"2+ sans AM") - both
+    // removed the same day (see the Codex-rule area below for why); this
+    // option is unaffected, still controls only whether a Legendary/Unique
+    // that matched no precision rule gets hidden vs shown via "Légendaires -
+    // Garder".
     const hideWeakLegendaries = strict && options.hideWeakLegendaries === true;
-    // "voir les Légendaires/Uniques sans Greater Affix mais au moins avec
-    // les bonnes stats" - only meaningful when showLegendaryQuality is on.
-    const keepGoodStatsNoGA = showLegendaryQuality && options.keepGoodStatsNoGA !== false;
     // 2026-09-25: "mode farm" - user's own explanation: once they've got
     // enough crafting materials or want to focus a farming session, they
     // hide everything except Ancestral build-relevant items (already
@@ -2416,9 +2407,8 @@
     const effectiveHideWeak = hideWeakLegendaries || farmMode;
     const FARM_MIN_ITEM_POWER = 850;
     // 2026-09-25: 5th user-customizable swatch (Codex upgrade rule only -
-    // the other 2 rules that used to share this same fixed green,
-    // "Mythique - Garder" and "Légendaires - Garder", stay fixed on
-    // purpose, only Codex was asked for).
+    // "Légendaires - Garder" stays fixed green on purpose, only Codex was
+    // asked for; "Mythique - Garder" removed entirely later this same day).
     const colorCodex = options.colorCodex ?? COLOR_GREEN;
     // 2026-09-22: user-customizable swatches (3 color pickers in the panel,
     // "pour que les gens puissent personnaliser un peu") - default to the
@@ -2434,12 +2424,21 @@
     // BETTER one is pushed first so it wins the match.
     const rules = [];
 
-    if (allBuildIds.length >= 3) {
-      // Strict mode only has this 3+ tier - the looser 2+ bar is dropped
-      // on purpose - and, when requireAncestral is on, also requires
-      // Ancestral (kind=2 condition, reverse-engineered 2026-09-22),
-      // matching the community "T12+ Strict" convention: at endgame every
-      // drop is Ancestral-capable, so a non-Ancestral Rare is never BiS.
+    // 2026-09-25 CORRECTION: this flat "3+ of the whole build's pooled
+    // affixes" rule used to fire in BOTH modes - the user pointed out it has
+    // the exact same flaw as "Légendaire - 2+ sans AM" below (also removed
+    // this same day): pooling every slot's priority stats together means a
+    // Rare from ANY slot can match 3 stats that actually belong to OTHER
+    // slots, flagging items that aren't really good for where they'd be
+    // worn. Strict mode already has per-slot precision (buildPerSlotRules(),
+    // now Rare|Legendary as of v2.81) to do this correctly per slot, so this
+    // flat rule is now Open-only, where there's no per-slot alternative to
+    // fall back on.
+    if (!strict && allBuildIds.length >= 3) {
+      // and, when requireAncestral is on, also requires Ancestral (kind=2
+      // condition, reverse-engineered 2026-09-22), matching the community
+      // "T12+ Strict" convention: at endgame every drop is Ancestral-
+      // capable, so a non-Ancestral Rare is never BiS.
       const bisConditions = [conditionRarity(RARE), conditionAffixes(allBuildIds, 3)];
       if (requireAncestral) bisConditions.push(conditionAncestral());
       rules.push(tagRule(makeRule("Rare 3+ Affixes (BiS)", RECOLOR, bisConditions, colorBis)));
@@ -2462,23 +2461,28 @@
     // Already tagRule()-wrapped by buildPerSlotRules()/buildUniqueItemRules().
     for (const r of extraRules) rules.push(r);
     rules.push(tagRule(makeRule("Codex : Mise à jour", RECOLOR, [conditionCodexUpgrade()], colorCodex)));
-    // Mythic always gets its own guaranteed-visible rule, independent of
-    // both options below - a Mythic is always worth a look regardless of
-    // whether quality-coloring or hiding is enabled.
-    rules.push(tagRule(makeRule("Mythique - Garder", RECOLOR, [conditionRarity(MYTHIC)], COLOR_GREEN)));
-    if (showLegendaryQuality) {
-      // GA-keep pushed BEFORE the no-GA-but-good-stats rule (so GA still
-      // wins gold when an item has both) - more specific/better tier first,
-      // same idiom as the Rare 2+/3+ tiers above.
-      const gaKeepConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionGreaterAffix(1)];
-      if (requireAncestral) gaKeepConditions.push(conditionAncestral());
-      rules.push(tagRule(makeRule("Légendaire - Aff. Majeur", RECOLOR, gaKeepConditions, colorBis)));
-      if (keepGoodStatsNoGA && allBuildIds.length >= 2) {
-        const noGaConditions = [conditionRarity(LEGENDARY | UNIQUE), conditionAffixes(allBuildIds, 2)];
-        if (requireAncestral) noGaConditions.push(conditionAncestral());
-        rules.push(tagRule(makeRule("Légendaire - 2+ sans AM", RECOLOR, noGaConditions, colorGood)));
-      }
-    }
+    // 2026-09-25 REMOVED "Mythique - Garder" (unconditional RECOLOR just for
+    // rarity=MYTHIC) - the user pointed out it never did anything a Mythic
+    // wasn't already getting for free: `hideMask` (see below) never includes
+    // MYTHIC in any configuration (farmMode's own hide mask explicitly
+    // excludes it too), so a Mythic was always going to stay visible with or
+    // without this rule. Pure rule-budget waste under the 25-rule cap.
+    //
+    // 2026-09-25 REMOVED "Légendaire - Aff. Majeur" and "Légendaire - 2+ sans
+    // AM" (used to live here, gated by the now-removed showLegendaryQuality/
+    // keepGoodStatsNoGA options) - same flat-pool problem as the old "Rare
+    // 3+ Affixes (BiS)" above: "2+ sans AM" matched ANY Legendary/Unique with
+    // 2 of the WHOLE build's pooled affixes regardless of slot, so e.g. a
+    // Pants drop could get flagged "interesting" off 2 stats that actually
+    // belong to Rings/Amulet. Since v2.81 made per-slot precision rules
+    // (buildPerSlotRules()) target Rare|Legendary instead of Rare-only, a
+    // Legendary with the right affixes FOR ITS OWN SLOT already gets a
+    // proper tier color from those, before ever reaching this point - the
+    // Greater Affix case is also redundant with the in-game star icon
+    // (same reasoning already applied on 2026-09-24 to remove a similar flat
+    // "any GA" rule for Rares). A Legendary/Unique matching neither now
+    // falls through to "Légendaires - Garder" below, same safety net as
+    // always.
     // 2026-09-24: moved here from the very top of the rule list (was
     // rule #1, unconditional, ahead of EVERYTHING) - the user pointed out
     // Charms/Seals never got any build-specific distinction because this
@@ -4075,8 +4079,6 @@
     // render) - see their wiring in ensurePanelToggleButton()/wherever the
     // column is built.
     const optAncestral = document.getElementById("d4a-opt-ancestral")?.checked ?? true;
-    const optShowQuality = document.getElementById("d4a-opt-show-quality")?.checked ?? true;
-    const optKeepGoodStatsNoGA = document.getElementById("d4a-opt-keep-good-no-ga")?.checked ?? true;
     // 2026-09-24: default UNCHECKED (unlike the others) - hiding weak
     // Legendaries/Uniques is now opt-in, decoupled from quality-coloring
     // (see generateFilterCode()'s 2026-09-24 CORRECTION comment). Matches
@@ -4187,9 +4189,7 @@
     const filterResult = isStrict
       ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules], {
           requireAncestral: optAncestral,
-          showLegendaryQuality: optShowQuality,
           hideWeakLegendaries: optHideWeak,
-          keepGoodStatsNoGA: optKeepGoodStatsNoGA,
           farmMode: optFarmMode,
           colorBis,
           colorGood,
@@ -4393,17 +4393,13 @@
       <div id="d4a-filter-options">
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
         <label><input type="checkbox" id="d4a-opt-ancestral"> 🔱 Ancestral uniquement</label>
-        <label><input type="checkbox" id="d4a-opt-show-quality"> 🎨 Distinguer les Légendaires par qualité</label>
-        <label><input type="checkbox" id="d4a-opt-keep-good-no-ga"> 💎 Exception bonnes stats</label>
         <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <label><input type="checkbox" id="d4a-opt-unique-per-item"> 🔍 Une règle par Unique</label>
         <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
-          <p>🎨 Colore différemment les Légendaires/Uniques selon leur qualité (Greater Affix ou bonnes stats) au lieu de tout recolorer pareil - utile pour comparer directement une pièce upgradée à ce que tu portes déjà, sans devoir inspecter chaque objet un par un.</p>
-          <p>💎 Ne s'applique que si "Distinguer les Légendaires par qualité" est coché. Sans elle, un Légendaire/Unique sans Greater Affix mais avec 2+ stats du build reste dans la couleur par défaut au lieu de ressortir.</p>
-          <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont ni Greater Affix ni bonnes stats, au lieu de les laisser visibles dans la couleur par défaut. Indépendant de "Distinguer par qualité" - active les deux ensemble pour ne garder visible que ce qui compte vraiment.</p>
+          <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont matché aucune règle de précision, au lieu de les laisser visibles dans la couleur par défaut ("Légendaires - Garder").</p>
           <p>🔍 Au lieu d'une seule règle "Uniques - 2+/3+ Affixes" regroupant tous tes Uniques reconnus, génère une règle par Unique nommé (ex. "Grief - 3 Affixes") - utile en fin de partie pour savoir exactement lequel a de bonnes stats. S'applique sur les 2 filtres (Ouvert et Strict). Si un build a beaucoup d'Uniques reconnus, les règles les moins précises sont retirées en premier pour respecter la limite de 25 règles du jeu (comme pour la précision par emplacement).</p>
           <p>🌾 Pour une session de farm une fois que tu as assez de matériaux : cache tout objet non-Ancestral de puissance ≥850 (le plafond au niveau 70), toutes raretés jusqu'à Unique incluse - il ne reste visible que les Ancestraux du build (déjà couverts ailleurs) et les mises à jour de Codex. Active automatiquement le même comportement que "Cacher les Légendaires faibles".</p>
         </details>
@@ -4441,12 +4437,12 @@
         <details class="d4a-legend-details">
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">
-            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Tier 2 : 2+ affixes du build (par emplacement, ou pool général "Bon")</span>
-            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build (pool général "BiS" : + Ancestral et Greater Affix)</span>
+            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Tier 2 : 2+ affixes du build par emplacement (ou pool général "Bon" - Ouvert uniquement)</span>
+            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build par emplacement (ou pool général "BiS" - Ouvert uniquement)</span>
             <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 (Parfait) : les 4 affixes du build sur cet emplacement</span>
             <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 (Supérieur) : affixes du build + Greater Affix (par emplacement)</span>
             <span><i id="d4a-legend-codex" style="background:${COLOR_HEX_DEFAULTS.codex}"></i>Codex à améliorer</span>
-            <span><i style="background:#00c800"></i>Légendaire/Unique/Mythique à garder</span>
+            <span><i style="background:#00c800"></i>Légendaire/Unique restant (Mythique : jamais recoloré, jamais caché)</span>
           </div>
         </details>
       </div>
@@ -4563,8 +4559,6 @@
     // user isn't surprised by items disappearing.
     const OPT_DEFAULTS = {
       "d4a-opt-ancestral": true,
-      "d4a-opt-show-quality": true,
-      "d4a-opt-keep-good-no-ga": true,
       "d4a-opt-hide-weak": false,
       "d4a-opt-perslot": true,
       "d4a-opt-unique-per-item": false,
