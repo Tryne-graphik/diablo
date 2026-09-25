@@ -5775,3 +5775,17 @@ fix, pas seulement le panneau Stat Priority. No-op sur tout autre site (aucun `.
 Version 2.80, `node --check` vert. **Pas encore reteste en jeu sans le contournement manuel de
 scroll** - prochaine etape : regenerer SANS scroller manuellement pour confirmer que le fix marche
 seul.
+
+**2026-09-25 (suite) - incident isole, non reproduit**: un filtre regenere par l'utilisateur (confirme
+etre en v2.80) est arrive avec une vraie corruption de bas niveau - le prefixe de longueur de la regle
+"Prec.3 - Main Sec." ne correspondait pas a son contenu reel (83 octets declares vs ~77 reels),
+corrompant tout le reste du decodage a partir de la (regles Uniques et suivantes illisibles). Signe
+revelateur : cette regle ne contenait que 2 ids d'arme (Epee/Dague) au lieu des 7 attendus depuis
+v2.78 - exactement l'ancien pool pre-v2.78. Diagnostic pointait vers une execution de code non a jour
+malgre la version affichee. **L'utilisateur a regenere le filtre une 2eme fois (meme build) et le
+resultat est cette fois parfaitement decode sans erreur** - 23 regles, "Prec.3 - Main Sec." avec les 7
+ids complets dont le Bouclier confirme. Incident non reproduit, traite comme ponctuel (cache
+navigateur ou onglet avec ancien code encore charge, plutot qu'un vrai bug de v2.80) - a garder en tete
+si ca se reproduit un jour, mais pas d'action de code necessaire pour l'instant. **Premiere
+confirmation structurelle complete du filtre Rogue habituel avec le fix v2.80 (scroll automatique)
+actif.**
