@@ -5714,3 +5714,17 @@ Filtre de test reel de l'utilisateur (4 regles) decode octet par octet :
   "Proprietes" du filtre en jeu n'a que 2 options (Aucune/Ancestral) et que le bit 32 vient d'ailleurs.
 
 `node --check` vert, commite/pushe.
+
+**2026-09-25 (suite) - mystere du bit 32 clarifie (sans etre resolu)**: l'utilisateur a confirme
+directement qu'il n'y a que 2 cases a cocher dans la section "Proprietes" de l'editeur de filtre en jeu
+(Aucune / Ancestral). Puis a fourni un 2eme filtre de test, une seule regle avec **les 10 types de
+condition ajoutes d'un coup** (kind=0 a 9), chacun laisse a sa valeur par defaut/vide - decode octet par
+octet, confirme l'integralite de l'enum `kind` deja documentee dans `codec.py` (ItemPowerRange, Rarity,
+ItemProperties, Codex, GreaterAffix, ItemType, RequiredAffixes, OptionalAffixes, SpecificUnique,
+TalismanSetBonus), sans aucune surprise. Confirme aussi que `ItemProperties` (kind=2) ne prend que
+arg4 dans {absent(0), 1, 4} via l'interface - il n'y a pas de case a cocher qui donnerait bit 32.
+**Conclusion** : le `arg4=36` vu la veille sur plusieurs regles du filtre Druide n'est tres probablement
+PAS une propriete cochable manuellement - reste non resolu (pas re-examine faute d'avoir les octets
+bruts de ce filtre Druide sous la main), mais risque faible puisqu'aucun code de ce projet ne lit ou
+n'ecrit ce bit aujourd'hui. Docstring de `codec.py` mise a jour avec cette confirmation complete de
+l'enum kind + la clarification du mystere bit 32, pour reference future.

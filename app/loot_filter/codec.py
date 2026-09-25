@@ -55,6 +55,18 @@ caught because both conditions happen to hit an overlapping, hard-to-visually-te
 apart set of Legendary items. Not independently verified in-game by this project yet -
 recommended next step is a tiny single-condition test filter, imported and visually
 checked, same method Upsilon72's own README used for their affix ids.
+
+2026-09-25: user built one rule with all 10 condition kinds added at once, each left at
+its default/empty value, then pasted the export - a clean confirmation of the entire
+kind=0..9 enum above in a single real filter (decoded byte-for-byte: kind 9 down to 0,
+each matching the meaning already documented here exactly, no surprises). Also settles
+an open question: kind=2 (ItemProperties) only ever carries arg4 in {unset(0), 1, 4} via
+the in-game UI - the editor's "Properties" condition has exactly 2 checkboxes (None,
+Ancestral), confirmed directly by the user. A real Druid filter decoded on 2026-09-25
+(the day before) had shown arg4=36 (=4|32) on several rules, with bit 32 hypothesized as
+"Masterworked" - that hypothesis is now unlikely to be a manual Properties checkbox
+(there isn't one). Left unresolved (not re-examined without the original Druid filter
+bytes on hand) but low-risk: no code in this project sets or reads bit 32 today.
 """
 
 from __future__ import annotations
