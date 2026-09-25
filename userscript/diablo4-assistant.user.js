@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.80
+// @version      2.81
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2667,10 +2667,26 @@
         const optionalCount = Math.min(tier === 5 ? 1 : tier - 1, optionalIds.length);
         const affixConditions = [conditionAffixes(requiredIds, 1)];
         if (optionalIds.length) affixConditions.push(conditionOptionalAffixes(optionalIds, optionalCount));
+        // 2026-09-25: rarity mask changed from RARE-only to RARE|LEGENDARY,
+        // matching the user's own hand-built Auradin (Paladin) filter - every
+        // one of its per-slot precision rules uses rarity=12 (4|8), not 4.
+        // Reasoning confirmed by the user directly: you can Codex-upgrade a
+        // Rare into a Legendary in-game, so a Legendary that merely lacks a
+        // Greater Affix but still has the right affix COUNT is just as
+        // worth surfacing as a promising Rare - restricting to Rare-only
+        // was silently missing half of what these rules are meant to catch.
+        // Ancestral-only (when requireAncestral is on, the default) already
+        // narrows this appropriately via conditionAncestral() below - the
+        // reference filter mostly used ItemPowerRange>=900 for the same
+        // purpose instead, a different but equally-valid Ancestral proxy
+        // confirmed earlier this session (2026-09-25, v2.77 finding); no
+        // change needed here since conditionAncestral() already achieves
+        // the same restriction and is already independently confirmed
+        // in-game.
         const conditions =
           tier === 5
-            ? [conditionRarity(RARE), conditionItemTypes(typeIds), ...affixConditions, conditionGreaterAffix(1)]
-            : [conditionRarity(RARE), conditionItemTypes(typeIds), ...affixConditions];
+            ? [conditionRarity(RARE | LEGENDARY), conditionItemTypes(typeIds), ...affixConditions, conditionGreaterAffix(1)]
+            : [conditionRarity(RARE | LEGENDARY), conditionItemTypes(typeIds), ...affixConditions];
         if (requireAncestral) conditions.push(conditionAncestral());
         rules.push(tagRule(makeRule(`${tierLabels[tier]} - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, RECOLOR, conditions, tierColors[tier]), trimPriorityByTier[tier]));
       }

@@ -5789,3 +5789,32 @@ navigateur ou onglet avec ancien code encore charge, plutot qu'un vrai bug de v2
 si ca se reproduit un jour, mais pas d'action de code necessaire pour l'instant. **Premiere
 confirmation structurelle complete du filtre Rogue habituel avec le fix v2.80 (scroll automatique)
 actif.**
+
+## 2026-09-25 (suite) - v2.81 : precision par emplacement etait trop stricte (Rare uniquement au lieu de Rare+Legendaire)
+
+Utilisateur pas satisfait du filtre genere avec Tiers 3/4 selectionnes : chaque regle "Precis"/"Parfait"
+ne ciblait que les objets Rare, alors qu'il s'attendait a quelque chose de plus proche de son filtre
+Auradin (Paladin) fourni manuellement la veille. A redemande le code de ce filtre Auradin pour le
+redecoder precisement (il n'avait jamais ete sauvegarde sur disque, seulement decode a la volee dans
+une session precedente).
+
+**Trouvaille** : TOUTES les regles de precision par emplacement du filtre Auradin (Legend Shield,
+Legend 1Hander, Legend Boots, Jambieres, Anneaux, Gants) utilisent `Rarete = 12`, pas `4` - et
+`12 = RARE(4) | LEGENDARY(8)`. Confirme par l'utilisateur : en jeu on peut transformer un Rare en
+Legendaire via le Codex, donc un Legendaire qui a le bon NOMBRE d'affixes mais pas encore d'Affixe
+Majeur merite d'etre repere au meme titre qu'un Rare prometteur - restreindre a Rare uniquement (ce que
+faisait le generateur depuis le debut de cette feature) ratait silencieusement la moitie de ce que ces
+regles sont censees attraper.
+
+**Corrige** dans `buildPerSlotRules()` : `conditionRarity(RARE)` -> `conditionRarity(RARE | LEGENDARY)`
+sur les 4 tiers (2/3/4/5). La restriction Ancestral-uniquement (quand la case correspondante est
+cochee, par defaut oui) reste geree par `conditionAncestral()` comme avant - le filtre Auradin de
+reference utilise plutot `ItemPowerRange>=900` pour le meme effet (technique differente mais deja
+confirmee equivalente le 2026-09-25 plus tot, v2.77), donc aucun changement necessaire de ce cote,
+`conditionAncestral()` etant deja confirme fonctionnel en jeu independamment.
+
+Version 2.81, `node --check` vert. Toujours en attente : pourquoi Gants/Amulette/Anneaux ne montraient
+qu'un seul tier avec la selection Tier A=3/B=4 - hypothese (pas encore confirmee par l'utilisateur) :
+ces emplacements n'ont que 3 affixes prioritaires connus sur le widget Stat Priority de Maxroll pour ce
+build, donc le Tier 4 (qui exige 4 affixes connus) est structurellement impossible a generer - a
+verifier directement sur la page Maxroll par l'utilisateur. **Pas encore teste en jeu.**
