@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.79
+// @version      2.80
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2099,12 +2099,45 @@
   // "Priorité des statistiques" instead) - the tab never even got
   // clicked, so no amount of retrying could have helped. Now matches
   // either label.
+  // 2026-09-25: real root cause of a rare "per-slot precision is just empty,
+  // no error" report - confirmed live via Playwright this same session while
+  // researching 2H-weapon slot labels. Maxroll's equipment/stat-priority
+  // widget host (`.d4t-embed-host`) lazy-mounts on IntersectionObserver: its
+  // placeholder div exists in the DOM from page load, but its content
+  // (including the "Equipment"/"Stat Priority" TAB BUTTONS themselves, not
+  // just their content) only renders once scrolled into view at least once.
+  // If the user's scroll position when clicking "Générer le filtre" never
+  // brought that section on screen, `ensureStatPriorityTabActive()`'s tab
+  // search below finds nothing at all (not even a wrong tab - the label text
+  // genuinely isn't in the DOM yet), so it silently returns having done
+  // nothing - manually scrolling down first (the user's own workaround)
+  // always fixed it, confirming this exact mechanism. Fixed by force-
+  // scrolling every d4t-embed-host into view once before searching for the
+  // tab, then restoring the user's original scroll position (no reason to
+  // leave the page jumped around just to read data in the background).
+  async function ensureMaxrollWidgetsMounted() {
+    const hosts = document.querySelectorAll(".d4t-embed-host");
+    if (!hosts.length) return;
+    const originalScrollY = window.scrollY;
+    for (const host of hosts) {
+      host.scrollIntoView({ block: "center" });
+      await sleep(300);
+    }
+    window.scrollTo({ top: originalScrollY });
+  }
+
   const STAT_PRIORITY_TAB_LABELS = new Set(["stat priority", "priorité des statistiques"]);
   async function ensureStatPriorityTabActive() {
     if (document.querySelector(".d4t-item")) return;
-    const tabCandidate = Array.from(document.querySelectorAll("*")).find(
-      (e) => e.children.length === 0 && STAT_PRIORITY_TAB_LABELS.has(e.textContent.trim().toLowerCase())
-    );
+    const findTab = () =>
+      Array.from(document.querySelectorAll("*")).find(
+        (e) => e.children.length === 0 && STAT_PRIORITY_TAB_LABELS.has(e.textContent.trim().toLowerCase())
+      );
+    let tabCandidate = findTab();
+    if (!tabCandidate) {
+      await ensureMaxrollWidgetsMounted();
+      tabCandidate = findTab();
+    }
     if (!tabCandidate) return;
     for (let attempt = 0; attempt < 3; attempt++) {
       for (const target of [tabCandidate, tabCandidate.parentElement, tabCandidate.parentElement?.parentElement]) {
@@ -3961,6 +3994,19 @@
   async function runGenerateFilter(mode) {
     const isStrict = mode === "strict";
     renderPanel("<h3>Diablo IV Assistant</h3><p>Recherche du build équivalent...</p>");
+    // 2026-09-25: force Maxroll's lazy-mounted widgets into view BEFORE
+    // resolveTranslation() reads the Equipment tab (see
+    // ensureMaxrollWidgetsMounted()'s docstring) - a no-op on any other site
+    // (no .d4t-embed-host there). Without this, a user who clicks "Générer
+    // le filtre" while scrolled somewhere else on the page (e.g. still
+    // reading Skills/Paragon) gets an incomplete equipment list silently,
+    // same root cause as the per-slot bug fixed the same day.
+    try {
+      await ensureMaxrollWidgetsMounted();
+    } catch (e) {
+      // ignore - best-effort, resolveTranslation()/findPerSlotStatPriority()
+      // still retry on their own below
+    }
     let result;
     try {
       result = await resolveTranslation();

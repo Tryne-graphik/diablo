@@ -5751,3 +5751,27 @@ structurellement correct** :
 **Pas de Barbare a disposition** cote utilisateur pour la verification visuelle finale en jeu (armes
 recolorees, etc.) - **sera teste par un ami** a une date non precisee. A relancer si besoin dans une
 session future plutot que suppose valide sans ce retour visuel.
+
+## 2026-09-25 (suite) - v2.80 : vrai bug trouve et corrige - widgets Maxroll lazy-mount selon le scroll
+
+En testant son propre filtre Rogue habituel (Dance of Knives, maxroll.gg), l'utilisateur a eu un
+filtre Strict de seulement 7 regles - **aucune regle par emplacement, aucun Unique reconnu**, sans
+erreur visible. Diagnostic via screenshot : il etait scrolle sur la section "Skills/Paragon" de la
+page au moment du clic, pas encore descendu jusqu'a la section equipement. En scrollant manuellement
+vers le bas puis en regenerant, le filtre est sorti complet (23 regles, toutes les precisions par
+emplacement + Uniques presents) - **root cause confirmee** : le widget equipement/stat-priority de
+Maxroll (`.d4t-embed-host`, le meme trouve lors de la recherche Playwright plus tot ce jour) se monte
+en lazy-load (IntersectionObserver) - tant qu'il n'a jamais ete visible a l'ecran, ni son contenu NI
+ses boutons d'onglet "Equipment"/"Stat Priority" n'existent dans le DOM, donc `ensureStatPriorityTabActive()`
+ne trouvait litteralement rien a cliquer, echouait silencieusement (chaque appelant traite deja ca
+comme "signal bonus, pas obligatoire" - jamais d'erreur visible).
+
+**Corrige** : nouvelle fonction `ensureMaxrollWidgetsMounted()` qui force chaque `.d4t-embed-host` a
+defiler a l'ecran (`scrollIntoView`) avant de chercher l'onglet, puis restaure la position de scroll
+d'origine de l'utilisateur. Appelee (1) au tout debut de `ensureStatPriorityTabActive()` si la
+recherche initiale de l'onglet echoue, et (2) au tout debut de `runGenerateFilter()` avant meme
+`resolveTranslation()`, pour que la liste d'equipement (source des noms d'Uniques) beneficie aussi du
+fix, pas seulement le panneau Stat Priority. No-op sur tout autre site (aucun `.d4t-embed-host`).
+Version 2.80, `node --check` vert. **Pas encore reteste en jeu sans le contournement manuel de
+scroll** - prochaine etape : regenerer SANS scroller manuellement pour confirmer que le fix marche
+seul.
