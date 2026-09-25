@@ -5883,3 +5883,33 @@ la ligne verte fixe ne mentionne plus Mythique). Un Legendaire/Unique qui ne mat
 retombe simplement sur "Legendaires - Garder" (vert uni, filet de securite inchange).
 
 Version 2.83, `node --check` vert. **Pas encore teste en jeu.**
+
+## 2026-09-25 (suite) - v2.84 : les regles Uniques ont recu la meme correction (pool aplati -> affixes par emplacement)
+
+L'utilisateur a etendu la meme critique aux regles "Uniques - 2+/3+ Affixes" : meme defaut que les
+regles Legendaire generiques retirees en v2.83 - ces regles ANDaient un Unique specifique (kind=8, id
+correct) avec un pool aplati de ~15-20 affixes de TOUS les emplacements combines (kind=6), ce qui rend
+le "2+/3+" presque toujours vrai par hasard et n'apporte pas d'info fiable. Regle donnee par
+l'utilisateur : ne regrouper des Uniques ensemble que s'ils partagent VRAIMENT le meme jeu d'affixes,
+sinon les traiter individuellement.
+
+**Reecrit `buildUniqueItemRules()`** : chaque Unique trouve dans `perSlotData` (les memes donnees que
+`buildPerSlotRules()`, deja par emplacement) recoit maintenant les VRAIS affixes prioritaires de SON
+emplacement (`entry.ids`) comme condition, au lieu du pool aplati. Les Uniques dont le jeu d'affixes est
+identique (rare, mais possible si 2 emplacements partagent le meme classement) sont regroupes en une
+seule regle ; sinon chacun a la sienne, nommee d'apres l'Unique (ex. "Etna's Lost Dagger - 3 Affixes",
+tronque si besoin pour la limite de 24 caracteres du jeu). Un Unique trouve seulement via la liste de
+noms de l'onglet Equipement (sans corrélation d'emplacement, ex. si le widget Stat Priority n'avait pas
+cet emplacement) n'a aucune donnee fiable - garde uniquement le filet de securite "Garder Uniques"
+(SHOW), sans coloration par palier plutot que d'inventer un critere. Meme logique requis(top1)/optionnel
+que `buildPerSlotRules()` pour coherence. Regles taguees trimables (2 affixes avant 3 affixes, meme
+schema que l'ancien mode "un par Unique") puisque le nombre de regles n'est plus fixe a 2 - un build
+avec plusieurs Uniques distincts par emplacement peut vite grossir sous la limite de 25.
+
+La case a cocher "🔍 Une regle par Unique" (devenue obsolete - c'est desormais le comportement par
+defaut, plus intelligent que l'ancien mode "un par Unique" qui utilisait aussi le pool aplati) est
+retiree du panneau, avec son texte d'aide et sa valeur par defaut. Variables mortes nettoyees
+(`allBuildIds`/`allSkillIds`/`perSlotItemNames` calcules dans `runGenerateFilter()` uniquement pour
+l'ancien appel).
+
+Version 2.84, `node --check` vert. **Pas encore teste en jeu.**

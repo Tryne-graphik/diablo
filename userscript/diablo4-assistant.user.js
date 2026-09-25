@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.83
+// @version      2.84
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2771,67 +2771,92 @@
   // reached. Caller passes `isStrict && hideWeakLegendaries` (the exact
   // same condition generateFilterCode() itself branches on) so this stays
   // correct if that logic ever changes.
-  // 2026-09-24: added a 3+ tier alongside the existing 2+ (same idiom as
-  // the flat Rare pool's own 2+/3+ tiers), on BOTH Open and Strict (this
-  // function isn't mode-gated) per the user's ask "faire les uniques - 3
-  // Affiches sur tous les filtres". Also added `perItemRules`: instead of
-  // pooling every matched Unique into one shared condition, emit a
-  // separate 2+/3+ pair PER Unique, named after that Unique specifically
-  // ("<name> - 2 Affixes") - the user's reasoning: at endgame, knowing
-  // WHICH specific Unique rolled well is more actionable than "some
-  // Unique in my pool did". Unlike the pooled rules, these ARE trimmable
-  // (high priority numbers = dropped first, see tagRule()'s docstring) -
-  // a build with many recognized Uniques could otherwise push well past
-  // the 25-rule cap the way the original 2026-09-23 per-Unique attempt
-  // did before it was reverted to pooling. The SHOW safety net always
-  // stays pooled regardless of this option - visibility only needs ONE
-  // cheap rule, no reason to multiply it per item too.
-  function buildUniqueItemRules(itemNamesEn, colorGood, colorBis, buildAffixIds = [], needsShowSafetyNet = true, perItemRules = false) {
+  // 2026-09-25 REWRITE: the 2026-09-24 version (see git history for the old
+  // docstring) pooled either ALL matched Uniques, or EVERY Unique
+  // individually, against the SAME flat build-wide affix pool
+  // (`buildAffixIds`, ~15-20 stats across every slot combined) either way.
+  // The user pointed out this is the exact same flaw already fixed in
+  // buildPerSlotRules() (v2.81) and removed from the flat Legendary rules
+  // (v2.83): a Unique's affix condition should only ever be checked against
+  // the stats that are actually relevant to ITS OWN slot, not a pool mixing
+  // in every other slot's priorities too - "15 affixes requis crée plus de
+  // confusion qu'autre chose". Their stated rule: group Uniques together
+  // ONLY when they genuinely share the same relevant affix set; otherwise
+  // treat each one individually.
+  //
+  // Rewritten to source each matched Unique's affix list from `perSlotData`
+  // (the same per-slot Stat Priority data buildPerSlotRules() uses) instead
+  // of the flat pool - a Unique found in a given slot's `.itemName` gets
+  // THAT slot's own ranked `.ids` as its relevant affixes. Uniques sharing
+  // an identical ids array (rare, but possible - e.g. 2 slots that happen to
+  // rank the same top stats) are grouped into one shared rule; everyone else
+  // gets their own. A Unique matched only via the separate Equipment-tab
+  // name list (no per-slot correlation, e.g. if the Stat Priority widget
+  // didn't have that slot) has no reliable affix data at all - it still
+  // gets the flat "Garder Uniques" SHOW safety net below, just no tier
+  // RECOLOR (better to show nothing wrong than invent a criterion from
+  // nothing). The old "🔍 Une règle par Unique" checkbox is gone - this is
+  // now just how it always works, no toggle needed.
+  //
+  // Same required(top1)/optional(rest) idiom as buildPerSlotRules() for
+  // consistency, and same trim-priority tagging (2-affix tier trimmed
+  // before 3-affix) since the rule count here is no longer a fixed 2 - a
+  // build with several distinct per-slot Uniques could add up fast under
+  // D4's 25-rule cap.
+  function buildUniqueItemRules(perSlotData, itemNamesEnFallback, colorGood, colorBis, needsShowSafetyNet = true) {
     const matched = [];
     const seen = new Set();
     const pooledSnoIds = [];
-    const canonicalIds = [];
-    for (const rawName of itemNamesEn) {
+    const groups = new Map(); // key: JSON.stringify(slot ids) -> { ids, uniques: [{name, snoIds}] }
+    const NO_SLOT_DATA = "__no_slot_data__";
+
+    for (const entry of perSlotData) {
+      if (!entry.itemName) continue;
+      const canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(entry.itemName));
+      if (!canonical || seen.has(canonical.toLowerCase())) continue;
+      seen.add(canonical.toLowerCase());
+      matched.push(canonical);
+      pooledSnoIds.push(...UNIQUE_ITEM_IDS[canonical]);
+      const key = entry.ids.length >= 2 ? JSON.stringify(entry.ids) : NO_SLOT_DATA;
+      if (!groups.has(key)) groups.set(key, { ids: entry.ids, uniques: [] });
+      groups.get(key).uniques.push({ name: canonical, snoIds: UNIQUE_ITEM_IDS[canonical] });
+    }
+    for (const rawName of itemNamesEnFallback) {
       const canonical = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(rawName));
       if (!canonical || seen.has(canonical.toLowerCase())) continue;
       seen.add(canonical.toLowerCase());
       matched.push(canonical);
       pooledSnoIds.push(...UNIQUE_ITEM_IDS[canonical]);
-      canonicalIds.push({ name: canonical, ids: UNIQUE_ITEM_IDS[canonical] });
+      if (!groups.has(NO_SLOT_DATA)) groups.set(NO_SLOT_DATA, { ids: [], uniques: [] });
+      groups.get(NO_SLOT_DATA).uniques.push({ name: canonical, snoIds: UNIQUE_ITEM_IDS[canonical] });
     }
+
     const rules = [];
-    if (pooledSnoIds.length) {
-      if (buildAffixIds.length) {
-        if (perItemRules) {
-          // 2026-09-24: most real Unique names (264/336, checked against
-          // UNIQUE_ITEM_IDS) are too long to fit alongside " - 3 Affixes"
-          // (12 chars) within D4's 24-char rule-name cap - makeRule()'s own
-          // defensive truncation cuts from the END, which would silently
-          // drop the tier suffix instead of the name for most of them
-          // (worse than the pooled naming this option replaces). Truncate
-          // the NAME here instead, reserving room for the suffix, so the
-          // tier info always survives even if the name gets shortened.
-          const SUFFIX_LEN = " - 3 Affixes".length;
-          for (const { name, ids } of canonicalIds) {
-            const shortName = name.length > 24 - SUFFIX_LEN ? name.slice(0, 24 - SUFFIX_LEN) : name;
-            if (buildAffixIds.length >= 3) {
-              rules.push(tagRule(makeRule(`${shortName} - 3 Affixes`, RECOLOR, [conditionSpecificUnique(ids), conditionAffixes(buildAffixIds, 3)], colorBis), 10));
-            }
-            rules.push(tagRule(makeRule(`${shortName} - 2 Affixes`, RECOLOR, [conditionSpecificUnique(ids), conditionAffixes(buildAffixIds, 2)], colorGood), 20));
-          }
-        } else {
-          // Never trimmable (see tagRule()'s docstring) - fixed cost no
-          // matter how many Uniques matched, and a build's core Uniques
-          // are worth keeping regardless of filter budget pressure.
-          if (buildAffixIds.length >= 3) {
-            rules.push(tagRule(makeRule("Uniques - 3+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 3)], colorBis), false));
-          }
-          rules.push(tagRule(makeRule("Uniques - 2+ Affixes", RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionAffixes(buildAffixIds, 2)], colorGood), false));
-        }
+    const SUFFIX_LEN = " - 3 Affixes".length;
+    for (const [key, group] of groups) {
+      if (key === NO_SLOT_DATA) continue; // no reliable affix data - covered by the SHOW safety net only
+      const snoIds = group.uniques.flatMap((u) => u.snoIds);
+      // Multiple Uniques sharing this exact slot-affix set (rare) share one
+      // rule labeled "Uniques"; the common single-Unique case names it
+      // directly, truncated to leave room for the tier suffix (most real
+      // Unique names don't fit D4's 24-char rule-name cap otherwise).
+      const label = group.uniques.length === 1
+        ? (group.uniques[0].name.length > 24 - SUFFIX_LEN ? group.uniques[0].name.slice(0, 24 - SUFFIX_LEN) : group.uniques[0].name)
+        : "Uniques";
+      const requiredIds = group.ids.slice(0, 1);
+      const optionalIds = group.ids.slice(1);
+      if (group.ids.length >= 3) {
+        const optionalCount = Math.min(2, optionalIds.length);
+        rules.push(tagRule(makeRule(`${label} - 3 Affixes`, RECOLOR, [conditionSpecificUnique(snoIds), conditionAffixes(requiredIds, 1), conditionOptionalAffixes(optionalIds, optionalCount)], colorBis), 10));
       }
-      if (needsShowSafetyNet) {
-        rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], colorBis), false));
-      }
+      const optionalCount2 = Math.min(1, optionalIds.length);
+      rules.push(tagRule(makeRule(`${label} - 2 Affixes`, RECOLOR, [conditionSpecificUnique(snoIds), conditionAffixes(requiredIds, 1), conditionOptionalAffixes(optionalIds, optionalCount2)], colorGood), 20));
+    }
+    if (pooledSnoIds.length && needsShowSafetyNet) {
+      // Never trimmable (see tagRule()'s docstring) - fixed cost no matter
+      // how many Uniques matched, and a build's core Uniques are worth
+      // keeping regardless of filter budget pressure.
+      rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], colorBis), false));
     }
     return { rules, matched };
   }
@@ -4085,11 +4110,6 @@
     // the user's stated preference: always show quality via color, don't
     // hide anything unless explicitly asked to.
     const optHideWeak = document.getElementById("d4a-opt-hide-weak")?.checked ?? false;
-    // 2026-09-24: "une regle pour chaque unique" - default OFF like
-    // hideWeak, same reasoning: a real behavior change (more/renamed
-    // rules, real risk of hitting the 25-rule cap on a build with many
-    // recognized Uniques) shouldn't surprise a first-time user.
-    const optUniquePerItem = document.getElementById("d4a-opt-unique-per-item")?.checked ?? false;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
     // 2026-09-25: "mode farm" - default OFF like hideWeak/uniquePerItem, a
     // real behavior change (see generateFilterCode()'s farmMode comment).
@@ -4140,32 +4160,24 @@
     } catch (e) {
       // ignore - same as above, a bonus signal, not required
     }
-    const perSlotItemNames = perSlot.map((entry) => entry.itemName).filter(Boolean);
-
     // 2026-09-22: named-Unique rules from the build's own scraped equipment
     // list - see buildUniqueItemRules()'s docstring. Included in BOTH
     // filters (unlike per-slot rules, Strict-only): a build's core BiS
     // unique is worth keeping regardless of which preset, and this is an
     // identity match, not a Rare-tier heuristic.
-    // 2026-09-23: merged with perSlotItemNames (from the Stat Priority
-    // widget, see above) - found live that a build's Unique could go
-    // unmatched when the separate "Equipment" tab wasn't the active one at
-    // generation time, silently producing zero Unique rules. Two sources,
-    // de-duplicated by buildUniqueItemRules() itself (it already skips
-    // repeats), cost nothing when they agree and cover the gap when one
-    // source is empty.
-    // Same pooled build-affix list generateFilterCode() computes
-    // internally (skill ids + Stat Priority ids) - recomputed here since
-    // buildUniqueItemRules() needs it too, ahead of that call.
-    const { ids: allSkillIds } = resolveSkillIds(result.resolvedClass || "", result.skillsEn);
-    const allBuildIds = Array.from(new Set([...allSkillIds, ...priority.ids]));
+    // 2026-09-25: buildUniqueItemRules() now sources each Unique's own
+    // relevant affixes from `perSlot` directly (see its docstring) instead
+    // of a flat build-wide pool - no longer needs a separately-computed
+    // allBuildIds/perSlotItemNames here, just perSlot itself plus the
+    // Equipment-tab name list as a fallback for Uniques the Stat Priority
+    // widget didn't correlate to a slot.
     // Matches generateFilterCode()'s own `effectiveHideWeak` condition -
     // see buildUniqueItemRules()'s docstring for why the SHOW safety net is
     // only needed when weak Legendaries/Uniques can actually get hidden.
     // Farm mode implies the same broader hide as hideWeak (see
     // generateFilterCode()'s farmMode comment), so it needs the safety net too.
     const needsUniqueShowSafetyNet = isStrict && (optHideWeak || optFarmMode);
-    const uniqueRulesResult = buildUniqueItemRules([...(result.itemsEn || []), ...perSlotItemNames], colorGood, colorBis, allBuildIds, needsUniqueShowSafetyNet, optUniquePerItem);
+    const uniqueRulesResult = buildUniqueItemRules(perSlot, result.itemsEn || [], colorGood, colorBis, needsUniqueShowSafetyNet);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
     // vient de façon abrégée" - the site is a 2-letter tag rather than the
@@ -4395,12 +4407,10 @@
         <label><input type="checkbox" id="d4a-opt-ancestral"> 🔱 Ancestral uniquement</label>
         <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
-        <label><input type="checkbox" id="d4a-opt-unique-per-item"> 🔍 Une règle par Unique</label>
         <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
           <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont matché aucune règle de précision, au lieu de les laisser visibles dans la couleur par défaut ("Légendaires - Garder").</p>
-          <p>🔍 Au lieu d'une seule règle "Uniques - 2+/3+ Affixes" regroupant tous tes Uniques reconnus, génère une règle par Unique nommé (ex. "Grief - 3 Affixes") - utile en fin de partie pour savoir exactement lequel a de bonnes stats. S'applique sur les 2 filtres (Ouvert et Strict). Si un build a beaucoup d'Uniques reconnus, les règles les moins précises sont retirées en premier pour respecter la limite de 25 règles du jeu (comme pour la précision par emplacement).</p>
           <p>🌾 Pour une session de farm une fois que tu as assez de matériaux : cache tout objet non-Ancestral de puissance ≥850 (le plafond au niveau 70), toutes raretés jusqu'à Unique incluse - il ne reste visible que les Ancestraux du build (déjà couverts ailleurs) et les mises à jour de Codex. Active automatiquement le même comportement que "Cacher les Légendaires faibles".</p>
         </details>
         <div class="d4a-color-row">
@@ -4561,7 +4571,6 @@
       "d4a-opt-ancestral": true,
       "d4a-opt-hide-weak": false,
       "d4a-opt-perslot": true,
-      "d4a-opt-unique-per-item": false,
       // 2026-09-25: "mode farm" - real behavior change (broader hide), OFF
       // by default like the other opt-in behavior changes above.
       "d4a-opt-farm-mode": false,
