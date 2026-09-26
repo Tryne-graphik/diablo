@@ -6123,3 +6123,98 @@ Version 2.89, `node --check` vert. **Premiere fois que cette fonctionnalite est 
 reelles depuis sa creation (v2.87/2.88) - confirme le bug ET valide le diagnostic/correctif contre les
 vraies donnees de la page qui a echoue. Prochaine etape : regenerer sur ce meme build InfinityBuilds
 pour confirmer que le correctif marche vraiment en conditions reelles.**
+
+## 2026-09-26
+
+Session de retours de bugs de traduction par l'utilisatrice (screenshots reels), corriges au fil de
+l'eau, versions 2.90 a 2.95 :
+
+- **v2.90** : `translateBatchLines()` (traduction Google generique) jetait TOUT un lot de 15 lignes des
+  qu'une seule ligne causait un decalage de comptage cote reponse Google - silencieux pour le contenu
+  ajoute APRES le clic initial sur "Traduire" (`flushGoogleTranslateQueue()`, aucun message d'erreur
+  contrairement au passage initial). Nouveau `translateLinesRobust()` : coupe le lot en deux
+  recursivement au lieu de tout jeter, une ligne recalcitrante ne coute plus qu'elle-meme.
+- **v2.91 - vrai bug trouve en analysant une capture d'ecran d'un Talisman complet, tout en anglais** :
+  `extractMaxrollEquipmentFromDom()` excluait tout texte "{Beru/Fer/Linta/Mlor/Phoba} of X" depuis le
+  22/09, pensant que c'etait uniquement du bruit du panneau de suggestion "Talisman" (vrai a l'epoque,
+  pour "Comparer les variantes", fonctionnalite supprimee en v2.75). Sauf que c'est AUSSI le seul
+  format de nom des vrais Charmes/Sceaux equipes - le filtre cachait donc aussi tout objet reel de ce
+  type a la traduction ET au matching Unique depuis un mois. Filtre supprime.
+- **v2.92** : `findEmbeddedAspectPairs()` s'arretait au premier match trouve (souvent le type de base,
+  "Runic Gloves") sans jamais chercher l'Aspect ("Imitated Imbuement") dans le meme nom compose -
+  reecrit pour chercher TOUS les segments traduisibles d'un nom (base + Aspect), pas juste le premier.
+- **v2.93** : ajoute la traduction FR de 14 mots runiques de craft Saison 15 (recettes fournies par
+  l'utilisatrice) - Grief -> "Grand Chagrin", Infinity -> "Infini", etc.
+- **v2.94** : les onglets de variante de build (Starter/Midgame/Endgame/Bossing/Push) passaient par la
+  traduction Google generique hors contexte et produisaient de vrais contresens ("Starter" -> "Demarreur"
+  de voiture, "Midgame" -> "Milieu de fete", "Bossing" -> "Bossage") - nouveau `BUILD_VARIANT_PAIRS`,
+  meme technique que `BOSS_NAME_PAIRS`.
+
+Chaque correctif verifie via un harnais Node autonome rejouant le VRAI code extrait du fichier (pas une
+reimplementation) contre le VRAI dictionnaire, avant meme d'ouvrir un navigateur - methode reutilisee
+plusieurs fois ce jour-la, fiable.
+
+**Recherche demandee ensuite : comparer notre methode de filtre de butin a la concurrence** (fork dedie,
+WebSearch/WebFetch). Resultat complet dans le rapport transmis a l'utilisateur (non duplique ici) -
+retenir : `d4-filter-master` (SwedishLesbian, GitHub) fait la meme chose que nous (build -> filtre
+auto) mais lit l'API JSON officielle du planner Maxroll au lieu de scraper le DOM, et a deja
+TalismanSetBonus (kind=9) en prod, chose qu'on a nous-memes vue utilisee dans un vrai filtre le meme
+jour (celui de la femme de l'utilisateur) sans jamais l'avoir cablee.
+
+**MAJOR FINDING, verifie empiriquement (vrais appels HTTP, vrais decodages) : deux sources de donnees
+Maxroll jamais exploitees peuvent remplacer une bonne partie du scraping DOM fragile ET du dictionnaire
+patchwork actuel** :
+- `https://planners.maxroll.gg/profiles/d4/<id>` (JSON public, sans auth) donne pour chaque variante de
+  build (confirme : Starter/Midgame/Endgame/Bossing/Pushing, exactement les noms traduits en v2.94) la
+  liste d'objets equipes PAR ID NUMERIQUE (nom, power, affixes explicites, aspect), plus `activeProfile`
+  (index de la variante active, evite toute lecture d'onglet DOM). Contre-verifie : le champ
+  `lootFilters` du planner contient bien des filtres (decodes avec notre propre codec), mais ce sont les
+  filtres generiques "Maxroll Light/Medium/Strict" (declutter par palier de World Tier), PAS une
+  recommandation de stats par emplacement propre au build - ne remplace donc PAS le widget Stat Priority
+  (`.d4t-item`), qui reste necessaire.
+- `https://assets-ng.maxroll.gg/d4-tools/game/data.enus.json` et `data.frfr.json` - deja dans
+  `@connect`, deja fetches par le bouton "Recherche" existant (`fetchMaxrollGameItems()`) mais jamais
+  utilises pour le dictionnaire principal - contiennent les vrais noms EN ET FR (maintenus par Maxroll,
+  gestion de genre `[ms]/[fs]/[mp]/[fp]`) pour ~11700 objets/1200 aspects, dans **le meme espace d'ID que
+  le protobuf de filtre de butin deja utilise** (verifie : `affixes["S04_CoreStat_Dexterity"]["id"]` =
+  1829562 = notre `AFFIX_IDS["Dexterity"]` existant). A resolu au passage une enigme vieille de
+  plusieurs sessions (3 ID de type d'objet jamais identifies : `0x0016D22D`=Quarterstaff,
+  `0x00165271`=Glaive, `0x00234A98`=Flail) et retrouve "Seal of the Diamond Mind".
+
+Decision utilisateur : partir sur la refonte (option 2). Plan ecrit et approuve (EnterPlanMode),
+sauvegarde dans `C:\Users\Tryne\.claude\plans\binary-honking-swan.md` - deux pistes sequencees, A
+(dictionnaire) avant B (scraping DOM d'equipement Maxroll).
+
+**Piste A implementee, v2.95** : nouveau `app/fr_en/build_dictionary_maxroll.py` (meme forme que
+`build_dictionary_d4base.py`/`build_dictionary_kamilabs.py`). Deux extractions depuis les memes 2
+fichiers :
+1. `items` (objets/Talismans/Uniques) - filtre par prefixe de cle pertinent (slots d'equipement,
+   `*Unique*`, `Talisman_Charm_Set*`, `ParagonGlyph*`) pour exclure le bruit reel confirme (montures,
+   quetes, tempering, entrees de debug/test dont le nom == la cle).
+2. `affixes`, entrees `legendary_*` (= les Aspects, stockes en fragment grammatical prefix/suffix "of
+   X"/"de X", pas en nom complet) - degage la forme courte affichee par Maxroll en retirant la
+   particule ("of "/"de "/"du "/"des "/"d'"). Ne reconstruit PAS la forme complete "Aspect of X" (deja
+   couverte par d4base.fr) - ajoute seulement la forme courte, un second chemin independant vers le
+   meme resultat pour le loop d'embedded-match de `findEmbeddedAspectPairs()`.
+
+**Vrai piege trouve et evite pendant l'implementation** : deux Aspects DIFFERENTS peuvent partager le
+meme nom court affiche ("Duelist's" = un Aspect Sacresprit -> "de duel" ET un Aspect Barbare sans
+rapport -> "de duelliste", confirme dans les donnees brutes) - une collision reelle du jeu, pas une
+erreur de donnees. Sans context de build/classe, impossible de savoir lequel utiliser ; pire, le tri
+alphabetique final de `merge_dictionaries.py` aurait fait gagner "duel" sur le "duelliste" deja correct
+et deja valide cette session (via le filtre de la femme de l'utilisateur) - une vraie regression
+silencieuse. Detecte et neutralise : `extract_aspects()` regroupe par nom court avant d'ecrire, et
+ignore purement et simplement tout nom court avec plusieurs traductions differentes plutot que de
+deviner (4 collisions trouvees et exclues : Trickster's, Encased, Duelist's, Recalling Feathers).
+
+Resultat : dictionnaire 2517 -> 6521 entrees (+4004, additif, aucune entree existante modifiee/perdue).
+Reverifie contre le VRAI code deploye (meme harnais Node que plus tot ce jour-la) : les 5 termes qui ont
+declenche toute cette recherche (Imitated Imbuement, Earthstriker's, Channeling, Crushing, Duelist's)
+resolvent tous correctement, la plupart maintenant via un match direct (`lookupFr()`) plutot que le
+chemin de secours ajoute en v2.92. `node --check` vert, verifie qu'aucun artefact de corruption ne
+s'est glisse dans la ligne FR_EN_DICTIONARY reembarque (6522 occurrences de `"kind"` attendues : 6521
+entrees + 1 mention dans un commentaire pre-existant, confirme).
+
+**Pas encore fait** : Piste B (remplacer le scraping DOM d'equipement Maxroll par l'API planner) - reste
+a faire, voir le plan sauvegarde. Rien de cette session n'a ete teste en navigateur reel - prochaine
+etape standard : commit, push, verification Tampermonkey, puis test reel par l'utilisatrice.
