@@ -52,62 +52,6 @@
       "seen_in": 1
     },
     {
-      "fr": "(DNS) de poursuite vertueuse",
-      "en": "(DNS) of Righteous Pursuit",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(DNS) de rédemption",
-      "en": "(DNS) of Salvation",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(PH) CC Area Damage",
-      "en": "(DNS) CC Area Damage",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(PH) Conqueror's",
-      "en": "(DNS) Conqueror's",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(PH) Juggernaut CC",
-      "en": "(DNS) Juggernaut CC",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(PH) Thorns DD",
-      "en": "(DNS) Thorns DD",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(PH) Thorns Taunt",
-      "en": "(DNS) Thorns Taunt",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "(PH) legendary 83",
-      "en": "(DNS) of Expiation",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
       "fr": "(RECONCEPTION) de roche métamorphique",
       "en": "(REDESIGN) of Metamorphic Stone",
       "kind": "item",
@@ -5719,13 +5663,6 @@
       "source": "maxroll_gamedata"
     },
     {
-      "fr": "défense",
-      "en": "(PH) of Defense",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
       "fr": "défense de fer",
       "en": "the Iron Warrior",
       "kind": "item",
@@ -7056,13 +6993,6 @@
       "source": "maxroll_gamedata"
     },
     {
-      "fr": "mouvement",
-      "en": "(PH) of Movement",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
       "fr": "mouvement surnaturel",
       "en": "Unnatural Movement",
       "kind": "item",
@@ -7847,13 +7777,6 @@
       "source": "maxroll_gamedata"
     },
     {
-      "fr": "solide",
-      "en": "(DNS) Iron Body's",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
       "fr": "solidité",
       "en": "Bruiser's",
       "kind": "item",
@@ -8136,13 +8059,6 @@
     {
       "fr": "ténèbres paralysantes",
       "en": "Crippling Darkness",
-      "kind": "item",
-      "seen_in": 1,
-      "source": "maxroll_gamedata"
-    },
-    {
-      "fr": "utilité",
-      "en": "(PH) of Utility",
       "kind": "item",
       "seen_in": 1,
       "source": "maxroll_gamedata"

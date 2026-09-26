@@ -6339,3 +6339,36 @@ Note au passage : en verifiant la ligne FR_EN_DICTIONARY, quelques entrees "(DNS
 Maxroll internes "do not ship"/"placeholder", contenu non publie) ont ete reperees, issues du merge
 Maxroll de la v2.95 - inoffensives en pratique (jamais affichees sur une vraie page) mais a nettoyer
 un jour si l'occasion se presente.
+
+**v3.5** : utilisateur a renvoye le fichier complet (717 lignes) traduit cette fois via Gemini
+(`gemini-code-...txt`). Comparaison automatique contre le dictionnaire actuel (6588 entrees) :
+**447 concordent**, **189 divergent**, **1 seul terme reellement nouveau** (et c'est un artefact,
+voir plus bas).
+
+**Decision prise sur les 189 divergences : garder nos donnees existantes, ne pas les remplacer par
+Gemini.** Raison : contrairement au premier fichier (traduit a la main, seule source disponible pour
+des trous reels), la quasi-totalite des divergences ici concernent des noms d'Objets Uniques ou nos
+entrees viennent de sources reelles du jeu (d4base.fr, kami-labs, les fichiers de localisation Maxroll)
+- Gemini, lui, a traduit le texte anglais a froid, sans acces aux vrais termes officiels Blizzard.
+Verifie sur plusieurs cas (ex. "Chest Armor"->"Cuirasse" et "Pants"->"Jambieres", des termes reels de
+l'interface FR du jeu, vs les traductions plausibles mais non-officielles de Gemini "Armure de
+torse"/"Pantalon") - nos donnees sourcees restent plus fiables que des traductions IA generees a froid.
+Seule exception traitee comme un vrai choix editorial (pas de terme officiel Blizzard, ce sont des
+libelles internes a ce projet) : les 5 noms de variantes de build et 3 des 13 libelles d'emplacement -
+Gemini propose des alternatives raisonnables (ex. "Armure de torse" pour Chest Armor, "Heaume" pour
+Helm) mais rien ne les rend meilleures que nos choix existants - laisses tels quels, purement
+subjectif, pas re-ouvert sans demande explicite.
+
+**2 nettoyages reels faits au passage** : (1) `"(DNS)"` - un nom-cle place-holder (bug de dev,
+"Do Not Ship") s'etait glisse dans `UNIQUE_ITEM_IDS` avec 5 ID pooles dessous, ni un vrai objet ni une
+vraie traduction - retire de `app/loot_filter/uniques.py` ET de sa copie miroir dans le userscript
+(pas de script de sync automatique entre les deux, verifie). (2) Les 12 entrees "(DNS)"/"(PH)"
+identifiees comme suspectes en v3.4 (contenu Maxroll non publie/placeholder) confirmees et retirees du
+dictionnaire.
+
+**Clarification sur les "8 Uniques probablement manquants"** (identifies la session precedente) :
+ils etaient deja dans le dictionnaire de traduction (recuperes via le merge Maxroll large de la v2.95,
+kind=unknown) - le vrai trou restant est uniquement cote `UNIQUE_ITEM_IDS` (ciblage de filtre de
+butin par ID specifique), pas la traduction sur page.
+
+Dictionnaire 6588 -> **6576 entrees** (net, apres retrait des 12 placeholders). `node --check` vert.

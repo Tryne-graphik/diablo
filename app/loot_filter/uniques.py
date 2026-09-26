@@ -18,7 +18,6 @@ from __future__ import annotations
 
 # fmt: off
 UNIQUE_ITEM_IDS: dict[str, list[int]] = {
-    "(DNS)": [0x0025CEE2, 0x0025CEE5, 0x0025CEE8, 0x0025CEEC, 0x0025CEEF],
     "100,000 Steps": [0x001278E2],
     "Accord of the Wilds": [0x002742F2],
     "Ae'grom's Schism": [0x0026E5D3],
