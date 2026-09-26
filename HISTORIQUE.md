@@ -6215,6 +6215,24 @@ chemin de secours ajoute en v2.92. `node --check` vert, verifie qu'aucun artefac
 s'est glisse dans la ligne FR_EN_DICTIONARY reembarque (6522 occurrences de `"kind"` attendues : 6521
 entrees + 1 mention dans un commentaire pre-existant, confirme).
 
-**Pas encore fait** : Piste B (remplacer le scraping DOM d'equipement Maxroll par l'API planner) - reste
-a faire, voir le plan sauvegarde. Rien de cette session n'a ete teste en navigateur reel - prochaine
-etape standard : commit, push, verification Tampermonkey, puis test reel par l'utilisatrice.
+**Piste B implementee, v2.96** : `@connect planners.maxroll.gg` ajoute, 2 nouvelles fonctions juste
+avant `extractMaxrollEquipmentFromDom()` (repli existant, inchange) - `fetchMaxrollPlannerData(plannerId)`
+(fetch + double JSON.parse, l'API renvoie le vrai payload comme une CHAINE JSON dans son propre champ
+`data`, pas un objet imbrique - mis en cache par plannerId) et `extractMaxrollEquipmentFromPlannerData()`
+(selectionne le profil via `data.activeProfile`, resout chaque objet equipe `profile.items[slot] ->
+data.items[ref].name`). Cablé dans `extractMaxrollDetail()` : le fetch planner API et le poll DOM
+demarrent EN PARALLELE (aucune latence ajoutee), mais le poll DOM (jusqu'a 3s de stabilisation) n'est
+attendu que si l'API planner revient vide - net gain de vitesse ET de fiabilite quand l'API repond.
+Scope volontairement limite aux OBJETS (noms pour la traduction) - les COMPETENCES restent sur
+`meta.skills` (fetch HTML existant, inchange) et le widget Stat Priority (`.d4t-item`) n'est pas touche
+(confirme sans equivalent dans l'API planner, voir plus haut).
+
+Verifie avec les vraies donnees deja recuperees pendant la recherche (`planner_response.json`, un
+vrai build Rogue) : resout correctement le profil "Endgame" (index 3) et ses 11 objets equipes
+(Fiend Guardian, Bloody Eye, Order Gear, ...). Repli teste explicitement : `null`/`undefined`/objet
+malforme -> tableau vide sans exception, laisse la place au DOM comme prevu. `node --check` vert.
+
+**Rien de cette session (Piste A + B, v2.90-2.96) n'a encore ete teste en navigateur reel** - prochaine
+etape standard : commit, push, verification Tampermonkey, puis test reel par l'utilisatrice. Point
+particulier a surveiller au premier vrai test : est-ce que l'API planner reduit vraiment les echecs
+"Générer le filtre renvoie peu/pas de regles" par rapport au scraping DOM qu'elle remplace en partie.

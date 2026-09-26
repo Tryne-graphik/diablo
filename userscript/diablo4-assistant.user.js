@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.95
+// @version      2.96
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -17,6 +17,7 @@
 // @connect      kami-labs.fr
 // @connect      maxroll.gg
 // @connect      assets-ng.maxroll.gg
+// @connect      planners.maxroll.gg
 // @connect      d4builds.gg
 // @connect      d4guides.gg
 // @connect      api.talion.tv
@@ -3464,6 +3465,54 @@
   // left depending on this list being exclusion-filtered, and the
   // consumers that remain (translation nameMap, Unique-name matching) both
   // already tolerate extra non-matching names gracefully.
+  // 2026-09-26: Maxroll's planner has its own JSON API, public/no-auth,
+  // structured by numeric id instead of scraped CSS classes - found while
+  // researching how competing tools avoid the DOM-scraping fragility this
+  // project has hit repeatedly (lazy-mount timing, CSS class churn,
+  // partial React renders, a stale tab-label match after Chrome auto-
+  // translates a button). `data.profiles[]` holds one entry per build
+  // variant (Starter/Midgame/Endgame/Bossing/Pushing - same names as
+  // BUILD_VARIANT_PAIRS above); `data.activeProfile` is the index of
+  // whichever one the build's author set as default/endgame, so which
+  // variant to read doesn't require looking at the DOM at all.
+  // `profile.items` maps a slot NUMBER to a key into the top-level
+  // `data.items` catalog, each holding at least a `name` (the same style
+  // of string the DOM scrape below already returns - "Bone Retribution",
+  // "Lord's Ire" - so no changes needed downstream in buildNameMap()/
+  // findEmbeddedAspectPairs()). The outer HTTP response wraps the whole
+  // thing as a JSON STRING in its own `data` field, not a nested object -
+  // needs a second JSON.parse.
+  // Cached per plannerId (module-level, not per-call) - extractMaxrollDetail()
+  // only calls this once per page anyway, but the manual "Recherche" tool's
+  // own live-fetch pattern (fetchMaxrollGameItems()) sets the precedent.
+  const maxrollPlannerCache = new Map();
+  async function fetchMaxrollPlannerData(plannerId) {
+    if (maxrollPlannerCache.has(plannerId)) return maxrollPlannerCache.get(plannerId);
+    let result = null;
+    try {
+      const raw = await gmGet(`https://planners.maxroll.gg/profiles/d4/${plannerId}`);
+      const outer = JSON.parse(raw);
+      result = JSON.parse(outer.data);
+    } catch (e) {
+      result = null; // network error, unexpected shape, ... - caller falls back to the DOM scrape
+    }
+    maxrollPlannerCache.set(plannerId, result);
+    return result;
+  }
+
+  function extractMaxrollEquipmentFromPlannerData(plannerData) {
+    if (!plannerData || !Array.isArray(plannerData.profiles) || !plannerData.items) return [];
+    const activeIndex = Number.isInteger(plannerData.activeProfile) ? plannerData.activeProfile : 0;
+    const profile = plannerData.profiles[activeIndex] || plannerData.profiles[0];
+    if (!profile || !profile.items) return [];
+    const names = [];
+    for (const itemRef of Object.values(profile.items)) {
+      const item = plannerData.items[itemRef];
+      if (item && item.name) names.push(item.name);
+    }
+    return names;
+  }
+
   function extractMaxrollEquipmentFromDom() {
     return Array.from(document.querySelectorAll('[class*="equipment_Slot__title__"]'))
       .map((el) => el.textContent.trim())
@@ -3508,9 +3557,13 @@
     const plannerId = plannerIds.values().next().value;
     const plannerUrl = `https://maxroll.gg/d4/planner/${plannerId}`;
 
-    // Run the DOM wait and the network fetch concurrently - the DOM read
-    // is only needed for items (more accurate, see above); skills still
-    // come from the planner fetch, nothing better found for those yet.
+    // 2026-09-26: try the planner's own JSON API first (see
+    // fetchMaxrollPlannerData()'s docstring) - structured, ID-based, no
+    // DOM/CSS-class dependency at all. Both this and the DOM poll start
+    // concurrently so neither adds latency on top of the other; the DOM
+    // wait's result is only awaited (and its own up-to-3s stabilization
+    // poll actually paid for) when the API path comes back empty.
+    const plannerDataPromise = fetchMaxrollPlannerData(plannerId);
     const domItemsPromise = waitForMaxrollEquipmentDom();
 
     let html = null;
@@ -3532,8 +3585,16 @@
     }
 
     const skillsEn = meta && Array.isArray(meta.skills) ? meta.skills : [];
-    const domItems = await domItemsPromise;
-    const itemsEn = domItems.length ? domItems : meta && Array.isArray(meta.items) ? meta.items : [];
+
+    const plannerData = await plannerDataPromise;
+    const plannerItems = extractMaxrollEquipmentFromPlannerData(plannerData);
+    let itemsEn;
+    if (plannerItems.length) {
+      itemsEn = plannerItems;
+    } else {
+      const domItems = await domItemsPromise;
+      itemsEn = domItems.length ? domItems : meta && Array.isArray(meta.items) ? meta.items : [];
+    }
     if (skillsEn.length === 0 && itemsEn.length === 0) return null;
 
     return {
