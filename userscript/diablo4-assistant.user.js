@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.6
+// @version      3.7
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -12,6 +12,19 @@
 // @match        *://www.talion.tv/diablo-4/builds/*
 // @match        *://infinitybuilds.gg/*/builds/*
 // @match        *://helltides.com/tower*
+// 2026-09-27: real feedback report - "Mes Builds" (the recent-build
+// quick-jump list) was only reachable from an actual build-guide page,
+// since the script never even ran on a site's own homepage before. These
+// 6 homepage matches let init() below mount a minimal panel there (see
+// isBuildDetailPage()) - just the version/Mes Builds/feedback sections,
+// since Traduire/Filtre/Classement/Recherche all need a real build on
+// screen to do anything.
+// @match        *://kami-labs.fr/
+// @match        *://maxroll.gg/
+// @match        *://d4builds.gg/
+// @match        *://d4guides.gg/
+// @match        *://www.talion.tv/
+// @match        *://infinitybuilds.gg/
 // @connect      infinitybuilds.gg
 // @connect      data.infinitybuilds.gg
 // @connect      kami-labs.fr
@@ -4842,6 +4855,17 @@
     };
   }
 
+  // 2026-09-27: matches a real build-detail path on any of the 6 sites
+  // this project supports - kept as one loose path-shape check (not
+  // hostname-exact) rather than mirroring each @match pattern 1:1, since
+  // the only thing this decides is "show the full panel or the minimal
+  // homepage one" (see init()) - a false positive/negative here just
+  // means a slightly-off panel, not a broken feature.
+  function isBuildDetailPage() {
+    const p = location.pathname;
+    return /\/builds?\//.test(p) || /\/build-guides\//.test(p);
+  }
+
   function init() {
     const extractRequestId = new URLSearchParams(location.search).get("d4a_extract");
     if (extractRequestId) {
@@ -4980,6 +5004,28 @@
       </div>
     `;
     document.body.appendChild(column);
+
+    // 2026-09-27: on a site's homepage (no specific build in context),
+    // hide every section that needs one - Traduire/Filtre/Classement/
+    // Recherche would all silently do nothing useful there anyway. Uses
+    // `hidden` rather than removing these elements: the wiring code right
+    // below unconditionally does `document.getElementById(id).prop = ...`
+    // for most of them (no null-guard), so actually removing them from
+    // the DOM would crash init() on every homepage visit - hiding leaves
+    // them present (wiring stays intact, harmless since nothing shows
+    // them again) and just invisible. "Vérifier MAJ" stays visible (not
+    // build-specific); Mes Builds and Retour d'expérience are untouched.
+    if (!isBuildDetailPage()) {
+      const idsToHide = [
+        "d4a-buildinfo-section", "d4a-search-section", "d4a-filter-options", "d4a-panel-section", "d4a-ranking-section",
+        "d4a-btn-translate", "d4a-btn-search-toggle", "d4a-btn-ranking",
+        "d4a-btn-filter-open", "d4a-btn-filter-strict",
+      ];
+      for (const id of idsToHide) {
+        const el = document.getElementById(id);
+        if (el) el.hidden = true;
+      }
+    }
 
     const translateBtn = document.getElementById("d4a-btn-translate");
     translateBtn.title = "Traduit les objets/compétences avec les termes exacts du client FR, puis le reste du texte de la page via Google";

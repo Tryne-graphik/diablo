@@ -6397,3 +6397,26 @@ script Cloudflare Turnstile en plus du contenu normal) : le delai externe 18s ->
 (`openLeaderboardExtractionTab`), et le delai interne de sondage dans l'onglet cache 15s -> 20s
 (`runLeaderboardExtractionMode` - decouvert au passage qu'il coupait avant meme que le delai externe
 n'ait sa chance, gaspillant la marge). node --check vert.
+
+**Retours d'experience traites (Google Sheet)** : acces mis en place ce jour (connecteur MCP Google
+Drive autorise via `/mcp` - note pour plus tard : geree au niveau du compte sur
+claude.ai/customize/connectors, pas par l'app de bureau ; un seul compte Google actif a la fois, en
+connecter un 2e remplace le 1er). Le classeur reel etait sous un AUTRE compte Google que celui utilise
+au depart - trouve apres partage explicite avec `tryne.graphik@gmail.com`. Un seul vrai retour parmi
+les lignes (le reste : tests techniques de dev) :
+
+**v3.7** : "Ne garde pas en memoire les builds consultes sur differents sites / ne permet pas d'ouvrir
+le script sur la page d'accueil des sites, ce qui pourrait conduire au build recemment consulte sans
+devoir le chercher" (26/09, page Maxroll Whirlwind Barbarian). Diagnostic confirme par les `@match`
+existants : le script ne tournait QUE sur les pages de guide elles-memes, jamais sur la page d'accueil
+d'un site - "Mes Builds" (qui retient deja le dernier build visite par classe, memoire inchangee) etait
+donc bien injoignable depuis l'accueil, exactement comme signale.
+
+Corrige : 6 nouveaux `@match` (page d'accueil exacte de chacun des 6 sites), plus `isBuildDetailPage()`
+(verifie si le chemin ressemble a une vraie page de build, teste contre les 6 formes reelles - OK sur
+toute la ligne) qui decide si le panneau complet ou une version minimale s'affiche. Choix technique
+important : les sections non pertinentes sur l'accueil (Traduire/Filtre/Classement/Recherche) sont
+MASQUEES (`hidden`) plutot que retirees du DOM - le code de branchement des boutons juste apres fait
+`document.getElementById(id).prop = ...` sans verification null pour la plupart, donc retirer ces
+elements aurait fait planter `init()` a chaque visite d'accueil. "Vérifier MAJ" reste visible (pas lie a
+un build), "Mes Builds" et "Retour d'expérience" intouches. `node --check` vert.
