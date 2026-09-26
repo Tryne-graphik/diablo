@@ -6273,3 +6273,12 @@ de regression.
 
 `node --check` vert apres chaque edit. Rien de la v3.1 teste en navigateur reel encore - prochaine etape
 standard : commit, push, verification Tampermonkey, test reel.
+
+**v3.2** : utilisateur a demande un bouton pour lancer la verification de mise a jour Tampermonkey
+directement depuis le panneau, sans passer par le dashboard. Pas d'API GM_* pour ca (deliberement non
+exposee aux scripts sandboxes) - meme mecanisme que le bouton "Installer/mettre a jour" de l'outil
+installer/ separe : ouvrir l'URL @downloadURL/@updateURL du script declenche le dialogue natif de
+Tampermonkey, qui compare lui-meme les versions. Nouveau bouton "🔄 Vérifier MAJ" dans la grille
+d'actions (complete la grille 2x2 existante Traduire/Recherche/Classement, se retrouve naturellement
+sous Recherche comme demande), URL lue via `GM_info.script.downloadURL` (pas de duplication codee en
+dur, repli sur l'URL GitHub connue si absent).

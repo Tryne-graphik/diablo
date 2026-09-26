@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.1
+// @version      3.2
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4820,6 +4820,7 @@
         <button id="d4a-btn-translate">🇫🇷 Traduire</button>
         <button id="d4a-btn-search-toggle">🔍 Recherche</button>
         <button id="d4a-btn-ranking">🏆 Classement</button>
+        <button id="d4a-btn-check-update">🔄 Vérifier MAJ</button>
       </div>
       <div id="d4a-search-section" hidden>
         <div id="d4a-search-form">
@@ -4924,6 +4925,26 @@
     searchToggleBtn.title = "Afficher/masquer la recherche de traduction manuelle";
     searchToggleBtn.onclick = () => {
       searchSection.hidden = !searchSection.hidden;
+    };
+
+    // 2026-09-26: Tampermonkey has no GM_* API a userscript can call to
+    // trigger its OWN "check for updates now" (that's a dashboard-only
+    // action, deliberately not exposed to sandboxed scripts) - but opening
+    // the script's own @downloadURL/@updateURL directly achieves the same
+    // practical result: Tampermonkey intercepts navigation to a .user.js
+    // URL and shows its native install/update dialog, comparing versions
+    // itself. GM_info.script.downloadURL (populated by Tampermonkey from
+    // this file's own metadata block) is used instead of hardcoding the
+    // URL a second time - falls back to the known GitHub raw URL only if
+    // GM_info doesn't carry it for some reason (e.g. a manually-imported
+    // copy with no @downloadURL recorded).
+    const checkUpdateBtn = document.getElementById("d4a-btn-check-update");
+    checkUpdateBtn.title = "Ouvre la page d'installation du script - Tampermonkey indique lui-même si une mise à jour est disponible";
+    checkUpdateBtn.onclick = () => {
+      const url =
+        (typeof GM_info !== "undefined" && GM_info.script && (GM_info.script.downloadURL || GM_info.script.updateURL)) ||
+        "https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js";
+      window.open(url, "_blank", "noopener,noreferrer");
     };
 
     // 2026-09-24: "zone de texte a afficher au besoin, titre : retour
