@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.2
+// @version      3.3
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3949,6 +3949,17 @@
   // substring in one pass, then keeps every non-overlapping match (longest
   // first, same rule translateTextNode already applies) instead of only
   // the single best one - so both segments get their own nameMap entry.
+  // A match not anchored at a word boundary on both sides risks matching
+  // by coincidence in the middle of an unrelated word (e.g. a short
+  // stripped aspect form like "art" would otherwise match inside
+  // "Heart's..." or "...smart"). Boundary = string start/end or a
+  // non-alphanumeric neighbor (space, apostrophe, punctuation).
+  function isWordBoundaryMatch(lowerText, start, end) {
+    const before = start === 0 || !/[a-z0-9]/i.test(lowerText[start - 1]);
+    const after = end >= lowerText.length || !/[a-z0-9]/i.test(lowerText[end]);
+    return before && after;
+  }
+
   function findEmbeddedAspectPairs(rawNames) {
     const pairs = [];
     for (const raw of rawNames || []) {
@@ -3971,6 +3982,16 @@
           if (form.length <= 3) continue; // skip short generic words - too easy to match by coincidence
           const idx = rawLower.indexOf(form.toLowerCase());
           if (idx === -1) continue;
+          // 2026-09-27: this used to require the WHOLE raw name to equal
+          // the stripped form exactly (only for the reverse/stripped
+          // case) - loosened to a substring search so a compound name
+          // ("Runic Gloves of Imitated Imbuement") could also match its
+          // embedded Aspect, but that also let a short stripped form
+          // match by coincidence inside an unrelated word. Anchoring both
+          // ends to a word boundary keeps the compound-name case working
+          // (it always lands right after "of "/between words) while
+          // rejecting mid-word coincidences.
+          if (!isWordBoundaryMatch(rawLower, idx, idx + form.length)) continue;
           const fr = form === rawEn ? entry.fr : stripAspectPrefix(entry.fr || "");
           if (!fr) continue;
           candidates.push({ start: idx, end: idx + form.length, enInRaw: trimmed.slice(idx, idx + form.length), fr });
@@ -4174,6 +4195,16 @@
       const fr = lookupFr(en);
       if (fr && fr !== en && el.textContent.trim() === en) {
         el.textContent = fr;
+        // Unlike translateTextNode()'s span-wrapped replacements, this
+        // writes directly into an existing element - without marking it
+        // translate="no" too, a later "Traduire le reste du texte" click
+        // (startGoogleTranslateObserver) sees this as a freshly-added
+        // French text node and sends it back through Google's EN->FR
+        // call as if it were still English, risking corrupting an
+        // already-correct name like "Grand Chagrin". closest() matches
+        // the element itself, not just ancestors, so setting it here is
+        // enough to protect the text node inside.
+        el.setAttribute("translate", "no");
         count++;
       }
     }
@@ -4386,8 +4417,17 @@
       const result = await translateLinesRobust(lines);
       for (let j = 0; j < batchNodes.length; j++) {
         if (result[j] && result[j] !== lines[j]) {
-          batchNodes[j].nodeValue = result[j];
-          translatedCount++;
+          // 2026-09-27: match flushGoogleTranslateQueue's isConnected
+          // check - translateLinesRobust()'s retry-on-mismatch can now
+          // take several extra round-trips, widening the window for a
+          // React re-render to detach one of these nodes before its
+          // result comes back. Writing to a detached node is harmless but
+          // silently wrong: translatedCount would count it as fixed while
+          // the CURRENT (replacement) node on screen stays untranslated.
+          if (batchNodes[j].isConnected) {
+            batchNodes[j].nodeValue = result[j];
+            translatedCount++;
+          }
         } else if (!result[j]) {
           failedLines++;
         }

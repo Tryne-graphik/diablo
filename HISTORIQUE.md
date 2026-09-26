@@ -6282,3 +6282,26 @@ Tampermonkey, qui compare lui-meme les versions. Nouveau bouton "🔄 Vérifier 
 d'actions (complete la grille 2x2 existante Traduire/Recherche/Classement, se retrouve naturellement
 sous Recherche comme demande), URL lue via `GM_info.script.downloadURL` (pas de duplication codee en
 dur, repli sur l'URL GitHub connue si absent).
+
+**Revue de code demandee par l'utilisateur** sur tout le diff de la session (`/code-review 57241ac..HEAD
+high`, lancee en tache de fond). 3 vrais problemes trouves et corriges en **v3.3** :
+
+- `translateMaxrollUniqueHeaders()` (v3.1) ecrivait `el.textContent = fr` sans jamais marquer
+  `translate="no"`, contrairement a toutes les autres passes de remplacement du fichier - si l'utilisateur
+  a aussi lance la traduction Google generique, une traduction deja correcte ("Grand Chagrin") pouvait
+  se faire re-traduire (EN->FR force) et se corrompre des que l'observateur Google voit ce nouveau noeud
+  de texte. Corrige : `translate="no"` pose directement sur l'element.
+- `findEmbeddedAspectPairs()` (v2.92) avait assoupli la recherche de "toute la chaine == forme
+  depouillee" (exact) a "sous-chaine trouvee n'importe ou" - necessaire pour le cas des noms composes
+  ("Runic Gloves of Imitated Imbuement") mais ouvrait un risque reel de faux positif si une forme
+  d'Aspect depouillee courte apparaissait par coincidence au milieu d'un autre nom sans rapport. Corrige
+  avec une verification de frontiere de mot (`isWordBoundaryMatch`) - garde le cas des noms composes
+  (toujours ancre apres "of "/entre deux mots) tout en rejetant les coincidences en milieu de mot. Reteste
+  contre le vrai dictionnaire : tous les cas precedemment valides (Imitated Imbuement, Runic Gloves of...,
+  Warcaster of Channeling, etc.) resolvent identiquement.
+- `runTranslatePageText()` n'avait pas la verification `isConnected` que `flushGoogleTranslateQueue()` a
+  deja - la nouvelle logique de reessai recursif (`translateLinesRobust`, v2.90) peut prendre plusieurs
+  allers-retours de plus, elargissant la fenetre ou un noeud pourrait se detacher (re-render React) avant
+  que son resultat revienne. Corrige pour la coherence avec l'autre passe.
+
+`node --check` vert. Rien de la v3.3 teste en navigateur encore.
