@@ -1,0 +1,495 @@
+{
+  "generated_at": "2026-09-27",
+  "entries": [
+    {
+      "fr": "traduction actuelle (vide si aucune connue).",
+      "en": "Format : nom anglais",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts",
+      "en": "All Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Armure",
+      "en": "Armor",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vitesse d'attaque",
+      "en": "Attack Speed",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Les attaques réduisent le temps de recharge d'esquive",
+      "en": "Attacks Reduce Evade Cooldown",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Génération de barrière",
+      "en": "Barrier Generation",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de froid",
+      "en": "Cold Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance au froid",
+      "en": "Cold Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction du temps de recharge",
+      "en": "Cooldown Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Chances de coup critique",
+      "en": "Critical Strike Chance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts des coups critiques",
+      "en": "Critical Strike Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts sur la durée",
+      "en": "Damage Over Time Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction des dégâts",
+      "en": "Damage Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Dextérité",
+      "en": "Dexterity",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Chances d'esquive",
+      "en": "Dodge Chance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Énergie par victime",
+      "en": "Energy On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération d'énergie",
+      "en": "Energy Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Essence par victime",
+      "en": "Essence On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération d'essence",
+      "en": "Essence Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "L'esquive confère de la vitesse de déplacement",
+      "en": "Evade Grants Movement Speed",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Foi par victime",
+      "en": "Faith On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de foi",
+      "en": "Faith Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de feu",
+      "en": "Fire Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance au feu",
+      "en": "Fire Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Génération de fortification",
+      "en": "Fortify Generation",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Fureur par victime",
+      "en": "Fury On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de fureur",
+      "en": "Fury Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Soins reçus",
+      "en": "Healing Received",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts sacrés",
+      "en": "Holy Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Compétences d'imprégnation",
+      "en": "Imbuement Skills",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Intelligence",
+      "en": "Intelligence",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vie par coup",
+      "en": "Life On Hit",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de vie",
+      "en": "Life Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vie par victime",
+      "en": "Life on Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de foudre",
+      "en": "Lightning Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance à la foudre",
+      "en": "Lightning Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Chances de coup de chance",
+      "en": "Lucky Hit Chance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Coup de chance : rend de la ressource principale",
+      "en": "Lucky Hit Restore Primary Resource",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Mana par victime",
+      "en": "Mana On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de mana",
+      "en": "Mana Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Charges d'esquive maximales",
+      "en": "Maximum Evade Charge",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vie maximale",
+      "en": "Maximum Life",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Ressource maximale",
+      "en": "Maximum Resource",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vitesse de déplacement",
+      "en": "Movement Speed",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts physiques",
+      "en": "Physical Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance physique",
+      "en": "Physical Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de poison",
+      "en": "Poison Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance au poison",
+      "en": "Poison Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Capacité des potions",
+      "en": "Potion Capacity",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance à tous les éléments",
+      "en": "Resistance to All Elements",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction du coût en ressource",
+      "en": "Resource Cost Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Génération de ressource",
+      "en": "Resource Generation",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts d'ombre",
+      "en": "Shadow Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance à l'ombre",
+      "en": "Shadow Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Esprit par victime",
+      "en": "Spirit On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération d'esprit",
+      "en": "Spirit Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Épines",
+      "en": "Thorns",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vigueur par victime",
+      "en": "Vigor On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de vigueur",
+      "en": "Vigor Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts vulnérables",
+      "en": "Vulnerable Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Dégâts de l'arme",
+      "en": "Weapon Damage",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Volonté",
+      "en": "Willpower",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de courroux",
+      "en": "Wrath Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Courroux toutes les 10 victimes",
+      "en": "Wrath every 10 Kills",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Puissance d'imprégnation",
+      "en": "Imbuement Potency (Trempe Voleur)",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Puissance des gemmes",
+      "en": "Gem Strength",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Toutes les caractéristiques",
+      "en": "All Stats",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction du temps de recharge de mobilité",
+      "en": "Mobility Cooldown Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Coup de chance : étourdissement/gel",
+      "en": "Lucky Hit: Stun/Freeze (combo Barbare-Voleur)",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Coup de chance : jusqu'à X % de chances de rendre de la ressource principale",
+      "en": "Lucky Hit: Up to X% Chance to Restore Primary Resource",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    }
+  ]
+}

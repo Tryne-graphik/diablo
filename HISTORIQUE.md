@@ -6305,3 +6305,37 @@ high`, lancee en tache de fond). 3 vrais problemes trouves et corriges en **v3.3
   que son resultat revienne. Corrige pour la coherence avec l'autre passe.
 
 `node --check` vert. Rien de la v3.3 teste en navigateur encore.
+
+**v3.4** : utilisateur a signale "Imbuement Potency" manquant du fichier de traduction genere -
+confirme un vrai trou documente depuis le 22/09 (jamais resolu faute de source fiable). Genere un
+fichier de verification complete (`research/verification-complete-traductions-2026-09-27.txt`, 717
+lignes, EN seul sans traduction pre-remplie expres, pour permettre une vraie comparaison croisee) puis,
+sur demande, un audit des Uniques Maxroll absents de `UNIQUE_ITEM_IDS` (8 trouves apres filtrage du
+bruit - contenu de test/PTR/materiaux de craft mal etiquetes "Unique").
+
+Utilisateur a renvoye `trad.txt` (le premier fichier, plus petit, deja traduit - 294 paires apres
+deduplication des categories de competences partagees entre classes). Comparaison automatique contre
+le dictionnaire existant : **223 concordent**, **70 nouveaux** (les 64 stats principales + les 6
+affixes jamais resolus, dont Imbuement Potency), **1 seul desaccord** (`ConcussiveStormp Skills` -
+"choc percutant" chez l'utilisatrice vs "Tempête percutante" en base ; le nom interne du jeu contient
+probablement une faute de frappe "Stormp"/"Stomp", aucune des deux versions n'est certaine - laisse
+tel quel, a trancher si ca revient).
+
+**2 vrais bugs trouves en integrant les 70 nouvelles entrees, corriges avant merge** : (1) le script de
+parsing du fichier renvoye capturait aussi la ligne d'INSTRUCTION du fichier ("Format : nom anglais ->
+traduction actuelle...") comme si c'etait une vraie paire de traduction - supprime. (2) 3 des 6 cles
+"affixes jamais resolus" avaient des notes entre parentheses que j'avais moi-meme ajoutees pour le
+contexte de l'utilisatrice (ex. "Imbuement Potency (Trempe Voleur)") - inutilisables telles quelles
+comme cle de dictionnaire puisque le texte reel du jeu n'aura jamais cette parenthese. Nettoye : cle
+"Imbuement Potency" gardee (parenthese retiree, traduction utilisatrice conservee) ; les 2 autres
+("Lucky Hit: Stun/Freeze (combo...)" et "...Up to X% Chance...") supprimees entierement - ce ne sont
+pas des chaines litterales reelles du jeu de toute facon (la seconde contient un pourcentage variable),
+les garder aurait pu introduire un faux match plus tard.
+
+Dictionnaire 6521 -> **6588 entrees** (net, apres nettoyage). `node --check` vert, resync confirme via
+un test direct contre le vrai code deploye.
+
+Note au passage : en verifiant la ligne FR_EN_DICTIONARY, quelques entrees "(DNS)"/"(PH)" (tags
+Maxroll internes "do not ship"/"placeholder", contenu non publie) ont ete reperees, issues du merge
+Maxroll de la v2.95 - inoffensives en pratique (jamais affichees sur une vraie page) mais a nettoyer
+un jour si l'occasion se presente.

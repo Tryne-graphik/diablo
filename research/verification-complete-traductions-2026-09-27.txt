@@ -1,0 +1,717 @@
+DIABLO IV ASSISTANT - VERIFICATION COMPLETE DES TRADUCTIONS (2026-09-26)
+======================================================================
+
+Traduis chaque ligne independamment, SANS regarder ce qu'on a deja en base -
+le but est justement de comparer ta version a la notre apres coup pour
+attraper les erreurs des deux cotes (les tiennes ou les notres).
+Un nom anglais par ligne. Ajoute ta traduction apres la fleche.
+
+STATS PRINCIPALES (64)
+----------------------------------------
+All Damage Multiplier                              -> 
+Armor                                              -> 
+Attack Speed                                       -> 
+Attacks Reduce Evade Cooldown                      -> 
+Barrier Generation                                 -> 
+Cold Damage Multiplier                             -> 
+Cold Resistance                                    -> 
+Cooldown Reduction                                 -> 
+Critical Strike Chance                             -> 
+Critical Strike Damage Multiplier                  -> 
+Damage Over Time Multiplier                        -> 
+Damage Reduction                                   -> 
+Dexterity                                          -> 
+Dodge Chance                                       -> 
+Energy On Kill                                     -> 
+Energy Regeneration                                -> 
+Essence On Kill                                    -> 
+Essence Regeneration                               -> 
+Evade Grants Movement Speed                        -> 
+Faith On Kill                                      -> 
+Faith Regeneration                                 -> 
+Fire Damage Multiplier                             -> 
+Fire Resistance                                    -> 
+Fortify Generation                                 -> 
+Fury On Kill                                       -> 
+Fury Regeneration                                  -> 
+Healing Received                                   -> 
+Holy Damage Multiplier                             -> 
+Imbuement Skills                                   -> 
+Intelligence                                       -> 
+Life On Hit                                        -> 
+Life Regeneration                                  -> 
+Life on Kill                                       -> 
+Lightning Damage Multiplier                        -> 
+Lightning Resistance                               -> 
+Lucky Hit Chance                                   -> 
+Lucky Hit Restore Primary Resource                 -> 
+Mana On Kill                                       -> 
+Mana Regeneration                                  -> 
+Maximum Evade Charge                               -> 
+Maximum Life                                       -> 
+Maximum Resource                                   -> 
+Movement Speed                                     -> 
+Physical Damage Multiplier                         -> 
+Physical Resistance                                -> 
+Poison Damage Multiplier                           -> 
+Poison Resistance                                  -> 
+Potion Capacity                                    -> 
+Resistance to All Elements                         -> 
+Resource Cost Reduction                            -> 
+Resource Generation                                -> 
+Shadow Damage Multiplier                           -> 
+Shadow Resistance                                  -> 
+Spirit On Kill                                     -> 
+Spirit Regeneration                                -> 
+Strength                                           -> 
+Thorns                                             -> 
+Vigor On Kill                                      -> 
+Vigor Regeneration                                 -> 
+Vulnerable Damage Multiplier                       -> 
+Weapon Damage                                      -> 
+Willpower                                          -> 
+Wrath Regeneration                                 -> 
+Wrath every 10 Kills                               -> 
+
+AFFIXES CONNUS MAIS SANS ID INTERNE RESOLU (6)
+----------------------------------------
+Trou documente depuis le 22/09 - pas de source fiable trouvee a ce jour.
+Imbuement Potency (Trempe Voleur)                  -> 
+Gem Strength                                       -> 
+All Stats                                          -> 
+Mobility Cooldown Reduction                        -> 
+Lucky Hit: Stun/Freeze (combo Barbare-Voleur)      -> 
+Lucky Hit: Up to X% Chance to Restore Primary Resource -> 
+
+CATEGORIES DE COMPETENCES - BARBARIAN (31)
+----------------------------------------
+Ancients Skills                                    -> 
+Bash                                               -> 
+Bludgeoning Skills                                 -> 
+Brawling Skills                                    -> 
+Challenging Shout                                  -> 
+Charge                                             -> 
+Death Blow                                         -> 
+Defensive Skills                                   -> 
+Double Swing                                       -> 
+DualWield Skills                                   -> 
+Dust Devil                                         -> 
+Earthquake                                         -> 
+Flay                                               -> 
+Frenzy                                             -> 
+Ground Stomp                                       -> 
+Hammer of the Ancients                             -> 
+Iron Shrapnel                                      -> 
+Iron Skin                                          -> 
+Kick                                               -> 
+Leap                                               -> 
+Lunging Strike                                     -> 
+Mighty Throw                                       -> 
+Rallying Cry                                       -> 
+Rend                                               -> 
+Rupture                                            -> 
+Slashing Skills                                    -> 
+Steel Grasp                                        -> 
+Upheaval                                           -> 
+War Cry                                            -> 
+WeaponMastery Skills                               -> 
+Whirlwind                                          -> 
+
+CATEGORIES DE COMPETENCES - DRUID (34)
+----------------------------------------
+Blood Howl                                         -> 
+Boulder                                            -> 
+Claw                                               -> 
+Companion Skills                                   -> 
+Cyclone Armor                                      -> 
+Debilitating Roar                                  -> 
+Defensive Skills                                   -> 
+Earth Skills                                       -> 
+Earth Spike                                        -> 
+Earthen Bulwark                                    -> 
+Human Skills                                       -> 
+Hurricane                                          -> 
+Landslide                                          -> 
+Lightning Storm                                    -> 
+Maul                                               -> 
+NatureMagic Skills                                 -> 
+Poison Creeper                                     -> 
+Projectile Skill Damage                            -> 
+Pulverize                                          -> 
+Rabies                                             -> 
+Ravens                                             -> 
+Shapeshifting Skills                               -> 
+Shred                                              -> 
+Stone Burst                                        -> 
+Storm Skills                                       -> 
+Storm Strike                                       -> 
+Tornado                                            -> 
+Trample                                            -> 
+Versatile Skills                                   -> 
+Werebear Skills                                    -> 
+Werewolf Skills                                    -> 
+Wind Shear                                         -> 
+Wolves                                             -> 
+Wrath Skills                                       -> 
+
+CATEGORIES DE COMPETENCES - NECROMANCER (27)
+----------------------------------------
+Blight                                             -> 
+Blood Lance                                        -> 
+Blood Mist                                         -> 
+Blood Skills                                       -> 
+Blood Surge                                        -> 
+Bone Prison                                        -> 
+Bone Skills                                        -> 
+Bone Spear                                         -> 
+Bone Spirit                                        -> 
+Bone Splinters                                     -> 
+Corpse Explosion                                   -> 
+Corpse Skills                                      -> 
+Corpse Tendrils                                    -> 
+Curse Skills                                       -> 
+Darkness Skills                                    -> 
+Decompose                                          -> 
+Decrepify                                          -> 
+Golem                                              -> 
+Hemorrhage                                         -> 
+Iron Maiden                                        -> 
+Macabre Skills                                     -> 
+Minion Skills                                      -> 
+Projectile Skill Damage                            -> 
+Reap                                               -> 
+Sever                                              -> 
+Skeleton Mage                                      -> 
+Skeleton Warrior                                   -> 
+
+CATEGORIES DE COMPETENCES - PALADIN (25)
+----------------------------------------
+Advance                                            -> 
+Aegis                                              -> 
+Arbiter of Justice                                 -> 
+Aura Skills                                        -> 
+Blessed Hammer                                     -> 
+Blessed Shield                                     -> 
+Brandish                                           -> 
+Clash                                              -> 
+Condemn                                            -> 
+Consecration                                       -> 
+Defiance Aura                                      -> 
+Disciple Skills                                    -> 
+Divine Lance                                       -> 
+Falling Star                                       -> 
+Fanaticism Aura                                    -> 
+Holy Bolt                                          -> 
+Holy Light Aura                                    -> 
+Juggernaut Skills                                  -> 
+Purify                                             -> 
+Rally                                              -> 
+Shield Bash                                        -> 
+Shield Charge                                      -> 
+Spear of the Heavens                               -> 
+Valor Skills                                       -> 
+Zealot Skills                                      -> 
+
+CATEGORIES DE COMPETENCES - ROGUE (30)
+----------------------------------------
+Agility Skills                                     -> 
+Arrow Storm                                        -> 
+Barrage                                            -> 
+Blade Shift                                        -> 
+Caltrops                                           -> 
+Cold Imbuement                                     -> 
+Concealment                                        -> 
+Cutthroat Skills                                   -> 
+Dance of Knives                                    -> 
+Dark Shroud                                        -> 
+Dash                                               -> 
+Flurry                                             -> 
+Forceful Arrow                                     -> 
+Grenade Skills                                     -> 
+Heartseeker                                        -> 
+Invigorating Strike                                -> 
+Marksman Skills                                    -> 
+Penetrating Shot                                   -> 
+Poison Imbuement                                   -> 
+Poison Trap                                        -> 
+Projectile Skill Damage                            -> 
+Puncture                                           -> 
+Rapid Fire                                         -> 
+Shade Skills                                       -> 
+Shadow Imbuement                                   -> 
+Shadow Step                                        -> 
+Smoke Grenade                                      -> 
+Subterfuge Skills                                  -> 
+Trap Skills                                        -> 
+Twisting Blades                                    -> 
+
+CATEGORIES DE COMPETENCES - SORCERER (29)
+----------------------------------------
+Arc Lash                                           -> 
+Ball Lightning                                     -> 
+Blizzard                                           -> 
+Chain Lightning                                    -> 
+Charged Bolts                                      -> 
+Conjuration Skills                                 -> 
+Defensive Skills                                   -> 
+Familiar                                           -> 
+Fire Bolt                                          -> 
+Fireball                                           -> 
+Firewall                                           -> 
+Flame Shield                                       -> 
+Frost Bolt                                         -> 
+Frost Nova                                         -> 
+Frost Skills                                       -> 
+Frozen Orb                                         -> 
+Hydra                                              -> 
+Ice Armor                                          -> 
+Ice Blades                                         -> 
+Ice Shards                                         -> 
+Incinerate                                         -> 
+Lightning Spear                                    -> 
+Mastery Skills                                     -> 
+Meteor                                             -> 
+Projectile Skill Damage                            -> 
+Pyromancy Skills                                   -> 
+Shock Skills                                       -> 
+Spark                                              -> 
+Teleport                                           -> 
+
+CATEGORIES DE COMPETENCES - SPIRITBORN (27)
+----------------------------------------
+Armored Hide                                       -> 
+Centipede Skills                                   -> 
+ConcussiveStormp Skills                            -> 
+Counterattack                                      -> 
+Crushing Hand                                      -> 
+Defensive Skills                                   -> 
+Eagle Skills                                       -> 
+Focus Skills                                       -> 
+Gorilla Skills                                     -> 
+Jaguar Skills                                      -> 
+Payback                                            -> 
+Potency Skills                                     -> 
+Quill Volley                                       -> 
+Rake                                               -> 
+Ravager                                            -> 
+Razor Wings                                        -> 
+Rock Splitter                                      -> 
+Rushing Claw                                       -> 
+Scourge                                            -> 
+Soar                                               -> 
+Stinger                                            -> 
+Thrash                                             -> 
+Thunderspike                                       -> 
+Touch of Death                                     -> 
+Toxic Skin                                         -> 
+Vortex                                             -> 
+Withering Fist                                     -> 
+
+CATEGORIES DE COMPETENCES - WARLOCK (25)
+----------------------------------------
+Abyss Skills                                       -> 
+Blazing Scream                                     -> 
+Bombardment                                        -> 
+Command Fallen                                     -> 
+Dark Prison                                        -> 
+Defensive Skills                                   -> 
+Demonology Skills                                  -> 
+Doom                                               -> 
+Dread Claws                                        -> 
+Hell Fracture                                      -> 
+Hellfire Skills                                    -> 
+Hellion Sting                                      -> 
+Infernal Breath                                    -> 
+Molten Bomb                                        -> 
+Nether Step                                        -> 
+Occult Skills                                      -> 
+Profane Sentinel                                   -> 
+Rampage                                            -> 
+Sigil of Chaos                                     -> 
+Sigil of Subversion                                -> 
+Sigil of Summons                                   -> 
+Tortured Wretch                                    -> 
+Tyrant's Grasp                                     -> 
+Umbral Chains                                      -> 
+Wall of Agony                                      -> 
+
+CATEGORIES GENERIQUES (2)
+----------------------------------------
+All Skills                                         -> 
+Core Skills                                        -> 
+
+LIBELLES D EMPLACEMENT D EQUIPEMENT (13)
+----------------------------------------
+Amulet                                             -> 
+Bludgeoning Weapon                                 -> 
+Boots                                              -> 
+Chest Armor                                        -> 
+Gloves                                             -> 
+Helm                                               -> 
+Left Ring                                          -> 
+Mainhand                                           -> 
+Offhand                                            -> 
+Pants                                              -> 
+Ranged Weapon                                      -> 
+Right Ring                                         -> 
+Slicing Weapon                                     -> 
+
+VARIANTES DE BUILD (onglets de guide) (5)
+----------------------------------------
+Bossing                                            -> 
+Endgame                                            -> 
+Midgame                                            -> 
+Pushing                                            -> 
+Starter                                            -> 
+
+OBJETS UNIQUES CONNUS (336)
+----------------------------------------
+(DNS)                                              -> 
+100,000 Steps                                      -> 
+Accord of the Wilds                                -> 
+Ae'grom's Schism                                   -> 
+Ahavarion, Spear of Lycander                       -> 
+Airidah's Inexorable Will                          -> 
+Anathema of the Primes                             -> 
+Ancients' Oath                                     -> 
+Andariel's Visage                                  -> 
+Arcadia                                            -> 
+Argent Veil                                        -> 
+Arreat's Bearing                                   -> 
+Asheara's Khanjar                                  -> 
+Asheara's Khanjar (Crucible)                       -> 
+Assassin's Stride                                  -> 
+Autumnal Crown                                     -> 
+Axial Conduit                                      -> 
+Azurewrath                                         -> 
+Azurewrath (Crucible)                              -> 
+Balazan's Maxtlatl                                 -> 
+Band of First Breath                               -> 
+Bands of Ichorous Rose                             -> 
+Bane of Ahjad-Den                                  -> 
+Banished Lord's Talisman                           -> 
+Bastion of Sir Matthias                            -> 
+Battle Trance                                      -> 
+Beastfall Boots                                    -> 
+Bindings of Attrition                              -> 
+Black River                                        -> 
+Blood Artisan's Cuirass                            -> 
+Blood Moon Breeches                                -> 
+Blood Wake                                         -> 
+Blood-Mad Idol                                     -> 
+Bloodless Scream                                   -> 
+Blue Rose                                          -> 
+Boost Dagger                                       -> 
+Boost Helm                                         -> 
+Boost Pants                                        -> 
+Boost Scythe                                       -> 
+Boost Staff                                        -> 
+Bridle of Tor'Baalos                               -> 
+Bucrani's Grip                                     -> 
+Bucrani's Resolve                                  -> 
+Bucrani's Tread                                    -> 
+Bucrani's Will                                     -> 
+Cage of Madness                                    -> 
+Cassia's Grace                                     -> 
+Cathedral's Song                                   -> 
+Chainscourged Mail                                 -> 
+Cluckeye                                           -> 
+Cluckonomicon                                      -> 
+Condemnation                                       -> 
+Condemnation (Crucible)                            -> 
+Coop de Grâce                                      -> 
+Cowl of Malefic Torment                            -> 
+Cowl of the Nameless                               -> 
+Craze of the Dead God                              -> 
+Crown of Lucion                                    -> 
+Cruor's Embrace                                    -> 
+Dark Howl                                          -> 
+Dark Stalker's Medallion                           -> 
+Dawnfire                                           -> 
+Death's Pavane                                     -> 
+Deathgrip                                          -> 
+Deathless Visage                                   -> 
+Deathmask of Nirmitruq                             -> 
+Deathspeaker's Pendant                             -> 
+Desperate March                                    -> 
+Dirge of Airidah                                   -> 
+Dirge of Odium                                     -> 
+Dolmen Stone                                       -> 
+Doombringer                                        -> 
+Doombringer (Crucible)                             -> 
+Drognan's Anguish                                  -> 
+Eaglehorn                                          -> 
+Earthbreaker                                       -> 
+Ebonpiercer                                        -> 
+Echo of Kwatli                                     -> 
+Eggcecutioner                                      -> 
+Eggis                                              -> 
+El'Druin, Sword of Justice                         -> 
+Elegy                                              -> 
+Emberfury                                          -> 
+Emblem of Staalbreak                               -> 
+Endurant Faith                                     -> 
+Esadora's Overflowing Cameo                        -> 
+Esu's Heirloom                                     -> 
+Etna's Lost Dagger                                 -> 
+Eye of Baal                                        -> 
+Eyes in the Dark                                   -> 
+Fang of the Vipermagi                              -> 
+Fields of Crimson                                  -> 
+Fields of Crimson (Crucible)                       -> 
+Fist of the Iron Rose                              -> 
+Fists of Fate                                      -> 
+Fists of War                                       -> 
+Flamescar                                          -> 
+Flameweaver                                        -> 
+Fleshrender                                        -> 
+Fleshwrit Carapace                                 -> 
+Flickerstep                                        -> 
+Footfalls of the Waning World                      -> 
+Fractured Runestone                                -> 
+Fractured Winterglass                              -> 
+Frostburn                                          -> 
+Fury of the Wilds                                  -> 
+Galvanic Azurite                                   -> 
+Gate of the Red Dawn                               -> 
+Gathlen's Birthright                               -> 
+Gauntlets of Sheol                                 -> 
+Gift of Frost                                      -> 
+Gladiator's Triumph                                -> 
+Gloves of the Illuminator                          -> 
+Godslayer Crown                                    -> 
+Gohr's Devastating Grips                           -> 
+Gospel of the Devotee                              -> 
+Grasp of Shadow                                    -> 
+Gravewalker's Hand                                 -> 
+Greatstaff of the Crone                            -> 
+Greaves of the Empty Tomb                          -> 
+Greenwalker's Oath                                 -> 
+Greenwalker's Signet                               -> 
+Griswold's Opus                                    -> 
+Griswold's Opus (Crucible)                         -> 
+Guise of War                                       -> 
+Hail of Verglas                                    -> 
+Halo                                               -> 
+Hand of Apotheosis                                 -> 
+Hands of the Worldbreaker                          -> 
+Hangman's Hand                                     -> 
+Harlequin Crest                                    -> 
+Harmony of Ebewaka                                 -> 
+Harriers of War                                    -> 
+Heart of Azgar                                     -> 
+Heart of War                                       -> 
+Hecaton Chasm                                      -> 
+Heir of Perdition                                  -> 
+Hellbrand Signet                                   -> 
+Hellhammer                                         -> 
+Hellhound's Sabatons                               -> 
+Herald of Zakarum                                  -> 
+Herald's Morningstar                               -> 
+Hesha e Kesungi                                    -> 
+Hooves of the Mountain God                         -> 
+Howl from Below                                    -> 
+Hunter's Zenith                                    -> 
+Iceheart Brais                                     -> 
+Ifeh's Dire Totem                                  -> 
+Indira's Memory                                    -> 
+Infernal Homunculus                                -> 
+Insatiable Fury                                    -> 
+Jacinth Shell                                      -> 
+Judgment of Auriel                                 -> 
+Judicant's Glaivehelm                              -> 
+Kabraxis' Will                                     -> 
+Kessime's Legacy                                   -> 
+Khamsin Steppewalkers                              -> 
+Kilt of Blackwing                                  -> 
+Levin Grasp                                        -> 
+Lidless Wall                                       -> 
+Light's Rebuke                                     -> 
+Lightburst Hammer                                  -> 
+Litany of Sable                                    -> 
+Locran's Talisman                                  -> 
+Loyalty's Mantle                                   -> 
+Lurid Pact                                         -> 
+Mace of King Leoric                                -> 
+Mad Wolf's Glee                                    -> 
+Malefic Crescent                                   -> 
+Mantle of Mountain's Fury                          -> 
+Mantle of the Grey                                 -> 
+March of the Stalwart Soul                         -> 
+Mark of the Old Wolf                               -> 
+Melted Heart of Selig                              -> 
+Might of Qual-Kehk                                 -> 
+Might of the Ursine                                -> 
+Misericorde                                        -> 
+Mjölnic Ryng                                       -> 
+Moloch's Beating Flame                             -> 
+Molten Band                                        -> 
+Morlu Fleshward                                    -> 
+Mother's Embrace                                   -> 
+Mutilator Plate                                    -> 
+Nails of the Gore-Crowned                          -> 
+Nesekem, the Herald                                -> 
+Night Terror                                       -> 
+Nomad's Longing Heart                              -> 
+Okun's Catalyst                                    -> 
+Omen of Pain                                       -> 
+Onyx Soul                                          -> 
+Ophidian Iris                                      -> 
+Orphan Maker                                       -> 
+Orsivane                                           -> 
+Overkill                                           -> 
+Pact of Bone                                       -> 
+Paingorger's Gauntlets                             -> 
+Path of Trag'Oul                                   -> 
+Path of the Emissary                               -> 
+Peacemonger's Signet                               -> 
+Penitent Greaves                                   -> 
+Pitfighter's Gull                                  -> 
+Protean Heart                                      -> 
+Protection of the Prime                            -> 
+Purified Lightbringer                              -> 
+Rage of Harrogath                                  -> 
+Raiment of the Infinite                            -> 
+Raiment of the Sea                                 -> 
+Rakanoth's Wake                                    -> 
+Ramaladni's Magnum Opus                            -> 
+Ramaladni's Magnum Opus (Crucible)                 -> 
+Razorplate                                         -> 
+Red Blessing                                       -> 
+Red Sermon                                         -> 
+Red Sermon (Crucible)                              -> 
+Rictus of Terror                                   -> 
+Rimeblood                                          -> 
+Ring of Mendeln                                    -> 
+Ring of Red Furor                                  -> 
+Ring of Starless Skies                             -> 
+Ring of Writhing Moon                              -> 
+Ring of the Midday Hunt                            -> 
+Ring of the Midnight Sun                           -> 
+Ring of the Ravenous                               -> 
+Ring of the Sacrilegious Soul                      -> 
+Rod of Kepeleke                                    -> 
+Rotting Lightbringer                               -> 
+Rustbitten Dirk                                    -> 
+Rustbitten Dirk (Crucible)                         -> 
+Saboteur's Signet                                  -> 
+Sabre of Tsasgal                                   -> 
+Sabre of Tsasgal (Crucible)                        -> 
+Sanctis of Kethamar                                -> 
+Sanguivor, Blade of Zir                            -> 
+Sanguivor, Blade of Zir (Crucible)                 -> 
+Sashes of the Wretched                             -> 
+Scepter of the Three                               -> 
+Scorn of the Earth                                 -> 
+Scoundrel's Kiss                                   -> 
+Scoundrel's Leathers                               -> 
+Scourge of Duriel                                  -> 
+Sea Lord's Fine Gloves                             -> 
+Seal of the Ophanim                                -> 
+Seal of the Second Trumpet                         -> 
+Seed of Horazon                                    -> 
+Sepazontec                                         -> 
+Shanar's Resonance                                 -> 
+Shard of Verathiel                                 -> 
+Shard of Verathiel (Crucible)                      -> 
+Shattered Vow                                      -> 
+Shattered Vow (Crucible)                           -> 
+Shroud of False Death                              -> 
+Shroud of Khanduras                                -> 
+Shrouded Gift                                      -> 
+Sidhe Bindings                                     -> 
+Signet of Pelghain                                 -> 
+Sire of Sin                                        -> 
+Skyhunter                                          -> 
+Sliver of Hate                                     -> 
+Snake Glaive                                       -> 
+Soulbrand                                          -> 
+Spine of Tathamet                                  -> 
+Staff of Endless Rage                              -> 
+Staff of Lam Esen                                  -> 
+Staff of Zerae                                     -> 
+Starfall Coronet                                   -> 
+Stone of Jordan                                    -> 
+Stone of Vehemen                                   -> 
+Storm's Companion                                  -> 
+Strides of War                                     -> 
+Strike of Stormhorn                                -> 
+Sunbird's Gorget                                   -> 
+Sunbrand                                           -> 
+Sundered Night                                     -> 
+Sunstained War-Crozier                             -> 
+Supplication                                       -> 
+Supplication (Crucible)                            -> 
+Tal Rasha's Iridescent Loop                        -> 
+Tassets of the Dawning Sky                         -> 
+Temerity                                           -> 
+Tempest Roar                                       -> 
+The Basilisk                                       -> 
+The Blade of Sight Aflame                          -> 
+The Butcher's Cleaver                              -> 
+The Butcher's Cleaver (Crucible)                   -> 
+The Eightfold Idol                                 -> 
+The Fecund Seal                                    -> 
+The Gloom Ward                                     -> 
+The Grandfather                                    -> 
+The Grandfather (Crucible)                         -> 
+The Hand of Naz                                    -> 
+The Hemat Stone                                    -> 
+The Maestro                                        -> 
+The Mortacrux                                      -> 
+The Mortacrux (Crucible)                           -> 
+The Oculus                                         -> 
+The Open Eye of Gorgorra                           -> 
+The Relentless Heart                               -> 
+The Third Blade                                    -> 
+The Third Blade (Crucible)                         -> 
+The Umbracrux                                      -> 
+The Umbracrux (Crucible)                           -> 
+The Undercrown                                     -> 
+The Unmaker                                        -> 
+Thousand-Eye Reaver                                -> 
+Thousand-Eye Reaver (Crucible)                     -> 
+Thrice-Woven Nightmare                             -> 
+Thundergod's Blessing                              -> 
+Tibault's Will                                     -> 
+Tuskhelm of Joritz the Mighty                      -> 
+Twin Strikes                                       -> 
+Tyrael's Might                                     -> 
+Ugly Bastard Helm                                  -> 
+Unbroken Chain                                     -> 
+Unsung Ascetic's Wraps                             -> 
+Vasily's Prayer                                    -> 
+Vengeful Sinew                                     -> 
+Vision of the Firestorm                            -> 
+Vox Omnium                                         -> 
+Ward of the White Dove                             -> 
+Waxing Gibbous                                     -> 
+Waxing Gibbous (Crucible)                          -> 
+Wendigo Brand                                      -> 
+Widow's Web                                        -> 
+Wildheart Hunger                                   -> 
+Will of Rathma                                     -> 
+Will of Stone                                      -> 
+Wilted Potential                                   -> 
+Windforce                                          -> 
+Word of Hakan                                      -> 
+Wound Drinker                                      -> 
+Wreath of Auric Laurel                             -> 
+Writhing Band of Trickery                          -> 
+Wushe Nak Pa                                       -> 
+Wyrdskin                                           -> 
+X'Fal's Corroded Signet                            -> 
+Yen's Blessing                                     -> 
+
+OBJETS UNIQUES PROBABLEMENT MANQUANTS DE NOTRE TABLE (8)
+----------------------------------------
+Trouves dans les donnees Maxroll mais absents de UNIQUE_ITEM_IDS - a confirmer
+(objets reels, pas du contenu de test/PTR/materiel de craft filtre au passage).
+Bane of Ahjad-Den (Gants, Barbare)                 -> 
+Bell of the Bovine (Amulette)                      -> 
+Galvanic Azurite (Anneau, Sorcier)                 -> 
+Kilt of Blackwing (Pantalon, Druide)               -> 
+Seal of the Diamond Mind (Sceau mythique)          -> 
+Seal of the Golden Epiphany (Sceau mythique)       -> 
+Seal of the Severed Finger (Sceau mythique)        -> 
+Sunstained War-Crozier (Baton-lance, Sacresprit)   -> 

@@ -1,0 +1,343 @@
+DIABLO IV ASSISTANT - AFFIXES A VERIFIER/TRADUIRE (2026-09-26)
+======================================================================
+
+Format : nom anglais -> traduction actuelle (vide si aucune connue).
+Corrige ce qui est faux, complete ce qui est vide, renvoie le fichier.
+
+STATS PRINCIPALES (64)
+----------------------------------------
+All Damage Multiplier                         -> 
+Armor                                         -> 
+Attack Speed                                  -> 
+Attacks Reduce Evade Cooldown                 -> 
+Barrier Generation                            -> 
+Cold Damage Multiplier                        -> 
+Cold Resistance                               -> 
+Cooldown Reduction                            -> 
+Critical Strike Chance                        -> 
+Critical Strike Damage Multiplier             -> 
+Damage Over Time Multiplier                   -> 
+Damage Reduction                              -> 
+Dexterity                                     -> 
+Dodge Chance                                  -> 
+Energy On Kill                                -> 
+Energy Regeneration                           -> 
+Essence On Kill                               -> 
+Essence Regeneration                          -> 
+Evade Grants Movement Speed                   -> 
+Faith On Kill                                 -> 
+Faith Regeneration                            -> 
+Fire Damage Multiplier                        -> 
+Fire Resistance                               -> 
+Fortify Generation                            -> 
+Fury On Kill                                  -> 
+Fury Regeneration                             -> 
+Healing Received                              -> 
+Holy Damage Multiplier                        -> 
+Imbuement Skills                              -> 
+Intelligence                                  -> 
+Life On Hit                                   -> 
+Life Regeneration                             -> 
+Life on Kill                                  -> 
+Lightning Damage Multiplier                   -> 
+Lightning Resistance                          -> 
+Lucky Hit Chance                              -> 
+Lucky Hit Restore Primary Resource            -> 
+Mana On Kill                                  -> 
+Mana Regeneration                             -> 
+Maximum Evade Charge                          -> 
+Maximum Life                                  -> 
+Maximum Resource                              -> 
+Movement Speed                                -> 
+Physical Damage Multiplier                    -> 
+Physical Resistance                           -> 
+Poison Damage Multiplier                      -> 
+Poison Resistance                             -> 
+Potion Capacity                               -> 
+Resistance to All Elements                    -> 
+Resource Cost Reduction                       -> 
+Resource Generation                           -> 
+Shadow Damage Multiplier                      -> 
+Shadow Resistance                             -> 
+Spirit On Kill                                -> 
+Spirit Regeneration                           -> 
+Strength                                      -> Force
+Thorns                                        -> 
+Vigor On Kill                                 -> 
+Vigor Regeneration                            -> 
+Vulnerable Damage Multiplier                  -> 
+Weapon Damage                                 -> 
+Willpower                                     -> 
+Wrath Regeneration                            -> 
+Wrath every 10 Kills                          -> 
+
+CATEGORIES DE COMPETENCES - BARBARIAN (31)
+----------------------------------------
+Ancients Skills                               -> Compétences des Anciens
+Bash                                          -> Raclée
+Bludgeoning Skills                            -> Compétences de matraquage
+Brawling Skills                               -> Compétences de bagarre
+Challenging Shout                             -> Cri provocateur
+Charge                                        -> Charge
+Death Blow                                    -> Coup de grâce
+Defensive Skills                              -> Compétences défensives
+Double Swing                                  -> Coup double
+DualWield Skills                              -> Compétences d’ambidextrie
+Dust Devil                                    -> Tourbillon de poussière
+Earthquake                                    -> Tremblement de terre
+Flay                                          -> Écorchement
+Frenzy                                        -> Frénésie
+Ground Stomp                                  -> Choc terrestre
+Hammer of the Ancients                        -> Marteau des Anciens
+Iron Shrapnel                                 -> Shrapnel de fer
+Iron Skin                                     -> Galvanisation
+Kick                                          -> Coup de pied
+Leap                                          -> Bond
+Lunging Strike                                -> Fente
+Mighty Throw                                  -> Jet puissant
+Rallying Cry                                  -> Cri de ralliement
+Rend                                          -> Déchirure
+Rupture                                       -> Rupture
+Slashing Skills                               -> Compétences de tranchage
+Steel Grasp                                   -> Poigne de fer
+Upheaval                                      -> Soulèvement
+War Cry                                       -> Cri de guerre
+WeaponMastery Skills                          -> Compétences de maîtrise des armes
+Whirlwind                                     -> Tourbillon
+
+CATEGORIES DE COMPETENCES - DRUID (34)
+----------------------------------------
+Blood Howl                                    -> Hurlement sanglant
+Boulder                                       -> Rocher
+Claw                                          -> Griffe
+Companion Skills                              -> Compétences de compagnon
+Cyclone Armor                                 -> Armure cyclonique
+Debilitating Roar                             -> Rugissement débilitant
+Defensive Skills                              -> Compétences défensives
+Earth Skills                                  -> Compétences de terre
+Earth Spike                                   -> Pointe de terre
+Earthen Bulwark                               -> Rempart de terre
+Human Skills                                  -> Compétences humaines
+Hurricane                                     -> Ouragan
+Landslide                                     -> Éboulement
+Lightning Storm                               -> Orage
+Maul                                          -> Mutilation
+NatureMagic Skills                            -> Compétences de magie de la nature
+Poison Creeper                                -> Lierre empoisonné
+Projectile Skill Damage                       -> Dégâts des compétences de projectile
+Pulverize                                     -> Pulvérisation
+Rabies                                        -> Morsure rabique
+Ravens                                        -> Corbeaux
+Shapeshifting Skills                          -> Compétences de métamorphose
+Shred                                         -> Déchiquetage
+Stone Burst                                   -> Explosion de pierres
+Storm Skills                                  -> Compétences de tempête
+Storm Strike                                  -> Coup de tonnerre
+Tornado                                       -> Tornade
+Trample                                       -> Piétinement
+Versatile Skills                              -> Compétences polyvalentes
+Werebear Skills                               -> Compétences d’ours-garou
+Werewolf Skills                               -> Compétences de loup-garou
+Wind Shear                                    -> Vent cisaillant
+Wolves                                        -> Loups
+Wrath Skills                                  -> Compétences de courroux
+
+CATEGORIES DE COMPETENCES - NECROMANCER (27)
+----------------------------------------
+Blight                                        -> Chancre
+Blood Lance                                   -> Prélèvement
+Blood Mist                                    -> Brume de sang
+Blood Skills                                  -> Compétences de sang
+Blood Surge                                   -> Afflux sanguin
+Bone Prison                                   -> Prison d’os
+Bone Skills                                   -> Compétences d’os
+Bone Spear                                    -> Lance d’os
+Bone Spirit                                   -> Esprit d’os
+Bone Splinters                                -> Éclats d’os
+Corpse Explosion                              -> Explosion macabre
+Corpse Skills                                 -> Compétences de cadavre
+Corpse Tendrils                               -> Vrilles nécrophages
+Curse Skills                                  -> Compétences de maîtrise des malédictions
+Darkness Skills                               -> Compétences de ténèbres
+Decompose                                     -> Décomposition
+Decrepify                                     -> Décrépitude
+Golem                                         -> Golem
+Hemorrhage                                    -> Saignée
+Iron Maiden                                   -> Vierge de fer
+Macabre Skills                                -> Compétences macabres
+Minion Skills                                 -> Compétences de serviteur
+Projectile Skill Damage                       -> Dégâts des compétences de projectile
+Reap                                          -> Fauchage
+Sever                                         -> Section
+Skeleton Mage                                 -> Mage squelette
+Skeleton Warrior                              -> Guerrier squelette
+
+CATEGORIES DE COMPETENCES - PALADIN (25)
+----------------------------------------
+Advance                                       -> Avancée
+Aegis                                         -> Égide
+Arbiter of Justice                            -> Arbitre de la justice
+Aura Skills                                   -> Compétences d’aura
+Blessed Hammer                                -> Marteau béni
+Blessed Shield                                -> Bouclier divin
+Brandish                                      -> Brandissement
+Clash                                         -> Choc
+Condemn                                       -> Blâme
+Consecration                                  -> Sacre
+Defiance Aura                                 -> Aura de défiance
+Disciple Skills                               -> Compétences de disciple
+Divine Lance                                  -> Lance divine
+Falling Star                                  -> Étoile filante
+Fanaticism Aura                               -> Aura de fanatisme
+Holy Bolt                                     -> Trait sacré
+Holy Light Aura                               -> Aura de lumière sacrée
+Juggernaut Skills                             -> Compétences de mastodonte
+Purify                                        -> Purification
+Rally                                         -> Ralliement
+Shield Bash                                   -> Coup de bouclier
+Shield Charge                                 -> Charge au bouclier
+Spear of the Heavens                          -> Lance des Cieux
+Valor Skills                                  -> Compétences de vaillance
+Zealot Skills                                 -> Compétences de zélateur
+
+CATEGORIES DE COMPETENCES - ROGUE (30)
+----------------------------------------
+Agility Skills                                -> Compétences d’agilité
+Arrow Storm                                   -> Pluie de flèches
+Barrage                                       -> Déluge
+Blade Shift                                   -> Passage des lames
+Caltrops                                      -> Chausse-trappe
+Cold Imbuement                                -> Imprégnation de givre
+Concealment                                   -> Dissimulation
+Cutthroat Skills                              -> Compétences de coupe-jarret
+Dance of Knives                               -> Danse des poignards
+Dark Shroud                                   -> Sombre voile
+Dash                                          -> Célérité
+Flurry                                        -> Rafale
+Forceful Arrow                                -> Flèche puissante
+Grenade Skills                                -> Compétences de grenade
+Heartseeker                                   -> Crève-cœur
+Invigorating Strike                           -> Frappe revigorante
+Marksman Skills                               -> Compétences de tir d’élite
+Penetrating Shot                              -> Tir pénétrant
+Poison Imbuement                              -> Imprégnation de poison
+Poison Trap                                   -> Piège de poison
+Projectile Skill Damage                       -> Dégâts des compétences de projectile
+Puncture                                      -> Perforation
+Rapid Fire                                    -> Tir rapide
+Shade Skills                                  -> Compétences d’ombre
+Shadow Imbuement                              -> Imprégnation d’ombre
+Shadow Step                                   -> Pas de l’ombre
+Smoke Grenade                                 -> Bombe fumigène
+Subterfuge Skills                             -> Compétences de subterfuge
+Trap Skills                                   -> Compétences de piège
+Twisting Blades                               -> Lames sournoises
+
+CATEGORIES DE COMPETENCES - SORCERER (29)
+----------------------------------------
+Arc Lash                                      -> Fouet électrique
+Ball Lightning                                -> Sphère foudroyante
+Blizzard                                      -> Blizzard
+Chain Lightning                               -> Chaîne d’éclairs
+Charged Bolts                                 -> Décharge électrique
+Conjuration Skills                            -> Compétences d’invocation
+Defensive Skills                              -> Compétences défensives
+Familiar                                      -> Familier
+Fire Bolt                                     -> Éclair de feu
+Fireball                                      -> Boule de feu
+Firewall                                      -> Mur de feu
+Flame Shield                                  -> Bouclier de feu
+Frost Bolt                                    -> Éclair de givre
+Frost Nova                                    -> Nova de givre
+Frost Skills                                  -> Compétences de givre
+Frozen Orb                                    -> Orbe gelé
+Hydra                                         -> Hydre
+Ice Armor                                     -> Armure de glace
+Ice Blades                                    -> Lames de glace
+Ice Shards                                    -> Éclats de glace
+Incinerate                                    -> Incinération
+Lightning Spear                               -> Lance de foudre
+Mastery Skills                                -> Compétences de maîtrise
+Meteor                                        -> Météore
+Projectile Skill Damage                       -> Dégâts des compétences de projectile
+Pyromancy Skills                              -> Compétences de pyromancie
+Shock Skills                                  -> Compétences foudroyantes
+Spark                                         -> Étincelle
+Teleport                                      -> Téléportation
+
+CATEGORIES DE COMPETENCES - SPIRITBORN (27)
+----------------------------------------
+Armored Hide                                  -> Peau armurée
+Centipede Skills                              -> Compétences de mille-pattes
+ConcussiveStormp Skills                       -> Compétences de Tempête percutante
+Counterattack                                 -> Contre-attaque
+Crushing Hand                                 -> Main écrasante
+Defensive Skills                              -> Compétences défensives
+Eagle Skills                                  -> Compétences d’aigle
+Focus Skills                                  -> Compétences de focalisation
+Gorilla Skills                                -> Compétences de gorille
+Jaguar Skills                                 -> Compétences de jaguar
+Payback                                       -> Revanche
+Potency Skills                                -> Compétences de puissance
+Quill Volley                                  -> Volée de plumes
+Rake                                          -> Lacération
+Ravager                                       -> Ravage
+Razor Wings                                   -> Ailes acérées
+Rock Splitter                                 -> Bris de roche
+Rushing Claw                                  -> Griffe véloce
+Scourge                                       -> Calamité
+Soar                                          -> Élévation
+Stinger                                       -> Piqueur
+Thrash                                        -> Brutale sauvagerie
+Thunderspike                                  -> Pointe de foudre
+Touch of Death                                -> Toucher mortel
+Toxic Skin                                    -> Derme toxique
+Vortex                                        -> Vortex
+Withering Fist                                -> Poing flétrissant
+
+CATEGORIES DE COMPETENCES - WARLOCK (25)
+----------------------------------------
+Abyss Skills                                  -> Compétences des abysses
+Blazing Scream                                -> Cri ardent
+Bombardment                                   -> Bombardement
+Command Fallen                                -> Commandement des Déchus
+Dark Prison                                   -> Sombre geôle
+Defensive Skills                              -> Compétences défensives
+Demonology Skills                             -> Compétences de démonologie
+Doom                                          -> Destin funeste
+Dread Claws                                   -> Griffes d'effroi
+Hell Fracture                                 -> Fracture infernale
+Hellfire Skills                               -> Compétences de feu de l’enfer
+Hellion Sting                                 -> Piqûre de fiélon
+Infernal Breath                               -> Souffle infernal
+Molten Bomb                                   -> Bombe de magma
+Nether Step                                   -> Pas du néant
+Occult Skills                                 -> Compétences occultes
+Profane Sentinel                              -> Sentinelle profane
+Rampage                                       -> Boucherie
+Sigil of Chaos                                -> Sceau de chaos
+Sigil of Subversion                           -> Sceau de subversion
+Sigil of Summons                              -> Sceau d'invocations
+Tortured Wretch                               -> Misérable supplicié
+Tyrant's Grasp                                -> Poigne de tyran
+Umbral Chains                                 -> Chaînes d'ombre
+Wall of Agony                                 -> Mur d’agonie
+
+CATEGORIES GENERIQUES (2)
+----------------------------------------
+All Skills                                    -> Toutes les compétences
+Core Skills                                   -> Compétences principales
+
+AFFIXES CONNUS MAIS JAMAIS RESOLUS (6) - PAS DANS LES LISTES CI-DESSUS
+------------------------------------------------------------------
+Signale par l'utilisatrice le 27/09 : "Imbuement Potency" manquait - en creusant, ces 6
+affixes sont un trou connu depuis la session du 22/09 (aucun ID interne trouve dans nos
+sources a l'epoque, donc jamais ajoutes a la liste generee automatiquement ci-dessus).
+Si tu connais le terme francais officiel pour l'un d'eux, note-le ici.
+
+Imbuement Potency (Trempe Voleur)             ->
+Gem Strength                                  ->
+All Stats                                     ->
+Mobility Cooldown Reduction                   ->
+Lucky Hit: Stun/Freeze (combo Barbare-Voleur) ->
+Lucky Hit: Up to X% Chance to Restore Primary Resource ->

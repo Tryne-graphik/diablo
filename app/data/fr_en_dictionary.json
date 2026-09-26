@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T20:47:17.546292+00:00",
+  "generated_at": "2026-09-26T22:01:04.675920+00:00",
   "builds_crawled": 24,
   "failures": [],
   "entries": [
@@ -17224,6 +17224,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Armure",
+      "en": "Armor",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Armure cyclonique",
       "en": "Cyclone Armor",
       "kind": "unknown",
@@ -22397,6 +22404,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Capacité des potions",
+      "en": "Potion Capacity",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Cape de noyade",
       "en": "Drowned Cloak",
       "kind": "unknown",
@@ -23363,6 +23377,27 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Chances d'esquive",
+      "en": "Dodge Chance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Chances de coup critique",
+      "en": "Critical Strike Chance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Chances de coup de chance",
+      "en": "Lucky Hit Chance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Chancre",
       "en": "Blight",
       "kind": "unknown",
@@ -23473,6 +23508,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Charges d'esquive maximales",
+      "en": "Maximum Evade Charge",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Charme",
@@ -24497,6 +24539,13 @@
       "source": "kamilabs"
     },
     {
+      "fr": "Compétences d'imprégnation",
+      "en": "Imbuement Skills",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Concasseur d'os",
       "en": "Bonebreaker",
       "kind": "unknown",
@@ -25092,6 +25141,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Coup de chance : rend de la ressource principale",
+      "en": "Lucky Hit Restore Primary Resource",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Coup de graine",
       "en": "Coop de Grâce",
       "kind": "unknown",
@@ -25496,6 +25552,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Courroux toutes les 10 victimes",
+      "en": "Wrath every 10 Kills",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Coursevent de Sylvanas",
@@ -26898,6 +26961,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Dextérité",
+      "en": "Dexterity",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Diadème d'os impérial",
       "en": "Imperial Bone Coronet",
       "kind": "unknown",
@@ -27514,6 +27584,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Dégâts de l'arme",
+      "en": "Weapon Damage",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Délit de fuite",
       "en": "Hit and Run",
       "kind": "unknown",
@@ -27878,11 +27955,25 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Esprit par victime",
+      "en": "Spirit On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Esprit vengeur",
       "en": "Vengeful Spirit",
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Essence par victime",
+      "en": "Essence On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Estoc en fer froid",
@@ -28515,6 +28606,13 @@
       "source": "kamilabs"
     },
     {
+      "fr": "Foi par victime",
+      "en": "Faith On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Foi persistante",
       "en": "Endurant Faith",
       "kind": "unknown",
@@ -29045,6 +29143,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Fureur par victime",
+      "en": "Fury On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Fébrilité",
@@ -32477,6 +32582,27 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Génération de barrière",
+      "en": "Barrier Generation",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Génération de fortification",
+      "en": "Fortify Generation",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Génération de ressource",
+      "en": "Resource Generation",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Habit d'abondance de délices",
       "en": "Habit of Wanton Delights",
       "kind": "unknown",
@@ -34038,6 +34164,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Intelligence",
+      "en": "Intelligence",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Invocation d'Ae'grom",
       "en": "Summon Aegrom",
       "kind": "unknown",
@@ -34822,6 +34955,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "L'esquive confère de la vitesse de déplacement",
+      "en": "Evade Grants Movement Speed",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "L'idole octuple",
       "en": "The Eightfold Idol",
       "kind": "unknown",
@@ -35263,6 +35403,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Les attaques réduisent le temps de recharge d'esquive",
+      "en": "Attacks Reduce Evade Cooldown",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Les griffes du Lion",
       "en": "The Lion's Claws",
       "kind": "unknown",
@@ -35646,6 +35793,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Mana par victime",
+      "en": "Mana On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Manches de rejeton de Zir",
@@ -37067,6 +37221,83 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Multiplicateur de dégâts",
+      "en": "All Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts d'ombre",
+      "en": "Shadow Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de feu",
+      "en": "Fire Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de foudre",
+      "en": "Lightning Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de froid",
+      "en": "Cold Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts de poison",
+      "en": "Poison Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts des coups critiques",
+      "en": "Critical Strike Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts physiques",
+      "en": "Physical Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts sacrés",
+      "en": "Holy Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts sur la durée",
+      "en": "Damage Over Time Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Multiplicateur de dégâts vulnérables",
+      "en": "Vulnerable Damage Multiplier",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Murmures des sages",
@@ -39890,6 +40121,13 @@
       "source": "kamilabs"
     },
     {
+      "fr": "Puissance d'imprégnation",
+      "en": "Imbuement Potency",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Puissance de Qual-Kehk",
       "en": "Might of Qual-Kehk",
       "kind": "unknown",
@@ -39902,6 +40140,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Puissance des gemmes",
+      "en": "Gem Strength",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Puissance effrénée",
@@ -40408,6 +40653,13 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Ressource maximale",
+      "en": "Maximum Resource",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Revanche",
       "en": "Payback",
       "kind": "unknown",
@@ -40828,11 +41080,102 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Réduction des dégâts",
+      "en": "Damage Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction du coût en ressource",
+      "en": "Resource Cost Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction du temps de recharge",
+      "en": "Cooldown Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Réduction du temps de recharge de mobilité",
+      "en": "Mobility Cooldown Reduction",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Régicide",
       "en": "Kingslayer",
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Régénération d'esprit",
+      "en": "Spirit Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération d'essence",
+      "en": "Essence Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération d'énergie",
+      "en": "Energy Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de courroux",
+      "en": "Wrath Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de foi",
+      "en": "Faith Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de fureur",
+      "en": "Fury Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de mana",
+      "en": "Mana Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de vie",
+      "en": "Life Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Régénération de vigueur",
+      "en": "Vigor Regeneration",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Réprimande de la Lumière",
@@ -40877,11 +41220,60 @@
       "source": "kamilabs"
     },
     {
+      "fr": "Résistance au feu",
+      "en": "Fire Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance au froid",
+      "en": "Cold Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance au poison",
+      "en": "Poison Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Résistance naturelle",
       "en": "Natural Resistance",
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Résistance physique",
+      "en": "Physical Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance à l'ombre",
+      "en": "Shadow Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance à la foudre",
+      "en": "Lightning Resistance",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Résistance à tous les éléments",
+      "en": "Resistance to All Elements",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Résolution",
@@ -41834,6 +42226,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Soins reçus",
+      "en": "Healing Received",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Solerets abyssaux",
@@ -43138,6 +43537,13 @@
       "source": "kamilabs"
     },
     {
+      "fr": "Toutes les caractéristiques",
+      "en": "All Stats",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Toxines incapacitantes",
       "en": "Debilitating Toxins",
       "kind": "unknown",
@@ -43845,6 +44251,27 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Vie maximale",
+      "en": "Maximum Life",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vie par coup",
+      "en": "Life On Hit",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vie par victime",
+      "en": "Life on Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Vierge de fer",
       "en": "Iron Maiden",
       "kind": "unknown",
@@ -43878,6 +44305,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "kamilabs"
+    },
+    {
+      "fr": "Vigueur par victime",
+      "en": "Vigor On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Virées nocturnes",
@@ -44111,6 +44545,20 @@
       "source": "maxroll_gamedata"
     },
     {
+      "fr": "Vitesse d'attaque",
+      "en": "Attack Speed",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
+      "fr": "Vitesse de déplacement",
+      "en": "Movement Speed",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Voie d'Akarat",
       "en": "Akarat Path",
       "kind": "unknown",
@@ -44284,6 +44732,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Volonté",
+      "en": "Willpower",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Volonté de Bucrani",
@@ -44846,6 +45301,13 @@
       "source": "kamilabs"
     },
     {
+      "fr": "Énergie par victime",
+      "en": "Energy On Kill",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
+    },
+    {
       "fr": "Épaulières commémoratives de la Mère",
       "en": "Mother's Memorial Pauldron",
       "kind": "unknown",
@@ -44914,6 +45376,13 @@
       "kind": "unknown",
       "seen_in": 1,
       "source": "maxroll_gamedata"
+    },
+    {
+      "fr": "Épines",
+      "en": "Thorns",
+      "kind": "unknown",
+      "seen_in": 1,
+      "source": "user_traduction_2026-09-27"
     },
     {
       "fr": "Épines de traque",
