@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      2.93
+// @version      2.94
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -229,6 +229,23 @@
     ["The Beast in the Ice", "Bête dans la glace"],
     ["Beast in Ice", "Bête dans la glace"],
     ["Lord Zir", "Zir"],
+  ];
+
+  // 2026-09-26: build-variant tab labels (Starter/Midgame/Endgame/Bossing/
+  // Push - see this file's own 2026-09-21/22 comments, e.g. line ~80) go
+  // through Google's generic pass since they're not item/skill names - out
+  // of ARPG context, Google mistranslated them nonsensically (a real report:
+  // "Starter" -> "Démarreur", a car's starter motor; "Midgame" -> "Milieu
+  // de fête", "middle of the [birthday] party"; "Bossing" -> "Bossage", an
+  // unrelated French word for a raised surface). Same fix as
+  // BOSS_NAME_PAIRS above: a small fixed dictionary through the precise
+  // nameMap path, protected from Google by translate="no" once applied.
+  const BUILD_VARIANT_PAIRS = [
+    ["Starter", "Starter"],
+    ["Midgame", "Milieu de partie"],
+    ["Endgame", "Fin de partie"],
+    ["Bossing", "Chasse aux boss"],
+    ["Push", "Poussée"],
   ];
 
   const WORD_RE = /[a-z']+/g;
@@ -3867,6 +3884,7 @@
     addPairs(skillsEn, skillsFr);
     for (const [en, fr] of findParagonNameMap()) map.set(en, fr);
     for (const [en, fr] of BOSS_NAME_PAIRS) map.set(en, fr);
+    for (const [en, fr] of BUILD_VARIANT_PAIRS) map.set(en, fr);
     for (const [en, fr] of findEmbeddedAspectPairs(itemsEn)) {
       if (!map.has(en)) map.set(en, fr);
     }
