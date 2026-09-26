@@ -6232,7 +6232,44 @@ vrai build Rogue) : resout correctement le profil "Endgame" (index 3) et ses 11 
 (Fiend Guardian, Bloody Eye, Order Gear, ...). Repli teste explicitement : `null`/`undefined`/objet
 malforme -> tableau vide sans exception, laisse la place au DOM comme prevu. `node --check` vert.
 
-**Rien de cette session (Piste A + B, v2.90-2.96) n'a encore ete teste en navigateur reel** - prochaine
-etape standard : commit, push, verification Tampermonkey, puis test reel par l'utilisatrice. Point
-particulier a surveiller au premier vrai test : est-ce que l'API planner reduit vraiment les echecs
-"Générer le filtre renvoie peu/pas de regles" par rapport au scraping DOM qu'elle remplace en partie.
+**v3.0** : bump de version majeure pour marquer le changement d'architecture (v2.90-2.96 cumulees),
+poussee sur GitHub. Premier vrai test en navigateur demande a l'utilisatrice.
+
+**Premier vrai retour de test (meme session, meme build - Dance of Knives Rogue), 2 vrais bugs trouves,
+corriges en v3.1** :
+
+- **"Pousséeing" au lieu de "Poussée" sur l'onglet variante** : `BUILD_VARIANT_PAIRS` (v2.94) avait
+  `["Push", "Poussée"]`, mais le vrai texte affiche est "**Pushing**" (confirme via `profiles[].name`
+  de l'API planner) - "Push" est un sous-mot litteral de "Pushing", donc le remplacement par substring
+  ne touchait que "Push" et laissait "ing" colle au resultat francais. Corrige : cle changee en
+  "Pushing".
+- **"principale principale" sur le libelle d'emplacement Main Hand, et objets Uniques du widget
+  "Priorite des statistiques" non traduits (ex. "Grief" reste en anglais au lieu de "Grand Chagrin")** :
+  deux causes distinctes. (1) Aucune entree de dictionnaire ne couvrait les libelles d'emplacement
+  (Mainhand, Offhand, etc.) - tombaient sur la passe Google generique qui a invente un contresens.
+  Nouveau `ITEM_SLOT_LABEL_PAIRS`, meme technique que `BUILD_VARIANT_PAIRS`. (2) Plus profond : le
+  widget "Priorite des statistiques" (`.d4t-item`) affiche le nom du Unique de chaque emplacement via
+  `.d4t-header .d4-color-unique` - deja extrait par `findPerSlotStatPriority()`, mais UNIQUEMENT pour
+  le matching Unique du filtre de butin, jamais pour la traduction de page. Pire : "Grief" s'est avere
+  absent de TOUTES les donnees de l'API planner pour ce build (verifie empiriquement, aucun des 7
+  profils ne le contient) - le nameMap construit a partir de itemsEn ne pouvait donc de toute facon pas
+  le contenir, quelle que soit la source (DOM ou API). Fix structurel plutot que rustine : nouvelle
+  `translateMaxrollUniqueHeaders()` qui lit directement `lookupFr()` sur ces en-tetes specifiques,
+  independamment de nameMap/itemsEn - fonctionne quel que soit l'ordre des boutons cliques (Traduire
+  avant ou apres Filtre, ou meme sans jamais cliquer Traduire), branchee a la fois sur le passage
+  initial et sur l'observateur continu.
+
+**Correction defensive supplementaire, meme changement** : `extractMaxrollEquipmentFromPlannerData()`
+ne lisait que `activeProfile` (le variant par defaut choisi par l'auteur, ex. Endgame) - hypothese
+initiale du bug ci-dessus avant l'investigation reelle, finalement pas la cause pour CE build precis
+(Grief absent de tous les variants), mais un vrai risque general reste identifie : rien ne garantit que
+`activeProfile` correspond a l'onglet que le VISITEUR regarde. Plutot que deviner quel onglet est actif
+(la fragilite CSS que toute cette migration cherche a eviter), la fonction met maintenant en commun les
+objets de TOUS les variants (`itemsEnWide`/`itemsFrWide`, nouveaux champs) - sans risque pour la
+traduction (un nom non present sur la page n'est simplement jamais substitue), utilise uniquement pour
+`buildNameMap()`. Le champ `itemsEn` etroit (DOM en priorite, fidele a l'onglet affiche) reste utilise
+tel quel pour le matching Unique du filtre de butin, ou choisir le mauvais variant serait un vrai risque
+de regression.
+
+`node --check` vert apres chaque edit. Rien de la v3.1 teste en navigateur reel encore - prochaine etape
+standard : commit, push, verification Tampermonkey, test reel.

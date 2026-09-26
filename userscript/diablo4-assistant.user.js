@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.0
+// @version      3.1
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -246,7 +246,40 @@
     ["Midgame", "Milieu de partie"],
     ["Endgame", "Fin de partie"],
     ["Bossing", "Chasse aux boss"],
-    ["Push", "Poussée"],
+    // 2026-09-26 CORRECTION: was "Push" - a real user screenshot showed
+    // "Pousséeing" on the tab actually labeled "Pushing" (confirmed via
+    // the planner API's own `profiles[].name` field, see
+    // fetchMaxrollPlannerData()) - "Push" is a literal SUBSTRING of
+    // "Pushing", so translateTextNode()'s substring match replaced only
+    // that part and left "ing" stuck onto the French result. Real source
+    // text is "Pushing", not the shorthand "Push" this project's own
+    // comments (elsewhere in this file) used informally.
+    ["Pushing", "Poussée"],
+  ];
+
+  // 2026-09-26: equipment-slot labels (Maxroll's own Stat Priority widget
+  // shows these as `.d4t-slot` headers) - not covered by FR_EN_DICTIONARY
+  // at all (those are item/skill names, not UI category labels), so they
+  // fell through to Google's generic pass and produced a real nonsense
+  // result: "Mainhand" -> "principale principale" (a doubled word, exact
+  // cause not pinned down without live DOM access, but the fix is the
+  // same either way - supply the correct term directly so Google's pass
+  // never gets a chance to guess). Same EN keys this project's own
+  // ITEM_TYPE_IDS table already uses, kept in sync deliberately.
+  const ITEM_SLOT_LABEL_PAIRS = [
+    ["Mainhand", "Arme principale"],
+    ["Offhand", "Arme secondaire"],
+    ["Ranged Weapon", "Arme à distance"],
+    ["Bludgeoning Weapon", "Arme contondante"],
+    ["Slicing Weapon", "Arme tranchante"],
+    ["Left Ring", "Anneau gauche"],
+    ["Right Ring", "Anneau droit"],
+    ["Amulet", "Amulette"],
+    ["Boots", "Bottes"],
+    ["Gloves", "Gants"],
+    ["Chest Armor", "Torse"],
+    ["Helm", "Casque"],
+    ["Pants", "Pantalon"],
   ];
 
   const WORD_RE = /[a-z']+/g;
@@ -3500,17 +3533,33 @@
     return result;
   }
 
+  // 2026-09-26 CORRECTION: originally read only `plannerData.activeProfile`
+  // (the build AUTHOR's chosen default variant, e.g. "Endgame") - but
+  // that's NOT necessarily the variant the current VIEWER has open. Real
+  // report: a user browsing the "Pushing" tab got Google's generic
+  // "Chagrin" instead of the dictionary's correct "Grand Chagrin" for an
+  // item equipped only on Pushing, not Endgame - this function was only
+  // ever looking at Endgame's items, so "Grief" never made it into
+  // itemsEn/nameMap for that page view. Detecting which DOM tab is
+  // active would mean exactly the CSS-class fragility this migration is
+  // meant to get away from, so instead of picking ONE profile, pool item
+  // names from EVERY profile - harmless for translation (a name only gets
+  // substituted where it actually appears on the page) and gives full
+  // coverage regardless of which variant the viewer has open. Callers
+  // that need the variant CURRENTLY ON SCREEN specifically (the loot
+  // filter's Unique-matching fallback) still use the DOM-scraped list
+  // instead, see extractMaxrollDetail()'s itemsEn vs itemsEnWide split.
   function extractMaxrollEquipmentFromPlannerData(plannerData) {
     if (!plannerData || !Array.isArray(plannerData.profiles) || !plannerData.items) return [];
-    const activeIndex = Number.isInteger(plannerData.activeProfile) ? plannerData.activeProfile : 0;
-    const profile = plannerData.profiles[activeIndex] || plannerData.profiles[0];
-    if (!profile || !profile.items) return [];
-    const names = [];
-    for (const itemRef of Object.values(profile.items)) {
-      const item = plannerData.items[itemRef];
-      if (item && item.name) names.push(item.name);
+    const names = new Set();
+    for (const profile of plannerData.profiles) {
+      if (!profile || !profile.items) continue;
+      for (const itemRef of Object.values(profile.items)) {
+        const item = plannerData.items[itemRef];
+        if (item && item.name) names.add(item.name);
+      }
     }
-    return names;
+    return Array.from(names);
   }
 
   function extractMaxrollEquipmentFromDom() {
@@ -3586,15 +3635,25 @@
 
     const skillsEn = meta && Array.isArray(meta.skills) ? meta.skills : [];
 
+    // itemsEn: the variant CURRENTLY ON SCREEN specifically - DOM stays
+    // primary (extractMaxrollEquipmentFromDom() naturally reflects
+    // whichever step is rendered, no tab-detection needed - see its own
+    // docstring), planner data only fills in if the DOM read came back
+    // completely empty. Used wherever the RIGHT variant matters, not just
+    // any variant (the loot filter's Unique-matching fallback).
+    const domItems = await domItemsPromise;
     const plannerData = await plannerDataPromise;
     const plannerItems = extractMaxrollEquipmentFromPlannerData(plannerData);
-    let itemsEn;
-    if (plannerItems.length) {
-      itemsEn = plannerItems;
-    } else {
-      const domItems = await domItemsPromise;
-      itemsEn = domItems.length ? domItems : meta && Array.isArray(meta.items) ? meta.items : [];
-    }
+    const itemsEn = domItems.length ? domItems : plannerItems.length ? plannerItems : meta && Array.isArray(meta.items) ? meta.items : [];
+
+    // itemsEnWide: every item name from every build variant, pooled - see
+    // extractMaxrollEquipmentFromPlannerData()'s docstring. Only for
+    // translation (buildNameMap()), where an extra name that doesn't
+    // happen to appear on the current page is simply never matched -
+    // unlike itemsEn above, there's no "wrong variant" risk to guard
+    // against here.
+    const itemsEnWide = Array.from(new Set([...itemsEn, ...plannerItems]));
+
     if (skillsEn.length === 0 && itemsEn.length === 0) return null;
 
     return {
@@ -3602,8 +3661,10 @@
       sourceUrl: plannerUrl,
       skillsEn,
       itemsEn,
+      itemsEnWide,
       skillsFr: skillsEn.map(lookupFr),
       itemsFr: itemsEn.map(lookupFr),
+      itemsFrWide: itemsEnWide.map(lookupFr),
     };
   }
 
@@ -3742,8 +3803,10 @@
         resolvedClass: gameClass,
         skillsEn: native.skillsEn,
         itemsEn: native.itemsEn,
+        itemsEnWide: native.itemsEnWide || native.itemsEn,
         skillsFr: native.skillsFr,
         itemsFr: native.itemsFr,
+        itemsFrWide: native.itemsFrWide || native.itemsFr,
         hasDetail: true,
         kamilabsMatch: null,
         sourceLabel: native.sourceLabel,
@@ -3772,7 +3835,10 @@
     const itemsFr = frDetail && frDetail.items.length ? frDetail.items : itemsEn;
     const kamilabsMatch = findBestTitleMatch(kamiBuilds, match.title, resolvedClass);
 
-    return { title, match, resolvedClass, skillsEn, itemsEn, skillsFr, itemsFr, hasDetail: !!enDetail, kamilabsMatch, sourceLabel: "InfinityBuilds" };
+    return {
+      title, match, resolvedClass, skillsEn, itemsEn, itemsEnWide: itemsEn, skillsFr, itemsFr,
+      itemsFrWide: itemsFr, hasDetail: !!enDetail, kamilabsMatch, sourceLabel: "InfinityBuilds",
+    };
   }
 
   // Replaces this build's item/skill names directly on the page being
@@ -3946,6 +4012,7 @@
     for (const [en, fr] of findParagonNameMap()) map.set(en, fr);
     for (const [en, fr] of BOSS_NAME_PAIRS) map.set(en, fr);
     for (const [en, fr] of BUILD_VARIANT_PAIRS) map.set(en, fr);
+    for (const [en, fr] of ITEM_SLOT_LABEL_PAIRS) map.set(en, fr);
     for (const [en, fr] of findEmbeddedAspectPairs(itemsEn)) {
       if (!map.has(en)) map.set(en, fr);
     }
@@ -4080,12 +4147,48 @@
   // already-translated text no longer contains an English name to match.
   let translationObserver = null;
 
+  // 2026-09-26: the "Priorité des statistiques" widget (`.d4t-item`, same
+  // one findPerSlotStatPriority() reads for loot-filter purposes) shows
+  // each slot's chosen item name at `.d4t-header .d4-color-unique` when
+  // it's a named Unique - but that name was only ever fed into the LOOT
+  // FILTER's Unique-matching, never into on-page translation. Real report:
+  // a user's screenshot showed a Unique's own English name ("Grief") next
+  // to its otherwise-fully-translated slot, with Google's own generic
+  // guess used instead of our dictionary's real term ("Grand Chagrin")
+  // since this widget's names never went through buildNameMap()/nameMap -
+  // that's built once from itemsEn at "Traduire" click time, and this
+  // widget frequently only mounts LATER (via "Filtre Ouvert"/"Filtre
+  // Strict" activating its tab, a separate button/action). Looking up
+  // directly via lookupFr() instead of nameMap sidesteps that ordering
+  // problem entirely - it works no matter which button was clicked first,
+  // or whether "Traduire" was clicked at all.
+  function translateMaxrollUniqueHeaders(root) {
+    if (!root || root.nodeType !== Node.ELEMENT_NODE || !root.querySelectorAll) return 0;
+    const selector = ".d4t-header .d4-color-unique";
+    const els = root.matches && root.matches(selector) ? [root] : [];
+    els.push(...root.querySelectorAll(selector));
+    let count = 0;
+    for (const el of els) {
+      const en = el.textContent.trim();
+      if (!en) continue;
+      const fr = lookupFr(en);
+      if (fr && fr !== en && el.textContent.trim() === en) {
+        el.textContent = fr;
+        count++;
+      }
+    }
+    return count;
+  }
+
   function startTranslationObserver(nameMap) {
     if (translationObserver) translationObserver.disconnect();
     translationObserver = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type === "childList") {
-          for (const node of mutation.addedNodes) translateTextIn(node, nameMap);
+          for (const node of mutation.addedNodes) {
+            translateTextIn(node, nameMap);
+            translateMaxrollUniqueHeaders(node);
+          }
         } else if (mutation.type === "characterData") {
           translateTextIn(mutation.target, nameMap);
         }
@@ -4096,6 +4199,7 @@
 
   function applyPageTranslation(nameMap) {
     const count = translateTextIn(document.body, nameMap);
+    translateMaxrollUniqueHeaders(document.body);
     startTranslationObserver(nameMap);
     return count;
   }
@@ -4352,7 +4456,12 @@
       ? ""
       : `<p style="color:#c9a227">Impossible de lire le détail du build (l'onglet d'analyse n'a pas répondu à temps).</p>`;
 
-    const nameMap = buildNameMap(result.itemsEn, result.itemsFr, result.skillsEn, result.skillsFr);
+    // itemsEnWide/itemsFrWide (Maxroll: pooled across every build variant,
+    // not just the one on screen - see extractMaxrollEquipmentFromPlannerData()'s
+    // docstring) rather than itemsEn/itemsFr here - translation has no
+    // "wrong variant" risk the way the loot filter's Unique-matching does,
+    // so the wider pool is strictly better coverage for this specific use.
+    const nameMap = buildNameMap(result.itemsEnWide || result.itemsEn, result.itemsFrWide || result.itemsFr, result.skillsEn, result.skillsFr);
     const replacedCount = applyPageTranslation(nameMap);
     const pageNote = replacedCount
       ? `<p>${replacedCount} nom(s) remplacé(s) directement sur cette page par leur terme français exact - utilise la traduction Chrome pour le reste du texte.</p>`
