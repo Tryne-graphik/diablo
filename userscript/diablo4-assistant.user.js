@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.5
+// @version      3.6
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -988,7 +988,12 @@
   // shipping the raw multi-MB payload through GM_setValue), reports back,
   // closes itself - same relay shape as runExtractionMode.
   function runLeaderboardExtractionMode(requestId) {
-    const deadline = Date.now() + 15000;
+    // 2026-09-27: bumped 15s -> 20s alongside openLeaderboardExtractionTab's
+    // own 18s -> 25s - this inner deadline is what actually governs how
+    // long the background tab keeps polling for window.__NUXT__.data
+    // before giving up (previously it could give up at 15s even though the
+    // OUTER caller was willing to wait 18s, wasting most of that margin).
+    const deadline = Date.now() + 20000;
     const poll = setInterval(() => {
       const data = (window.__NUXT__ && window.__NUXT__.data) || {};
       let found = null;
@@ -1028,7 +1033,15 @@
   // Same shape as openExtractionTab, distinct result-key prefix
   // (d4a_lbresult_ vs d4a_result_) so the two extraction flows can never
   // collide if both happen to be in flight at once.
-  function openLeaderboardExtractionTab(timeoutMs = 18000) {
+  // 2026-09-27: bumped 18s -> 25s - a real user report of "no player found"
+  // couldn't be reproduced against a fresh fetch (the build in question WAS
+  // in the top 200), pointing at a slow/failed background-tab load rather
+  // than a real absence. helltides.com/tower also loads a Cloudflare
+  // Turnstile script, giving it more to load than a plain static page -
+  // a modest safety margin costs nothing on the happy path (the tab
+  // resolves and closes itself as soon as data is found either way, see
+  // runLeaderboardExtractionMode) and only matters when it's already slow.
+  function openLeaderboardExtractionTab(timeoutMs = 25000) {
     return new Promise((resolve) => {
       const requestId = "r" + Date.now() + Math.random().toString(36).slice(2);
       const resultKey = "d4a_lbresult_" + requestId;
@@ -1102,6 +1115,15 @@
   // GENERIC_UTILITY_TYPES (those skills are on almost every build of a
   // class regardless of identity - see that file's comment for the
   // concrete false-positive example that led to excluding them).
+  // 2026-09-27: returns { runsFetched, best } instead of just the match (or
+  // null) - a real user report showed "Aucun joueur du classement officiel
+  // identifié" with no way to tell whether that meant "genuinely nobody in
+  // the top 200 of this class plays this build" or "the background-tab
+  // fetch to helltides.com failed/timed out" (18s, and the site loads a
+  // Cloudflare Turnstile script - a slow load or a blocked request there
+  // would silently produce the exact same empty result before this fix).
+  // runsFetched lets the caller show a different, more actionable message
+  // for each case instead of one message that could mean either.
   async function bestOfficialRank(gameClass, title) {
     const runs = await fetchTowerRuns();
     const titleSig = signature(title);
@@ -1114,13 +1136,16 @@
       if (!confirmed) continue;
       if (best === null || (run.rank ?? Infinity) < (best.rank ?? Infinity)) best = run;
     }
-    if (!best) return null;
+    if (!best) return { runsFetched: runs.length, best: null };
     // 2026-09-24: "chercher où se situe le build dans le classement, quel
     // niveau de fosse et en combien de temps" - totalClassRuns gives the
     // rank some context (#47 means little without knowing out of how many
     // Rogues), runTimeMs is the Pit clear time for that specific run.
     const totalClassRuns = runs.filter((r) => r.gameClass === gameClass).length;
-    return { rank: best.rank, battleTag: best.battleTag, tier: best.tier, runTimeMs: best.runTimeMs, totalClassRuns };
+    return {
+      runsFetched: runs.length,
+      best: { rank: best.rank, battleTag: best.battleTag, tier: best.tier, runTimeMs: best.runTimeMs, totalClassRuns },
+    };
   }
 
   // "3:24" for 204000 - Tower/Pit runs are always well under an hour, no
@@ -1244,20 +1269,27 @@
     recordBuildVisit(gameClass, title, location.href);
     section.innerHTML = "Recherche de la position officielle...";
 
-    const [rank, links] = await Promise.all([
-      bestOfficialRank(gameClass, title).catch(() => null),
+    const [rankResult, links] = await Promise.all([
+      bestOfficialRank(gameClass, title).catch(() => ({ runsFetched: 0, best: null })),
       findCrossSiteLinks(title, gameClass).catch(() => []),
     ]);
 
     // 2026-09-24: "quel niveau de fosse et en combien de temps" - the rank
     // alone doesn't say much without knowing out of how many players of
     // this class, or what that run actually achieved.
+    // 2026-09-27: distinguish "fetched real data, genuinely no match" from
+    // "the fetch itself came back empty" (background-tab timeout/failure) -
+    // see bestOfficialRank()'s docstring. A real user report couldn't tell
+    // which case they were in from the old single message.
+    const rank = rankResult.best;
     const rankHtml = rank
       ? `🏆 <a href="${TOWER_URL}" target="_blank" rel="noopener noreferrer">#${rank.rank}${rank.totalClassRuns ? `/${rank.totalClassRuns}` : ""} au classement officiel</a> ` +
         `(${rank.battleTag || "joueur anonyme"})` +
         (rank.tier != null ? ` — Fosse ${rank.tier}` : "") +
         (formatRunTime(rank.runTimeMs) ? `, en ${formatRunTime(rank.runTimeMs)}` : "")
-      : "Aucun joueur du classement officiel identifié avec ce build.";
+      : rankResult.runsFetched > 0
+        ? "Aucun joueur du classement officiel identifié avec ce build."
+        : "⚠️ Classement officiel indisponible pour l'instant (la récupération en arrière-plan a échoué ou pris trop de temps) - réessaie dans quelques minutes.";
 
     const linksHtml = links.length
       ? "Aussi vu sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")

@@ -6372,3 +6372,28 @@ kind=unknown) - le vrai trou restant est uniquement cote `UNIQUE_ITEM_IDS` (cibl
 butin par ID specifique), pas la traduction sur page.
 
 Dictionnaire 6588 -> **6576 entrees** (net, apres retrait des 12 placeholders). `node --check` vert.
+
+**v3.6** : utilisateur a signale "Aucun joueur du classement officiel identifie" sur la page Dance of
+Knives Rogue (capture d'ecran + console montrant des erreurs `ERR_BLOCKED_BY_CLIENT`). Verification
+avec les vraies donnees du classement (`app/leaderboard.py` via Playwright, 1599 runs, 200 par classe) :
+**Dance of Knives EST bien present** - 81 Voleurs sur 200 l'utilisent, le meilleur au rang #184
+(`Tisaki#2891`, palier 150). Reteste avec plusieurs variantes plausibles du titre reel - la logique de
+correspondance (`bestOfficialRank`/`signature`/`skillTokens`) trouve le bon match a chaque fois. Les
+erreurs de la console montrees par l'utilisatrice viennent en fait de scripts publicitaires/analytics
+bloques par un bloqueur de pub sur la page Maxroll elle-meme (doubleclick, googletagmanager,
+cloudflareinsights, clarity.ms...) - sans rapport avec la recuperation du classement (onglet cache vers
+helltides.com, invisible dans cette console puisque DevTools n'inspectait pas cet onglet-la).
+
+**Vrai probleme trouve : impossible de distinguer "vraiment personne dans le top 200" de "la
+recuperation en arriere-plan a echoue/timeout" - les deux produisaient EXACTEMENT le meme message.**
+`bestOfficialRank()` retourne maintenant `{runsFetched, best}` au lieu de juste `best` (ou `null`) -
+`renderBuildInfo()` affiche un message distinct et actionnable quand `runsFetched === 0` ("classement
+indisponible, reessaie") plutot que le message ambigu de "aucun joueur". Verifie avec les vraies
+donnees : le nouveau format renvoie bien `{runsFetched: 1599, best: {...}}` pour Dance of Knives et
+`{runsFetched: 1599, best: null}` pour un faux build invente - la distinction fonctionne.
+
+Au passage, delai augmente par precaution (pas de cause confirmee, mais helltides.com/tower charge un
+script Cloudflare Turnstile en plus du contenu normal) : le delai externe 18s -> 25s
+(`openLeaderboardExtractionTab`), et le delai interne de sondage dans l'onglet cache 15s -> 20s
+(`runLeaderboardExtractionMode` - decouvert au passage qu'il coupait avant meme que le delai externe
+n'ait sa chance, gaspillant la marge). node --check vert.
