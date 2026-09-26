@@ -17327,6 +17327,104 @@
       "kind": "skill",
       "seen_in": 1,
       "source": "manual_2026-09-23"
+    },
+    {
+      "fr": "Pluie",
+      "en": "Rain",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Splendeur",
+      "en": "Splendor",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Fumée",
+      "en": "Smoke",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Savoir",
+      "en": "Lore",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Rayonnement",
+      "en": "Radiance",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Délire",
+      "en": "Delirium",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Gage des Anciens",
+      "en": "Ancient's Pledge",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Rime",
+      "en": "Rhyme",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Grand Chagrin",
+      "en": "Grief",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Appel aux Armes",
+      "en": "Call to Arms",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Infini",
+      "en": "Infinity",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Force",
+      "en": "Strength",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Tonnerre Sacré",
+      "en": "Holy Thunder",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
+    },
+    {
+      "fr": "Sillon",
+      "en": "Pattern",
+      "kind": "item",
+      "seen_in": 1,
+      "source": "user_runewords_s15"
     }
   ],
   "merged_kamilabs_builds": 376,

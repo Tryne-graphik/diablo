@@ -10,3 +10,7 @@ tools/
 # Logs et caches locaux
 *.log
 app/data/kamilabs_cache/
+
+# Build PyInstaller de l'outil de verif d'installation (regenerable, ~11 Mo)
+installer/build/
+installer/dist/
