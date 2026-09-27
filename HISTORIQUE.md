@@ -7061,3 +7061,42 @@ Restent non couverts (pas rapportes comme bugs, trouves en verifiant en direct) 
 "Superiority" et "Empowered", absents de fr_en_dictionary.json - a ajouter si un futur retour
 les mentionne. `node --check` vert, verifie en conditions reelles via Playwright (pas
 seulement en local/hors-ligne). Pas encore teste par l'utilisateur dans son vrai navigateur.
+
+## 2026-09-27 (suite) - v3.31 : glossaire des mecaniques de jeu (source Gemini Pro)
+
+L'utilisateur a genere via Gemini Pro (compte perso, en dehors de ce projet) un glossaire
+EN/FR complet des termes de mecanique generale de Diablo IV (stats, degats/combat, etats/CC,
+equipement/artisanat, consommables/gemmes, mecaniques de classe, progression/parangon,
+monde/activites, types d'armes) - exactement la categorie de termes qui a cause le bug
+"Overpower" (v3.30) : des mots qui ne sont ni des objets ni des competences, donc absents de
+fr_en_dictionary.json par construction, qui tombaient dans la passe Google generique et
+revenaient parfois faux. Fichier source archive dans
+`research/glossaire-mecaniques-gemini-2026-09-27.md`.
+
+Integre dans `GENERIC_TERM_PAIRS` (userscript/diablo4-assistant.user.js) : 122 paires au
+total (avant : 1 seule, "Overpower"). Delibere ment ecarte du glossaire fourni :
+- tout ce qui contient un gabarit "[x]" ou une phrase complete (affixes offensifs/
+  defensifs/utilitaires, vocabulaire de description d'effets) - translateTextNode fait du
+  remplacement de sous-chaine litteral, pas du gabarit/regex, donc "+[x]% Damage" ne peut de
+  toute facon jamais matcher un vrai texte de page ("+15% Damage").
+- "Common", "Magic", "Focus" - risque reel de collision en sous-chaine avec des mots anglais
+  ordinaires que ce remplacement litteral ne sait pas distinguer du terme de jeu ("uncommon",
+  "magical", "focused"/"the main focus of this build" seraient corrompus en plein milieu de
+  mot).
+- "Slow"/"Slowed", "Fear"/"Feared" - trop ambigus en mots nus (usage courant dans une prose
+  de guide, ex. "a slow playstyle", "I feared this wouldn't work") contrairement a
+  Stun/Freeze/Chill/Daze/Immobilize qui sont des mots bien plus specifiques a D4.
+- qualificatifs entre parentheses ("Common (White)", "World Tier (WT1, WT2, etc.)", "The Pit
+  (Artificer's Pit)") - pas du texte litteral de page, le terme nu sans la glose est utilise
+  a la place quand c'est sans risque.
+
+Verifie en direct (Playwright, sur les 2 memes pages de build utilisees pour les bugs
+precedents) : aucune vraie collision de sous-chaine trouvee (le scan a bien detecte des
+"faux positifs" attendus et inoffensifs - "Glyph"/"Paragon Board"/"Dungeon"/"Resistance"
+matchent a l'interieur de leurs formes plurielles anglaises "Glyphs"/"Boards"/"Dungeons"/
+"Resistances", ce qui donne un pluriel francais legerement imparfait mais comprehensible,
+ex. "Plateau de parangons" au lieu de "Plateaux de parangon" - limitation deja presente sur
+TOUTES les paires EN/FR existantes du projet, pas une regression introduite ici, jamais
+signalee comme un probleme).
+
+`node --check` vert. Pas encore teste par l'utilisateur dans son vrai navigateur.

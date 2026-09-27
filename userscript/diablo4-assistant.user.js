@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.30
+// @version      3.31
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -298,7 +298,164 @@
   // translation) instead of the real FR client term "Accablement". Same
   // fix pattern as BUILD_VARIANT_PAIRS/ITEM_SLOT_LABEL_PAIRS above - supply
   // the correct term directly so Google never gets a chance to guess.
-  const GENERIC_TERM_PAIRS = [["Overpower", "Accablement"]];
+  //
+  // 2026-09-27 (later, same day): user provided a much larger official
+  // EN/FR glossary (compiled via Gemini Pro, cross-checked against the real
+  // FR game client) covering exactly this "generic keyword" blind spot -
+  // extended well past just "Overpower". Deliberately left OUT of this list
+  // (kept as en->en identity, i.e. simply not translated by this pass, or
+  // just skipped entirely):
+  //   - anything containing a "[x]" placeholder or full sentence template
+  //     (offensive/defensive/utility affix phrasing, effect-description
+  //     vocabulary) - translateTextNode does literal substring matching,
+  //     not templates/regex, so "+[x]% Damage" can never match real page
+  //     text like "+15% Damage" anyway.
+  //   - "Common", "Magic", "Focus" - real substring-collision risk with
+  //     ordinary English words this literal substring matcher can't tell
+  //     apart from the game term ("uncommon", "magical", "focused"/
+  //     "the main focus of this build" would get corrupted mid-word).
+  //   - "Slow"/"Slowed", "Fear"/"Feared" - too ambiguous as bare words
+  //     (common adjective/verb use in ordinary guide prose, e.g. "a slow
+  //     playstyle", "I feared this wouldn't work") vs. the specific CC
+  //     effect: unlike Stun/Freeze/Chill/Daze/Immobilize, these two are
+  //     common enough outside D4 context to risk mistranslating a normal
+  //     sentence.
+  //   - parenthetical qualifiers ("Common (White)", "World Tier (WT1,
+  //     WT2, etc.)", "The Pit (Artificer's Pit)") - not literal page text,
+  //     the bare term without the gloss is used instead where safe.
+  const GENERIC_TERM_PAIRS = [
+    ["Overpower", "Accablement"],
+    // Stats & Attributes
+    ["Strength", "Force"],
+    ["Willpower", "Volonté"],
+    ["Dexterity", "Dextérité"],
+    ["Attack Power", "Puissance d'attaque"],
+    ["Maximum Life", "Vie maximale"],
+    ["Armor", "Armure"],
+    ["Resistance", "Résistance"],
+    ["Movement Speed", "Vitesse de déplacement"],
+    ["Cooldown Reduction", "Réduction du temps de recharge"],
+    ["Resource Generation", "Génération de ressource"],
+    ["Fury", "Fureur"],
+    ["Spirit", "Esprit"],
+    ["Energy", "Énergie"],
+    // Damage & Combat Mechanics
+    ["Vulnerable Damage", "Dégâts aux cibles vulnérables"],
+    ["Vulnerable", "Vulnérable"],
+    ["Critical Strike Chance", "Chances de coup critique"],
+    ["Critical Strike Damage", "Dégâts des coups critiques"],
+    ["Lucky Hit Chance", "Chances de coup de chance"],
+    ["Lucky Hit", "Coup de chance"],
+    ["Damage over Time", "Dégâts sur la durée"],
+    ["Area of Effect", "Zone d'effet"],
+    ["Core Skill Damage", "Dégâts des compétences principales"],
+    ["Basic Attack Speed", "Vitesse d'attaque de base"],
+    ["Thorns", "Épines"],
+    // Status Effects & Crowd Control
+    ["Crowd Control", "Perte de contrôle"],
+    ["Healthy", "En bonne santé"],
+    ["Injured", "Blessé"],
+    ["Stunned", "Étourdi"],
+    ["Stun", "Étourdissement"],
+    ["Frozen", "Gelé"],
+    ["Freeze", "Gel"],
+    ["Chilled", "Glacé"],
+    ["Chill", "Glaçage"],
+    ["Dazed", "Hébété"],
+    ["Daze", "Hébétement"],
+    ["Immobilized", "Immobilisé"],
+    ["Immobilize", "Immobilisation"],
+    ["Knockback", "Repoussement"],
+    ["Knockdown", "Renversement"],
+    ["Tether", "Enchaînement"],
+    ["Fortified", "Fortifié"],
+    ["Fortify", "Fortification"],
+    ["Barrier", "Barrière"],
+    ["Unstoppable", "Inarrêtable"],
+    ["Immune", "Insensible"],
+    ["Stealth", "Camouflage"],
+    ["Berserking", "Rage du berserker"],
+    ["Blood Orb", "Orbe de sang"],
+    ["Crackling Energy", "Énergie crépitante"],
+    // Gear, Rarity & Crafting
+    ["Mythic Unique", "Unique mythique"],
+    ["Legendary Aspect", "Aspect légendaire"],
+    ["Legendary", "Légendaire"],
+    ["Item Power", "Puissance de l'objet"],
+    ["Greater Affix", "Affixe supérieur"],
+    ["Implicit Affix", "Affixe implicite"],
+    ["Affix", "Affixe"],
+    ["Codex of Power", "Codex de puissance"],
+    ["Socket", "Châsse"],
+    ["Gem", "Gemme"],
+    ["Runeword", "Mot runique"],
+    ["Tempering", "Trempe"],
+    ["Masterworking", "Perfectionnement"],
+    ["Enchanting", "Enchantement"],
+    ["Salvage", "Recyclage"],
+    ["Transmog", "Transmogrification"],
+    ["Wardrobe", "Vestiaire"],
+    // Consumables & Gems
+    ["Elixir", "Élixir"],
+    ["Incense", "Encens"],
+    ["Amethyst", "Améthyste"],
+    ["Emerald", "Émeraude"],
+    ["Ruby", "Rubis"],
+    ["Topaz", "Topaze"],
+    ["Sapphire", "Saphir"],
+    ["Diamond", "Diamant"],
+    ["Skull", "Crâne"],
+    // Class Mechanics
+    ["Arsenal System", "Système d'arsenal"],
+    ["Weapon Expertise", "Expertise d'arme"],
+    ["Spirit Boons", "Esprits druidiques"],
+    ["Book of the Dead", "Livre des morts"],
+    ["Combo Points", "Points de combo"],
+    ["Inner Sight", "Vision intérieure"],
+    ["Preparation", "Préparation"],
+    ["Enchantment Slots", "Emplacements d'enchantement"],
+    ["Spirit Hall", "Salle des esprits"],
+    // Progression & Skill Trees
+    ["Skill Tree", "Arbre de compétences"],
+    ["Basic Skill", "Compétence de base"],
+    ["Core Skill", "Compétence principale"],
+    ["Defensive Skill", "Compétence défensive"],
+    ["Mastery Skill", "Compétence de maîtrise"],
+    ["Ultimate Skill", "Compétence ultime"],
+    ["Key Passive", "Passif principal"],
+    ["Paragon Board", "Plateau de parangon"],
+    ["Paragon Point", "Point de parangon"],
+    ["Glyph", "Glyphe"],
+    // World & Activities
+    ["Waypoint", "Relais"],
+    ["Stronghold", "Bastion"],
+    ["Altar of Lilith", "Autel de Lilith"],
+    ["Nightmare Dungeon", "Donjon du Cauchemar"],
+    ["Nightmare Sigil", "Emblème du Cauchemar"],
+    ["Dungeon", "Donjon"],
+    ["Helltide", "Vague infernale"],
+    ["Aberrant Cinders", "Cendres aberrantes"],
+    ["Tree of Whispers", "Arbre des murmures"],
+    ["World Boss", "Boss mondial"],
+    ["Legion Event", "Événement de légion"],
+    ["The Pit", "La Fosse"],
+    ["Infernal Hordes", "Hordes infernales"],
+    ["Kurast Undercity", "Bas-fonds de Kurast"],
+    ["Dark Citadel", "Citadelle sombre"],
+    ["Mercenary", "Mercenaire"],
+    ["Reinforcement", "Renfort"],
+    // Weapon type names
+    ["Swords", "Épées"],
+    ["Maces", "Masses"],
+    ["Axes", "Haches"],
+    ["Daggers", "Dagues"],
+    ["Wands", "Baguettes"],
+    ["Staves", "Bâtons"],
+    ["Bows", "Arcs"],
+    ["Crossbows", "Arbalètes"],
+    ["Polearms", "Armes d'hast"],
+    ["Shield", "Bouclier"],
+  ];
 
   const WORD_RE = /[a-z']+/g;
 
