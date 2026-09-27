@@ -6745,3 +6745,25 @@ tout seul (succes ~6s d'apres le test Playwright, ou sur timeout). Delais laisse
 l'instant comme marge de securite, a resserrer plus tard une fois la fiabilite confirmee.
 
 `node --check` vert. A retester par l'utilisateur - premier test reel de cette approche.
+
+## 2026-09-27 (suite) - v3.20 : logs ajoutes DANS l'onglet d'extraction lui-meme (aucun log cote helltides.com avant)
+
+L'onglet actif (v3.19) s'est refermee tout seul apres un moment, montrant bien la vraie page du
+classement (captures partagees : "Diablo 4 Season 15 Tower Leaderboard" avec de vraies donnees) - pas
+une redirection vers un accueil comme d'abord suspecte. Mais la console partagee par l'utilisateur pour
+CET onglet ne contenait AUCUNE ligne `[D4A]` - normal, `runLeaderboardExtractionMode()` (le code qui
+tourne DANS cet onglet-la) n'avait jamais eu le moindre `console.log`, seul le code cote onglet
+appelant (page de build) en avait recu en v3.16. Impossible de savoir a distance si le code s'y execute
+seulement, et encore moins pourquoi il ne trouve rien.
+
+Ajoute, DANS `runLeaderboardExtractionMode()` (donc visible dans la console de l'onglet
+helltides.com/tower, pas celle du build) :
+- Au demarrage : confirmation que la fonction est bien appelee, avec le `requestId` et l'URL reelle.
+- Tous les ~5s pendant le sondage : `window.__NUXT__` est-il present, et la liste des cles de
+  `.data` (jusqu'a 15) - permettra de voir si la structure de donnees du site a change (cle renommee,
+  champ `skillDetails` absent, etc.) plutot que de continuer a deviner.
+- A l'abandon final (45s ecoules) : nombre de sondages effectues et liste complete des cles de `.data`
+  a ce moment-la.
+
+`node --check` vert. Prochain test : cliquer "🏆 Mon rang", puis ouvrir les DevTools de l'onglet
+helltides.com QUI S'OUVRE (pas celui du build) avant qu'il se referme, et partager ses lignes `[D4A]`.

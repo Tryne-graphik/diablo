@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.19
+// @version      3.20
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -948,9 +948,20 @@
     // margin under real throttling. Trying a much larger budget first
     // (cheap, no visible UX change) before considering the more invasive
     // fix (briefly focusing the tab so it isn't throttled at all).
+    // 2026-09-27: even active:true (v3.19) still ended in a real timeout -
+    // and this function itself had NEVER logged anything, so there was no
+    // way to tell whether it even ran, let alone why it found nothing.
+    // These logs run in THIS tab (helltides.com), inspect its own devtools
+    // console to read them - console.log() calls elsewhere in this file
+    // (fetchTowerRuns() etc.) run in the OTHER tab (the build page) and
+    // never appear here.
+    console.log("[D4A] extraction (onglet classement): démarrée, requestId =", requestId, "URL =", location.href);
     const deadline = Date.now() + 45000;
+    let pollCount = 0;
     const poll = setInterval(() => {
+      pollCount++;
       const data = (window.__NUXT__ && window.__NUXT__.data) || {};
+      const dataKeys = Object.keys(data);
       let found = null;
       for (const value of Object.values(data)) {
         if (Array.isArray(value) && value.length && value[0] && value[0].skillDetails) {
@@ -958,8 +969,18 @@
           break;
         }
       }
+      // ~ every 5th second (300ms * 17) - enough to see progress without
+      // flooding the console over a 45s window.
+      if (pollCount === 1 || pollCount % 17 === 0) {
+        console.log(
+          "[D4A] extraction: sondage #" + pollCount,
+          "- window.__NUXT__ présent ?", !!window.__NUXT__,
+          "- clés de .data:", dataKeys.length, dataKeys.slice(0, 15)
+        );
+      }
       if (found) {
         clearInterval(poll);
+        console.log("[D4A] extraction: trouvé !", found.length, "runs après", pollCount, "sondages");
         const runs = found.map((r) => ({
           rank: r.rank,
           battleTag: r.battle_tag,
@@ -997,6 +1018,7 @@
         // openLeaderboardExtractionTab()'s own 25s outer timeout resolves
         // to `null` a few seconds later, which fetchTowerRunsUncached()
         // (v3.15) correctly never caches.
+        console.warn("[D4A] extraction: ABANDON après", pollCount, "sondages, jamais trouvé - clés de .data à la fin:", dataKeys);
         clearInterval(poll);
       }
     }, 300);
