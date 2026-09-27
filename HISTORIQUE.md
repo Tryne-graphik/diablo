@@ -6797,3 +6797,18 @@ retrouver un comportement moins intrusif visuellement.
 
 `node --check` vert. Prochain test decisif : cliquer "🏆 Mon rang" - devrait enfin trouver les vraies
 donnees du classement.
+
+## 2026-09-27 (suite) - v3.22 : CONFIRME PAR L'UTILISATEUR - "ça fonctionne" - onglet repasse en arriere-plan
+
+Le fix `unsafeWindow` (v3.21) confirme par l'utilisateur : le classement fonctionne enfin. La piste
+"throttling des onglets en arriere-plan" (v3.18/v3.19) etait donc un faux-fuyant - le vrai bug
+(`window` sandboxe) aurait echoue de la meme facon que l'onglet soit actif ou non. Plus besoin
+d'interrompre visuellement l'utilisateur a chaque recherche de rang : `GM_openInTab(...,
+{active:true,...})` repasse a `{active:false,...}` dans `openLeaderboardExtractionTab()`.
+
+Delais laisses a 45s/50s (au lieu de revenir a 20s/25s) par prudence - la fiabilite en arriere-plan
+n'a pas encore ete retestee independamment du fix `unsafeWindow`, donc garder une marge confortable
+pour l'instant ; a resserrer plus tard une fois confirme stable sur plusieurs recherches.
+
+`node --check` vert. A confirmer : le classement fonctionne-t-il toujours aussi bien une fois l'onglet
+repasse en arriere-plan (pas la meme situation que le dernier test reussi, qui etait fait en avant-plan) ?
