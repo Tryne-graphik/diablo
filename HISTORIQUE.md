@@ -6420,3 +6420,28 @@ MASQUEES (`hidden`) plutot que retirees du DOM - le code de branchement des bout
 `document.getElementById(id).prop = ...` sans verification null pour la plupart, donc retirer ces
 elements aurait fait planter `init()` a chaque visite d'accueil. "Vérifier MAJ" reste visible (pas lie a
 un build), "Mes Builds" et "Retour d'expérience" intouches. `node --check` vert.
+
+**v3.8** : demande utilisateur - "Mes Builds" transforme d'un menu deroulant par classe (une seule
+entree a la fois, il fallait choisir la classe pour voir SON build) en **tableau** montrant tous les
+builds memorises simultanement : Classe | Build (lien pour rouvrir) | Site | Classement (dans le
+classement de CETTE classe uniquement, pas de "classement general" cross-classe - ca n'existe pas
+comme concept dans le jeu, chaque classe a son propre Tower leaderboard separe).
+
+`recordBuildVisit()` stocke maintenant aussi `source` (nouveau `currentSiteLabel()`, matche le hostname
+contre les 6 sites connus, reutilise `SOURCE_LABELS`). Le calcul du classement de chaque ligne appelle
+`bestOfficialRank()` en parallele (`Promise.all`, jusqu'a 8 builds) - **vrai risque corrige avant meme
+de tester** : `fetchTowerRuns()` n'avait pas de garde contre les appels concurrents, donc 8 appels en
+parallele sur un cache froid auraient chacun ouvert leur PROPRE onglet cache vers helltides.com en
+meme temps. Ajoute `towerRunsInFlight` (promesse partagee) - un seul fetch reel meme avec N appelants
+simultanes.
+
+Le tableau se recalcule maintenant a chaque chargement de page (y compris la page d'accueil, cf.
+v3.7) au lieu de ne s'afficher qu'apres selection manuelle d'une classe.
+
+`node --check` vert. Rien teste en navigateur encore.
+
+**Pas fait cette session, note pour plus tard** : (1) integration Perplexity dans ai-delegate - fait
+cote outil (`E:\ai-delegate`), pas encore cote projet Diablo. (2) idee de l'utilisateur : demander a
+Gemini (via ai-delegate, `ask_gemini`) de verifier/completer TOUT le dictionnaire FR_EN_DICTIONARY en
+lui demandant explicitement les termes EXACTS du client Diablo IV - pas encore tente, ai-delegate
+necessite un redemarrage de session pour que ses outils soient utilisables.

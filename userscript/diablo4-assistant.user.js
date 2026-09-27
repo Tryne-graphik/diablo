@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.7
+// @version      3.8
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1099,6 +1099,14 @@
   // build-site fetchers below which are plain HTTP requests and stay
   // uncached) - one shared cache for every class, filtered per-caller,
   // same shape as app/leaderboard.py's get_leaderboard()/top_skill_names().
+  // 2026-09-27: towerRunsInFlight added - the new "Mes Builds" table calls
+  // this once per remembered build (up to 8, one per class) in parallel.
+  // Without de-duping, every one of those 8 calls would see an empty/cold
+  // cache at the same instant (the cache is only written AFTER a fetch
+  // completes) and each independently open its own background tab -
+  // sharing the SAME in-flight promise means only the first caller
+  // actually fetches, the rest just await it.
+  let towerRunsInFlight = null;
   async function fetchTowerRuns() {
     try {
       const cached = GM_getValue(TOWER_CACHE_KEY, null);
@@ -1109,6 +1117,14 @@
     } catch (e) {
       // corrupt cache entry - fall through and refetch
     }
+    if (towerRunsInFlight) return towerRunsInFlight;
+    towerRunsInFlight = fetchTowerRunsUncached().finally(() => {
+      towerRunsInFlight = null;
+    });
+    return towerRunsInFlight;
+  }
+
+  async function fetchTowerRunsUncached() {
     const runs = (await openLeaderboardExtractionTab()) || [];
     try {
       GM_setValue(TOWER_CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), runs }));
@@ -1247,27 +1263,67 @@
     }
   }
 
+  // 2026-09-27: which of the 6 supported sites the current page is on,
+  // for the "Mes Builds" table's Site column - reuses SOURCE_LABELS'
+  // naming rather than a second table, matched by hostname substring
+  // since that's cheap/reliable and this only needs to distinguish 6
+  // known domains, not parse a URL precisely.
+  function currentSiteLabel() {
+    const h = location.hostname;
+    if (h.includes("kami-labs")) return SOURCE_LABELS.kamilabs;
+    if (h.includes("maxroll")) return SOURCE_LABELS.maxroll;
+    if (h.includes("infinitybuilds")) return SOURCE_LABELS.infinitybuilds;
+    if (h.includes("d4builds")) return SOURCE_LABELS.d4builds;
+    if (h.includes("d4guides")) return SOURCE_LABELS.d4guides;
+    if (h.includes("talion")) return SOURCE_LABELS.talion;
+    return h;
+  }
+
   function recordBuildVisit(gameClass, title, url) {
     if (!gameClass || !title || !url) return;
     const all = getMyBuilds();
-    all[gameClass] = { title, url, visitedAt: Date.now() };
+    all[gameClass] = { title, url, source: currentSiteLabel(), visitedAt: Date.now() };
     GM_setValue(MY_BUILDS_KEY, JSON.stringify(all));
   }
 
-  function renderMyBuildForClass(gameClass) {
+  // 2026-09-27 REWRITE: real user request - a table of every remembered
+  // build (one per class) at once, each with its site, a reopen link, and
+  // its rank in THAT class's official leaderboard - instead of the old
+  // "pick a class from a dropdown, see just that one" flow. bestOfficialRank()
+  // is called once per remembered build, in parallel (Promise.all) - safe
+  // now that fetchTowerRuns() de-dupes concurrent in-flight fetches (see
+  // its 2026-09-27 comment), so this costs at most ONE background-tab
+  // fetch total, not one per row.
+  async function renderMyBuildsTable() {
     const resultEl = document.getElementById("d4a-mybuilds-result");
     if (!resultEl) return;
-    if (!gameClass) {
-      resultEl.innerHTML = "";
+    const all = getMyBuilds();
+    const classes = Object.keys(CLASS_KEYWORDS).filter((c) => all[c]);
+    if (classes.length === 0) {
+      resultEl.innerHTML = `<p class="d4a-rank-meta">Aucun build consulté pour l'instant.</p>`;
       return;
     }
-    const entry = getMyBuilds()[gameClass];
-    if (!entry) {
-      resultEl.innerHTML = `<p class="d4a-rank-meta">Aucun build consulté pour cette classe pour l'instant.</p>`;
-      return;
-    }
-    const when = new Date(entry.visitedAt).toLocaleDateString("fr-FR");
-    resultEl.innerHTML = `<p><a href="${entry.url}" target="_blank" rel="noopener noreferrer">${entry.title}</a><br><span class="d4a-rank-meta">consulté le ${when}</span></p>`;
+
+    resultEl.innerHTML = `<table id="d4a-mybuilds-tbl"><thead><tr>
+      <th>Classe</th><th>Build</th><th>Site</th><th>Classement</th>
+    </tr></thead><tbody>${classes
+      .map((c) => `<tr data-class="${c}"><td>${CLASS_LABELS_FR[c]}</td><td><a href="${all[c].url}" target="_blank" rel="noopener noreferrer">${all[c].title}</a></td><td>${all[c].source || "?"}</td><td class="d4a-rank-meta">...</td></tr>`)
+      .join("")}</tbody></table>`;
+
+    const ranks = await Promise.all(
+      classes.map((c) => bestOfficialRank(c, all[c].title).catch(() => ({ runsFetched: 0, best: null })))
+    );
+    classes.forEach((c, i) => {
+      const cell = resultEl.querySelector(`tr[data-class="${c}"] td:last-child`);
+      if (!cell) return;
+      const { runsFetched, best } = ranks[i];
+      cell.textContent = best
+        ? `#${best.rank}${best.totalClassRuns ? `/${best.totalClassRuns}` : ""}`
+        : runsFetched > 0
+          ? "non classé"
+          : "indispo.";
+      cell.className = "";
+    });
   }
 
   async function renderBuildInfo() {
@@ -3236,11 +3292,11 @@
         background: #000; color: #eee; font-size: 13px; font-family: inherit; resize: vertical;
       }
       #d4a-feedback-note { font-size: 11px; color: #9aa0ab; margin: 0; }
-      #d4a-mybuilds-select {
-        width: 100%; margin: 6px 0; padding: 6px 8px; border-radius: 4px; border: none;
-        background: #000; color: #eee; font-size: 13px;
-      }
       #d4a-mybuilds-result p { margin: 0; }
+      #d4a-mybuilds-tbl { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12px; }
+      #d4a-mybuilds-tbl th { text-align: left; color: #9aa0ab; font-weight: 600; padding: 2px 4px; border-bottom: 1px solid #333; }
+      #d4a-mybuilds-tbl td { padding: 3px 4px; border-bottom: 1px solid #222; vertical-align: top; }
+      #d4a-mybuilds-tbl a { color: #03d0fc; }
       #d4a-search-form { display: flex; gap: 6px; margin: 6px 0 10px; }
       #d4a-search-form input {
         flex: 1; min-width: 0; padding: 6px 8px; border-radius: 4px; border: none;
@@ -4987,10 +5043,6 @@
       </div>
       <div id="d4a-mybuilds-section">
         <strong>📌 Mes Builds</strong>
-        <select id="d4a-mybuilds-select">
-          <option value="">Choisir une classe...</option>
-          ${Object.keys(CLASS_KEYWORDS).map((c) => `<option value="${c}">${CLASS_LABELS_FR[c]}</option>`).join("")}
-        </select>
         <div id="d4a-mybuilds-result"></div>
       </div>
       <div id="d4a-feedback-section">
@@ -5185,16 +5237,14 @@
       if (e.key === "Enter") runLiveSearch();
     };
 
-    const myBuildsSelect = document.getElementById("d4a-mybuilds-select");
-    myBuildsSelect.onchange = () => renderMyBuildForClass(myBuildsSelect.value);
-    // Pré-sélectionne la classe de CETTE page si détectée, pour afficher
-    // directement le build suivi correspondant sans avoir à le choisir.
+    // 2026-09-27: records this visit (if we're on a real build page) THEN
+    // always renders the full table - unlike the old per-class dropdown,
+    // this needs to run even with nothing new to record (e.g. visiting a
+    // site's homepage, see isBuildDetailPage() above) so previously
+    // remembered builds still show up there too.
     const currentClass = guessClass();
-    if (currentClass) {
-      recordBuildVisit(currentClass, guessTitle(), location.href);
-      myBuildsSelect.value = currentClass;
-      renderMyBuildForClass(currentClass);
-    }
+    if (currentClass) recordBuildVisit(currentClass, guessTitle(), location.href);
+    renderMyBuildsTable();
 
     toggleBtn.onclick = () => {
       const hidden = column.style.display === "none";
