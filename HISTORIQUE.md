@@ -6883,3 +6883,26 @@ Touches de rouge (3, ciblees) :
   "Filtre Ouvert" (reste gris neutre) sans refaire les deux boutons.
 
 `node --check` vert. Rien teste visuellement en navigateur - a confirmer par l'utilisateur.
+
+**Confirme par l'utilisateur** : le look plait ("ça marche bien").
+
+## 2026-09-27 (suite) - v3.26 : case favoris centree
+
+Demande utilisateur : centrer la case a cocher "⭐ Garder ce build dans mes favoris" dans
+`renderBuildInfo()` (etait alignee a gauche par defaut). `text-align:center` ajoute sur le conteneur.
+
+`node --check` vert.
+
+## 2026-09-27 (suite) - README.md resynchronise avec l'etat actuel du script
+
+README reste sur `docs`, pas de bump de version (aucun changement du fichier .user.js lui-meme).
+Le README etait reste fige sur un etat ancien du script malgre toutes les evolutions du jour :
+- decrivait encore l'ancien bouton "🔍 Recherche" (retire en v3.15).
+- decrivait "Mes Builds" comme un menu deroulant qui enregistre automatiquement (retire en v3.9 -
+  c'est maintenant un tableau repliable avec favoris explicites + bouton "✕" pour en retirer un, v3.24).
+- ne mentionnait ni "↩️ Original", ni "🏆 Mon rang" (classement officiel, distinct du "🏆 Classement"
+  consensus deja documente), ni "🔎 Recherche Google" (v3.11).
+- position du panneau decrite comme "en bas a droite" - en realite en haut a gauche depuis le debut
+  (erreur pre-existante, sans rapport avec les changements du jour, corrigee au passage).
+
+Reecrit section par section pour refleter l'etat reel du panneau a la v3.26.

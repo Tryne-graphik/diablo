@@ -4,7 +4,7 @@ Extension de navigateur (via [Tampermonkey](https://www.tampermonkey.net/)) qui,
 
 - traduit automatiquement les objets/compétences EN→FR (Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides, talion.tv)
 - génère un filtre de butin natif D4 (import direct en jeu) adapté au build affiché
-- calcule un classement consensus multi-sources pour une classe donnée
+- calcule un classement consensus multi-sources pour une classe donnée, et retrouve la position du build affiché dans le vrai classement officiel de la Tour
 
 ## Installation (2 minutes)
 
@@ -21,13 +21,18 @@ Le script se met ensuite à jour **automatiquement** (Tampermonkey vérifie rég
 
 ## Utilisation
 
-Va sur une page de build sur Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides ou talion.tv : un panneau **"Diablo IV Assistant"** apparaît en bas à droite de la page (bouton ☰ pour l'afficher/masquer), avec le numéro de version affiché sous le titre.
+Va sur une page de build (ou la page d'accueil) de Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides ou talion.tv : un panneau **"Diablo IV Assistant"** apparaît en haut à gauche de la page (bouton ☰ pour l'afficher/masquer), avec le numéro de version affiché sous le titre.
 
-### Les 3 boutons principaux
+### Les 4 boutons principaux
 
-- **🇫🇷 Traduire** - traduit les objets/compétences avec les termes exacts du client FR, puis le reste de la page via Google. À cliquer en premier sur une page anglaise.
-- **🔍 Recherche** - déplie un petit champ pour chercher la traduction d'un terme précis (EN ou FR) sans traduire toute la page.
-- **🏆 Classement** - classe les meilleurs builds de la classe détectée, par consensus entre 6 sites de guides.
+- **🇫🇷 Traduire** - traduit les objets/compétences avec les termes exacts du client FR, puis le reste de la page via Google. À cliquer en premier sur une page anglaise. Le bouton s'allume une fois la traduction faite.
+- **↩️ Original** - annule la traduction en rechargeant la page (redevient cliquable après "Traduire").
+- **🏆 Classement** - classe les meilleurs builds de la classe détectée, par consensus entre les 6 sites de guides (à ne pas confondre avec "🏆 Mon rang" ci-dessous, qui vient du vrai classement officiel en jeu).
+- **🔄 Vérifier MAJ** - ouvre la page d'installation du script, Tampermonkey indique lui-même si une mise à jour est disponible.
+
+### Position dans le classement officiel
+
+Sur une page de build, un encadré affiche "Aussi vu sur" (les autres sites où un build équivalent existe) et un bouton **🏆 Mon rang** - cherche le build affiché dans le vrai classement officiel de la Tour (top 200 par classe), pas une estimation : rang, joueur, niveau de Fosse atteint et temps du run.
 
 ### Générer un filtre de butin
 
@@ -38,9 +43,13 @@ Deux boutons, deux usages différents :
 
 Le code généré s'importe directement en jeu : Réglages > Filtre de butin > Importer.
 
-### Mes Builds
+### 📌 Mes Builds
 
-Un menu déroulant mémorise le dernier build consulté par classe, pour y revenir rapidement sans le rechercher à nouveau.
+Sur une page de build, une case à cocher "⭐ Garder ce build dans mes favoris" permet d'enregistrer explicitement le build affiché (un seul favori par classe). "Mes Builds", repliable, liste tous les builds ainsi enregistrés avec un lien pour les rouvrir, et un bouton "✕" pour en retirer un directement depuis la liste.
+
+### 🔎 Recherche Google
+
+Recherche rapide sur tout le web (pas seulement les 6 sites connus) avec des menus déroulants de préréglages : Type (Build/Objet unique/Aspect légendaire/Donjon Cauchemar), Classe, Mode de jeu, Saison, plus un champ de texte libre - ouvre une recherche Google classique dans un nouvel onglet.
 
 ## Retour d'expérience / bugs
 
