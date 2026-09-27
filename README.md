@@ -21,7 +21,7 @@ Le script se met ensuite à jour **automatiquement** (Tampermonkey vérifie rég
 
 ## Utilisation
 
-Va sur une page de build (ou la page d'accueil) de Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides ou talion.tv : un panneau **"Diablo IV Assistant"** apparaît en haut à gauche de la page (bouton ☰ pour l'afficher/masquer), avec le numéro de version affiché sous le titre.
+Va sur n'importe quelle page de Maxroll, InfinityBuilds, kami-labs, D4Builds, D4Guides ou talion.tv : un panneau **"Diablo IV Assistant"** apparaît en haut à gauche de la page (bouton ☰ pour l'afficher/masquer), avec le numéro de version affiché sous le titre. Sur une page de build, tous les outils sont disponibles ; ailleurs (accueil, classements, articles...), seul un panneau réduit (Mes Builds, Retour d'expérience) s'affiche.
 
 ### Les 4 boutons principaux
 

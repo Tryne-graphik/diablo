@@ -6972,3 +6972,28 @@ tout futur test de cet endpoint) :
 a supprimer manuellement si souhaite. Quota journalier (200/action) non teste jusqu'a
 epuisement (logique simple, deja relue). **Reste a tester** : le clic reel sur les boutons
 "Envoyer"/"Partager" depuis Tampermonkey (seul le serveur est confirme pour l'instant).
+
+## 2026-09-27 (suite) - v3.28 : script actif sur toutes les pages des 6 sites
+
+Demande utilisateur : que le script tourne sur toutes les pages des 6 sites de build
+(pas seulement page d'accueil + page de build precise, comme depuis le fix homepage du
+meme jour). Peu complique en pratique : `isBuildDetailPage()` decidait deja "panneau
+complet vs panneau reduit" a partir de la seule forme de l'URL, independamment du motif
+`@match` qui avait declenche le chargement du script - il suffisait donc d'elargir les
+`@match` sans toucher a cette logique.
+
+Change dans l'en-tete du script : les 6 paires de motifs precis (page d'accueil exacte +
+chemin de build) remplacees par un seul motif generique par domaine (`*://site.com/*`
+ou equivalent avec sous-domaine `www.` pour talion.tv). `helltides.com/tower*` inchange
+(reste un onglet cache ouvert uniquement pour extraire le classement officiel, jamais
+navigue directement). Verifie qu'aucune fonctionnalite ne se declenche automatiquement
+au chargement de page (la traduction ne demarre que sur clic du bouton "Traduire") - donc
+pas de risque de traduction/action intempestive sur une page d'article ou de forum.
+Commentaires du code mis a jour pour refleter que le panneau reduit s'applique desormais
+a "toute page sans build" et pas seulement a la page d'accueil. README.md aussi mis a
+jour. `node --check` vert.
+
+**A prevoir** : Tampermonkey va redemander une confirmation de permission (a l'utilisateur
+et aux amis testeurs) au prochain update, la portee du script s'elargissant. **Pas encore
+teste en navigation reelle** - prochain test : visiter une page non-build sur un des 6
+sites et confirmer que seul le panneau reduit s'affiche, sans erreur console.
