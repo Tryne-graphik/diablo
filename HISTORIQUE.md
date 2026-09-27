@@ -6557,3 +6557,20 @@ Meme regle CSS de "titre de section" (gras, couleur normale, pas le style discre
 d'aide) que pour "Mes Builds".
 
 `node --check` vert, aucune reference residuelle a l'ancien bouton de bascule (`grep` de verification).
+
+## 2026-09-27 (suite) - v3.13 : classement officiel encadre + bouton "Réessayer"
+
+Demande utilisateur : delimiter visuellement le classement officiel (dans `renderBuildInfo()`) dans un
+petit rectangle a fond plus fonce, et ajouter un bouton pour relancer la recherche si le premier
+chargement a echoue.
+
+Nouveau `.d4a-rank-box` (fond `#000`, bordure `#333`, coins arrondis) autour du bloc classement.
+Le bouton "🔄 Réessayer" n'apparait QUE dans le cas `rankResult.runsFetched === 0` (l'echec de
+recuperation en arriere-plan lui-meme, cf. le fix v3.6/2026-09-27 sur `bestOfficialRank()` qui
+distingue deja ce cas de "vraiment aucun joueur trouve") - pas de bouton quand la recherche a reussi
+mais n'a simplement trouve personne, ca ne changerait rien de relancer. `onclick` rappelle simplement
+`renderBuildInfo()` en entier - reutilise toute la logique existante (refait le fetch classement +
+liens croises + reconstruit la case favoris depuis `isFavorited()`) plutot que dupliquer un chemin de
+retry separe.
+
+`node --check` vert.

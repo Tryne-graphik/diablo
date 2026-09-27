@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.12
+// @version      3.13
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1430,10 +1430,19 @@
       ? "Aussi vu sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")
       : "";
 
+    // 2026-09-27: real user request - delimit the rank in its own boxed
+    // area (darker background, easy to spot), and add a retry button for
+    // the "fetch itself failed" case specifically (runsFetched === 0, see
+    // 2026-09-27 comment above) - re-running the whole background-tab
+    // leaderboard fetch is transient/network-dependent, worth a one-click
+    // retry instead of "réessaie dans quelques minutes" with no button.
+    const retryBtnHtml = rankResult.runsFetched === 0 ? ` <button id="d4a-rank-retry" type="button">🔄 Réessayer</button>` : "";
+    const rankBoxHtml = `<div class="d4a-rank-box">${rankHtml}${retryBtnHtml}</div>`;
+
     const favChecked = isFavorited(gameClass, location.href);
     const favHtml = `<div style="margin-top:4px;"><label style="cursor:pointer;"><input type="checkbox" id="d4a-fav-checkbox" ${favChecked ? "checked" : ""}> ⭐ Garder ce build dans mes favoris</label></div>`;
 
-    section.innerHTML = `<div>${rankHtml}</div>${linksHtml ? `<div>${linksHtml}</div>` : ""}${favHtml}`;
+    section.innerHTML = `${rankBoxHtml}${linksHtml ? `<div>${linksHtml}</div>` : ""}${favHtml}`;
 
     const favCheckbox = document.getElementById("d4a-fav-checkbox");
     if (favCheckbox) {
@@ -1442,6 +1451,8 @@
         renderMyBuildsTable();
       });
     }
+    const retryBtn = document.getElementById("d4a-rank-retry");
+    if (retryBtn) retryBtn.onclick = () => renderBuildInfo();
   }
 
   // ---------------------------------------------------------------------
@@ -3329,6 +3340,15 @@
       #d4a-panel-section:empty, #d4a-ranking-section:empty, #d4a-buildinfo-section:empty { display: none; }
       #d4a-buildinfo-section { font-size: 12px; color: #9aa0ab; margin: -2px 0 4px; line-height: 1.5; }
       #d4a-buildinfo-section a { color: #03d0fc; }
+      .d4a-rank-box {
+        background: #000; border: 1px solid #333; border-radius: 6px;
+        padding: 6px 8px; margin-bottom: 4px;
+      }
+      .d4a-rank-box button {
+        background: #333; color: #fff; border: none; padding: 2px 8px;
+        border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit;
+        margin-left: 4px; vertical-align: middle;
+      }
       #d4a-column h3 { margin: 0 0 8px; font-size: 16px; color: #eee; }
       #d4a-column .d4a-close { float: right; cursor: pointer; color: #9aa0ab; }
       #d4a-column .d4a-chip-list { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 10px; }
