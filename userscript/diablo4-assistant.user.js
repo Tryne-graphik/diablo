@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.17
+// @version      3.18
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -937,12 +937,18 @@
   // shipping the raw multi-MB payload through GM_setValue), reports back,
   // closes itself - same relay shape as runExtractionMode.
   function runLeaderboardExtractionMode(requestId) {
-    // 2026-09-27: bumped 15s -> 20s alongside openLeaderboardExtractionTab's
-    // own 18s -> 25s - this inner deadline is what actually governs how
-    // long the background tab keeps polling for window.__NUXT__.data
-    // before giving up (previously it could give up at 15s even though the
-    // OUTER caller was willing to wait 18s, wasting most of that margin).
-    const deadline = Date.now() + 20000;
+    // 2026-09-27: bumped 15s -> 20s -> 45s (alongside openLeaderboardExtractionTab's
+    // own 18s -> 25s -> 50s) - real [D4A] logs from the user showed TWO
+    // consecutive genuine timeouts at 20s/25s (not a caching bug - both of
+    // those were separately fixed and confirmed honest the same day). A
+    // standalone Playwright test found the leaderboard data in ~6s, but
+    // that ran in an ACTIVE page - real Chrome measurably deprioritizes
+    // network/rendering work in a backgrounded/inactive tab (which this
+    // one always is, active:false), so 20-25s plausibly still isn't enough
+    // margin under real throttling. Trying a much larger budget first
+    // (cheap, no visible UX change) before considering the more invasive
+    // fix (briefly focusing the tab so it isn't throttled at all).
+    const deadline = Date.now() + 45000;
     const poll = setInterval(() => {
       const data = (window.__NUXT__ && window.__NUXT__.data) || {};
       let found = null;
@@ -999,15 +1005,12 @@
   // Same shape as openExtractionTab, distinct result-key prefix
   // (d4a_lbresult_ vs d4a_result_) so the two extraction flows can never
   // collide if both happen to be in flight at once.
-  // 2026-09-27: bumped 18s -> 25s - a real user report of "no player found"
-  // couldn't be reproduced against a fresh fetch (the build in question WAS
-  // in the top 200), pointing at a slow/failed background-tab load rather
-  // than a real absence. helltides.com/tower also loads a Cloudflare
-  // Turnstile script, giving it more to load than a plain static page -
-  // a modest safety margin costs nothing on the happy path (the tab
-  // resolves and closes itself as soon as data is found either way, see
-  // runLeaderboardExtractionMode) and only matters when it's already slow.
-  function openLeaderboardExtractionTab(timeoutMs = 25000) {
+  // 2026-09-27: bumped 18s -> 25s -> 50s (see runLeaderboardExtractionMode's
+  // matching comment - two real consecutive [D4A]-logged timeouts at 25s
+  // pointed at background-tab throttling, not a caching bug). Costs
+  // nothing on the happy path (the tab resolves and closes itself as soon
+  // as data is found either way) and only matters when it's already slow.
+  function openLeaderboardExtractionTab(timeoutMs = 50000) {
     return new Promise((resolve) => {
       const requestId = "r" + Date.now() + Math.random().toString(36).slice(2);
       const resultKey = "d4a_lbresult_" + requestId;

@@ -6704,3 +6704,27 @@ que du bruit d'ad-blocker, c'est la ligne `[D4A]` elle-meme qui a pointe directe
 `node --check` vert. A reconfirmer par l'utilisateur - si le probleme persiste malgre ce fix, le
 throttling navigateur des onglets en arriere-plan lui-meme (pas juste la mise en cache du symptome)
 deviendrait la piste a creuser ensuite.
+
+## 2026-09-27 (suite) - v3.18 : les logs [D4A] confirment un vrai timeout (pas un bug de cache) - delais fortement augmentes
+
+Nouveaux logs `[D4A]` partages par l'utilisateur, DEUX fois de suite : `onglet ouvert ? true` puis
+`ÉCHEC/TIMEOUT - aucune donnée reçue de l'onglet helltides.com`, cache jamais pollue entre les deux
+(le fix v3.17 fonctionne). Donc les deux bugs de cache sont bien confirmes corriges - le probleme
+restant est un vrai probleme de fiabilite : l'onglet cache n'arrive pas a charger les donnees dans le
+budget de 20s/25s (interne/externe), de facon repetee.
+
+Hypothese retenue (déjà posee en v3.15/v3.17, maintenant appuyee par deux echecs reels consecutifs) :
+throttling navigateur des onglets en arriere-plan/inactifs (`GM_openInTab(..., {active:false})`) -
+Chrome et consorts ralentissent l'execution JS/le reseau des onglets non visibles, potentiellement
+assez pour que ce qui prend ~6s en onglet actif (mesure par un test Playwright autonome le jour meme)
+depasse largement 20-25s en arriere-plan, surtout avec le script anti-robot Cloudflare de
+helltides.com qui ajoute du travail.
+
+Essai de la solution la MOINS intrusive d'abord (aucun changement visuel) : delais fortement augmentes,
+`runLeaderboardExtractionMode()` 20s -> 45s, `openLeaderboardExtractionTab()` 25s -> 50s. Si ca ne
+suffit toujours pas, la piste suivante (plus invasive, demandera l'accord de l'utilisateur puisqu'elle
+change un comportement visible) serait de rendre l'onglet brievement actif/visible le temps du
+chargement pour eviter le throttling entierement, au prix d'un onglet qui apparait a l'ecran quelques
+secondes.
+
+`node --check` vert. A retester par l'utilisateur.
