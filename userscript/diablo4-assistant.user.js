@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.20
+// @version      3.21
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -45,6 +45,7 @@
 // @grant        GM_deleteValue
 // @grant        GM_addValueChangeListener
 // @grant        GM_removeValueChangeListener
+// @grant        unsafeWindow
 // ==/UserScript==
 
 (function () {
@@ -960,7 +961,26 @@
     let pollCount = 0;
     const poll = setInterval(() => {
       pollCount++;
-      const data = (window.__NUXT__ && window.__NUXT__.data) || {};
+      // 2026-09-27 REAL BUG FOUND (3rd one, the actual root cause all
+      // along): a real [D4A] log from the user's console showed
+      // "window.__NUXT__ présent ? false" on EVERY single poll, 51 times
+      // over 15s, while the SAME tab visibly displayed real leaderboard
+      // data on screen - proving the page's own __NUXT__ was there, just
+      // not reachable as plain `window`. Tampermonkey (like other
+      // userscript managers) runs scripts in a SANDBOXED JS realm by
+      // default whenever any @grant beyond "none" is used (this script
+      // grants several GM_* APIs) - `window` inside the script is the
+      // userscript's OWN isolated window, a different object from the
+      // page's real one, so `window.__NUXT__` could never find anything
+      // no matter how long this polled. `unsafeWindow` is the
+      // Tampermonkey-provided reference to the page's REAL window,
+      // needed specifically to read globals the page's own script set
+      // (exactly this case) - this was the actual reason every attempt
+      // failed, not timing/throttling as earlier theorized (those fixes -
+      // longer timeouts, active tab - were reasonable given the evidence
+      // at the time, but this is the real cause).
+      const pageWindow = typeof unsafeWindow !== "undefined" ? unsafeWindow : window;
+      const data = (pageWindow.__NUXT__ && pageWindow.__NUXT__.data) || {};
       const dataKeys = Object.keys(data);
       let found = null;
       for (const value of Object.values(data)) {
@@ -974,7 +994,7 @@
       if (pollCount === 1 || pollCount % 17 === 0) {
         console.log(
           "[D4A] extraction: sondage #" + pollCount,
-          "- window.__NUXT__ présent ?", !!window.__NUXT__,
+          "- unsafeWindow.__NUXT__ présent ?", !!pageWindow.__NUXT__,
           "- clés de .data:", dataKeys.length, dataKeys.slice(0, 15)
         );
       }

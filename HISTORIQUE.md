@@ -6767,3 +6767,33 @@ helltides.com/tower, pas celle du build) :
 
 `node --check` vert. Prochain test : cliquer "🏆 Mon rang", puis ouvrir les DevTools de l'onglet
 helltides.com QUI S'OUVRE (pas celui du build) avant qu'il se referme, et partager ses lignes `[D4A]`.
+
+## 2026-09-27 (suite) - v3.21 : TROISIEME vrai bug trouve, et cette fois c'est la vraie cause depuis le debut - window vs unsafeWindow
+
+Log `[D4A]` decisif recu de l'utilisateur, DANS l'onglet helltides.com cette fois (grace au fix v3.20) :
+`window.__NUXT__ présent ? false` sur TOUS les sondages (#1, #17, #34, #51 - soit >15s), alors que la
+capture montrait la VRAIE page du classement affichee avec de vraies donnees ("Diablo 4 Season 15 Tower
+Leaderboard", joueurs reels). La page a bien les donnees, mais notre script ne les voit jamais.
+
+**Cause reelle** : Tampermonkey (comme les autres gestionnaires de userscripts) execute les scripts
+dans un realm JavaScript SANDBOXE des qu'un `@grant` autre que `none` est utilise (ce script en utilise
+plusieurs : `GM_xmlhttpRequest`, `GM_openInTab`, etc.) - `window` a l'interieur du script n'est PAS le
+vrai `window` de la page, c'est celui, isole, du userscript lui-meme. `window.__NUXT__` ne pouvait donc
+JAMAIS rien trouver, peu importe le temps d'attente - ce n'etait ni un probleme de cache (v3.15/v3.17),
+ni de throttling/onglet en arriere-plan (hypothese des v3.18/v3.19, raisonnable vu les indices
+disponibles a l'epoque mais fausse). Ce bug existe probablement depuis la toute premiere version de
+cette fonctionnalite (2026-09-22).
+
+Corrige : `unsafeWindow.__NUXT__` a la place de `window.__NUXT__` (avec repli sur `window` si
+`unsafeWindow` n'existe pas, pour rester compatible avec un gestionnaire de userscripts qui ne
+l'exposerait pas) - `unsafeWindow` est l'API standard des gestionnaires de userscripts pour acceder au
+vrai `window` de la page, precisement pour ce cas de figure. `@grant unsafeWindow` ajoute explicitement
+aux metadonnees pour plus de clarte/portabilite (Tampermonkey l'expose deja sans grant explicite, mais
+autant etre explicite).
+
+Laisse l'onglet en avant-plan (v3.19) pour ce test - la vraie cause etant maintenant corrigee, repasser
+en arriere-plan (`active:false`) pourrait etre reenvisage ensuite une fois la fiabilite confirmee, pour
+retrouver un comportement moins intrusif visuellement.
+
+`node --check` vert. Prochain test decisif : cliquer "🏆 Mon rang" - devrait enfin trouver les vraies
+donnees du classement.
