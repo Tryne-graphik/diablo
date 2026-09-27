@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.18
+// @version      3.19
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1060,7 +1060,17 @@
         }
       });
 
-      tabHandle = GM_openInTab(targetUrl, { active: false, insert: true, setParent: true });
+      // 2026-09-27: active:false -> true - real [D4A] logs showed the
+      // background tab timing out TWICE even after the deadline was
+      // raised to 45s/50s (see the matching comments above/below), meaning
+      // it wasn't just slow, it was essentially stuck - most likely either
+      // browser throttling of inactive tabs or helltides.com's Cloudflare
+      // Turnstile script never resolving while the tab isn't visible.
+      // Opening it in the foreground costs a brief visible tab-switch
+      // (confirmed with the user first) but should let it load normally
+      // (~6s per the standalone Playwright test) - setParent:true already
+      // returns focus to this tab once it closes itself on success.
+      tabHandle = GM_openInTab(targetUrl, { active: true, insert: true, setParent: true });
       console.log("[D4A] classement: onglet ouvert ?", !!tabHandle, targetUrl);
       timer = setTimeout(() => finish(null), timeoutMs);
     });

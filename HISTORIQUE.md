@@ -6728,3 +6728,20 @@ chargement pour eviter le throttling entierement, au prix d'un onglet qui appara
 secondes.
 
 `node --check` vert. A retester par l'utilisateur.
+
+## 2026-09-27 (suite) - v3.19 : delai plus long ne suffisait pas - onglet passe en avant-plan (accord utilisateur obtenu)
+
+Nouveau log `[D4A]` : ÉCHEC/TIMEOUT encore, MEME avec le delai porte a 50s en v3.18 - preuve que
+l'onglet n'etait pas juste lent, il ne progressait quasiment pas du tout en arriere-plan. Confirme
+l'hypothese du throttling navigateur (ou le script anti-robot Cloudflare Turnstile de helltides.com qui
+pourrait ne jamais se resoudre tant que l'onglet n'est pas visible) plutot qu'un simple manque de marge.
+
+Seule piste fiable restante : ouvrir l'onglet EN AVANT-PLAN (visible) au lieu d'arriere-plan - change
+un comportement visible (un onglet apparait brievement a chaque recherche), donc demande explicitement
+l'accord de l'utilisateur avant d'implementer (`AskUserQuestion`) - "Oui, essaye". `GM_openInTab(...,
+{active:false,...})` -> `{active:true,...}` dans `openLeaderboardExtractionTab()`. `setParent:true`
+(deja present) fait revenir le focus sur l'onglet d'origine une fois l'onglet de recherche referme
+tout seul (succes ~6s d'apres le test Playwright, ou sur timeout). Delais laisses a 45s/50s pour
+l'instant comme marge de securite, a resserrer plus tard une fois la fiabilite confirmee.
+
+`node --check` vert. A retester par l'utilisateur - premier test reel de cette approche.
