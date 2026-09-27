@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.22
+// @version      3.25
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1374,11 +1374,29 @@
       return;
     }
 
+    // 2026-09-27: real user request - a way to remove an unwanted build
+    // straight from this table, instead of having to reopen its page and
+    // uncheck the favorite checkbox there. Reuses setFavorite(favorited:
+    // false) exactly as that checkbox does - a "✕" button per row is
+    // clearer here than reusing the 📌 pin (already the section's own
+    // icon, would read as ambiguous per-row).
     resultEl.innerHTML = `<table id="d4a-mybuilds-tbl"><thead><tr>
-      <th>Classe</th><th>Build</th>
+      <th>Classe</th><th>Build</th><th></th>
     </tr></thead><tbody>${classes
-      .map((c) => `<tr data-class="${c}"><td>${CLASS_LABELS_FR[c]}</td><td><a href="${all[c].url}" target="_blank" rel="noopener noreferrer" title="${all[c].title.replace(/"/g, "&quot;")}">${shortenBuildTitle(all[c].title)}</a></td></tr>`)
+      .map(
+        (c) =>
+          `<tr data-class="${c}"><td>${CLASS_LABELS_FR[c]}</td><td><a href="${all[c].url}" target="_blank" rel="noopener noreferrer" title="${all[c].title.replace(/"/g, "&quot;")}">${shortenBuildTitle(all[c].title)}</a></td><td><button class="d4a-mybuilds-remove" data-class="${c}" type="button" title="Retirer des favoris">✕</button></td></tr>`
+      )
       .join("")}</tbody></table>`;
+
+    resultEl.querySelectorAll(".d4a-mybuilds-remove").forEach((btn) => {
+      btn.onclick = () => {
+        const c = btn.dataset.class;
+        const entry = all[c];
+        if (entry) setFavorite(c, entry.title, entry.url, false);
+        renderMyBuildsTable();
+      };
+    });
   }
 
   // 2026-09-27: real user request - "un outil pour lancer des recherches
@@ -3353,6 +3371,21 @@
     return { rules, matched };
   }
 
+  // 2026-09-27: real user request - "trouve des icones gothiques" for the
+  // Diablo look started in v3.23. A single inline SVG rather than any
+  // emoji-replacement scheme (deliberately scoped down - only the panel's
+  // OWN persistent title, not the ~10 other places "Diablo IV Assistant"
+  // shows up as an <h3> inside dynamically-rendered result panels, most of
+  // which are plain-quoted strings rather than template literals and would
+  // need individual rework for little extra payoff for a "quelques
+  // touches" request). "Diablo skull" icon by Lorc, from game-icons.net
+  // (https://game-icons.net/1x1/lorc/diablo-skull.html), CC BY 3.0 -
+  // credited in README.md. Background square stripped (only the white
+  // foreground path kept) and recolored via `fill="currentColor"` so it
+  // follows whatever color the surrounding CSS sets (the panel's gold).
+  const DIABLO_SKULL_SVG =
+    '<svg viewBox="0 0 512 512" width="15" height="15" fill="currentColor" style="vertical-align:-3px;margin-right:4px;" aria-hidden="true"><path d="M256.717 15.525s-34.385 56.154-34.385 75.143c0 12.812 5.063 22.368 12.436 28.5 5.633 4.823 12.896 7.8 20.896 8.04 17.535.9 35.436-10.866 35.436-36.54.002-18.993-34.383-75.143-34.383-75.143zM206.17 79.94c-23.862 9.82-40.335 27.916-52.5 52.656-18.018 36.645-24.874 88.532-25.535 146.586h62.68c-2.794 14.47-3.947 30.726-4.07 47.943-1.695 14.567 8.944 76.447 8.944 76.447s30.256-50.032 35.736-66.283c6.153 24 22.82 68.677 22.82 68.677s16.506-44.24 22.73-68.324c5.796 16.617 35.618 65.93 35.618 65.93s10.947-63.662 8.865-77.04c-.147-16.997-1.304-33.047-4.067-47.35h62.156c-.662-58.055-7.518-109.942-25.536-146.587-11.04-22.452-25.63-39.43-46.065-49.72a52.148 52.148 0 0 1 1.107 10.692c0 28.803-23.55 52.354-52.354 52.354-28.803 0-52.353-23.55-52.353-52.354 0-4.71.64-9.277 1.82-13.627zm-47.895 4.93c-1.13-.015-2.26-.015-3.384 0C68.12 86.09-3.26 175.69 25.03 269.714c12.356 41.064 72.85 67.43 104.263 50.228-59.21.1-76.798-64.22-58.488-108.835 10.297-25.09 27.425-40.573 50.732-44.042 3.926-15.375 8.962-29.7 15.36-42.713 7.417-15.08 16.88-28.326 28.488-39.192-2.38-.162-4.75-.26-7.11-.29zm193.286 0c-3.013.037-6.045.19-9.09.446 11.53 10.836 20.936 24.027 28.315 39.034 6.358 12.93 11.37 27.156 15.285 42.418 24.447 2.792 42.338 18.452 52.96 44.337 18.31 44.614.72 108.935-58.49 108.836 31.413 17.204 91.91-9.163 104.267-50.227 28.29-94.024-43.09-183.622-129.862-184.842a127.244 127.244 0 0 0-3.384 0zm-25.937 80.847c11.335 4.365 19.38 15.354 19.38 28.226 0 16.704-13.54 30.244-30.24 30.244-15.347 0-28.017-11.434-29.974-26.248 20.755-5.506 33.46-17.012 40.833-32.223zm-143.562.01c7.38 15.212 20.09 26.717 40.858 32.218-1.96 14.81-14.63 26.243-29.973 26.243-16.7 0-30.242-13.54-30.242-30.245 0-12.865 8.035-23.845 19.358-28.216zm108.48 74.513-36.698 76.045-36.7-76.043 36.698 25.143 36.7-25.145zM170.483 360.002s-51.736 72.637-56.19 89.27c-11.81 44.068 49.134 57.507 60.22 16.136 4.455-16.63-4.03-105.406-4.03-105.406zm165.327 0s-8.488 88.776-4.033 105.406c11.086 41.37 72.033 27.932 60.223-16.137-4.455-16.63-56.19-89.268-56.19-89.268zM228.14 383.73s-29.39 58.982-30.724 71.635c-3.538 33.527 42.495 36.31 45.816 4.836 1.336-12.652-15.09-76.47-15.09-76.47zm51.788 0s-16.43 63.818-15.094 76.47c3.32 31.475 49.356 28.692 45.818-4.835-1.333-12.653-30.724-71.636-30.724-71.636z"/></svg>';
+
   // ---------------------------------------------------------------------
   // UI - unchanged in spirit from v1 (floating button, top-left panel).
   // ---------------------------------------------------------------------
@@ -3369,19 +3402,42 @@
          explicit width needed - same trick their panel relies on). */
       #d4a-toggle-btn {
         position: fixed; top: 10px; left: 10px; z-index: 999999;
-        background: #15151f; color: #eee; border: none; border-radius: 6px;
+        background: #15151f; color: #eee; border: 1px solid #c9a227; border-radius: 6px;
         width: 34px; height: 34px; cursor: pointer; font-size: 16px;
         box-shadow: 0 2px 8px rgba(0,0,0,.4);
       }
+      /* 2026-09-27: "un look Diablo" (real user request) - recolored the
+         accent from generic cyan to a warm gold (#d4af37, distinct from
+         the muted #c9a227 already used elsewhere in this file for warning
+         text - keeping them separate avoids a link/button reading as a
+         warning), plus a gilded double-border/inset-shadow "carved stone"
+         frame here. Deliberately NOT a webfont (Google Fonts etc.) - would
+         need a network fetch to fonts.googleapis.com on every one of the 6
+         sites this runs on, a new @connect entry, and risks CSP blocking
+         on a site that restricts font-src for a modest visual gain. The
+         gothic feel instead comes from a serif "display" stack (Georgia/
+         Palatino) applied ONLY to titles/section headers below - body
+         text (buttons, inputs, descriptions) stays on the original
+         system-ui sans-serif, since this is a utility panel read
+         alongside a build guide, not the game itself - legibility first. */
       #d4a-column {
         position: fixed; top: 54px; left: 10px; z-index: 999998;
         background: #15151f; color: #eee; padding: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.4); border-radius: 8px;
+        border: 1px solid #c9a227; border-radius: 8px;
+        /* 2026-09-27: "quelques touches de rouge" - a thin blood-red glow
+           just inside the gold border (inset 0 0 0 Npx trick, distinct
+           layer from the existing drop-shadow/inner-darkening ones), for
+           a two-tone "gold leaf over dark red" frame instead of gold alone. */
+        box-shadow: 0 2px 8px rgba(0,0,0,.5), inset 0 0 10px rgba(0,0,0,.6), inset 0 0 0 2px rgba(139,0,0,.35);
         display: flex; flex-direction: column; gap: 8px;
         width: 300px; max-height: calc(100vh - 70px); overflow-y: auto;
         font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5;
       }
-      #d4a-column-title { font-weight: bold; color: #03d0fc; font-size: 14px; text-align: center; }
+      #d4a-column-title {
+        font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif;
+        font-weight: bold; color: #d4af37; font-size: 15px; letter-spacing: 0.5px;
+        text-align: center; padding-bottom: 6px; border-bottom: 1px solid #c9a227;
+      }
       #d4a-version { font-size: 12px; color: #fff; text-align: center; margin-top: -4px; }
       /* 2026-09-23: "un peu petit" - bumped +1/+2px across the board
          (button/checkbox-label text +2, everything else +1), and the
@@ -3396,12 +3452,12 @@
         background: #333; color: #fff; border: none; padding: 6px 10px;
         border-radius: 4px; cursor: pointer; font-size: 13px; font-family: system-ui, sans-serif;
       }
-      #d4a-btn-translate.d4a-active { background: #03d0fc; color: #000; font-weight: bold; }
+      #d4a-btn-translate.d4a-active { background: #d4af37; color: #000; font-weight: bold; }
       #d4a-btn-untranslate:disabled { opacity: 0.5; cursor: default; }
       .d4a-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
       #d4a-panel-section:empty, #d4a-ranking-section:empty, #d4a-buildinfo-section:empty { display: none; }
       #d4a-buildinfo-section { font-size: 12px; color: #9aa0ab; margin: -2px 0 4px; line-height: 1.5; }
-      #d4a-buildinfo-section a { color: #03d0fc; }
+      #d4a-buildinfo-section a { color: #d4af37; }
       .d4a-rank-box {
         background: #000; border: 1px solid #333; border-radius: 6px;
         padding: 6px 8px; margin-bottom: 4px;
@@ -3412,7 +3468,10 @@
         border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit;
         margin-left: 4px; vertical-align: middle;
       }
-      #d4a-column h3 { margin: 0 0 8px; font-size: 16px; color: #eee; }
+      #d4a-column h3 {
+        margin: 0 0 8px; font-size: 16px; color: #eee;
+        font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif; letter-spacing: 0.3px;
+      }
       #d4a-column .d4a-close { float: right; cursor: pointer; color: #9aa0ab; }
       #d4a-column .d4a-chip-list { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 10px; }
       #d4a-column .d4a-chip { background: #000; border: 1px solid #333; border-radius: 10px; padding: 2px 8px; font-size: 13px; }
@@ -3420,13 +3479,17 @@
         width: 100%; font-family: monospace; font-size: 12px; background: #000;
         color: #eee; border: 1px solid #333; border-radius: 6px; padding: 6px; resize: vertical;
       }
-      #d4a-column button.d4a-copy { background: #03d0fc; color: #000; font-weight: bold; }
+      #d4a-column button.d4a-copy { background: #d4af37; color: #000; font-weight: bold; }
+      /* "quelques touches de rouge" - a subtle blood-red border sets Filtre
+         Strict apart from Filtre Ouvert (plain gray) without a full
+         redesign of either button. */
+      #d4a-btn-filter-strict { border: 1px solid #8b0000; }
       .d4a-filter-actions { display: flex; gap: 6px; margin: 4px 0 8px; }
       .d4a-filter-actions button { flex: 1; }
       #d4a-column button.d4a-toggle-text { background: #2a2a35; color: #eee; }
       #d4a-column button.d4a-share { background: #7b5cff; color: #fff; font-weight: bold; }
       .d4a-share-note { font-size: 11px; word-break: break-all; margin: 2px 0 8px; }
-      #d4a-column a { color: #03d0fc; }
+      #d4a-column a { color: #d4af37; }
       #d4a-item-tooltip {
         position: fixed; z-index: 1000000; max-width: 260px;
         background: #15151f; color: #eee; border: 1px solid #333;
@@ -3442,18 +3505,18 @@
       .d4a-rank-meta { color: #9aa0ab; font-size: 12px; }
       .d4a-tier-badge { display: inline-block; font-weight: 700; font-size: 11px; padding: 1px 5px; border-radius: 3px; color: #fff; margin-right: 3px; }
       .d4a-rank-links { font-size: 12px; }
-      .d4a-rank-links a { color: #03d0fc; margin-right: 4px; }
+      .d4a-rank-links a { color: #d4af37; margin-right: 4px; }
       #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
-      #d4a-mybuilds-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
+      #d4a-mybuilds-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-gsearch-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
-      #d4a-gsearch-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
+      #d4a-gsearch-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-gsearch-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
       #d4a-gsearch-form select, #d4a-gsearch-form input {
         width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
         background: #000; color: #eee; font-size: 13px; font-family: inherit;
       }
       #d4a-feedback-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
-      #d4a-feedback-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
+      #d4a-feedback-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-feedback-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
       #d4a-feedback-form input, #d4a-feedback-form textarea {
         width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
@@ -3463,9 +3526,15 @@
       #d4a-mybuilds-result p { margin: 0; }
       #d4a-mybuilds-tbl { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
       #d4a-mybuilds-tbl th { text-align: left; color: #9aa0ab; font-weight: 600; padding: 2px 4px; border-bottom: 1px solid #333; }
-      #d4a-mybuilds-tbl th:first-child, #d4a-mybuilds-tbl td:first-child { width: 72px; }
+      #d4a-mybuilds-tbl th:first-child, #d4a-mybuilds-tbl td:first-child { width: 64px; }
+      #d4a-mybuilds-tbl th:last-child, #d4a-mybuilds-tbl td:last-child { width: 20px; }
       #d4a-mybuilds-tbl td { padding: 3px 4px; border-bottom: 1px solid #222; vertical-align: top; }
-      #d4a-mybuilds-tbl a { color: #03d0fc; }
+      #d4a-mybuilds-tbl a { color: #d4af37; }
+      .d4a-mybuilds-remove {
+        background: none; border: none; color: #9aa0ab; cursor: pointer;
+        font-size: 12px; padding: 0; line-height: 1.4;
+      }
+      .d4a-mybuilds-remove:hover { color: #cd0d01; }
       /* 2026-09-22: <details>/<summary> for the collapsed detection summary
          in the filter panel, and for the Strict-filter options checkboxes -
          both added the same day after "il faudrait simplifier l'affichage"
@@ -3493,7 +3562,10 @@
       #d4a-filter-options { background: #0c0c14; border: 1px solid #333; border-radius: 6px; padding: 6px 8px; margin: 2px 0; text-align: center; }
       #d4a-filter-options label { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; margin: 4px 0; cursor: pointer; }
       #d4a-filter-options label input[type="checkbox"] { margin: 0; }
-      .d4a-section-title { color: #03d0fc; font-weight: bold; font-size: 13px; }
+      .d4a-section-title {
+        color: #d4af37; font-weight: bold; font-size: 13px;
+        font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif; letter-spacing: 0.3px;
+      }
       .d4a-help { margin: 2px auto 6px; text-align: left; }
       .d4a-help p { text-align: left; }
       /* 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la
@@ -5123,7 +5195,7 @@
     const column = document.createElement("div");
     column.id = "d4a-column";
     column.innerHTML = `
-      <div id="d4a-column-title">Diablo IV Assistant</div>
+      <div id="d4a-column-title">${DIABLO_SKULL_SVG}Diablo IV Assistant</div>
       <div id="d4a-version">v${(typeof GM_info !== "undefined" && GM_info.script && GM_info.script.version) || "?"}</div>
       <div id="d4a-buildinfo-section"></div>
       <div class="d4a-action-grid">

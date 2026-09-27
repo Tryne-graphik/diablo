@@ -49,3 +49,7 @@ Le bouton **"💬 Retour d'expérience"** dans le panneau envoie un message dire
 ## Statut
 
 Projet en cours de test actif, non publié sur un store d'extensions. Season 15.
+
+## Crédits
+
+Icône "Diablo skull" du titre du panneau : [Lorc](https://lorcblog.blogspot.com/) via [game-icons.net](https://game-icons.net/1x1/lorc/diablo-skull.html), licence [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).

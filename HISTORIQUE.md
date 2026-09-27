@@ -6812,3 +6812,74 @@ pour l'instant ; a resserrer plus tard une fois confirme stable sur plusieurs re
 
 `node --check` vert. A confirmer : le classement fonctionne-t-il toujours aussi bien une fois l'onglet
 repasse en arriere-plan (pas la meme situation que le dernier test reussi, qui etait fait en avant-plan) ?
+
+**Confirme par l'utilisateur** : le classement fonctionne toujours aussi bien en arriere-plan, et le
+cache tient bien ses 30 minutes. Le fil de bugs classement (v3.15 a v3.22) est clos.
+
+## 2026-09-27 (suite) - v3.23 : "look Diablo" - palette or/pierre + police gothique pour les titres
+
+Demande utilisateur : chercher sur le web de quoi donner un "look Diablo" au panneau (fonds d'ecran,
+icones, etc.). Recherche faite (fork dedie, WebSearch) avec des contraintes reelles en tete : userscript
+= pas de fichier externe embarquable, pas de police Google Fonts (demanderait une requete reseau vers
+fonts.googleapis.com sur chacun des 6 sites, un nouveau `@connect`, risque de blocage CSP pour un gain
+visuel modeste), et surtout AUCUN vrai asset Blizzard/Diablo IV (le depot est public sur GitHub,
+redistribuer des assets proteges serait un vrai probleme legal).
+
+Implemente la recommandation "impact fort, effort minimal" :
+- Accent recolore : cyan `#03d0fc` -> or chaud `#d4af37` (tous les liens/boutons actifs/couleurs de
+  section, 8 occurrences). Delibere ment DIFFERENT du `#c9a227` deja utilise ailleurs dans le fichier
+  pour les messages d'avertissement (`style="color:#c9a227"`, non touche) - les deux ors cohabitent
+  sans se confondre visuellement avec un avertissement.
+- Cadre "pierre gravee" sur le panneau principal (`#d4a-column`) : bordure or `1px solid #c9a227` +
+  `box-shadow` avec une ombre interieure en plus de l'ombre existante, pour un effet de renfoncement.
+  Meme bordure fine sur le bouton hamburger (`#d4a-toggle-btn`).
+- Liseré or sous le titre du panneau (`border-bottom` sur `#d4a-column-title`).
+- Police gothique (`Georgia, "Palatino Linotype", "Book Antiqua", serif`) appliquee UNIQUEMENT aux
+  titres/en-tetes de section (`#d4a-column-title`, `#d4a-column h3`, `.d4a-section-title`, les 3
+  `<summary>` de section repliables) - le corps du texte (boutons, champs, descriptions) reste en
+  `system-ui` sans-serif pour la lisibilite, cet outil se lit a cote d'un guide de build, pas dans le
+  jeu lui-meme.
+
+Pas fait (propose comme pistes bonus dans la recherche, pas demande explicitement) : remplacement des
+icones emoji par des icones SVG de game-icons.net (CC BY, attribution requise), teinte rouge sang -
+volontairement laisse de cote pour rester sur le changement "impact fort, effort minimal".
+
+`node --check` vert. Rien teste visuellement en navigateur - a confirmer par l'utilisateur (un
+userscript ne peut pas etre verifie visuellement sans l'installer sur un vrai site).
+
+## 2026-09-27 (suite) - v3.24 : bouton pour retirer un build de "Mes Builds" directement depuis le tableau
+
+Demande utilisateur : pouvoir sortir un build non desire de la liste "Mes Builds" sans devoir rouvrir sa
+page et decocher la case favoris. `renderMyBuildsTable()` : nouvelle 3e colonne (sans en-tete visible)
+avec un bouton "✕" par ligne (`.d4a-mybuilds-remove`), plutot que de reutiliser l'icone 📌 (deja
+utilisee pour le titre de la section elle-meme, aurait ete ambigu repetee sur chaque ligne). Au clic :
+`setFavorite(gameClass, title, url, false)` - EXACTEMENT le meme chemin que decocher la case dans
+`renderBuildInfo()`, aucune logique dupliquee - puis re-rend le tableau. CSS discret (gris, s'allume en
+orange braise au survol) pour ne pas rivaliser visuellement avec le lien du build.
+
+`node --check` vert.
+
+## 2026-09-27 (suite) - v3.25 : icône gothique + touches de rouge (suite du look Diablo v3.23)
+
+Demande utilisateur - le look v3.23 lui plait, demande de chercher des icônes gothiques et d'ajouter
+des touches de rouge. Recherche faite (WebSearch/WebFetch) sur game-icons.net (icônes SVG CC BY 3.0) :
+icône "Diablo skull" de Lorc trouvée (litteralement nommee d'apres la licence), recuperee via
+`https://game-icons.net/icons/ffffff/000000/1x1/lorc/diablo-skull.svg`, fond noir retire (garde
+seulement le path blanc), recoloree en `fill="currentColor"` pour suivre l'or du CSS environnant.
+
+Portee volontairement limitee au titre PERSISTANT du panneau (`#d4a-column-title`, nouveau
+`DIABLO_SKULL_SVG`) - PAS aux ~10 autres `<h3>Diablo IV Assistant</h3>` repetes dans les panneaux de
+resultat generes dynamiquement (la plupart en chaines entre guillemets doubles, pas des template
+literals - `${...}` n'y fonctionne pas, aurait demande une reprise individuelle de chacun pour un gain
+marginal face a une demande de "quelques touches"). Attribution CC BY ajoutee dans README.md (nouvelle
+section Credits) - obligatoire pour cette licence.
+
+Touches de rouge (3, ciblees) :
+- `.d4a-mybuilds-remove:hover` : orange braise -> rouge sang `#cd0d01` (coherent avec l'action de
+  suppression, plus qu'un simple choix esthetique).
+- Cadre du panneau (`#d4a-column`) : fine lueur rouge sang en `inset box-shadow` juste a l'interieur
+  de la bordure or existante, effet "or sur velours rouge fonce" sans toucher au fond ni au texte.
+- `#d4a-btn-filter-strict` : bordure rouge sang `#8b0000` pour le distinguer visuellement de
+  "Filtre Ouvert" (reste gris neutre) sans refaire les deux boutons.
+
+`node --check` vert. Rien teste visuellement en navigateur - a confirmer par l'utilisateur.
