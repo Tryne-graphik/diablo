@@ -7011,3 +7011,53 @@ et lui donner la classe `.d4a-rank-box` deja existante (meme style boite noire/b
 la zone du bouton "Mon rang" juste au-dessus) - aucun nouveau CSS necessaire. Texte legerement
 reformule ("🔗 Aussi disponible sur :" au lieu de "Aussi vu sur :"). Logique de recherche des
 liens croises inchangee. `node --check` vert. Pas encore teste dans un vrai navigateur.
+
+## 2026-09-27 (suite) - v3.30 : verification des retours d'experience reels, 3 vrais bugs corriges
+
+Demande utilisateur : verifier les "Retours d'experience" envoyes par les testeurs (Google
+Sheet, onglet "Feuille 1", lu directement via Google Drive). 4 lignes reelles trouvees (hors
+tests E2E), toutes sur v3.27, sur dance-of-knives-rogue-guide et apocalypse-warlock-guide
+(Maxroll) :
+
+1. "earthstrike -> Aspect du Frappe-Terre" - **pas un bug** : deja correct depuis le
+   2026-09-23 (`Earthstriker's`/`Earthstriker's Aspect` -> `frappe-terre`/`Aspect du
+   frappe-terre` dans fr_en_dictionary.json), le testeur notait juste une traduction
+   fonctionnelle, rien a corriger.
+2. "Overpower traduit par Maîtriser au lieu d'Accablement" - **vrai bug confirme** : ce mot
+   n'existe pas du tout dans fr_en_dictionary.json (c'est un terme de mecanique de combat,
+   pas un nom d'objet/competence), donc tombait dans la passe Google generique qui devinait
+   un verbe generique au lieu du vrai terme client FR. Confirme presence reelle du mot
+   "Overpower" (x4) sur la page Warlock via Playwright. Fixe : nouvelle table
+   `GENERIC_TERM_PAIRS` (meme mecanisme que BUILD_VARIANT_PAIRS/ITEM_SLOT_LABEL_PAIRS),
+   `["Overpower", "Accablement"]`.
+3. "glyphe Canny doit etre Astuce" et 4. "glyphe 'non lie' n'existe pas, c'est Libération"
+   (pour Unbound) - **meme cause racine, un vrai bug de regression** : `findParagonNameMap()`
+   cherchait un element dont le texte exact est "boards used" pour scoper sa recherche - or
+   Maxroll a refondu sa page (confirme via Playwright : 0 occurrence de "boards used" nulle
+   part sur la page, meme en sous-chaine ; la section Paragon est maintenant un widget
+   planner integre a part). "Canny": "Astuce" existait deja dans PARAGON_DICTIONARY.glyphs
+   mais n'etait donc jamais applique. Bonus trouve en creusant : les noms de glyphes
+   apparaissent bien dans le texte de la page, mais via `<span class="d4-glyph">` (confirme
+   en direct : Efficacy, Superiority, Unbound, Wrath, Occultist, Empowered, Hellforge selon
+   le build) - un selecteur bien plus fiable qu'une recherche de titre. Fixe :
+   `findParagonNameMap()` scanne maintenant `.d4-glyph` et resout via `lookupFr()` contre le
+   dictionnaire COMPLET (pas seulement les 9 glyphes de PARAGON_DICTIONARY) - sans risque de
+   faux positif puisque le match est ancre sur cet element precis, pas une recherche de
+   sous-chaine dans la prose. L'ancienne recherche par titre "boards used" est gardee en repli
+   pour d'autres sites (kami-labs, etc.) qui pourraient encore lister boards/glyphes en texte
+   brut. Confirme en live (Playwright) : Unbound -> Libération, Wrath -> Colère, Occultist ->
+   Occultiste, Hellforge -> Forge infernale resolvent tous correctement desormais.
+
+   Sous-decouverte lors de l'investigation : la paire "Unbound"/"Consommation" existait deja
+   dans fr_en_dictionary.json (source d4base.fr, seen_in=1, donc peu fiable) - en conflit
+   direct avec le retour utilisateur (issu du vrai client FR en jeu). Corrigee en
+   "Unbound"/"Libération" dans app/data/fr_en_dictionary.json (source annotee
+   `correction-2026-09-27-user-report`), puis resynchronisee dans le userscript via
+   `scripts/sync_userscript_dictionary.py`. Note : "Release"/"Libération" existe aussi comme
+   paire separee (meme source, meme fragilite) - pas touchee faute de rapport direct dessus,
+   possible doublon/erreur de decalage a re-verifier si signale un jour.
+
+Restent non couverts (pas rapportes comme bugs, trouves en verifiant en direct) : glyphes
+"Superiority" et "Empowered", absents de fr_en_dictionary.json - a ajouter si un futur retour
+les mentionne. `node --check` vert, verifie en conditions reelles via Playwright (pas
+seulement en local/hors-ligne). Pas encore teste par l'utilisateur dans son vrai navigateur.

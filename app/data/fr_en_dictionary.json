@@ -8740,11 +8740,11 @@
       "source": "d4base.fr"
     },
     {
-      "fr": "Consommation",
+      "fr": "Libération",
       "en": "Unbound",
       "kind": "paragon_glyph",
       "seen_in": 1,
-      "source": "d4base.fr"
+      "source": "correction-2026-09-27-user-report"
     },
     {
       "fr": "Contrôle",
