@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.8
+// @version      3.9
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1279,10 +1279,29 @@
     return h;
   }
 
-  function recordBuildVisit(gameClass, title, url) {
+  // 2026-09-27 REWRITE: was recordBuildVisit(), called unconditionally on
+  // every single page visit - real user request to make this an EXPLICIT
+  // opt-in instead ("une case à cocher pour préciser si on veut garder le
+  // build dans ses favoris"), so "Mes Builds" only ever holds builds the
+  // user actually chose to keep, not just whatever they last happened to
+  // look at. Still one slot per class (favoriting a new build for an
+  // already-favorited class replaces it) - a real multi-favorite-per-class
+  // list would need a bigger storage redesign, not asked for here.
+  function isFavorited(gameClass, url) {
+    const entry = getMyBuilds()[gameClass];
+    return !!(entry && entry.url === url);
+  }
+
+  function setFavorite(gameClass, title, url, favorited) {
     if (!gameClass || !title || !url) return;
     const all = getMyBuilds();
-    all[gameClass] = { title, url, source: currentSiteLabel(), visitedAt: Date.now() };
+    if (favorited) {
+      all[gameClass] = { title, url, source: currentSiteLabel(), visitedAt: Date.now() };
+    } else if (all[gameClass] && all[gameClass].url === url) {
+      delete all[gameClass];
+    } else {
+      return; // unchecking a build that wasn't the favorited one for its class - nothing to do
+    }
     GM_setValue(MY_BUILDS_KEY, JSON.stringify(all));
   }
 
@@ -1335,7 +1354,6 @@
       section.innerHTML = "";
       return;
     }
-    recordBuildVisit(gameClass, title, location.href);
     section.innerHTML = "Recherche de la position officielle...";
 
     const [rankResult, links] = await Promise.all([
@@ -1364,7 +1382,18 @@
       ? "Aussi vu sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")
       : "";
 
-    section.innerHTML = `<div>${rankHtml}</div>${linksHtml ? `<div>${linksHtml}</div>` : ""}`;
+    const favChecked = isFavorited(gameClass, location.href);
+    const favHtml = `<div style="margin-top:4px;"><label style="cursor:pointer;"><input type="checkbox" id="d4a-fav-checkbox" ${favChecked ? "checked" : ""}> ⭐ Garder ce build dans mes favoris</label></div>`;
+
+    section.innerHTML = `<div>${rankHtml}</div>${linksHtml ? `<div>${linksHtml}</div>` : ""}${favHtml}`;
+
+    const favCheckbox = document.getElementById("d4a-fav-checkbox");
+    if (favCheckbox) {
+      favCheckbox.addEventListener("change", (e) => {
+        setFavorite(gameClass, title, location.href, e.target.checked);
+        renderMyBuildsTable();
+      });
+    }
   }
 
   // ---------------------------------------------------------------------
@@ -3285,6 +3314,7 @@
       .d4a-rank-links a { color: #03d0fc; margin-right: 4px; }
       #d4a-search-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
+      #d4a-mybuilds-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
       #d4a-feedback-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
       #d4a-feedback-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
       #d4a-feedback-form input, #d4a-feedback-form textarea {
@@ -5042,8 +5072,10 @@
         <button id="d4a-btn-filter-strict">🛡 Filtre Strict</button>
       </div>
       <div id="d4a-mybuilds-section">
-        <strong>📌 Mes Builds</strong>
-        <div id="d4a-mybuilds-result"></div>
+        <details open>
+          <summary>📌 Mes Builds</summary>
+          <div id="d4a-mybuilds-result"></div>
+        </details>
       </div>
       <div id="d4a-feedback-section">
         <button id="d4a-btn-feedback-toggle">💬 Retour d'expérience</button>
@@ -5237,13 +5269,10 @@
       if (e.key === "Enter") runLiveSearch();
     };
 
-    // 2026-09-27: records this visit (if we're on a real build page) THEN
-    // always renders the full table - unlike the old per-class dropdown,
-    // this needs to run even with nothing new to record (e.g. visiting a
-    // site's homepage, see isBuildDetailPage() above) so previously
-    // remembered builds still show up there too.
-    const currentClass = guessClass();
-    if (currentClass) recordBuildVisit(currentClass, guessTitle(), location.href);
+    // 2026-09-27: builds are now saved only via the explicit favorite
+    // checkbox in renderBuildInfo() (setFavorite()), not on every visit -
+    // this just renders whatever's already favorited, including on a
+    // site's homepage where there's no current build to record anyway.
     renderMyBuildsTable();
 
     toggleBtn.onclick = () => {

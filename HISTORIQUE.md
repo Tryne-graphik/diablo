@@ -6445,3 +6445,38 @@ cote outil (`E:\ai-delegate`), pas encore cote projet Diablo. (2) idee de l'util
 Gemini (via ai-delegate, `ask_gemini`) de verifier/completer TOUT le dictionnaire FR_EN_DICTIONARY en
 lui demandant explicitement les termes EXACTS du client Diablo IV - pas encore tente, ai-delegate
 necessite un redemarrage de session pour que ses outils soient utilisables.
+
+## 2026-09-27 (suite) - v3.9 : "Mes Builds" passe de l'enregistrement automatique aux favoris explicites
+
+Demande utilisateur : (1) "il faudrait pouvoir cacher le tableau des builds", (2) "une case a cocher
+pour preciser si on veut garder le build dans ses favoris ou non et ne garder dans le tableau que les
+build selectionner" - le tableau v3.8 enregistrait automatiquement le dernier build visite par classe
+a CHAQUE visite de page, sans que l'utilisatrice puisse choisir quoi garder.
+
+`recordBuildVisit()` (appele sans condition dans `init()` et dans `renderBuildInfo()`) remplace par
+deux fonctions explicites :
+- `isFavorited(gameClass, url)` - le build affiche est-il celui deja enregistre pour sa classe ?
+- `setFavorite(gameClass, title, url, favorited)` - coche : enregistre (remplace l'entree existante de
+  cette classe, toujours un seul favori par classe, meme limite qu'avant) ; decoche : supprime
+  l'entree SEULEMENT si c'est bien celle-la qui etait enregistree (ne touche pas au favori d'une autre
+  classe/build par erreur).
+
+Nouvelle case a cocher "⭐ Garder ce build dans mes favoris" ajoutee dans `renderBuildInfo()`, pre-cochee
+via `isFavorited()`, `onchange` appelle `setFavorite()` puis `renderMyBuildsTable()` immediatement (pas
+besoin de recharger la page pour voir le tableau se mettre a jour). Le tableau ne montre donc plus le
+dernier build vu, mais uniquement ceux explicitement coches - `init()` simplifie en consequence
+(supprime l'appel automatique, garde juste le rendu du tableau).
+
+"Mes Builds" mis dans un `<details open>`/`<summary>` (meme pattern que "En savoir plus" ailleurs dans
+le panneau) pour repondre a la demande de pouvoir le cacher - ouvert par defaut, un clic sur le titre
+le replie. CSS dediee ajoutee pour que le `<summary>` garde l'apparence d'un titre de section (gras,
+couleur normale) au lieu du style discret des autres `<details>` d'aide.
+
+`node --check` vert. Deux references residuelles a l'ancien `recordBuildVisit()` trouvees et corrigees
+(`grep` de verification apres coup) - une dans `renderBuildInfo()`, une dans `init()`.
+
+**Pas fait cette session, en cours** : (3) verification croisee que les 6 sites supportes fonctionnent
+tous a 100% avec ce changement et plus generalement - demande explicite de l'utilisateur, a traiter
+ensuite. (4) proposition (a rediger, pas a implementer - l'utilisatrice la lira "demain matin") d'une
+page HTML hebergee sur son Google Drive qui chercherait un build sur tous les sites connectes a la fois
+et afficherait les liens - idee a creuser, pas encore de design ecrit.
