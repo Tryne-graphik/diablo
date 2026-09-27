@@ -6906,3 +6906,44 @@ Le README etait reste fige sur un etat ancien du script malgre toutes les evolut
   (erreur pre-existante, sans rapport avec les changements du jour, corrigee au passage).
 
 Reecrit section par section pour refleter l'etat reel du panneau a la v3.26.
+
+## 2026-09-27 (suite) - v3.27 : securisation du projet avant partage aux amis
+
+Demande utilisateur : "securiser le projet" avant de le partager (repo GitHub deja public,
+`@updateURL` pointe sur `master`). 4 points traites :
+
+1. **Legal/IP Blizzard** : nouveau `LICENSE` (tous droits reserves, usage personnel autorise,
+   pas de redistribution/reutilisation sans accord) + section "Avertissement" dans README.md
+   (non affilie a Blizzard Entertainment, aucun asset du jeu redistribue).
+2. **Anti-copie** : couvert par le meme LICENSE - un depot prive casserait `@updateURL`
+   (les amis ne pourraient plus recevoir les mises a jour automatiquement), donc pas retenu.
+   L'obfuscation du userscript n'est pas non plus souhaitable (les amis doivent pouvoir
+   lire ce qu'ils installent).
+3. **Abus de l'endpoint Apps Script** (`feedback-collector.gs`, appelable par quiconque
+   trouve l'URL `/exec` dans le userscript public) : ajout d'un `SHARED_SECRET` verifie
+   server-side sur chaque POST (protection faible - le userscript public contient forcement
+   la meme valeur, ca filtre juste les bots generiques qui scannent GitHub sans lire le code
+   appelant), d'un plafond de taille par champ (`MAX_LENGTHS`, coupe tout payload demesure),
+   et surtout d'un **quota de 200 requetes/jour par action** (`feedback`/`share`, via
+   `PropertiesService`) - la vraie protection, efficace meme si le secret fuite. Cote
+   userscript : `APPS_SCRIPT_SHARED_SECRET` ajoute et envoye dans les 2 POST existants.
+4. **Fuite de donnee perso** : le vrai `SHEET_ID` (identifiant de la feuille Google
+   personnelle de l'utilisateur) etait committe en clair dans `feedback-collector.gs` depuis
+   sa creation (2026-09-24) - remplace par le placeholder documente dans le fichier lui-meme
+   (`PASTE_YOUR_GOOGLE_SHEET_ID_HERE`). **Le vrai ID reste expose dans l'historique git deja
+   pousse sur GitHub** (ce commit ne fait que l'enlever de la version courante) - options
+   discutees avec l'utilisateur : recreer une nouvelle feuille Google (ID different, l'ancien
+   devient sans consequence) ou reecrire l'historique git + force-push (destructif, pas fait
+   sans accord explicite).
+
+`node --check` vert. Version bump 3.26->3.27 (necessaire : `APPS_SCRIPT_SHARED_SECRET` est un
+vrai changement fonctionnel, sans lui les futurs "Partager"/"Envoyer" echoueront tant que
+l'ancienne version tourne encore chez un testeur - donc a la fois bump ET redeploiement
+Apps Script requis avant que ca marche a nouveau, voir rappel utilisateur ci-dessous.
+
+**Etapes manuelles encore a faire par l'utilisateur avant que ca fonctionne reellement** :
+coller le vrai SHARED_SECRET (`bc7a564a-445a-418c-bcd5-5d7d03a206ca`) et le vrai SHEET_ID
+dans l'editeur Apps Script en ligne (et dans la copie Desktop `feedback-collector.txt`),
+Deployer > Gerer les deploiements > Nouvelle version (meme gotcha que d'habitude - editer le
+code seul ne suffit pas), puis forcer une verif de mise a jour Tampermonkey. **Pas encore
+teste en conditions reelles.**

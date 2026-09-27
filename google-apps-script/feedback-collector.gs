@@ -41,27 +41,70 @@
  * Déployer > Gérer les déploiements > icône crayon > Nouvelle version -
  * éditer le code seul ne suffit pas, l'URL /exec sert l'ancienne
  * version tant qu'aucune nouvelle version n'est publiée.
+ *
+ * 2026-09-27 SECURITE : SHEET_ID est un identifiant personnel (l'ID de la
+ * feuille Google du propriétaire) - il ne doit JAMAIS apparaître en clair
+ * dans ce fichier une fois committé sur le dépôt GitHub PUBLIC. Le
+ * placeholder ci-dessous doit être remplacé par le vrai ID UNIQUEMENT
+ * dans l'éditeur Apps Script en ligne et dans la copie Desktop
+ * (feedback-collector.txt, non versionnée) - jamais re-committé ici.
+ *
+ * SHARED_SECRET, à l'inverse, PEUT rester en clair ici : ce n'est pas un
+ * vrai secret puisque le userscript public contient forcément la même
+ * valeur (APPS_SCRIPT_SHARED_SECRET) pour pouvoir appeler ce endpoint -
+ * ça filtre seulement les bots génériques qui scannent GitHub pour des
+ * URLs Apps Script exposées sans lire le code appelant, pas un ami
+ * curieux. La vraie protection contre l'abus est le quota journalier
+ * ci-dessous, qui reste efficace même si le secret est connu.
  */
-var SHEET_ID = "1GT9UjN-JCK454fmPTyXlPdbw1OxwYDrfJZl972WKts0";
+var SHEET_ID = "PASTE_YOUR_GOOGLE_SHEET_ID_HERE";
+var SHARED_SECRET = "bc7a564a-445a-418c-bcd5-5d7d03a206ca";
 var SHARES_SHEET_NAME = "Partages";
 var SHARES_HEADER = ["Date", "Nom du filtre", "Build", "URL du build", "Mode", "Code"];
 
+// Plafonds de taille par champ (protege la feuille contre un payload
+// enorme envoye par erreur ou par abus) et quota d'appels/jour par action
+// (protege contre un flot de requetes, secret leake ou pas).
+var MAX_LENGTHS = { title: 200, body: 4000, version: 40, page: 500, filterName: 200, buildTitle: 300, buildUrl: 500, mode: 40, filterCode: 20000 };
+var DAILY_QUOTA = { feedback: 200, share: 200 };
+
 function doPost(e) {
   var data = JSON.parse(e.postData.contents);
-  if (data.action === "share") {
+  if (data.secret !== SHARED_SECRET) {
+    return jsonResponse({ status: "error", message: "unauthorized" });
+  }
+  var action = data.action === "share" ? "share" : "feedback";
+  if (!checkAndConsumeQuota(action)) {
+    return jsonResponse({ status: "error", message: "quota exceeded" });
+  }
+  if (action === "share") {
     return handleShare(data);
   }
   return handleFeedback(data);
+}
+
+/** Quota simple par jour et par action, stocke dans les Properties du script (pas de vraie base, mais suffisant pour bloquer un flot d'abus). */
+function checkAndConsumeQuota(action) {
+  var props = PropertiesService.getScriptProperties();
+  var key = "quota_" + action + "_" + new Date().toISOString().slice(0, 10);
+  var count = parseInt(props.getProperty(key) || "0", 10);
+  if (count >= DAILY_QUOTA[action]) return false;
+  props.setProperty(key, String(count + 1));
+  return true;
+}
+
+function cap(value, maxLen) {
+  return String(value == null ? "" : value).slice(0, maxLen);
 }
 
 function handleFeedback(data) {
   var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
   sheet.appendRow([
     new Date(),
-    data.title || "",
-    data.body || "",
-    data.version || "",
-    data.page || "",
+    cap(data.title, MAX_LENGTHS.title),
+    cap(data.body, MAX_LENGTHS.body),
+    cap(data.version, MAX_LENGTHS.version),
+    cap(data.page, MAX_LENGTHS.page),
   ]);
   return jsonResponse({ status: "ok" });
 }
@@ -70,11 +113,11 @@ function handleShare(data) {
   var sheet = getOrCreateSharesSheet();
   sheet.appendRow([
     new Date(),
-    data.filterName || "",
-    data.buildTitle || "",
-    data.buildUrl || "",
-    data.mode || "",
-    data.filterCode || "",
+    cap(data.filterName, MAX_LENGTHS.filterName),
+    cap(data.buildTitle, MAX_LENGTHS.buildTitle),
+    cap(data.buildUrl, MAX_LENGTHS.buildUrl),
+    cap(data.mode, MAX_LENGTHS.mode),
+    cap(data.filterCode, MAX_LENGTHS.filterCode),
   ]);
   return jsonResponse({ status: "ok", id: sheet.getLastRow() });
 }

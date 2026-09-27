@@ -59,6 +59,21 @@ Le bouton **"💬 Retour d'expérience"** dans le panneau envoie un message dire
 
 Projet en cours de test actif, non publié sur un store d'extensions. Season 15.
 
+## ⚠️ Avertissement
+
+Ce projet est un outil de fan, non affilié à, non approuvé par et non
+sponsorisé par Blizzard Entertainment, Inc. Diablo, Diablo IV et tous les
+noms/objets/compétences du jeu cités sont des marques et/ou droits
+d'auteur de Blizzard Entertainment, Inc. Aucun asset du jeu (image, son,
+texte extrait du client) n'est redistribué - seuls des noms et
+identifiants techniques nécessaires au fonctionnement de l'outil sont
+référencés.
+
+## Licence
+
+Voir [LICENSE](LICENSE) - dépôt public pour installation/relecture
+uniquement, pas de réutilisation/redistribution sans accord de l'auteur.
+
 ## Crédits
 
 Icône "Diablo skull" du titre du panneau : [Lorc](https://lorcblog.blogspot.com/) via [game-icons.net](https://game-icons.net/1x1/lorc/diablo-skull.html), licence [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
