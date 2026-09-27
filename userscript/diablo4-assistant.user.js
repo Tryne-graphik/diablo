@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.15
+// @version      3.16
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -999,6 +999,17 @@
       let listenerId = null;
       let timer = null;
 
+      // 2026-09-27: real user report "ça ne fonctionne toujours pas" after
+      // the cache-poisoning fix (v3.15) - but every console screenshot so
+      // far has shown only unrelated ad-blocker/preload noise from the
+      // BUILD PAGE's own console, never anything from this code, because
+      // it never logged anything at all. These console.log/warn calls run
+      // in the CALLER tab (the build page, where the user already has
+      // devtools open) - the background tab opened below is a SEPARATE
+      // process the user can't see into without switching to it before it
+      // auto-closes, so this is the only practical way to tell, from a
+      // screenshot of the tab the user is already looking at, whether the
+      // tab even opened, and whether it timed out or genuinely resolved.
       const finish = (data) => {
         if (settled) return;
         settled = true;
@@ -1012,6 +1023,8 @@
             // already closed itself - fine
           }
         }
+        if (data) console.log("[D4A] classement: reçu", data.length, "runs");
+        else console.warn("[D4A] classement: ÉCHEC/TIMEOUT - aucune donnée reçue de l'onglet helltides.com");
         resolve(data);
       };
 
@@ -1020,11 +1033,13 @@
         try {
           finish(JSON.parse(newVal));
         } catch (e) {
+          console.warn("[D4A] classement: réponse illisible de l'onglet", e);
           finish(null);
         }
       });
 
       tabHandle = GM_openInTab(targetUrl, { active: false, insert: true, setParent: true });
+      console.log("[D4A] classement: onglet ouvert ?", !!tabHandle, targetUrl);
       timer = setTimeout(() => finish(null), timeoutMs);
     });
   }
@@ -1046,12 +1061,19 @@
       const cached = GM_getValue(TOWER_CACHE_KEY, null);
       if (cached) {
         const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.fetchedAt < TOWER_CACHE_TTL_MS) return parsed.runs;
+        if (Date.now() - parsed.fetchedAt < TOWER_CACHE_TTL_MS) {
+          console.log("[D4A] classement: cache utilisé (", parsed.runs.length, "runs,", Math.round((Date.now() - parsed.fetchedAt) / 1000), "s)");
+          return parsed.runs;
+        }
       }
     } catch (e) {
       // corrupt cache entry - fall through and refetch
     }
-    if (towerRunsInFlight) return towerRunsInFlight;
+    if (towerRunsInFlight) {
+      console.log("[D4A] classement: fetch déjà en cours, on attend le même résultat");
+      return towerRunsInFlight;
+    }
+    console.log("[D4A] classement: aucun cache valide, ouverture d'un onglet en arrière-plan...");
     towerRunsInFlight = fetchTowerRunsUncached().finally(() => {
       towerRunsInFlight = null;
     });

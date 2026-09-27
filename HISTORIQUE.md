@@ -6645,3 +6645,30 @@ apres toute une session de tests) de l'utilisateur soit orphelin plutot que de d
 apres la mise a jour.
 
 `node --check` vert. Rien teste en navigateur encore - a confirmer par l'utilisateur.
+
+## 2026-09-27 (suite) - v3.16 : logs de diagnostic ajoutes (classement toujours signale casse apres le fix v3.15)
+
+Retour utilisateur apres v3.15 : "ça ne fonctionne toujours pas", avec une nouvelle capture d'ecran de
+console - encore une fois uniquement du bruit d'ad-blocker/preload (`net::ERR_BLOCKED_BY_CLIENT`,
+avertissements de preload Maxroll), rien lie a notre code. Cause identifiee : ce fichier n'avait
+JAMAIS eu un seul `console.log`/`console.warn` nulle part - impossible de distinguer nos propres
+messages du bruit ambiant dans une capture d'ecran de console, et impossible de savoir a distance si le
+bug etait deja corrige (l'utilisateur a-t-il reellement re-teste apres la mise a jour ?) ou si un AUTRE
+probleme existe en plus du cache empoisonne.
+
+Ajoute des `console.log`/`console.warn` prefixes `[D4A]` a chaque etape du chemin de recherche de rang,
+tous dans l'onglet APPELANT (la page de build, ou l'utilisateur a deja les outils de developpement
+ouverts) puisque l'onglet d'extraction ouvert en arriere-plan est un processus separe qu'on ne peut pas
+observer sans y basculer avant qu'il se ferme tout seul :
+- `fetchTowerRuns()` : cache utilise (avec age et nombre de runs) / fetch deja en cours / aucun cache,
+  ouverture d'un onglet.
+- `openLeaderboardExtractionTab()` : onglet ouvert ou non (`GM_openInTab` a bien renvoye un handle),
+  URL ciblee, puis a la fin succes (nombre de runs recus) ou echec/timeout, plus reponse illisible le
+  cas echeant.
+
+Objectif : le prochain rapport de bug doit contenir une vraie capture de ce que fait NOTRE code, pas du
+bruit ambiant - permettra de distinguer un onglet qui ne s'ouvre jamais, un onglet qui s'ouvre mais ne
+repond jamais (timeout), ou un cache qui serait a nouveau pollue.
+
+`node --check` vert. Demande a l'utilisateur : cliquer sur "🏆 Mon rang", ouvrir la console (F12),
+chercher les lignes commençant par "[D4A]" et les partager.
