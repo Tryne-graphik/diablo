@@ -6605,3 +6605,43 @@ se cache automatiquement une fois vide (`:empty`, meme convention deja utilisee 
 fichier pour les sections vides).
 
 `node --check` vert. Rien teste en navigateur encore.
+
+## 2026-09-27 (suite) - v3.15 : ancien outil "Recherche" retire + bouton "Original" + VRAI BUG TROUVE sur le classement
+
+**(1) "🔍 Recherche" (lookup EN/FR manuel) retire.** Devenu obsolete avec "🔎 Recherche Google" (v3.11)
+selon l'utilisateur. Supprime entierement : `runLiveSearch()`, ses caches dedies `fetchMaxrollGameItems()`/
+`fetchTalionUniquesLive()` (aucun autre appelant, verifie par `grep` avant suppression), la section HTML
+`#d4a-search-section` et tout son CSS. A la place, dans le meme emplacement de la grille : bouton
+"↩️ Original".
+
+**(2) Bouton "↩️ Original".** Annuler une traduction proprement (retracer chaque mutation DOM faite par
+`translateTextNode()` ET par le passage Google Translate separe de `runTranslatePageText()`) demanderait
+de suivre individuellement chaque noeud touche - `location.reload()` donne exactement le meme resultat
+(le vrai DOM original) sans ce risque de bookkeeping, et ne coute rien de plus puisque re-traduire est a
+un clic. "Mes Builds"/favoris survivent au reload (`GM_setValue`, pas un etat de page). Effet de couleur
+demande par l'utilisateur : `#d4a-btn-translate` prend la classe `.d4a-active` (fond `#03d0fc`) une fois
+la traduction reellement terminee, `#d4a-btn-untranslate` passe de `disabled` a actif au meme moment.
+
+**(3) VRAI BUG TROUVE sur le classement ("il ne fonctionne toujours pas").** Verification en profondeur
+demandee par l'utilisateur. D'abord verifie que la source de donnees elle-meme fonctionne : script Python
+autonome (Playwright, meme JS que `runLeaderboardExtractionMode()`) contre le vrai helltides.com/tower -
+1599 runs recuperes en 6.24s au total, largement dans le budget de 25s de `openLeaderboardExtractionTab()`.
+La source n'est donc PAS le probleme.
+
+Le vrai bug etait dans `fetchTowerRunsUncached()` : `openLeaderboardExtractionTab()` resout a `null`
+SPECIFIQUEMENT en cas d'echec/timeout (ses deux `finish(null)`), un fetch reussi mais genuinement vide
+resolvant a `[]` - une valeur distincte. L'ancien code faisait
+`(await openLeaderboardExtractionTab()) || []` AVANT de decider s'il fallait mettre en cache, fusionnant
+les deux cas en `[]` et mettant CE `[]` en cache sans condition - donc un seul fetch en arriere-plan
+rate (tres plausible : onglet ouvert inactif/en arriere-plan, throttle navigateur, script Cloudflare
+Turnstile sur helltides.com) se retrouvait mis en cache comme "0 run, recupere a l'instant" pour les 30
+MINUTES entieres de `TOWER_CACHE_TTL_MS`. Chaque appel suivant - y compris cliquer sur "🏆 Mon rang" ou
+"🔄 Réessayer" - relisait ce cache empoisonne instantanement au lieu de jamais reessayer reellement,
+rendant la fonctionnalite "cassee" pendant une demi-heure apres un seul mauvais chargement. Corrige :
+`raw` (la valeur brute avant le `|| []`) n'est mis en cache QUE s'il est non-null - `[]` (vraiment vide,
+vrai succes) se met toujours en cache normalement, seul `null` (vrai echec) ne s'y met plus. `TOWER_CACHE_KEY`
+bascule aussi de `"d4a_lb_cache"` a `"d4a_lb_cache_v2"` pour que le cache deja empoisonne (tres probable
+apres toute une session de tests) de l'utilisateur soit orphelin plutot que de devoir attendre 30 min
+apres la mise a jour.
+
+`node --check` vert. Rien teste en navigateur encore - a confirmer par l'utilisateur.

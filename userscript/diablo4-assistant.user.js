@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.14
+// @version      3.15
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -599,96 +599,6 @@
   }
 
   // ---------------------------------------------------------------------
-  // Manual "search a translation live" tool (🔍 button) - for a name our
-  // static FR_EN_DICTIONARY doesn't have (a case like "Grief", too new to
-  // be in any snapshot yet - see HISTORIQUE.md 2026-09-21). Re-fetches
-  // Maxroll's FULL game-data item tables (not just the pre-filtered
-  // Unique/Talisman subsets already merged into the dictionary - the
-  // complete 11,678-entry table, so this can find aspects/sets/anything
-  // else too) plus talion's uniques list, live, at search time - catches
-  // whatever's been added to either source since our last dictionary sync
-  // without needing to re-run a Python script and republish the userscript.
-  // Cached per page load (module-level - not per-search) since each
-  // fetch is a few MB and a user may search more than once.
-  let maxrollGameItemsCache = null;
-  async function fetchMaxrollGameItems() {
-    if (maxrollGameItemsCache) return maxrollGameItemsCache;
-    const [enRaw, frRaw] = await Promise.all([
-      gmGet("https://assets-ng.maxroll.gg/d4-tools/game/data.enus.json"),
-      gmGet("https://assets-ng.maxroll.gg/d4-tools/game/data.frfr.json"),
-    ]);
-    maxrollGameItemsCache = { itemsEn: JSON.parse(enRaw).items, itemsFr: JSON.parse(frRaw).items };
-    return maxrollGameItemsCache;
-  }
-
-  let talionUniquesLiveCache = null;
-  async function fetchTalionUniquesLive() {
-    if (talionUniquesLiveCache) return talionUniquesLiveCache;
-    const raw = await gmGet("https://api.talion.tv/api/diablo/uniques/front");
-    talionUniquesLiveCache = JSON.parse(raw);
-    return talionUniquesLiveCache;
-  }
-
-  async function runLiveSearch() {
-    const input = document.getElementById("d4a-search-input");
-    const query = (input.value || "").trim();
-    const resultsEl = document.getElementById("d4a-search-results");
-    if (!query) return;
-    const queryFold = fold(query);
-
-    resultsEl.innerHTML = `<p>Recherche de "${query}" en cours (Maxroll + talion.tv en direct)...</p>`;
-    expandColumn();
-
-    const seen = new Set();
-    const results = [];
-
-    // What we already know, instant (no network) - shown first.
-    for (const entry of FR_EN_DICTIONARY) {
-      if (fold(entry.en).includes(queryFold) || fold(entry.fr).includes(queryFold)) {
-        if (seen.has(entry.en.toLowerCase())) continue;
-        seen.add(entry.en.toLowerCase());
-        results.push({ en: entry.en, fr: entry.fr, source: "déjà connu" });
-        if (results.length >= 15) break;
-      }
-    }
-
-    let errorNote = "";
-    try {
-      const [maxrollItems, talionUniques] = await Promise.all([fetchMaxrollGameItems(), fetchTalionUniquesLive()]);
-
-      for (const key of Object.keys(maxrollItems.itemsEn)) {
-        if (results.length >= 25) break;
-        const enName = (maxrollItems.itemsEn[key].name || "").trim();
-        if (!enName || seen.has(enName.toLowerCase()) || !fold(enName).includes(queryFold)) continue;
-        const frRaw = (maxrollItems.itemsFr[key] || {}).name || "";
-        const frName = frRaw.replace(/^\[(?:mp|fp|ms|fs|m|f)\]\s*/, "").replace(/’/g, "'").trim();
-        if (!frName || frName.toLowerCase() === enName.toLowerCase()) continue;
-        seen.add(enName.toLowerCase());
-        results.push({ en: enName, fr: frName, source: "Maxroll (en direct)" });
-      }
-
-      for (const it of talionUniques) {
-        if (results.length >= 25) break;
-        const enName = (it.name_en || "").trim();
-        if (!enName || seen.has(enName.toLowerCase()) || !fold(enName).includes(queryFold)) continue;
-        seen.add(enName.toLowerCase());
-        results.push({ en: enName, fr: (it.name_fr || "").replace(/’/g, "'").trim(), source: "talion.tv (en direct)" });
-      }
-    } catch (e) {
-      errorNote = `<p style="color:#c9a227">Recherche en direct indisponible (${e.message}) - résultats déjà connus seulement.</p>`;
-    }
-
-    if (results.length === 0) {
-      resultsEl.innerHTML = `<p>Aucune traduction trouvée pour "${query}", ni dans le dictionnaire ni en direct.</p>${errorNote}`;
-      return;
-    }
-    const rows = results
-      .map((r) => `<div class="d4a-search-row"><strong>${r.en}</strong> → ${r.fr}<br><span class="d4a-search-source">${r.source}</span></div>`)
-      .join("");
-    resultsEl.innerHTML = `${errorNote}${rows}`;
-  }
-
-  // ---------------------------------------------------------------------
   // Cross-source consensus ranking - port of app/consensus.py's _group()/
   // rank_builds() (minus the official Tower-leaderboard confirmation
   // boost, a separate and much larger sub-system not ported here - see
@@ -980,7 +890,11 @@
   // differs (window state, not DOM tiles).
   // ---------------------------------------------------------------------
   const TOWER_URL = "https://helltides.com/tower";
-  const TOWER_CACHE_KEY = "d4a_lb_cache";
+  // 2026-09-27: bumped _v2 - orphans any cache entry poisoned by the empty-
+  // result-caching bug fixed the same day (see fetchTowerRunsUncached()),
+  // so a user with an already-broken cached "0 runs" doesn't have to wait
+  // out the old 30min TTL after updating.
+  const TOWER_CACHE_KEY = "d4a_lb_cache_v2";
   const TOWER_CACHE_TTL_MS = 30 * 60 * 1000; // matches app/leaderboard.py's CACHE_TTL_SECONDS
   const GENERIC_UTILITY_SKILL_TYPES = new Set(["Imbuement", "Subterfuge"]);
 
@@ -1144,14 +1058,31 @@
     return towerRunsInFlight;
   }
 
+  // 2026-09-27 REAL BUG FOUND: openLeaderboardExtractionTab() resolves to
+  // `null` specifically on failure/timeout (see its `finish(null)` calls) -
+  // a genuinely empty-but-successful fetch resolves to `[]` instead, a
+  // distinct value. The old code did `(await openLeaderboardExtractionTab())
+  // || []` BEFORE deciding whether to cache, collapsing both cases into the
+  // same `[]` and then caching THAT unconditionally - so a single failed/
+  // timed-out background-tab fetch (very plausible: helltides.com loads a
+  // Cloudflare Turnstile script, and the tab is opened inactive/backgrounded,
+  // which browsers throttle) got cached as "0 runs, fetched just now" for
+  // the full 30-minute TOWER_CACHE_TTL_MS. Every following call - including
+  // clicking "🏆 Mon rang" or "🔄 Réessayer" again - just replayed that
+  // poisoned empty cache instantly instead of ever retrying, so the feature
+  // stayed "broken" for half an hour after one bad load. `raw` is only
+  // cached when it's non-null - `[]` (genuinely empty, real success) still
+  // caches fine, only `null` (actual failure) does not.
   async function fetchTowerRunsUncached() {
-    const runs = (await openLeaderboardExtractionTab()) || [];
-    try {
-      GM_setValue(TOWER_CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), runs }));
-    } catch (e) {
-      // storage quota or similar - not fatal, just won't be cached this time
+    const raw = await openLeaderboardExtractionTab();
+    if (raw) {
+      try {
+        GM_setValue(TOWER_CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), runs: raw }));
+      } catch (e) {
+        // storage quota or similar - not fatal, just won't be cached this time
+      }
     }
-    return runs;
+    return raw || [];
   }
 
   // The "position officielle" shown under the panel title (2026-09-22) -
@@ -3365,10 +3296,12 @@
          the filter-options explanations (now on-demand, see
          #d4a-filter-options below). Panel width 280->300px to fit two
          columns of buttons and a 4th color picker comfortably. */
-      #d4a-column > button, #d4a-search-form button, .d4a-action-grid button {
+      #d4a-column > button, .d4a-action-grid button {
         background: #333; color: #fff; border: none; padding: 6px 10px;
         border-radius: 4px; cursor: pointer; font-size: 13px; font-family: system-ui, sans-serif;
       }
+      #d4a-btn-translate.d4a-active { background: #03d0fc; color: #000; font-weight: bold; }
+      #d4a-btn-untranslate:disabled { opacity: 0.5; cursor: default; }
       .d4a-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
       #d4a-panel-section:empty, #d4a-ranking-section:empty, #d4a-buildinfo-section:empty { display: none; }
       #d4a-buildinfo-section { font-size: 12px; color: #9aa0ab; margin: -2px 0 4px; line-height: 1.5; }
@@ -3414,7 +3347,6 @@
       .d4a-tier-badge { display: inline-block; font-weight: 700; font-size: 11px; padding: 1px 5px; border-radius: 3px; color: #fff; margin-right: 3px; }
       .d4a-rank-links { font-size: 12px; }
       .d4a-rank-links a { color: #03d0fc; margin-right: 4px; }
-      #d4a-search-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
       #d4a-gsearch-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
@@ -3438,15 +3370,6 @@
       #d4a-mybuilds-tbl th:first-child, #d4a-mybuilds-tbl td:first-child { width: 72px; }
       #d4a-mybuilds-tbl td { padding: 3px 4px; border-bottom: 1px solid #222; vertical-align: top; }
       #d4a-mybuilds-tbl a { color: #03d0fc; }
-      #d4a-search-form { display: flex; gap: 6px; margin: 6px 0 10px; }
-      #d4a-search-form input {
-        flex: 1; min-width: 0; padding: 6px 8px; border-radius: 4px; border: none;
-        background: #000; color: #eee; font-size: 13px;
-      }
-      #d4a-search-results { max-height: 300px; overflow-y: auto; }
-      .d4a-search-row { padding: 6px 0; border-bottom: 1px solid #333; }
-      .d4a-search-row:last-child { border-bottom: none; }
-      .d4a-search-source { color: #9aa0ab; font-size: 12px; }
       /* 2026-09-22: <details>/<summary> for the collapsed detection summary
          in the filter panel, and for the Strict-filter options checkboxes -
          both added the same day after "il faudrait simplifier l'affichage"
@@ -3757,8 +3680,7 @@
   // thing as a JSON STRING in its own `data` field, not a nested object -
   // needs a second JSON.parse.
   // Cached per plannerId (module-level, not per-call) - extractMaxrollDetail()
-  // only calls this once per page anyway, but the manual "Recherche" tool's
-  // own live-fetch pattern (fetchMaxrollGameItems()) sets the precedent.
+  // only calls this once per page anyway, cheap insurance either way.
   const maxrollPlannerCache = new Map();
   async function fetchMaxrollPlannerData(plannerId) {
     if (maxrollPlannerCache.has(plannerId)) return maxrollPlannerCache.get(plannerId);
@@ -5110,16 +5032,9 @@
       <div id="d4a-buildinfo-section"></div>
       <div class="d4a-action-grid">
         <button id="d4a-btn-translate">🇫🇷 Traduire</button>
-        <button id="d4a-btn-search-toggle">🔍 Recherche</button>
+        <button id="d4a-btn-untranslate" disabled>↩️ Original</button>
         <button id="d4a-btn-ranking">🏆 Classement</button>
         <button id="d4a-btn-check-update">🔄 Vérifier MAJ</button>
-      </div>
-      <div id="d4a-search-section" hidden>
-        <div id="d4a-search-form">
-          <input id="d4a-search-input" type="text" placeholder="Nom en anglais ou français...">
-          <button id="d4a-search-btn">Chercher</button>
-        </div>
-        <div id="d4a-search-results"></div>
       </div>
       <div id="d4a-filter-options">
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
@@ -5238,8 +5153,8 @@
     // build-specific); Mes Builds and Retour d'expérience are untouched.
     if (!isBuildDetailPage()) {
       const idsToHide = [
-        "d4a-buildinfo-section", "d4a-search-section", "d4a-filter-options", "d4a-panel-section", "d4a-ranking-section",
-        "d4a-btn-translate", "d4a-btn-search-toggle", "d4a-btn-ranking",
+        "d4a-buildinfo-section", "d4a-filter-options", "d4a-panel-section", "d4a-ranking-section",
+        "d4a-btn-translate", "d4a-btn-untranslate", "d4a-btn-ranking",
         "d4a-btn-filter-open", "d4a-btn-filter-strict",
       ];
       for (const id of idsToHide) {
@@ -5248,22 +5163,30 @@
       }
     }
 
+    // 2026-09-27: real user request - the old manual "🔍 Recherche" tool
+    // (live EN/FR dictionary lookup, see former runLiveSearch()) is
+    // obsolete now that "🔎 Recherche Google" exists; replaced by "↩️
+    // Original" in the same grid spot. Reverting a translation properly
+    // (undo every DOM mutation from both translateTextNode()'s direct
+    // replacements AND the separate Google-Translate pass in
+    // runTranslatePageText()) would need tracking every touched node
+    // individually - location.reload() gets the exact same end result
+    // (the real original DOM) with none of that bookkeeping risk, and
+    // costs nothing extra since re-translating is one click away anyway.
+    // "Mes Builds"/favoris survive the reload fine (GM_setValue, not page
+    // state). translateBtn gets a color highlight once translation
+    // actually completes, mirroring the enabled/disabled state of the
+    // Original button - if translation failed/no-op, nothing to undo.
     const translateBtn = document.getElementById("d4a-btn-translate");
+    const untranslateBtn = document.getElementById("d4a-btn-untranslate");
     translateBtn.title = "Traduit les objets/compétences avec les termes exacts du client FR, puis le reste du texte de la page via Google";
-    translateBtn.onclick = runTranslateAll;
-
-    // 2026-09-23: "deplace le bouton ... pour faire la recherche et
-    // afficher le resultat sur une ligne en dessous" - the search
-    // form/results (#d4a-search-section) used to always be visible near
-    // the bottom; now a toggle button in the top grid (replacing the old
-    // spot "Filtre" used to occupy) shows/hides it, results still render
-    // on their own line below the form exactly as before.
-    const searchToggleBtn = document.getElementById("d4a-btn-search-toggle");
-    const searchSection = document.getElementById("d4a-search-section");
-    searchToggleBtn.title = "Afficher/masquer la recherche de traduction manuelle";
-    searchToggleBtn.onclick = () => {
-      searchSection.hidden = !searchSection.hidden;
+    translateBtn.onclick = async () => {
+      await runTranslateAll();
+      translateBtn.classList.add("d4a-active");
+      untranslateBtn.disabled = false;
     };
+    untranslateBtn.title = "Recharge la page pour annuler la traduction et revenir au texte original";
+    untranslateBtn.onclick = () => location.reload();
 
     // 2026-09-26: Tampermonkey has no GM_* API a userscript can call to
     // trigger its OWN "check for updates now" (that's a dashboard-only
@@ -5400,11 +5323,6 @@
     const rankingBtn = document.getElementById("d4a-btn-ranking");
     rankingBtn.title = "Classe les meilleurs builds de la classe détectée sur cette page, par consensus entre 6 sites (InfinityBuilds, kami-labs, Maxroll, D4Builds, D4Guides, talion.tv)";
     rankingBtn.onclick = runRanking;
-
-    document.getElementById("d4a-search-btn").onclick = runLiveSearch;
-    document.getElementById("d4a-search-input").onkeydown = (e) => {
-      if (e.key === "Enter") runLiveSearch();
-    };
 
     // 2026-09-27: builds are now saved only via the explicit favorite
     // checkbox in renderBuildInfo() (setFavorite()), not on every visit -
