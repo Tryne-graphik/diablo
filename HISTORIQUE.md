@@ -6947,3 +6947,28 @@ dans l'editeur Apps Script en ligne (et dans la copie Desktop `feedback-collecto
 Deployer > Gerer les deploiements > Nouvelle version (meme gotcha que d'habitude - editer le
 code seul ne suffit pas), puis forcer une verif de mise a jour Tampermonkey. **Pas encore
 teste en conditions reelles.**
+
+## 2026-09-27 (suite) - v3.27 confirme fonctionnel de bout en bout (backend)
+
+Rotation du SHEET_ID (suite a la fuite git de l'ancien ID, voir plus haut) plus compliquee
+que prevu. 1ere feuille recreee (`18kCfjpG-...`) : erreur `SpreadsheetApp.openById` -
+"Vous n'etes pas autorise a acceder au document demande", meme apres partage de la feuille
+et nouvelle version de deploiement - cause jamais elucidee. L'utilisateur a cree une 2e
+feuille fraiche (`10yYos6-D0wR8AuP6_WhXnEZugc8dVW7yCn-i6nyMJII`, partagee d'emblee), collee
+dans Code.gs, redeploye - **celle-ci fonctionne**. C'est desormais le vrai SHEET_ID en prod
+(copie Desktop `feedback-collector.txt` a jour).
+
+Verifie via appels directs Python `requests` (curl s'est revele peu fiable sur la chaine de
+redirection script.google.com -> script.googleusercontent.com propre a Apps Script -
+`requests.post(url, json=..., allow_redirects=True)` est la methode fiable a reutiliser pour
+tout futur test de cet endpoint) :
+- mauvais secret -> `{"status":"error","message":"unauthorized"}` propre.
+- bon secret, feedback -> `{"status":"ok"}`.
+- bon secret, share -> `{"status":"ok","id":N}`, lien de lecture (`?share=N`) affiche
+  correctement titre/build/mode/code.
+- plafond de taille : un `filterCode` de 50000 caracteres est bien tronque a ~20000.
+
+3 lignes de test (`[TEST E2E]`, `[TEST CAP]`) ecrites dans la feuille reelle - cosmetique,
+a supprimer manuellement si souhaite. Quota journalier (200/action) non teste jusqu'a
+epuisement (logique simple, deja relue). **Reste a tester** : le clic reel sur les boutons
+"Envoyer"/"Partager" depuis Tampermonkey (seul le serveur est confirme pour l'instant).
