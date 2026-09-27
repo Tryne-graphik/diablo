@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.16
+// @version      3.17
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -890,11 +890,13 @@
   // differs (window state, not DOM tiles).
   // ---------------------------------------------------------------------
   const TOWER_URL = "https://helltides.com/tower";
-  // 2026-09-27: bumped _v2 - orphans any cache entry poisoned by the empty-
-  // result-caching bug fixed the same day (see fetchTowerRunsUncached()),
-  // so a user with an already-broken cached "0 runs" doesn't have to wait
-  // out the old 30min TTL after updating.
-  const TOWER_CACHE_KEY = "d4a_lb_cache_v2";
+  // 2026-09-27: bumped _v2 then _v3 - each time a distinct bug was found
+  // that could poison the cache with a fake "0 runs" result (first
+  // fetchTowerRunsUncached() caching a raw null as [], then
+  // runLeaderboardExtractionMode()'s own 20s-deadline branch doing the
+  // same thing one level down) - orphans the old poisoned entry so a user
+  // doesn't have to wait out the old 30min TTL after updating.
+  const TOWER_CACHE_KEY = "d4a_lb_cache_v3";
   const TOWER_CACHE_TTL_MS = 30 * 60 * 1000; // matches app/leaderboard.py's CACHE_TTL_SECONDS
   const GENERIC_UTILITY_SKILL_TYPES = new Set(["Imbuement", "Subterfuge"]);
 
@@ -950,30 +952,47 @@
           break;
         }
       }
-      const ready = found || Date.now() > deadline;
-      if (!ready) return;
-      clearInterval(poll);
-      const runs = (found || []).map((r) => ({
-        rank: r.rank,
-        battleTag: r.battle_tag,
-        gameClass: r.class,
-        tier: r.tier,
-        // 2026-09-24: "quel niveau de fosse et en combien de temps" - found
-        // live in the raw __NUXT__ payload (curl on the server-rendered
-        // page, grepped for *time*/*duration* key names) that a
-        // `run_time_ms` field exists alongside rank/tier, just never
-        // captured here before.
-        runTimeMs: r.run_time_ms,
-        skills: (r.skillDetails || []).filter(Boolean).map((s) => ({ name: s.name, type: s.type })),
-      }));
-      GM_setValue("d4a_lbresult_" + requestId, JSON.stringify(runs));
-      setTimeout(() => {
-        try {
-          window.close();
-        } catch (e) {
-          // see runExtractionMode - some browsers refuse, opener closes it too
-        }
-      }, 500);
+      if (found) {
+        clearInterval(poll);
+        const runs = found.map((r) => ({
+          rank: r.rank,
+          battleTag: r.battle_tag,
+          gameClass: r.class,
+          tier: r.tier,
+          // 2026-09-24: "quel niveau de fosse et en combien de temps" - found
+          // live in the raw __NUXT__ payload (curl on the server-rendered
+          // page, grepped for *time*/*duration* key names) that a
+          // `run_time_ms` field exists alongside rank/tier, just never
+          // captured here before.
+          runTimeMs: r.run_time_ms,
+          skills: (r.skillDetails || []).filter(Boolean).map((s) => ({ name: s.name, type: s.type })),
+        }));
+        GM_setValue("d4a_lbresult_" + requestId, JSON.stringify(runs));
+        setTimeout(() => {
+          try {
+            window.close();
+          } catch (e) {
+            // see runExtractionMode - some browsers refuse, opener closes it too
+          }
+        }, 500);
+      } else if (Date.now() > deadline) {
+        // 2026-09-27 REAL BUG FOUND (2nd one, distinct from the v3.15 cache
+        // fix): a real [D4A] log from the user showed the cache STILL
+        // serving "0 runs" minutes after that fix - traced to HERE, not to
+        // fetchTowerRunsUncached(). This branch used to report `[]` via the
+        // exact same GM_setValue() call as a genuine find, the moment the
+        // 20s deadline passed with `found` still null (background/inactive
+        // tabs get their JS throttled by the browser, so Nuxt hydration
+        // that takes ~6s in an active tab - confirmed via a standalone
+        // Playwright test against the real site - can plausibly still be
+        // incomplete at 20s here). The caller had no way to tell that
+        // apart from "genuinely 0 runs, real success" and cached it for
+        // 30 minutes same as before. Now: give up silently instead -
+        // openLeaderboardExtractionTab()'s own 25s outer timeout resolves
+        // to `null` a few seconds later, which fetchTowerRunsUncached()
+        // (v3.15) correctly never caches.
+        clearInterval(poll);
+      }
     }, 300);
   }
 

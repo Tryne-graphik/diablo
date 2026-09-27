@@ -6672,3 +6672,35 @@ repond jamais (timeout), ou un cache qui serait a nouveau pollue.
 
 `node --check` vert. Demande a l'utilisateur : cliquer sur "🏆 Mon rang", ouvrir la console (F12),
 chercher les lignes commençant par "[D4A]" et les partager.
+
+## 2026-09-27 (suite) - v3.17 : DEUXIEME vrai bug trouve grace aux logs [D4A] - cache toujours pollue
+
+Le premier vrai log `[D4A]` recu de l'utilisateur apres v3.16 : `classement: cache utilisé ( 0 runs,
+292 s)` - la preuve concrete que le cache etait DEJA repollue avec "0 runs" a peine 5 minutes apres la
+mise a jour vers le fix v3.15. Donc un DEUXIEME bug distinct produit le meme symptome.
+
+Trouve dans `runLeaderboardExtractionMode()` (tourne DANS l'onglet cache ouvert sur helltides.com) :
+sa boucle de polling avait un delai interne de 20s (`deadline`) different du delai de l'appelant (25s,
+`openLeaderboardExtractionTab()`). A l'ancienne ligne `const ready = found || Date.now() > deadline;`,
+si les 20s s'ecoulaient SANS jamais trouver le tableau du classement dans `window.__NUXT__.data`
+(hydratation Nuxt possiblement ralentie par le throttling navigateur des onglets en arriere-plan/
+inactifs - confirme necessaire par un test Playwright autonome ce jour-la : ~6s en onglet ACTIF, donc
+un onglet inactif qui n'a toujours rien trouve a 20s est plausible), le code appelait quand meme
+`GM_setValue(..., JSON.stringify([]))` - EXACTEMENT le meme chemin qu'une vraie trouvaille reussie.
+Cote appelant, `[]` n'est pas `null`, donc `fetchTowerRunsUncached()` (le fix v3.15) le mettait en
+cache normalement comme un "vrai" succes vide - le vrai timeout ne remontait donc JAMAIS jusqu'au
+`null` que v3.15 savait pourtant deja correctement ne pas mettre en cache.
+
+Corrige : la branche timeout-sans-trouvaille n'appelle plus `GM_setValue` du tout - elle abandonne
+silencieusement, laissant le timeout de 25s de l'appelant (`openLeaderboardExtractionTab()`) resoudre
+naturellement a `null` quelques secondes plus tard, ce que le fix v3.15 sait deja ne jamais mettre en
+cache. `TOWER_CACHE_KEY` rebascule a `"d4a_lb_cache_v3"` pour orpheliner l'entree deja pollue par CE
+bug (visible dans le log partage : 292s = moins de 5 min, donc largement encore dans les 30 min de TTL).
+
+Cas d'ecole du jour : sans les logs `[D4A]` ajoutes en v3.16, ce deuxieme bug aurait ete impossible a
+distinguer du premier a distance - la capture d'ecran de console de l'utilisateur ne contenait toujours
+que du bruit d'ad-blocker, c'est la ligne `[D4A]` elle-meme qui a pointe directement vers la cause.
+
+`node --check` vert. A reconfirmer par l'utilisateur - si le probleme persiste malgre ce fix, le
+throttling navigateur des onglets en arriere-plan lui-meme (pas juste la mise en cache du symptome)
+deviendrait la piste a creuser ensuite.
