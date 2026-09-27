@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.28
+// @version      3.29
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1285,6 +1285,12 @@
     return links;
   }
 
+  // 2026-09-27: real user request - the cross-site links line ("Aussi vu
+  // sur") moved from above the favorite checkbox to a small dedicated
+  // encart right below it, reusing .d4a-rank-box's existing black-box
+  // styling (same visual as the "Mon rang" button area right above) so
+  // no new CSS was needed - just the class added to the div. Content/logic
+  // unchanged, still from findCrossSiteLinks() below.
   // Orchestrates both halves of the "build info" section and renders it -
   // called automatically from init() on every build page, not gated
   // behind a button (that's the point of the feature: the info should
@@ -1506,9 +1512,9 @@
 
     section.innerHTML = `
       <div id="d4a-rank-line"></div>
-      <div id="d4a-links-line">Recherche des autres sites...</div>
       <div id="d4a-rank-area" class="d4a-rank-box"><button id="d4a-rank-btn" type="button">🏆 Mon rang</button></div>
       ${favHtml}
+      <div id="d4a-links-line" class="d4a-rank-box">Recherche des autres sites...</div>
     `;
 
     const favCheckbox = document.getElementById("d4a-fav-checkbox");
@@ -1525,7 +1531,7 @@
         const linksLine = document.getElementById("d4a-links-line");
         if (!linksLine) return;
         linksLine.innerHTML = links.length
-          ? "Aussi vu sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")
+          ? "🔗 Aussi disponible sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")
           : "";
       })
       .catch(() => {

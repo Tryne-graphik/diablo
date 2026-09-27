@@ -6997,3 +6997,17 @@ jour. `node --check` vert.
 et aux amis testeurs) au prochain update, la portee du script s'elargissant. **Pas encore
 teste en navigation reelle** - prochain test : visiter une page non-build sur un des 6
 sites et confirmer que seul le panneau reduit s'affiche, sans erreur console.
+
+## 2026-09-27 (suite) - v3.29 : encart "aussi disponible sur" sous la case favoris
+
+Demande utilisateur : un petit encart sur fond noir sous la case "garder ce build dans mes
+favoris", listant les sites (parmi les 6) qui proposent aussi ce build, nom du site cliquable
+ouvrant la page dans un nouvel onglet. La fonctionnalite existait deja depuis le 2026-09-22
+(`findCrossSiteLinks()`, ligne "Aussi vu sur") mais etait affichee en simple texte au-dessus
+de la case favoris, sans encart visuel.
+
+Change dans `renderBuildInfo()` : la ligne `#d4a-links-line` deplacee apres la case favoris,
+et lui donner la classe `.d4a-rank-box` deja existante (meme style boite noire/bordure que
+la zone du bouton "Mon rang" juste au-dessus) - aucun nouveau CSS necessaire. Texte legerement
+reformule ("🔗 Aussi disponible sur :" au lieu de "Aussi vu sur :"). Logique de recherche des
+liens croises inchangee. `node --check` vert. Pas encore teste dans un vrai navigateur.
