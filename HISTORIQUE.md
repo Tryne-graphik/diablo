@@ -6475,8 +6475,85 @@ couleur normale) au lieu du style discret des autres `<details>` d'aide.
 `node --check` vert. Deux references residuelles a l'ancien `recordBuildVisit()` trouvees et corrigees
 (`grep` de verification apres coup) - une dans `renderBuildInfo()`, une dans `init()`.
 
-**Pas fait cette session, en cours** : (3) verification croisee que les 6 sites supportes fonctionnent
-tous a 100% avec ce changement et plus generalement - demande explicite de l'utilisateur, a traiter
-ensuite. (4) proposition (a rediger, pas a implementer - l'utilisatrice la lira "demain matin") d'une
-page HTML hebergee sur son Google Drive qui chercherait un build sur tous les sites connectes a la fois
-et afficherait les liens - idee a creuser, pas encore de design ecrit.
+Verification croisee des 6 sites (demandee dans le meme message) faite via un fork dedie, lecture
+seule : aucun bug trouve, `isFavorited()`/`setFavorite()` sont generiques (cles sur `gameClass`/
+`location.href`, aucun branchement par site), les 6 `@match` d'accueil et `isBuildDetailPage()`
+re-verifies contre les vraies formes d'URL des 6 sites - tous corrects. Seule asymetrie relevee,
+PAS une regression : 3 sites sur 6 (D4Builds/D4Guides/talion.tv) passent encore par le repli
+InfinityBuilds + extraction en onglet cache au lieu d'une extraction native - voulu depuis v2.1,
+sans rapport avec les favoris.
+
+Piste de recherche cross-sites (page hebergee sur Drive) discutee puis abandonnee par l'utilisateur
+apres avoir compare les options d'hebergement gratuit (GitHub Pages, Render, Cloudflare Workers) -
+"on va oublier l'option de recherche". Remplacee par une idee plus simple, a evaluer : une recherche
+Google pre-remplie (menu deroulant Saison/Classe/Mode de jeu + champ texte optionnel, `site:` limite
+aux 6 domaines connus) plutot qu'un vrai systeme de recherche cross-sites - pas encore implementee.
+
+## 2026-09-27 (suite) - v3.10 : tableau "Mes Builds" simplifie a 2 colonnes + titres raccourcis
+
+Retour utilisateur sur capture d'ecran : le tableau v3.9 (Classe/Build/Site/Classement) rendait les
+titres illisibles, chaque lien de build repliait sur 5+ lignes faute de place (colonnes Site et
+Classement trop genereuses, "Site" affichait meme "?" pour plusieurs entrees). Demande : enlever Site
+et Classement, garder seulement Classe + nom du build en lien, et si possible raccourcir le lien en
+cachant les mots recurrents ("build", "guide", etc.) du titre.
+
+`renderMyBuildsTable()` simplifie a 2 colonnes - retire aussi tout l'appel `bestOfficialRank()` en
+parallele qui ne servait plus qu'a cette colonne (plus de fetch tower en arriere-plan pour ce tableau).
+Nouveau `shortenBuildTitle(title)` : reutilise **le meme `NOISE_WORDS`** deja porte pour le matching de
+titres entre sites (mots structurels/noms de classe, jamais un vrai terme de build) plutot que d'inventer
+une nouvelle liste - filtre ces mots du texte AFFICHE en préservant l'ordre (contrairement au Set non
+ordonne de `signature()`), plus "d4"/"iv" et les nombres seuls (numeros de saison). Le lien garde l'URL
+et le titre complet en `title="..."` (infobulle), seul le texte visible est raccourci.
+
+Verifie via un harnais Node autonome rejouant le VRAI `NOISE_WORDS`/`fold()`/`shortenBuildTitle()`
+extraits du fichier (pas une reimplementation) contre les 4 titres reels de la capture d'ecran plus 2
+cas supplementaires :
+- "Whirlwind Barbarian Endgame Build Guide" -> "Whirlwind"
+- "Build Paladin Frappes Ailées D4 Saison 13" -> "Frappes Ailées"
+- "Dance of Knives Rogue Endgame Build Guide" -> "Dance of Knives"
+- "Mekuna's Blazing Scream Endgame Build Guide" -> "Mekuna's Blazing Scream"
+
+CSS : `table-layout: fixed` + premiere colonne (Classe) limitee a 72px pour laisser le maximum de place
+au nom du build. `node --check` vert.
+
+## 2026-09-27 (suite) - v3.11 : nouvel outil "Recherche Google" (tous les sites, pas seulement les 6 connus)
+
+Suite de la discussion sur la piste de recherche cross-sites abandonnee : idee plus simple proposee par
+l'utilisateur - un outil avec des listes deroulantes de prereglages (Type/Saison/Classe/Mode de jeu) +
+un champ texte libre, qui lance juste une recherche Google classique, SANS la restreindre aux 6 sites
+connus (contrairement a `findCrossSiteLinks()` existant). Approuve tel quel ("c'est parfait") apres
+validation du perimetre de depart (4 types : Build/Objet unique/Aspect legendaire/Donjon Cauchemar).
+
+Nouvelle section `#d4a-gsearch-section` (bouton "🔎 Recherche Google" qui deplie un formulaire, meme
+pattern que "Retour d'expérience") - toujours visible, meme sur la page d'accueil d'un site (pas besoin
+d'un build detecte pour lancer une recherche, contrairement a Traduire/Filtre/Classement).
+
+`buildGoogleSearchQuery()` assemble les termes en ANGLAIS (pas en francais) - les guides/wikis Diablo 4
+sont tres majoritairement en anglais, de meilleurs resultats meme pour une recherche faite depuis la
+France. Reutilise les structures de donnees deja existantes plutot que d'en dupliquer : `CLASS_KEYWORDS`
+(mot-cle EN de la classe), `BUILD_VARIANT_PAIRS` (valeur EN du mode de jeu, libelle FR affiche dans le
+menu). Nouveau `GSEARCH_TYPE_OPTIONS` (4 types avec leur requete EN) et `GSEARCH_SEASONS` (saisons 10 a
+15, "Saison actuelle" par defaut = aucun filtre de saison). `runGoogleSearch()` ouvre
+`google.com/search?q=...` dans un nouvel onglet (`window.open`, pas `GM_openInTab` - pas besoin d'onglet
+cache en arriere-plan ici, l'utilisateur veut voir les resultats).
+
+Verifie via un harnais Node autonome rejouant le VRAI `buildGoogleSearchQuery()` extrait du fichier
+(DOM simule) sur 4 combinaisons :
+- Build / Barbare / Fin de partie / Saison 15 -> "diablo 4 build guide barbarian Endgame season 15"
+- Objet unique / texte libre "Grandfather" -> "diablo 4 unique item Grandfather"
+- Donjon Cauchemar / Sacresprit / Poussée / Saison 13 -> "diablo 4 nightmare dungeon spiritborn Pushing season 13"
+- Aspect légendaire / Démoniste -> "diablo 4 legendary aspect warlock"
+
+`node --check` vert. Rien teste en navigateur encore.
+
+## 2026-09-27 (suite) - v3.12 : "Recherche Google" passe au meme pattern repliable que "Mes Builds"
+
+Retour utilisateur immediat : puisque "Mes Builds" peut se reduire (`<details>`, v3.9), la nouvelle
+zone "Recherche Google" devrait suivre le meme principe plutot que son propre bouton dedie + `div
+hidden`. `#d4a-gsearch-section` converti en `<details><summary>🔎 Recherche Google</summary>...` -
+retire `d4a-btn-gsearch-toggle` et son cablage JS (`<details>` gere nativement l'ouverture/fermeture),
+garde uniquement le cablage du bouton "Lancer la recherche" et la touche Entree sur le champ texte.
+Meme regle CSS de "titre de section" (gras, couleur normale, pas le style discret des `<details>`
+d'aide) que pour "Mes Builds".
+
+`node --check` vert, aucune reference residuelle a l'ancien bouton de bascule (`grep` de verification).

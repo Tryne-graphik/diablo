@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.9
+// @version      3.12
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -324,6 +324,26 @@
     let inter = 0;
     for (const x of a) if (b.has(x)) inter++;
     return inter / (a.size + b.size - inter);
+  }
+
+  // 2026-09-27: real user request - "Mes Builds" links were unreadable,
+  // wrapping onto 5+ lines ("Whirlwind Barbarian Endgame Build Guide").
+  // Reuses the very same NOISE_WORDS already ported for title-matching
+  // (structural/class words, never a real build term) instead of a new
+  // guessed list - strips them from the DISPLAYED text (order preserved,
+  // unlike signature()'s unordered Set) plus a couple of extras
+  // ("d4"/"iv") and bare numbers (season numbers, e.g. "Saison 13").
+  const TITLE_DISPLAY_NOISE_EXTRA = new Set(["d4", "iv"]);
+  function shortenBuildTitle(title) {
+    if (!title) return title;
+    const kept = title.split(/\s+/).filter(Boolean).filter((w) => {
+      const f = fold(w).replace(/[^a-z0-9']/g, "");
+      if (!f) return false;
+      if (/^\d+$/.test(f)) return false;
+      return !NOISE_WORDS.has(f) && !TITLE_DISPLAY_NOISE_EXTRA.has(f);
+    });
+    const result = kept.join(" ").trim();
+    return result || title; // never show an empty link text
   }
 
   function findBestTitleMatch(candidates, title, gameClass) {
@@ -1313,7 +1333,11 @@
   // now that fetchTowerRuns() de-dupes concurrent in-flight fetches (see
   // its 2026-09-27 comment), so this costs at most ONE background-tab
   // fetch total, not one per row.
-  async function renderMyBuildsTable() {
+  // 2026-09-27: dropped the Site and Classement columns (real user request
+  // - the extra columns squeezed the Build column so hard that every title
+  // wrapped onto 5+ lines) - just Classe + Build now, which also means no
+  // more per-row bestOfficialRank()/background-tab fetch here at all.
+  function renderMyBuildsTable() {
     const resultEl = document.getElementById("d4a-mybuilds-result");
     if (!resultEl) return;
     const all = getMyBuilds();
@@ -1324,25 +1348,49 @@
     }
 
     resultEl.innerHTML = `<table id="d4a-mybuilds-tbl"><thead><tr>
-      <th>Classe</th><th>Build</th><th>Site</th><th>Classement</th>
+      <th>Classe</th><th>Build</th>
     </tr></thead><tbody>${classes
-      .map((c) => `<tr data-class="${c}"><td>${CLASS_LABELS_FR[c]}</td><td><a href="${all[c].url}" target="_blank" rel="noopener noreferrer">${all[c].title}</a></td><td>${all[c].source || "?"}</td><td class="d4a-rank-meta">...</td></tr>`)
+      .map((c) => `<tr data-class="${c}"><td>${CLASS_LABELS_FR[c]}</td><td><a href="${all[c].url}" target="_blank" rel="noopener noreferrer" title="${all[c].title.replace(/"/g, "&quot;")}">${shortenBuildTitle(all[c].title)}</a></td></tr>`)
       .join("")}</tbody></table>`;
+  }
 
-    const ranks = await Promise.all(
-      classes.map((c) => bestOfficialRank(c, all[c].title).catch(() => ({ runsFetched: 0, best: null })))
-    );
-    classes.forEach((c, i) => {
-      const cell = resultEl.querySelector(`tr[data-class="${c}"] td:last-child`);
-      if (!cell) return;
-      const { runsFetched, best } = ranks[i];
-      cell.textContent = best
-        ? `#${best.rank}${best.totalClassRuns ? `/${best.totalClassRuns}` : ""}`
-        : runsFetched > 0
-          ? "non classé"
-          : "indispo.";
-      cell.className = "";
-    });
+  // 2026-09-27: real user request - "un outil pour lancer des recherches
+  // sur un peu tous les aspects du jeu, avec des listes déroulantes de
+  // préréglages" (Type/Saison/Classe/Mode de jeu + texte libre), ouvrant
+  // une recherche Google classique - PAS limitée aux 6 sites connus
+  // (contrairement à findCrossSiteLinks()/l'idée de page de recherche
+  // cross-sites dédiée, explicitement abandonnée dans la même
+  // conversation : "on va oublier l'option de recherche"). Query terms in
+  // English, not French translations - build guides/wikis in this space
+  // are overwhelmingly English, and English keywords index better here
+  // even for a French search.
+  const GSEARCH_TYPE_OPTIONS = [
+    { value: "build", label: "Build", query: "build guide" },
+    { value: "unique", label: "Objet unique", query: "unique item" },
+    { value: "aspect", label: "Aspect légendaire", query: "legendary aspect" },
+    { value: "dungeon", label: "Donjon Cauchemar", query: "nightmare dungeon" },
+  ];
+  const GSEARCH_SEASONS = [15, 14, 13, 12, 11, 10];
+
+  function buildGoogleSearchQuery() {
+    const typeVal = document.getElementById("d4a-gsearch-type").value;
+    const typeOpt = GSEARCH_TYPE_OPTIONS.find((o) => o.value === typeVal) || GSEARCH_TYPE_OPTIONS[0];
+    const classVal = document.getElementById("d4a-gsearch-class").value;
+    const modeVal = document.getElementById("d4a-gsearch-mode").value;
+    const seasonVal = document.getElementById("d4a-gsearch-season").value;
+    const freeText = document.getElementById("d4a-gsearch-text").value.trim();
+
+    const parts = ["diablo 4", typeOpt.query];
+    if (classVal && CLASS_KEYWORDS[classVal]) parts.push(CLASS_KEYWORDS[classVal][0]);
+    if (modeVal) parts.push(modeVal);
+    if (seasonVal) parts.push(`season ${seasonVal}`);
+    if (freeText) parts.push(freeText);
+    return parts.join(" ");
+  }
+
+  function runGoogleSearch() {
+    const url = `https://www.google.com/search?q=${encodeURIComponent(buildGoogleSearchQuery())}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   async function renderBuildInfo() {
@@ -3315,6 +3363,13 @@
       #d4a-search-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
       #d4a-mybuilds-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
+      #d4a-gsearch-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
+      #d4a-gsearch-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
+      #d4a-gsearch-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+      #d4a-gsearch-form select, #d4a-gsearch-form input {
+        width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
+        background: #000; color: #eee; font-size: 13px; font-family: inherit;
+      }
       #d4a-feedback-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
       #d4a-feedback-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
       #d4a-feedback-form input, #d4a-feedback-form textarea {
@@ -3323,8 +3378,9 @@
       }
       #d4a-feedback-note { font-size: 11px; color: #9aa0ab; margin: 0; }
       #d4a-mybuilds-result p { margin: 0; }
-      #d4a-mybuilds-tbl { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12px; }
+      #d4a-mybuilds-tbl { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
       #d4a-mybuilds-tbl th { text-align: left; color: #9aa0ab; font-weight: 600; padding: 2px 4px; border-bottom: 1px solid #333; }
+      #d4a-mybuilds-tbl th:first-child, #d4a-mybuilds-tbl td:first-child { width: 72px; }
       #d4a-mybuilds-tbl td { padding: 3px 4px; border-bottom: 1px solid #222; vertical-align: top; }
       #d4a-mybuilds-tbl a { color: #03d0fc; }
       #d4a-search-form { display: flex; gap: 6px; margin: 6px 0 10px; }
@@ -5077,6 +5133,30 @@
           <div id="d4a-mybuilds-result"></div>
         </details>
       </div>
+      <div id="d4a-gsearch-section">
+        <details>
+          <summary>🔎 Recherche Google</summary>
+          <div id="d4a-gsearch-form">
+            <select id="d4a-gsearch-type">
+              ${GSEARCH_TYPE_OPTIONS.map((o) => `<option value="${o.value}">${o.label}</option>`).join("")}
+            </select>
+            <select id="d4a-gsearch-class">
+              <option value="">Toutes classes</option>
+              ${Object.keys(CLASS_KEYWORDS).map((c) => `<option value="${c}">${CLASS_LABELS_FR[c]}</option>`).join("")}
+            </select>
+            <select id="d4a-gsearch-mode">
+              <option value="">Tous modes de jeu</option>
+              ${BUILD_VARIANT_PAIRS.map(([en, fr]) => `<option value="${en}">${fr}</option>`).join("")}
+            </select>
+            <select id="d4a-gsearch-season">
+              <option value="">Saison actuelle</option>
+              ${GSEARCH_SEASONS.map((s) => `<option value="${s}">Saison ${s}</option>`).join("")}
+            </select>
+            <input id="d4a-gsearch-text" type="text" placeholder="Mots-clés (optionnel)">
+            <button id="d4a-gsearch-btn">🔎 Lancer la recherche</button>
+          </div>
+        </details>
+      </div>
       <div id="d4a-feedback-section">
         <button id="d4a-btn-feedback-toggle">💬 Retour d'expérience</button>
         <div id="d4a-feedback-form" hidden>
@@ -5146,6 +5226,11 @@
         (typeof GM_info !== "undefined" && GM_info.script && (GM_info.script.downloadURL || GM_info.script.updateURL)) ||
         "https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js";
       window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    document.getElementById("d4a-gsearch-btn").onclick = runGoogleSearch;
+    document.getElementById("d4a-gsearch-text").onkeydown = (e) => {
+      if (e.key === "Enter") runGoogleSearch();
     };
 
     // 2026-09-24: "zone de texte a afficher au besoin, titre : retour
