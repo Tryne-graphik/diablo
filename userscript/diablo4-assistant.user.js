@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.13
+// @version      3.14
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1393,6 +1393,58 @@
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
+  // 2026-09-27: real user report - the automatic background-tab rank
+  // lookup ("le classement en haut de page ne semble pas fonctionner du
+  // tout") is unreliable enough on page load that it's not worth doing
+  // automatically anymore. Replaced by a manual "🏆 Mon rang" button -
+  // findCrossSiteLinks() ("Aussi vu sur") stays automatic since it's a
+  // direct site query, not the fragile background-tab tower-leaderboard
+  // fetch, and isn't the part that was reported broken. #d4a-rank-line and
+  // #d4a-links-line are separate, independently-updated divs (not one
+  // shared innerHTML) so whichever of the two finishes last never wipes
+  // out the other - the rank search can complete well after the links
+  // have already rendered, or vice versa.
+  function wireRankSearchButton(gameClass, title) {
+    const btn = document.getElementById("d4a-rank-btn");
+    if (!btn) return;
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.textContent = "Recherche...";
+      const rankResult = await bestOfficialRank(gameClass, title).catch(() => ({ runsFetched: 0, best: null }));
+      // 2026-09-24: "quel niveau de fosse et en combien de temps" - the rank
+      // alone doesn't say much without knowing out of how many players of
+      // this class, or what that run actually achieved.
+      // 2026-09-27: distinguish "fetched real data, genuinely no match" from
+      // "the fetch itself came back empty" (background-tab timeout/failure) -
+      // see bestOfficialRank()'s docstring.
+      const rank = rankResult.best;
+      const rankHtml = rank
+        ? `🏆 <a href="${TOWER_URL}" target="_blank" rel="noopener noreferrer">#${rank.rank}${rank.totalClassRuns ? `/${rank.totalClassRuns}` : ""} au classement officiel</a> ` +
+          `(${rank.battleTag || "joueur anonyme"})` +
+          (rank.tier != null ? ` — Fosse ${rank.tier}` : "") +
+          (formatRunTime(rank.runTimeMs) ? `, en ${formatRunTime(rank.runTimeMs)}` : "")
+        : rankResult.runsFetched > 0
+          ? "Aucun joueur du classement officiel identifié avec ce build."
+          : "⚠️ Classement officiel indisponible pour l'instant.";
+
+      const rankArea = document.getElementById("d4a-rank-area");
+      if (rankResult.runsFetched === 0) {
+        // fetch itself failed (not "genuinely no match") - offer a retry
+        // right where the search button was, same button id so this same
+        // handler can just be re-wired onto it.
+        if (rankArea) rankArea.innerHTML = `<div>${rankHtml}</div><button id="d4a-rank-btn" type="button">🔄 Réessayer</button>`;
+        wireRankSearchButton(gameClass, title);
+      } else {
+        // done (found or genuinely not found) - the box's job is over,
+        // .d4a-rank-box:empty hides it automatically; the result moves
+        // into #d4a-rank-line, grouped alongside "Aussi vu sur".
+        if (rankArea) rankArea.innerHTML = "";
+        const rankLine = document.getElementById("d4a-rank-line");
+        if (rankLine) rankLine.innerHTML = rankHtml;
+      }
+    };
+  }
+
   async function renderBuildInfo() {
     const section = document.getElementById("d4a-buildinfo-section");
     if (!section) return;
@@ -1402,47 +1454,16 @@
       section.innerHTML = "";
       return;
     }
-    section.innerHTML = "Recherche de la position officielle...";
-
-    const [rankResult, links] = await Promise.all([
-      bestOfficialRank(gameClass, title).catch(() => ({ runsFetched: 0, best: null })),
-      findCrossSiteLinks(title, gameClass).catch(() => []),
-    ]);
-
-    // 2026-09-24: "quel niveau de fosse et en combien de temps" - the rank
-    // alone doesn't say much without knowing out of how many players of
-    // this class, or what that run actually achieved.
-    // 2026-09-27: distinguish "fetched real data, genuinely no match" from
-    // "the fetch itself came back empty" (background-tab timeout/failure) -
-    // see bestOfficialRank()'s docstring. A real user report couldn't tell
-    // which case they were in from the old single message.
-    const rank = rankResult.best;
-    const rankHtml = rank
-      ? `🏆 <a href="${TOWER_URL}" target="_blank" rel="noopener noreferrer">#${rank.rank}${rank.totalClassRuns ? `/${rank.totalClassRuns}` : ""} au classement officiel</a> ` +
-        `(${rank.battleTag || "joueur anonyme"})` +
-        (rank.tier != null ? ` — Fosse ${rank.tier}` : "") +
-        (formatRunTime(rank.runTimeMs) ? `, en ${formatRunTime(rank.runTimeMs)}` : "")
-      : rankResult.runsFetched > 0
-        ? "Aucun joueur du classement officiel identifié avec ce build."
-        : "⚠️ Classement officiel indisponible pour l'instant (la récupération en arrière-plan a échoué ou pris trop de temps) - réessaie dans quelques minutes.";
-
-    const linksHtml = links.length
-      ? "Aussi vu sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")
-      : "";
-
-    // 2026-09-27: real user request - delimit the rank in its own boxed
-    // area (darker background, easy to spot), and add a retry button for
-    // the "fetch itself failed" case specifically (runsFetched === 0, see
-    // 2026-09-27 comment above) - re-running the whole background-tab
-    // leaderboard fetch is transient/network-dependent, worth a one-click
-    // retry instead of "réessaie dans quelques minutes" with no button.
-    const retryBtnHtml = rankResult.runsFetched === 0 ? ` <button id="d4a-rank-retry" type="button">🔄 Réessayer</button>` : "";
-    const rankBoxHtml = `<div class="d4a-rank-box">${rankHtml}${retryBtnHtml}</div>`;
 
     const favChecked = isFavorited(gameClass, location.href);
     const favHtml = `<div style="margin-top:4px;"><label style="cursor:pointer;"><input type="checkbox" id="d4a-fav-checkbox" ${favChecked ? "checked" : ""}> ⭐ Garder ce build dans mes favoris</label></div>`;
 
-    section.innerHTML = `${rankBoxHtml}${linksHtml ? `<div>${linksHtml}</div>` : ""}${favHtml}`;
+    section.innerHTML = `
+      <div id="d4a-rank-line"></div>
+      <div id="d4a-links-line">Recherche des autres sites...</div>
+      <div id="d4a-rank-area" class="d4a-rank-box"><button id="d4a-rank-btn" type="button">🏆 Mon rang</button></div>
+      ${favHtml}
+    `;
 
     const favCheckbox = document.getElementById("d4a-fav-checkbox");
     if (favCheckbox) {
@@ -1451,8 +1472,20 @@
         renderMyBuildsTable();
       });
     }
-    const retryBtn = document.getElementById("d4a-rank-retry");
-    if (retryBtn) retryBtn.onclick = () => renderBuildInfo();
+    wireRankSearchButton(gameClass, title);
+
+    findCrossSiteLinks(title, gameClass)
+      .then((links) => {
+        const linksLine = document.getElementById("d4a-links-line");
+        if (!linksLine) return;
+        linksLine.innerHTML = links.length
+          ? "Aussi vu sur : " + links.map((l) => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${SOURCE_LABELS[l.source] || l.source}</a>`).join(" · ")
+          : "";
+      })
+      .catch(() => {
+        const linksLine = document.getElementById("d4a-links-line");
+        if (linksLine) linksLine.innerHTML = "";
+      });
   }
 
   // ---------------------------------------------------------------------
@@ -3344,6 +3377,7 @@
         background: #000; border: 1px solid #333; border-radius: 6px;
         padding: 6px 8px; margin-bottom: 4px;
       }
+      .d4a-rank-box:empty { display: none; }
       .d4a-rank-box button {
         background: #333; color: #fff; border: none; padding: 2px 8px;
         border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit;
@@ -3391,6 +3425,7 @@
         background: #000; color: #eee; font-size: 13px; font-family: inherit;
       }
       #d4a-feedback-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
+      #d4a-feedback-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; }
       #d4a-feedback-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
       #d4a-feedback-form input, #d4a-feedback-form textarea {
         width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
@@ -5148,7 +5183,7 @@
         <button id="d4a-btn-filter-strict">🛡 Filtre Strict</button>
       </div>
       <div id="d4a-mybuilds-section">
-        <details open>
+        <details>
           <summary>📌 Mes Builds</summary>
           <div id="d4a-mybuilds-result"></div>
         </details>
@@ -5178,13 +5213,15 @@
         </details>
       </div>
       <div id="d4a-feedback-section">
-        <button id="d4a-btn-feedback-toggle">💬 Retour d'expérience</button>
-        <div id="d4a-feedback-form" hidden>
-          <input id="d4a-feedback-title" type="text" value="Retour d'expérience">
-          <textarea id="d4a-feedback-body" rows="4" placeholder="Décris le problème ou la suggestion (un lien vers le build ou le filtre concerné aide beaucoup)..."></textarea>
-          <button id="d4a-feedback-send">📤 Envoyer</button>
-          <p id="d4a-feedback-note">Envoyé directement, aucun compte nécessaire.</p>
-        </div>
+        <details>
+          <summary>💬 Retour d'expérience</summary>
+          <div id="d4a-feedback-form">
+            <input id="d4a-feedback-title" type="text" value="Retour d'expérience">
+            <textarea id="d4a-feedback-body" rows="4" placeholder="Décris le problème ou la suggestion (un lien vers le build ou le filtre concerné aide beaucoup)..."></textarea>
+            <button id="d4a-feedback-send">📤 Envoyer</button>
+            <p id="d4a-feedback-note">Envoyé directement, aucun compte nécessaire.</p>
+          </div>
+        </details>
       </div>
     `;
     document.body.appendChild(column);
@@ -5266,11 +5303,6 @@
     // Falls back to the old GitHub-Issue link (no account-free option,
     // but works with zero setup) if APPS_SCRIPT_ENDPOINT_URL is still the
     // placeholder - fill it in with the deployed Apps Script /exec URL.
-    const feedbackToggleBtn = document.getElementById("d4a-btn-feedback-toggle");
-    const feedbackForm = document.getElementById("d4a-feedback-form");
-    feedbackToggleBtn.onclick = () => {
-      feedbackForm.hidden = !feedbackForm.hidden;
-    };
     const feedbackSendBtn = document.getElementById("d4a-feedback-send");
     const feedbackNote = document.getElementById("d4a-feedback-note");
     feedbackSendBtn.onclick = async () => {

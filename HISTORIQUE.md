@@ -6574,3 +6574,34 @@ liens croises + reconstruit la case favoris depuis `isFavorited()`) plutot que d
 retry separe.
 
 `node --check` vert.
+
+## 2026-09-27 (suite) - v3.14 : interface repliable uniformisee + classement passe en recherche manuelle groupee
+
+Trois demandes du meme message :
+
+**(1) Coherence des sections repliables.** "Retour d'expérience" utilisait encore l'ancien mecanisme
+(bouton dedie + `div hidden` bascule en JS), different de "Recherche Google" (`<details>` natif, v3.12).
+Converti au meme pattern - retire son bouton de bascule et le cablage JS associe. "Mes Builds" passe
+aussi de `<details open>` a `<details>` (ferme par defaut) pour que les 3 sections secondaires
+(Mes Builds/Recherche Google/Retour d'expérience) se comportent toutes pareil au clic.
+
+**(2) et (3) Le classement automatique en haut de page ne marchait pas de maniere fiable.** Retour
+utilisateur direct : "le classement en haut de page ne semble pas fonctionner du tout". Plutot que de
+re-fiabiliser le fetch en arriere-plan (background tab vers helltides.com, deja source de plusieurs
+correctifs cette session), remplace la recherche AUTOMATIQUE au chargement par un bouton manuel
+"🏆 Mon rang" (titre volontairement tres court, distinct du bouton existant "🏆 Classement" - feature
+differente, le classement consensus des meilleurs builds). "Aussi vu sur" reste automatique (requete
+directe aux sites, pas le fetch fragile qui posait probleme).
+
+Une fois la recherche de rang terminee (trouve OU genuinement absent, pas en echec), le resultat
+rejoint "Aussi vu sur" dans la meme zone (`#d4a-rank-line`/`#d4a-links-line`, divs separees mais cote
+a cote) - demande explicite de l'utilisateur ("grouper le resultat de la recherche avec le aussi vu").
+Divs separees plutot qu'un seul `innerHTML` partage : le fetch de rang (declenche par un clic, donc a
+un moment imprevisible) et celui des liens croises (automatique au chargement) peuvent se terminer dans
+n'importe quel ordre - un seul `innerHTML` partage aurait fait que celui qui finit en dernier efface le
+resultat de l'autre. En cas d'echec du fetch (pas juste "rien trouve"), le bouton "🔄 Réessayer"
+reapparait a la place du bouton de recherche initial (meme id, meme handler re-cable). `.d4a-rank-box`
+se cache automatiquement une fois vide (`:empty`, meme convention deja utilisee ailleurs dans le
+fichier pour les sections vides).
+
+`node --check` vert. Rien teste en navigateur encore.
