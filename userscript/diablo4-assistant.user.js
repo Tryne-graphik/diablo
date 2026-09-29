@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.31
+// @version      3.32
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4098,7 +4098,13 @@
   }
 
   async function extractMaxrollDetail() {
-    const pageHtml = document.documentElement.outerHTML;
+    // 2026-09-29: Maxroll a migre l'id du planner hors du HTML statique -
+    // il n'apparait plus nulle part dans document.documentElement.outerHTML
+    // (confirme en direct sur 2 pages de guide reelles, classes differentes),
+    // seulement dans window.__remixContext (peuple par leur framework Remix
+    // apres coup, pas visible dans le HTML serialise). outerHTML reste scanne
+    // en premier pour ne rien casser si Maxroll revient en arriere.
+    const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
     const plannerIds = new Set();
     const idRe = /d4\/planner\/([a-z0-9]{4,})/gi;
     let idMatch;

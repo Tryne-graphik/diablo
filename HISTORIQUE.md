@@ -709,3 +709,50 @@ toujours mettre les règles de secours/masquage en dernier.
 - Le format "nom court d'Aspect" affiché par différents sites peut être
   ambigu (deux Aspects de classes différentes partageant le même nom court)
   - toujours exclure une collision détectée plutôt que deviner.
+
+## 2026-09-29 - Verification reelle de l'extraction native kami-labs/Maxroll (v2.1)
+
+Item ouvert depuis la creation du projet (la note du 2026-09-21 disait deja
+"confirmees fonctionnelles le lendemain" mais sans browser reel documente
+depuis) - verifie pour de vrai via Chrome DevTools MCP sur des pages de
+build en direct, en injectant le code source reel du userscript (pas une
+reimplementation) avec juste un shim minimal de `GM_xmlhttpRequest` (via
+`fetch`, gmGet() l'utilise pour les 2 sites).
+
+**kami-labs.fr (`extractKamiLabsDetail()`) : fonctionne correctement.**
+Teste sur un vrai build Voleur ("build-voleur-pluie-de-fleches-polyvalent-
+saison-15") : 6 competences + 11 objets extraits, tous des noms reels
+(Shadow Step/Heartseeker/Dash/Concealment/Cold Imbuement/Rain of Arrows -
+vraies competences Voleur). 3 des 6 traductions FR (Celerite, Dissimulation,
+Pluie de fleches) confirmees mot pour mot dans le texte de description de
+rotation de la page elle-meme. Aucun changement necessaire.
+
+**maxroll.gg (`extractMaxrollDetail()`) : BUG REEL TROUVE ET CORRIGE.**
+Teste sur 2 pages de guide reelles (Voleur Dance of Knives, Necromancien
+Blood Wave) : dans les deux cas, l'id du planner (necessaire pour recuperer
+`skillsEn`/`itemsEn` via `search_metadata`) etait introuvable dans
+`document.documentElement.outerHTML`, meme apres avoir force le montage des
+widgets `.d4t-embed-host` (scroll + attente). Cause reelle : Maxroll a
+migre cet id hors du HTML statique - il n'existe plus que dans
+`window.__remixContext` (peuple par leur framework cote client apres coup,
+absent du HTML serialise). Confirme par extraction directe de
+`window.__remixContext` : l'id y est bien present sur les 2 pages testees
+("mmfzmj0i" et "xf9um40q"). **Extraction Maxroll etait donc cassee pour de
+bon sur toute page de build reelle en conditions actuelles** - skillsEn
+revenait systematiquement vide.
+
+**Corrige (v3.32)** : `extractMaxrollDetail()` scanne maintenant
+`document.documentElement.outerHTML` CONCATENE a
+`JSON.stringify(window.__remixContext)` (si present) au lieu du seul
+outerHTML - fallback gracieux si `__remixContext` n'existe pas (ancienne
+page/autre structure). Reteste en direct avec le code corrige sur les 2
+memes pages : skillsEn/itemsEn reviennent correctement peuples (ex. Blood
+Wave Necro : Reap/Blood Wave/Skeleton Mage/Decrepify/Bone Prison/Blood Mist
++ Leoric's Crown/Enigma/Insight/... - tous coherents avec le nom du build).
+`node --check` vert.
+
+**Pas encore reteste dans le vrai Tampermonkey de l'utilisateur** (seulement
+Chrome DevTools MCP avec injection directe + shim GM_xmlhttpRequest) -
+prochain pas si besoin : import du v3.32 dans Tampermonkey et clic reel sur
+"Traduire"/"Generer le filtre" sur une page Maxroll pour confirmer que la
+chaine complete (pas juste extractMaxrollDetail() isolee) fonctionne.
