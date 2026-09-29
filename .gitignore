@@ -14,3 +14,10 @@ app/data/kamilabs_cache/
 # Build PyInstaller de l'outil de verif d'installation (regenerable, ~11 Mo)
 installer/build/
 installer/dist/
+
+# Profil navigateur Playwright persistant (InfinityBuilds) - contient de vrais
+# cookies de session (Discord/Supabase), ne doit jamais etre commite
+.pw-profile-infinitybuilds/
+
+# Artefacts de debug/exploration Playwright (screenshots, dumps JSON/HTML bruts)
+scripts/_*

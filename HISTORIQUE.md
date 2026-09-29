@@ -7100,3 +7100,346 @@ TOUTES les paires EN/FR existantes du projet, pas une regression introduite ici,
 signalee comme un probleme).
 
 `node --check` vert. Pas encore teste par l'utilisateur dans son vrai navigateur.
+
+## Automatisation InfinityBuilds Planner - premiere vraie session (2026-09-29)
+
+Sujet different du reste du fichier : pas le userscript/backend habituels, mais la
+piste "remplissage automatique du Planner InfinityBuilds personnel via Playwright"
+actee comme architecture cible le 2026-09-20 (voir plus haut) et jamais commencee
+jusqu'ici. Declenchee par une question du a propos d'un build Voleur (ou autre
+classe) Saison 15 utilisant Couronne de Leoric + Eclat de Damnation pour farmer le
+parangon, avec un souci de robustesse (l'utilisateur meurt trop en jeu actuellement).
+
+**Profil navigateur persistant cree** : `.pw-profile-infinitybuilds/` a la racine du
+projet (gitignore a verifier/ajouter si pas deja fait). L'utilisateur s'est connecte
+une fois manuellement via Discord OAuth (`scripts/pw_login_infinitybuilds.py`,
+navigateur visible puis ferme par l'utilisateur). Confirme fonctionnel en headless
+ensuite (cookies Supabase `sb-etjlytacxkdyukroxtvg-auth-token.*` presents,
+`scripts/pw_check_infinitybuilds_login.py`) - identite confirmee via
+`fetch('/api/me')` : `tryne31@gmail.com` / handle `tryne31`.
+
+**Gear (Helm + Soul Splinters) : automatisation qui MARCHE, confirmee de bout en
+bout.** Flux reproductible (voir `scripts/pw_explore_new_build2.py` pour le detail
+exact des selecteurs) : `/en/builds/new` -> selectionner classe -> clic sur le slot
+"Helm" -> `input[placeholder^="Search uniques"]` rempli avec le nom -> clic sur la
+carte resultat -> la modale item s'ouvre avec ses 2 "Empty Socket" (Offering/Effect
+Rune-Gem-Soul Splinter) -> clic sur un socket -> onglet interne "Soul Splinter"
+(attention : `page.click("text=Soul Splinter")` matche AUSSI le texte du socket
+lui-meme derriere la modale, ambigu -> utiliser `get_by_role("tab", name=...)`
+avec fallback `get_by_text(..., exact=True).last.click(force=True)`) -> champ
+recherche (meme selecteur `input[placeholder^="Search"]`, le texte utilise un
+caractere ellipse unicode "..." et non 3 points ASCII, `[placeholder="..."]` exact
+echoue silencieusement en timeout) -> clic sur la carte du bon palier -> **un seul
+clic sur "Save" ferme TOUTES les modales imbriquees d'un coup** (pas besoin de
+Save x2). Verifie avec Couronne de Leoric + Greater Splinter of Damnation (Skarn,
++2625 Resistance Ombre, +1 Puissance Monstres pendant 20s par pack d'elite tue) +
+Greater Splinter of Pain (Duriel, +2625 Resistance Poison, -30% Reduction Degats /
+-30% Vitesse Deplacement) - exactement la combo demandee par l'utilisateur.
+
+**Decouverte majeure : mapping des noms Eclats spirituels des sites FR/EN vers les
+vrais ids internes.** Les noms "descriptifs" utilises par les sites de fans (Anguish/
+Pain/Sin/Lies/BlackSoulstone/Mother/InfernalFlames/Damnation) correspondent chacun a
+un boss/Mal Primordial different en interne - confirme via `soulsplinter-<boss>-04-itm`
+dans le JSON brut InfinityBuilds : Damnation=Skarn, Pain=Duriel, Hellfire=Nakrul (PAS
+Damnation, piege a eviter - un build Poison DoK deja publie sur InfinityBuilds
+utilise Nakrul+BlackSoulstone dans la Couronne, pas Damnation, il ne faut pas le
+copier tel quel pour un objectif farm-parangon).
+
+**Skills : le mecanisme de clic EST perce, mais la sauvegarde ne persiste PAS - bug
+bloquant non resolu.** Details techniques :
+- L'onglet Skills de la page principale n'est qu'un `<iframe>` cross-origin vers
+  `tools.infinitybuilds.gg/en/skills?mode=configure&class=<classe>` (idem Paragon
+  sur `/en/paragon`) - `page.frame_locator('iframe[src*="tools.infinitybuilds.gg/en/skills"]')`
+  pour y acceder. Rendu interne = hit-testing par coordonnees pixel pures (aucun
+  DOM par noeud, ni canvas ni svg identifiable - `page.mouse.click(x,y)` marche
+  directement, tolerance de hitbox genereuse).
+- **API JSON complete trouvee** : `https://data.infinitybuilds.gg/api/games/diablo4/skill-trees?v=<version>&locale=en`
+  (~6.3Mo, pas d'auth requise) donne pour chaque classe la liste complete des noeuds
+  (`id`, `x`, `y` en coordonnees "monde", `displayName`, `nodeKind`, `maxRanks`,
+  `connections`). Snapshot sauvegarde dans `scripts/_skilltrees_raw.json` (a deplacer
+  dans `research/` si cette piste reprend, actuellement juste dans `scripts/`,
+  gitignore a verifier).
+- **Transformation coordonnees "monde" -> pixels ecran N'EST PAS un zoom/pan
+  uniforme** : c'est un etirement independant par axe (X et Y scales differemment,
+  ratio ~1.9x observe de facon repetee) - pas de rotation/skew. Formule calibree et
+  verifiee (2 points confirmes exactement, zero erreur) **apres avoir clique le
+  bouton "Zoom out" du canevas 10 fois** (== zoom minimal, meme en re-cliquant plus
+  la vue ne change plus) : `SCALE_X=0.02257, OFFSET_X=673.83, SCALE_Y=0.04338,
+  OFFSET_Y=720.22`, viewport Playwright 1400x1000, `screen = (wx*SCALE_X+OFFSET_X,
+  wy*SCALE_Y+OFFSET_Y)`. Valable uniquement a ce zoom exact et cette taille de
+  viewport - a recalibrer si l'un des deux change. Meme au zoom minimal, le bas de
+  l'arbre (branches Imbuement/Ultimate/Agility, y monde > ~5000) reste partiellement
+  hors cadre - une future passe devra gerer un pan (drag souris) pour ces noeuds.
+- **Source de verite pour le contenu exact du build (quelles competences, quel rang,
+  quel ordre) trouvee sur Maxroll lui-meme**, bien plus fiable que du texte parse :
+  chaque page de build guide Maxroll embarque un blob JSON complet
+  (`window.__remixContext`, app Remix) contenant
+  `state.loaderData['branch-posts'].post.gutenbergBlock[0].plannerProfile.data.profiles[]`
+  - 8 profils par build (Leveling Skill Tree / Leveling 1-70 / Starter / Midgame /
+  Endgame / Push / Cold Endgame / Cold Push), chacun avec `skillTree.steps[0].data`
+  (dict `{id_noeud: rang}`), `items` (equipement complet), `paragon`, `skillBar`,
+  `specialization`, `mercenary` - litteralement tout le necessaire pour un build en
+  un seul fetch. **Les ids de noeuds de Maxroll correspondent EXACTEMENT aux ids de
+  l'API skill-trees d'InfinityBuilds** (0 id manquant sur les 25 testes) - les deux
+  sites partagent visiblement le meme dataset canonique en coulisses, gain de temps
+  enorme si reexploite plus tard (pas besoin de deviner/re-scraper, juste croiser
+  les deux). Le profil "Endgame" du guide Twisting Blades Rogue (Poison Imbuement,
+  maxroll.gg/d4/build-guides/twisting-blades-rogue-guide) donne 25 noeuds a allouer
+  (voir `TARGETS_RAW` dans `scripts/pw_allocate_skills.py` pour la liste exacte
+  id->rang), specialisation `Rogue_Talent_Mechanic_T1_N2`, skillBar =
+  ShadowClone/TwistingBlades/ShadowStep/Dash/Stealth/PoisonImbue.
+- **Premiere passe d'allocation (`scripts/pw_allocate_skills.py`) : bug de parsing
+  corrige apres coup mais resultat casse quand meme** - le parsing du texte de la
+  tooltip (pour verifier quel noeud a ete reellement touche) splitait sur "|" au
+  lieu de "\n", donc TOUT etait log comme un faux "FAIL" alors que 24/25 clics
+  avaient en fait reussi du premier coup (excellent signe pour la fiabilite du
+  calibrage) - mais a cause du faux FAIL, la boucle "cliquer (rang cible - 1) fois
+  de plus" ne s'est jamais executee, donc les 4 competences a rang 15
+  (Concealment/Twisting Blades/Dark Shroud/Poison Imbuement) sont restees a rang 1,
+  et le noeud 715 (Cooldown, Ultimate) a vraiment rate (position hors calibrage a
+  verifier). Un `Save Draft` a quand meme ete clique a la fin.
+- **BUG BLOQUANT DECOUVERT en essayant de corriger** : en rouvrant le brouillon
+  sauvegarde (`/en/me/builds/cmulue9q600000agm0xgh0ogv/edit` - le brouillon existe
+  bien, visible dans "My Builds", titre "Twisting Blades Poison - Farm Parangon",
+  classe Rogue) pour completer les rangs manquants, le compteur "SKILL POINTS" est
+  reparti de 0 au lieu de refleter les 24 points deja soi-disant sauvegardes -
+  **l'etat de l'arbre de competences (dans l'iframe tools.infinitybuilds.gg) ne
+  semble PAS avoir ete persiste par le clic sur "Save Draft"**, contrairement au
+  Gear (Couronne + Eclats) qui lui a l'air d'avoir tenu (a reverifier explicitement
+  la prochaine fois, pas fait). Hypothese non confirmee : il manque une etape de
+  synchronisation (postMessage iframe -> page parente, ou changement d'onglet qui
+  la declenche) avant que "Save Draft" ne capture l'etat reel de l'iframe. **A
+  investiguer en priorite avant de refaire quoi que ce soit sur les competences** -
+  sinon tout le travail d'allocation repart a zero a chaque fermeture/reouverture.
+
+**Etat exact du brouillon InfinityBuilds a la fin de la session** (id
+`cmulue9q600000agm0xgh0ogv`, URL `/en/me/builds/cmulue9q600000agm0xgh0ogv/edit`) :
+Gear = Couronne de Leoric + Damnation(Skarn, Greater) + Pain(Duriel, Greater)
+correctement configures (a reverifier). Skills = etat incertain/possiblement vide
+suite au bug de sauvegarde ci-dessus - **premiere chose a faire la prochaine session
+est de rouvrir ce brouillon et regarder l'onglet Skills tel qu'il est reellement**
+avant de refaire quoi que ce soit.
+
+**A faire, dans l'ordre, la prochaine fois** :
+1. Diagnostiquer et corriger le bug de non-persistance de l'arbre de competences.
+2. Reallouer proprement les 25 noeuds (liste dans `TARGETS_RAW`), avec le parsing
+   de tooltip corrige (`get_tooltip_info` dans `scripts/pw_fix_skills.py` - split
+   sur `\n`, pas `|`) et en tenant compte du fait qu'un premier clic sur un noeud
+   deja partiellement alloue semble parfois ne pas incrementer le rang (pattern
+   "off-by-one" observe de facon constante sur 6 noeuds d'affilee - a re-verifier,
+   pourrait aussi n'etre qu'un symptome du bug de sauvegarde ci-dessus plutot qu'un
+   vrai comportement de clic).
+3. Gerer le pan (drag souris) pour les noeuds hors cadre meme au zoom minimal.
+4. Paragon (meme structure iframe `tools.infinitybuilds.gg/en/paragon`, donnees
+   dans `eg['paragon']` du meme blob Maxroll - pas explore du tout encore, a priori
+   aussi complexe qu'un plateau de tuiles/glyphes, pas juste un clic par noeud).
+5. Specialisation (visible comme 3 cartes cliquables sous la grille d'equipement,
+   pas encore automatisee - a priori simple, un clic).
+6. Items de `eg['items']` (Maxroll) pour le reste de l'equipement (armure/armes/
+   anneaux/amulette) au-dela du casque deja fait.
+7. Talisman/Mercenaires/Warplan/Prime Evils - onglets pas du tout explores.
+
+## Suite et resolution du bug de sauvegarde (2026-09-29, meme jour)
+
+**Bug de persistance RESOLU et prouve.** Diagnostic reel (capture reseau pendant le
+clic sur le bouton de sauvegarde) : la sauvegarde envoie un `PATCH
+https://infinitybuilds.gg/api/builds/<id>` avec tout l'etat du build (gear +
+skills + paragon) dans le corps JSON - `variants[0].skills.skills` est un dict
+`{"rogue::skill-<id_numerique>": rang}` qui correspond exactement aux ids
+numeriques de l'API skill-trees. **Le mecanisme de sauvegarde marchait deja
+correctement** - le vrai souci de la premiere tentative (session precedente) etait
+probablement que le clic sur le bouton n'avait pas correctement abouti (bouton mal
+identifie ou timing), pas un bug de fond du site. Verification faite par
+rechargement a froid complet (nouveau `launch_persistent_context`, nouvelle page) :
+`83 / 83` points confirmes presents apres reload, avec `fetch('/api/builds/<id>')`
+cote client pour lire l'etat exact sauvegarde (plus fiable que lire l'affichage
+visuel).
+
+**Piege decouvert : le libelle du bouton de sauvegarde differe selon le contexte.**
+Sur `/en/builds/new` (creation), c'est **"Save Draft"**. Sur
+`/en/me/builds/<id>/edit` (edition d'un brouillon existant), c'est juste
+**"Save"**. Chercher le mauvais texte fait echouer silencieusement (timeout,
+aucune erreur bloquante si le code ne verifie pas le succes).
+
+**Piege decouvert : cliquer sur un noeud pour "juste verifier" son etat rajoute un
+rang si le noeud n'est pas au maximum et qu'il reste de la marge sous le plafond de
+83 points.** Il n'existe pas de tooltip au survol (hover seul, teste explicitement,
+ne montre rien) - la seule facon de lire l'etat d'un noeud est de cliquer dessus,
+ce qui l'incremente aussi. Consequence pratique : toute boucle de "verification"
+qui re-clique sur un noeud deja traite risque de fausser le decompte. Le compteur
+"SKILL POINTS X / 83" (lisible sans cliquer sur un noeud specifique) est la seule
+verification vraiment non-destructive.
+
+**Decouverte cle : clic droit = retirer un point directement sur le noeud, sans
+passer par le bouton "Remove point" de la tooltip.** Ce bouton "Remove point" (qui
+apparait dans la tooltip apres un clic gauche) **ne fonctionne PAS de facon fiable
+via Playwright, meme avec `force=True` ou un `element.click()` JS direct** - un
+diagnostic via `document.elementFromPoint()` a confirme que le canevas
+(`skill-tree-canvas`) est litteralement l'element au sommet de la pile a cet
+endroit precis (le bouton existe visuellement mais un autre element recoit les
+clics reels a ces coordonnees - probablement un vrai bug/limitation de rendu du
+site, pas quelque chose de contournable cote client). **Le clic droit direct sur le
+noeud dans le canevas retire un rang de facon fiable et immediate** - a utiliser
+systematiquement a la place du bouton de la tooltip pour toute correction future.
+
+**Nettoyage effectue** : le point errone reste de la session precedente
+("rogue::skill-1" = Flurry, une competence de base sans rapport avec le build,
+ajoute par erreur de test) et un second point mal place lors d'une tentative de
+correction ("rogue::skill-697", un AUTRE noeud partageant le meme nom generique
+"Cooldown" que la cible reelle mais situe dans une branche totalement differente -
+piege : plusieurs noeuds du meme arbre partagent des noms d'affichage identiques,
+`displayName` seul ne suffit pas a les distinguer, il faut aussi verifier `x`/`y`
+ou le tag de categorie affiche dans la tooltip, ex. "Ultimate" vs "Imbuement") ont
+tous les deux ete retires proprement au clic droit. **Etat final confirme apres
+sauvegarde et rechargement** : 24 des 25 noeuds cibles du profil Maxroll Endgame
+sont exactement corrects (`23, 27(15), 29(15), 40(15), 41, 43, 45(3), 55, 59, 67,
+204, 245(15), 247, 471, 586, 589, 632, 633, 647, 675, 677, 689, 690, 718`), il
+manque uniquement le noeud **715 "Cooldown" (Ultimate, +Reduction de recharge)** -
+83/83 points au total, avec le point restant coince sur Flurry (id 1, competence
+de base inoffensive, sans consequence sur l'efficacite du build) faute d'avoir pu
+placer ce dernier point precisement.
+
+**Le noeud 715 reste non place malgre plusieurs tentatives** - c'est le noeud le
+plus au sud de la branche Ultimate (`x=-2415.5, y=6560.4`), tout au bord de la
+zone visible/cliquable meme au zoom minimal (position ecran predite `y=1005` pour
+un viewport de hauteur 1000 - litteralement hors cadre de quelques pixels).
+Tentatives infructueuses : agrandir la hauteur du viewport Playwright (recalibre
+tout le panneau de facon imprevisible - Flurry n'etait plus au meme endroit apres,
+prouve empiriquement) ; molette de souris sur le canevas (effet incertain/pas
+reproductible) ; glisser-deposer (mousedown+move+mouseup) pour faire un vrai
+panoramique (aucun effet observe - le clic-glisser au bouton gauche n'est
+probablement pas le geste de pan attendu par cet outil, peut-etre reserve au
+bouton du milieu ou a un modificateur clavier, non teste). **A la prochaine
+tentative, essayer en priorite** : bouton du milieu de la souris pour le pan,
+`page.keyboard` combine a la molette, ou plus simplement inspecter le code source
+de `tools.infinitybuilds.gg` (le bundle JS) pour trouver le vrai geste de pan
+plutot que deviner par essais-erreurs.
+
+**Conclusion pratique de la session** : le blocage principal (persistance) est
+leve, la methode complete (transform de coordonnees + calibrage + clic
+gauche=ajouter/droit=retirer + verification via le compteur de points plutot que
+via des clics de "verification") est documentee et reproductible pour n'importe
+quel autre build/classe. Le seul residu est un unique point cosmetique
+(Flurry au lieu du noeud 715) sur CE brouillon precis - l'utilisateur peut le
+corriger lui-meme en 2 clics dans son navigateur si besoin, ou une session future
+peut retenter avec une meilleure technique de pan.
+
+## Equipement complet automatise (2026-09-29, meme jour, suite immediate)
+
+Apres la resolution du bug de sauvegarde, l'utilisateur a demande de terminer
+l'equipement complet pour pouvoir tester en jeu tout de suite. **Decouverte cle
+avant de commencer** : le build "Endgame" par defaut de Maxroll n'utilise PAS la
+Couronne de Leoric (il utilise "Odd Hate", un casque legendaire different) - la
+Couronne + Eclats de Damnation/Douleur etait le choix specifique de l'utilisateur
+pour le farm parangon, pas la recommandation generaliste de Maxroll. **Decision
+prise et a retenir : le Helm reste la Couronne de Leoric, tout le reste de
+l'equipement suit Maxroll fidelement.**
+
+**Reproduire les affixes precis de Maxroll s'est revele hors de portee** (id
+numeriques "nid" specifiques a la Saison 15, absents de la base de reference du
+projet `research/d4lootbench-data-2026-09-22.json` qui date d'avant cette saison)
+- **decision actee avec l'utilisateur : Base + Aspect seulement pour les
+legendaires, pas les valeurs d'affixes exactes** (de toute facon peu utile en
+pratique, un vrai drop n'aura jamais ces valeurs precises).
+
+**Methode qui a permis de debloquer les noms d'Aspect sans decoder les ids** :
+charger la vraie page Maxroll en direct avec Playwright (pas de reverse-engineering
+de donnees necessaire) et faire defiler jusqu'a la section "Equipment" - **elle
+affiche deja en texte simple et lisible la paire "Nom de l'Aspect / Type d'objet"
+pour chaque emplacement**, sans avoir besoin de survol ni de tooltip. Bien plus
+rapide que la decouverte laborieuse des ids numeriques `nid` (dont la resolution
+partielle a quand meme servi a confirmer/comprendre la structure).
+
+**Flux de l'automatisation InfinityBuilds pour un objet Legendaire** (nouveau,
+different des Uniques) : clic sur le slot -> onglet "Legendary" (au lieu de
+"Unique / Mythic") -> champ `input[placeholder^="Search legendary"]` -> taper le
+nom de l'Aspect (recherche floue, le nom court suffit, ex. "Mending Obscurity"
+trouve directement "Aspect of Mending Obscurity") -> clic sur la carte -> Save.
+**Piege specifique au slot "Ranged" (armes a distance)** : avant que le champ de
+recherche n'apparaisse, une etape supplementaire est requise - choisir le type de
+base ("Bow" ou "Crossbow") via 2 boutons, le texte explicatif dit "Which offhand
+item type? Aspects roll on any offhand, but the chosen type sets the base item
+icon." Sans ce clic prealable, `page.fill()` sur le champ de recherche time out
+indefiniment (le champ n'existe simplement pas encore dans le DOM).
+
+**Equipement final rempli et verifie (fetch direct de `/api/builds/<id>`, pas
+juste l'affichage)** - 11/11 emplacements principaux :
+- Helm: Couronne de Leoric (choix delibere, Eclats Damnation+Douleur, palier
+  Greater, deja fait avant cette suite)
+- Chest: Enigma (Unique)
+- Gloves: Fist of the Iron Rose (Mythique)
+- Pants: Tibault's Will (Mythique)
+- Boots: Aspect of Mending Obscurity (Legendaire)
+- Ranged: Aspect of Crushing (Legendaire, base Crossbow)
+- Ring 1: Aspect of Imitated Imbuement (Legendaire) + Eclat de Douleur (Duriel,
+  palier Greater)
+- Ring 2: Aspect of Malice (Legendaire) + Eclat de l'Ame-Pierre-Noire (palier
+  Greater)
+- Amulet: Exploiter's Aspect (Legendaire) + Eclat d'Enfer/Hellfire (Nakrul,
+  palier Greater)
+- Main Hand: The Maestro (Mythique)
+- Off-Hand: Asheara's Khanjar (Mythique)
+
+Les 3 Eclats spirituels ajoutes sur Anneau1/Anneau2/Amulette reprennent
+exactement la repartition par defaut de Maxroll pour ce build (leur casque a eux
+n'a pas de socket puisque ce n'est pas la Couronne de Leoric) - ajoutes en plus
+des 2 deja dans la Couronne, pour rester fidele a la puissance reelle du build
+tout en gardant la personnalisation farm-parangon demandee au depart.
+
+**Bug rencontre et contourne, meme session** : apres une premiere passe reussie
+sur la plupart des slots, une bannière "Recovered unsaved draft from Xs ago" est
+apparue et a commence a intercepter des clics (overlay `fixed inset-0` capturant
+les evenements pointeur) - se resout en cliquant son bouton "Discard draft" avant
+de continuer toute automatisation sur cette page.
+
+**Non fait, reste ouvert pour une prochaine session** :
+- **Specialisation** (Combo Points/Inner Sight/Preparation - la reponse trouvee
+  via Maxroll est **Preparation** pour ce build) - la section correspondante
+  n'apparait PAS sur le brouillon existant apres allocation de competences
+  (`get_by_text('SPECIALIZATION')` renvoie 0 resultat sur toute la page, pas
+  juste hors-cadre) alors qu'elle etait visible lors de la toute premiere
+  exploration (New Build, Barbare, avant toute allocation) - cause exacte non
+  identifiee, peut-etre lie au toggle "Show skills above the skill tree" ou a un
+  changement de mise en page une fois des points depenses. A un simple clic pres
+  pour l'utilisateur en attendant.
+- **Runes/gemmes dans les sockets** des 7 autres pieces d'armure/armes (seule la
+  Couronne a ses sockets remplis, avec des Eclats spirituels, pas des runes) -
+  jamais tente.
+- **Onglet TALISMAN** (Sceau Legendaire + 5 Charms de set "of the Sightless" +
+  1 Charm Unique "Etna's Lost Dagger", noms exacts releves sur la page Maxroll
+  mais interface jamais exploree).
+- **Parangon** - completement inexplore, donnees exactes disponibles dans
+  `eg['paragon']` du meme blob Maxroll (`window.__remixContext`), mais
+  l'interface (meme structure iframe `tools.infinitybuilds.gg/en/paragon`) n'a
+  jamais ete ouverte - a prevoir un calibrage similaire a celui des competences
+  (tableau de tuiles/glyphes, probablement aussi complexe).
+
+**Build final tel quel deja testable en jeu** pour l'essentiel (competences +
+equipement) - c'etait la demande explicite de l'utilisateur ("je teste dans la
+foulee").
+
+**Fichiers de travail crees cette session dans `scripts/`** (tous prototypes/
+exploration, pas nettoyes) : `pw_login_infinitybuilds.py`,
+`pw_check_infinitybuilds_login.py`, `pw_explore_new_build.py` (+`2`),
+`pw_explore_skills.py`, `pw_explore_skilltree_dom*.py` (1-7, essais successifs pour
+localiser l'arbre dans le DOM avant de trouver l'iframe), `pw_explore_skill_iframe.py`,
+`pw_explore_skill_network.py`, `pw_click_skill_node.py`, `pw_calibrate*.py` (1-2 +
+`_zoomed`), `pw_zoom_out_test.py`, `pw_allocate_skills.py`, `pw_fix_skills.py`,
+`pw_check_draft.py`, `pw_find_profile.py`, `_skilltrees_raw.json` (snapshot API,
+6.3Mo), plusieurs `_*.png`/`_*.txt`/`_*.json` de debug. A trier/nettoyer la
+prochaine session (garder au minimum le script de login et la formule de
+calibrage, le reste est jetable une fois le flux final ecrit proprement).
+
+## Idee notee pour plus tard (2026-09-29, pas implementee)
+
+Utilisateur : ajouter quelque part dans le menu du userscript des liens rapides
+vers tous les sites de builds (Maxroll, kami-labs, InfinityBuilds, D4Builds,
+D4Guides, talion.tv) - simple navigation, pas encore precise si c'est des liens
+generiques (page d'accueil/liste de builds de chaque site) ou lies au build
+courant. A distinguer de la fonctionnalite deja existante v2.18/2.19 ("position
+officielle + liens croises") qui affiche des liens vers LE MEME build precis sur
+les autres sites dans le panneau de resultats - ce que l'utilisateur demande ici
+semble etre un acces permanent/general dans le menu, pas contextuel a un build
+specifique. A clarifier avec l'utilisateur avant implementation (liens statiques
+simples vs quelque chose de plus dynamique) puis ajouter au menu Donghua-style
+(v2.12) existant.
