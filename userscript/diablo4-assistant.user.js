@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.34
+// @version      3.35
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2950,16 +2950,29 @@
   // found - correctly - the concatenated way, matching the direct `curl`
   // research that never hit this because a downloaded HTML file has no tag
   // boundaries to accidentally split across).
-  function extractInfinityBuildsRawSlotAffixes() {
-    const slotAffixIds = new Map();
+  // 2026-09-30 (build Mekuna Blazing Scream, 6 variantes): the payload holds
+  // EVERY variant ({"id":"v-...","name":"...","gear":[...],...,"talisman":{...}}
+  // in tab order) and the scrapers used to take the LAST one whatever tab was
+  // shown. Clicking a tab sets ?variant=<id>; no param = the first variant
+  // (confirmed live via Playwright). Returns just that variant's slice.
+  function getInfinityBuildsVariantPayload() {
     let combined = "";
     for (const script of document.querySelectorAll("script")) {
       if (script.textContent) combined += script.textContent;
     }
-    // 2026-09-30: guard moved AFTER unescaping - the RSC payload is escaped
-    // (\"affixId\"), so the old pre-unescape check never matched and silently
-    // returned 0 slots (tester's Warlock filter: 5 rules, zero per-slot).
+    // 2026-09-30: callers test for "affixId" AFTER unescaping - the RSC
+    // payload is escaped (\"affixId\"), so the old pre-unescape check never
+    // matched and silently returned 0 slots (tester's filter: 5 rules).
     const unescaped = combined.replace(/\\"/g, '"');
+    const starts = [...unescaped.matchAll(/"id":"(v-[a-z0-9-]+)","name":"[^"]*","gear"/g)];
+    if (!starts.length) return unescaped;
+    const wanted = new URLSearchParams(location.search).get("variant");
+    const i = Math.max(0, starts.findIndex((m) => m[1] === wanted));
+    return unescaped.slice(starts[i].index, i + 1 < starts.length ? starts[i + 1].index : undefined);
+  }
+  function extractInfinityBuildsRawSlotAffixes() {
+    const slotAffixIds = new Map();
+    const unescaped = getInfinityBuildsVariantPayload();
     if (!unescaped.includes('"affixId"') || !unescaped.includes('"slot"')) return slotAffixIds;
     const slotRe = /"slot":"(\w+)"(?:,"itemId":"([^"]*)")?[\s\S]{0,200}?"affixes":\[([\s\S]*?)\]/g;
     // 2026-09-30 (retour testeur, build Warlock 6SmunLGMnk): each affix object
@@ -2988,7 +3001,6 @@
         if (/"(tempered|removed)":true/.test(am[0]) || am[1].includes("runeword")) continue;
         ids.push(am[1]);
       }
-      // later occurrence wins (last variant tab)
       if (ids.length) slotAffixIds.set(ourSlot, { ids, typeIds: kindTypeId != null ? [kindTypeId] : null });
     }
     return slotAffixIds;
@@ -3040,9 +3052,14 @@
   // both need this during one filter generation; without caching, each
   // would independently re-parse the page AND re-fetch the label-resolve
   // API (a real network cost, unlike Maxroll's pure-DOM equivalent).
+  // Keyed by URL (?variant= changes without a page reload when switching tabs).
   let infinityBuildsPerSlotCachePromise = null;
+  let infinityBuildsPerSlotCacheKey = null;
   function findInfinityBuildsPerSlotAffixesCached(gameClass) {
-    if (!infinityBuildsPerSlotCachePromise) infinityBuildsPerSlotCachePromise = findInfinityBuildsPerSlotAffixes(gameClass);
+    if (!infinityBuildsPerSlotCachePromise || infinityBuildsPerSlotCacheKey !== location.href) {
+      infinityBuildsPerSlotCacheKey = location.href;
+      infinityBuildsPerSlotCachePromise = findInfinityBuildsPerSlotAffixes(gameClass);
+    }
     return infinityBuildsPerSlotCachePromise;
   }
 
@@ -3561,14 +3578,10 @@
   // D4's 25-rule cap.
   // 2026-09-30: the build's charms, from InfinityBuilds' RSC payload
   // ("talisman":{..."charms":["Talisman_Charm_Set_Warlock_02_02", ...]}).
-  // Last occurrence wins (last variant tab), same as the gear scrape.
+  // Reads the variant currently shown (see getInfinityBuildsVariantPayload()).
   // Other sites: no talisman data scraped yet -> [] -> no rule.
   function extractInfinityBuildsCharms() {
-    let combined = "";
-    for (const script of document.querySelectorAll("script")) {
-      if (script.textContent) combined += script.textContent;
-    }
-    const matches = combined.replace(/\\"/g, '"').match(/"talisman":\{"seal"[^{}]*?"charms":\[([^\]]*)\]/g);
+    const matches = getInfinityBuildsVariantPayload().match(/"talisman":\{"seal"[^{}]*?"charms":\[([^\]]*)\]/g);
     if (!matches) return [];
     return (matches[matches.length - 1].match(/"charms":\[([^\]]*)\]/)[1].match(/"([^"]+)"/g) || []).map((q) => q.slice(1, -1));
   }

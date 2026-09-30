@@ -872,3 +872,14 @@ etaient deja corriges. Ceux du 29/09 (filtre, build Warlock InfinityBuilds
 
 Restent : Uniques par emplacement sur IB, Main principale precise sur
 Maxroll, charmes sur Maxroll.
+
+**v3.35** - verification du build `mekunas-blazing-scream-warlock-rn824uhPl3`
+(celui qui n'avait pas marche pour la femme de l'utilisateur) : (1) il tombait
+bien dans le bug de garde d'echappement corrige en v3.33 ; (2) il a 6
+variantes et les extracteurs IB prenaient toujours la DERNIERE (Push Rang 1),
+quel que soit l'onglet affiche. Confirme via Playwright : cliquer un onglet
+ajoute `?variant=<id>` a l'URL, sans parametre = 1re variante. Nouveau
+`getInfinityBuildsVariantPayload()` (decoupe le payload par
+`{"id":"v-...","name":"...","gear"`) utilise par l'equipement ET les charmes ;
+cache par-slot indexe sur l'URL. Teste sur 4 builds reels (dont 2 sets de
+charmes sur la variante Ultra Speed : Flesh of Abaddon + Rite of the Nameless).
