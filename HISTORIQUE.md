@@ -928,3 +928,11 @@ fenetre ; affiches sous chaque filtre (page du build, Mes Builds, Mes filtres).
 Apps Script : colonnes 9-12 (Auteur, Saison, Type de build, Variante), en-tete
 complete automatiquement sur l ancienne feuille. Teste sur la page IB reelle
 (?variant= Push 150 -> Type Push, Variante Push 150).
+
+**v3.40** - redeploiement Apps Script : l ancien deploiement (AKfycbwlgssml...)
+a ete archive (repond "Page introuvable"), nouveau deploiement AKfycbw6txo...
+utilise desormais. Piege rencontre : la copie Bureau `feedback-collector.txt`
+(27/09) etait l ancien code ; copie a jour generee dans
+`Desktop/feedback-collector-v3.39.txt` (SHEET_ID rempli, hors depot). Un
+deploiement cree avant Ctrl+S fige l ancien code : toujours enregistrer puis
+"Gerer les deploiements > crayon > Nouvelle version" (l URL /exec ne change pas).
