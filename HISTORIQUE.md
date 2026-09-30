@@ -945,3 +945,14 @@ Legendaires faibles" coche = les Uniques du build auraient ete caches en jeu.
 Sur 4 builds reels, 24/27 Uniques reconnus ; 3 trop recents pour D4LootBench
 (dont Leoric s Crown = helm-unique-generic-005) -> avertissement dans le
 panneau, precise s ils seront caches.
+
+**v3.42 - etape "Masquage"** (demande utilisateur, pour eviter de cacher des
+Uniques du build sans le savoir) : 4 cases separees Communs+Magiques / Rares /
+Legendaires / Uniques hors build, a la place de l unique case "Cacher les
+Legendaires faibles" (qui cachait Legendaires ET Uniques ensemble ; ancien
+reglage repris pour les 2 nouvelles cases). generateFilterCode() : options
+hideCommonMagic/hideRare/hideLegendary/hideUnique ; "Legendaires - Garder" ne
+vise plus que les raretes NON cachees (sinon il gagnerait le first-match) ;
+pas de regle Cacher si rien n est coche. Legendaires/Uniques jamais caches en
+Ouvert. Verifie : 6 combinaisons via le vrai generateFilterCode() en Node
+(masques de rarete decodes) + fenetre 5 etapes sur la page IB reelle.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.41
+// @version      3.42
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3199,7 +3199,14 @@
     // hideWeakLegendaries (see effectiveHideWeak below), regardless of that
     // checkbox's own state - farm mode's whole point is that broader hide.
     const farmMode = strict && options.farmMode === true;
-    const effectiveHideWeak = hideWeakLegendaries || farmMode;
+    // 2026-09-30 (demande utilisateur : "une étape pour choisir ce qui sera
+    // caché") - per-rarity choices instead of one all-or-nothing switch.
+    // Legendary/Unique hides are Strict-only (Open keeps every Legendary+);
+    // they fall back to the legacy hideWeakLegendaries flag when not given.
+    const hideLegendary = strict && (options.hideLegendary ?? hideWeakLegendaries);
+    const hideUnique = strict && (options.hideUnique ?? hideWeakLegendaries);
+    const hideCommonMagic = options.hideCommonMagic ?? true;
+    const hideRare = options.hideRare ?? true;
     const FARM_MIN_ITEM_POWER = 850;
     // 2026-09-25: 5th user-customizable swatch (Codex upgrade rule only -
     // "Légendaires - Garder" stays fixed green on purpose, only Codex was
@@ -3309,8 +3316,11 @@
     // this is the same safety net the old "else" branch always was, now
     // reached AFTER the quality tiers get first shot at a better color
     // instead of only existing as an alternative to them.
-    if (!effectiveHideWeak) {
-      rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], colorLegendary)));
+    // Only the rarities NOT being hidden - a Garder rule matching a rarity the
+    // user chose to hide would win first-match and cancel that hide.
+    const keepMask = LEGENDARY_PLUS & ~(hideLegendary ? LEGENDARY : 0) & ~(hideUnique ? UNIQUE : 0);
+    if (!farmMode && keepMask & (LEGENDARY | UNIQUE)) {
+      rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(keepMask)], colorLegendary)));
     }
     // 2026-09-24: removed the old unconditional "any rarity with a Greater
     // Affix" recolor - the user pointed out D4 already marks GA affixes
@@ -3335,7 +3345,7 @@
     // excluded on purpose - always kept); off, and it behaves like Open for
     // that rarity tier (already unconditionally kept above, now AFTER the
     // quality tiers get a chance to give it a better color).
-    const hideMask = COMMON | MAGIC | RARE | (effectiveHideWeak ? LEGENDARY | UNIQUE : 0);
+    const hideMask = (hideCommonMagic ? COMMON | MAGIC : 0) | (hideRare ? RARE : 0) | (hideLegendary ? LEGENDARY : 0) | (hideUnique ? UNIQUE : 0);
     // 2026-09-25: "mode farm" - a much broader hide, decoded from a real
     // user filter: ItemPowerRange>=850 (the level-70 non-Ancestral cap) AND
     // non-Ancestral AND any rarity up to Unique (never Mythic/Talisman,
@@ -3347,7 +3357,7 @@
     const hideConditions = farmMode
       ? [conditionItemPowerRange(FARM_MIN_ITEM_POWER, 0), conditionNonAncestral(), conditionRarity(COMMON | MAGIC | RARE | LEGENDARY | UNIQUE)]
       : [conditionRarity(hideMask)];
-    rules.push(tagRule(makeRule("Cacher Détritus", HIDE_ALL, hideConditions)));
+    if (farmMode || hideMask) rules.push(tagRule(makeRule("Cacher Détritus", HIDE_ALL, hideConditions)));
 
     // 2026-09-23: D4's native filter import silently truncates anything
     // past rule 25 (see tagRule()'s docstring) - confirmed live: a build
@@ -5342,7 +5352,7 @@
     overlay.innerHTML = `
       <div id="d4a-wz" role="dialog" aria-modal="true" aria-labelledby="d4a-wz-title">
         <h3><span id="d4a-wz-title">🛡 Créer mon filtre</span><button id="d4a-wz-close" aria-label="Fermer">✕</button></h3>
-        <div id="d4a-wz-steps"><span>① Situation</span><span>② Exigence</span><span>③ Couleurs</span><span>④ Résumé</span></div>
+        <div id="d4a-wz-steps"><span>① Situation</span><span>② Exigence</span><span>③ Masquage</span><span>④ Couleurs</span><span>⑤ Résumé</span></div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Où en es-tu avec ce build ?</p>
           ${WZ_SITUATIONS.map((o) => radio("d4a-wz-situation", o, o.id === situation)).join("")}
@@ -5355,6 +5365,14 @@
           <p class="d4a-wz-note">Le jeu limite un filtre à 25 règles : si ça dépasse, les règles les moins exigeantes sont retirées en premier (un avertissement s'affiche).</p>
           <div class="d4a-wz-extra" id="d4a-wz-extra-2"></div>
           <details><summary class="d4a-wz-note">Réglage fin (Tier A / Tier B)</summary><div id="d4a-wz-tiers"></div></details>
+        </div>
+        <div class="d4a-wz-step">
+          <p class="d4a-wz-q">Qu'est-ce qui doit être caché en jeu ?</p>
+          <p class="d4a-wz-note">Seulement les objets qui ne correspondent à aucune règle du build.</p>
+          <div class="d4a-wz-extra" id="d4a-wz-extra-hide"></div>
+          <p class="d4a-wz-note" id="d4a-wz-hide-open-note">🌱 Filtre Ouvert : Légendaires et Uniques toujours gardés.</p>
+          <p class="d4a-wz-note" id="d4a-wz-hide-farm-note">🌾 Mode Farm : cache en plus tout objet non-Ancestral de puissance 850+, quelle que soit la rareté.</p>
+          <p class="d4a-wz-note">✅ Toujours gardés : Mythiques, Talismans et Sceaux légendaires, améliorations du Codex, et tout objet qui correspond au build (y compris ses Uniques reconnus).</p>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Couleurs des objets dans le jeu</p>
@@ -5379,7 +5397,8 @@
     document.body.appendChild(overlay);
     // Move the real option controls in (keeps their persistence handlers).
     const labelOf = (id) => document.getElementById(id).closest("label");
-    document.getElementById("d4a-wz-extra-1").append(labelOf("d4a-opt-ancestral"), labelOf("d4a-opt-hide-weak"));
+    document.getElementById("d4a-wz-extra-1").append(labelOf("d4a-opt-ancestral"));
+    document.getElementById("d4a-wz-extra-hide").append(labelOf("d4a-hide-cm"), labelOf("d4a-hide-rare"), labelOf("d4a-hide-leg"), labelOf("d4a-hide-uniq"));
     document.getElementById("d4a-wz-extra-2").append(labelOf("d4a-opt-perslot"));
     document.getElementById("d4a-wz-tiers").append(document.querySelector("#d4a-filter-options .d4a-tier-select"));
     document.getElementById("d4a-wz-colors").append(
@@ -5400,7 +5419,11 @@
       tabs.forEach((el, k) => el.classList.toggle("on", k === i));
       back.style.visibility = i === 0 ? "hidden" : "visible";
       next.textContent = i === steps.length - 1 ? "🛡 Générer le filtre" : "Suivant →";
-      document.getElementById("d4a-wz-open-note").hidden = checked("d4a-wz-situation") !== "leveling";
+      const sit = checked("d4a-wz-situation");
+      document.getElementById("d4a-wz-open-note").hidden = sit !== "leveling";
+      document.getElementById("d4a-wz-hide-open-note").hidden = sit !== "leveling";
+      document.getElementById("d4a-wz-hide-farm-note").hidden = sit !== "farm";
+      for (const id of ["d4a-hide-leg", "d4a-hide-uniq"]) document.getElementById(id).disabled = sit === "leveling";
       if (i === steps.length - 1) renderSummary();
     };
     const renderSummary = () => {
@@ -5411,7 +5434,9 @@
       if (sit.id !== "leveling") {
         lines.push(`Exigence : ${pre ? pre.label : `personnalisée (Tier ${document.getElementById("d4a-tier-a").value} / ${document.getElementById("d4a-tier-b").value})`}`);
         lines.push(`Ancestraux uniquement : ${opt("d4a-opt-ancestral") ? "oui" : "non"}`);
-        lines.push(`Légendaires sans bonnes stats : ${opt("d4a-opt-hide-weak") || sit.id === "farm" ? "cachées" : "gardées"}`);
+        const hidden = [["d4a-hide-cm", "Communs/Magiques"], ["d4a-hide-rare", "Rares"], ["d4a-hide-leg", "Légendaires"], ["d4a-hide-uniq", "Uniques"]]
+          .filter(([id]) => opt(id)).map(([, l]) => l);
+        lines.push(`Caché si hors build : ${hidden.length ? hidden.join(", ") : "rien"}${sit.id === "farm" ? " + non-Ancestraux 850+ (Farm)" : ""}`);
         lines.push(`Précision par emplacement : ${opt("d4a-opt-perslot") ? "oui" : "non"}`);
       }
       const ul = document.getElementById("d4a-wz-summary");
@@ -5497,7 +5522,11 @@
     // (see generateFilterCode()'s 2026-09-24 CORRECTION comment). Matches
     // the user's stated preference: always show quality via color, don't
     // hide anything unless explicitly asked to.
-    const optHideWeak = document.getElementById("d4a-opt-hide-weak")?.checked ?? false;
+    const optHideCommonMagic = document.getElementById("d4a-hide-cm")?.checked ?? true;
+    const optHideRare = document.getElementById("d4a-hide-rare")?.checked ?? true;
+    const optHideLegendary = document.getElementById("d4a-hide-leg")?.checked ?? false;
+    const optHideUnique = document.getElementById("d4a-hide-uniq")?.checked ?? false;
+    const optHideWeak = optHideLegendary || optHideUnique;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
     // 2026-09-25: "mode farm" - default OFF like hideWeak/uniquePerItem, a
     // real behavior change (see generateFilterCode()'s farmMode comment).
@@ -5571,7 +5600,7 @@
     // only needed when weak Legendaries/Uniques can actually get hidden.
     // Farm mode implies the same broader hide as hideWeak (see
     // generateFilterCode()'s farmMode comment), so it needs the safety net too.
-    const needsUniqueShowSafetyNet = isStrict && (optHideWeak || optFarmMode);
+    const needsUniqueShowSafetyNet = isStrict && (optHideUnique || optFarmMode);
     const uniqueRulesResult = buildUniqueItemRules(perSlot, result.itemsEn || [], colorGood, colorBis, needsUniqueShowSafetyNet, colorLegendary);
     let charmRulesResult = { rules: [], matched: [] };
     try {
@@ -5602,14 +5631,17 @@
     const filterResult = isStrict
       ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules, ...charmRulesResult.rules], {
           requireAncestral: optAncestral,
-          hideWeakLegendaries: optHideWeak,
+          hideLegendary: optHideLegendary,
+          hideUnique: optHideUnique,
+          hideCommonMagic: optHideCommonMagic,
+          hideRare: optHideRare,
           farmMode: optFarmMode,
           colorBis,
           colorGood,
           colorCodex,
           colorLegendary,
         })
-      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", [...uniqueRulesResult.rules, ...charmRulesResult.rules], { colorBis, colorGood, colorCodex, colorLegendary });
+      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", [...uniqueRulesResult.rules, ...charmRulesResult.rules], { colorBis, colorGood, colorCodex, colorLegendary, hideCommonMagic: optHideCommonMagic, hideRare: optHideRare });
 
     const detailNote = result.hasDetail
       ? ""
@@ -5650,7 +5682,7 @@
         : `<p style="opacity:.7">Règles par emplacement désactivées (case décochée).</p>`}
       ${charmRulesResult.matched.length ? `<p>Set de charmes ciblé : ${charmRulesResult.matched.join(", ")}</p>` : ""}
       ${unknownUniqueItemIds.length
-        ? `<p style="color:#c9a227">⚠️ ${unknownUniqueItemIds.length} Unique(s) du build trop récent(s) pour être ciblé(s) par le filtre (${unknownUniqueItemIds.map((i) => i.replace(/^item-(\d+-)?|-itm$/g, "")).join(", ")})${optHideWeak || optFarmMode ? " - avec « Cacher les Légendaires faibles » ou le mode Farm, ils seront cachés en jeu." : "."}</p>`
+        ? `<p style="color:#c9a227">⚠️ ${unknownUniqueItemIds.length} Unique(s) du build trop récent(s) pour être ciblé(s) par le filtre (${unknownUniqueItemIds.map((i) => i.replace(/^item-(\d+-)?|-itm$/g, "")).join(", ")})${isStrict && (optHideUnique || optFarmMode) ? " - « Uniques hors build » ou le mode Farm est actif : ils seront cachés en jeu." : "."}</p>`
         : ""}
       ${uniqueRulesResult.matched.length
         ? `<p>Uniques reconnus (gardés dans les deux filtres) : ${uniqueRulesResult.matched.map((en) => lookupFr(en)).join(", ")}</p>`
@@ -5946,7 +5978,10 @@
       <div id="d4a-filter-options" hidden>
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
         <label><input type="checkbox" id="d4a-opt-ancestral"> 🔱 Ancestral uniquement</label>
-        <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
+        <label><input type="checkbox" id="d4a-hide-cm"> ⚪ Communs et Magiques</label>
+        <label><input type="checkbox" id="d4a-hide-rare"> 🟡 Rares hors build</label>
+        <label><input type="checkbox" id="d4a-hide-leg"> 🟠 Légendaires hors build</label>
+        <label><input type="checkbox" id="d4a-hide-uniq"> 🟤 Uniques hors build</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
         <details class="d4a-help">
@@ -6224,7 +6259,12 @@
     // user isn't surprised by items disappearing.
     const OPT_DEFAULTS = {
       "d4a-opt-ancestral": true,
-      "d4a-opt-hide-weak": false,
+      // 2026-09-30: replaces "d4a-opt-hide-weak" (one box for both) - the
+      // old choice carries over to the 2 new ones.
+      "d4a-hide-cm": true,
+      "d4a-hide-rare": true,
+      "d4a-hide-leg": GM_getValue("d4a-opt-hide-weak", false),
+      "d4a-hide-uniq": GM_getValue("d4a-opt-hide-weak", false),
       "d4a-opt-perslot": true,
       // 2026-09-25: "mode farm" - real behavior change (broader hide), OFF
       // by default like the other opt-in behavior changes above.
