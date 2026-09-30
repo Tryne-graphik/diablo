@@ -3584,7 +3584,12 @@
     // now Rare|Legendary as of v2.81) to do this correctly per slot, so this
     // flat rule is now Open-only, where there's no per-slot alternative to
     // fall back on.
-    if (!strict && allBuildIds.length >= 3) {
+    // 2026-09-30 (PROPOSITION, decision produit en attente): Strict with NO
+    // per-slot data (talion.tv, a site/build whose reader found nothing) used
+    // to hide every Rare. `flatRareRules` (set by runGenerateFilter() only in
+    // that case) brings back the flat 3+/2+ rules there - never the 1+ one.
+    const flatRareStrict = strict && options.flatRareRules === true;
+    if ((!strict || flatRareStrict) && allBuildIds.length >= 3) {
       // and, when requireAncestral is on, also requires Ancestral (kind=2
       // condition, reverse-engineered 2026-09-22), matching the community
       // "T12+ Strict" convention: at endgame every drop is Ancestral-
@@ -3593,7 +3598,7 @@
       if (requireAncestral) bisConditions.push(conditionAncestral());
       rules.push(tagRule(makeRule("Rare 3+ Affixes (BiS)", RECOLOR, bisConditions, colorBis)));
     }
-    if (!strict && allBuildIds.length >= 2) {
+    if ((!strict || flatRareStrict) && allBuildIds.length >= 2) {
       rules.push(tagRule(makeRule("Rare 2+ Affixes", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 2)], colorGood)));
     } else if (!strict && allBuildIds.length === 1) {
       // Only one affix known in total - a ">=2" requirement could never
@@ -6039,6 +6044,7 @@
           hideCommonMagic: optHideCommonMagic,
           hideRare: optHideRare,
           farmMode: optFarmMode,
+          flatRareRules: perSlot.length === 0,
           colorBis,
           colorGood,
           colorCodex,
@@ -6071,7 +6077,11 @@
     const detectionDetails = `
       ${priority.names.length
         ? `<p>Pool : ${priority.names.join(", ")}</p>`
-        : `<p style="color:#c9a227">Aucune liste de priorité trouvée sur cette page - le filtre se base uniquement sur les compétences${filterResult.resolvedAffixCount < 2 ? " (règle simple ≥1 affixe)" : ""}.</p>`}
+        : `<p style="color:#c9a227">Aucune liste de stats trouvée sur cette page - ${
+            filterResult.resolvedAffixCount >= 2 || (!isStrict && filterResult.resolvedAffixCount === 1)
+              ? `règles Rares basées sur les rangs de compétences du build (${filterResult.resolvedAffixCount} affixe(s))`
+              : "pas de règle Rare propre au build"
+          } ; Uniques, Légendaires, Talismans et Codex gérés à part.</p>`}
       ${!isStrict
         ? `<p style="opacity:.7">Règles précises par emplacement : Strict uniquement.</p>`
         : optPerSlot
