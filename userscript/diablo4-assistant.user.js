@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.35
+// @version      3.36
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3821,14 +3821,20 @@
         width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
         background: #000; color: #eee; font-size: 13px; font-family: inherit;
       }
+      #d4a-myfilters-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
+      #d4a-myfilters-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
+      .d4a-myfilter { border-bottom: 1px solid #222; padding: 4px 0; font-size: 12px; }
+      .d4a-myfilter b { display: block; font-size: 13px; }
+      .d4a-myfilter button { margin: 3px 4px 0 0; padding: 2px 8px; font-size: 12px; }
+      #d4a-myfilters-list { max-height: 260px; overflow-y: auto; }
       #d4a-feedback-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
       #d4a-feedback-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
-      #d4a-feedback-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
-      #d4a-feedback-form input, #d4a-feedback-form textarea {
+      #d4a-feedback-form, #d4a-myfilters-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+      #d4a-feedback-form input, #d4a-feedback-form textarea, #d4a-myfilters-form input, #d4a-myfilters-form textarea {
         width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
         background: #000; color: #eee; font-size: 13px; font-family: inherit; resize: vertical;
       }
-      #d4a-feedback-note { font-size: 11px; color: #9aa0ab; margin: 0; }
+      #d4a-feedback-note, #d4a-myfilters-note { font-size: 11px; color: #9aa0ab; margin: 0; }
       #d4a-mybuilds-result p { margin: 0; }
       #d4a-mybuilds-tbl { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
       #d4a-mybuilds-tbl th { text-align: left; color: #9aa0ab; font-weight: 600; padding: 2px 4px; border-bottom: 1px solid #333; }
@@ -5401,7 +5407,7 @@
       <div class="d4a-filter-actions">
         <button class="d4a-copy" id="d4a-copy-${key}-btn">📋 Copier</button>
         <button class="d4a-toggle-text" id="d4a-toggle-${key}-btn">📄 Voir le texte</button>
-        <button class="d4a-share" id="d4a-share-${key}-btn">🔗 Partager</button>
+        <button class="d4a-share" id="d4a-share-${key}-btn">💾 Sauvegarder</button>
       </div>
       <textarea rows="4" readonly id="d4a-code-${key}" hidden>${code}</textarea>
       <p class="d4a-share-note" id="d4a-share-note-${key}" hidden></p>
@@ -5459,34 +5465,96 @@
     const shareNote = document.getElementById(`d4a-share-note-${key}`);
     shareBtn.onclick = async () => {
       shareBtn.disabled = true;
-      shareBtn.textContent = "⏳ Partage...";
+      shareBtn.textContent = "⏳ Sauvegarde...";
       try {
-        const response = await gmPostJson(APPS_SCRIPT_ENDPOINT_URL, {
-          action: "share",
-          secret: APPS_SCRIPT_SHARED_SECRET,
+        // 2026-09-30: same "share" row, now also listed in "Mes filtres".
+        const id = await saveFilterToLibrary({
           filterName: baseName,
           filterCode: filterResult.code,
           buildTitle: result.match.title,
           buildUrl: result.match.url,
           mode: label,
+          gameClass: result.resolvedClass || "",
         });
-        const { id } = JSON.parse(response);
         const shareUrl = `${APPS_SCRIPT_ENDPOINT_URL}?share=${id}`;
         try {
           await navigator.clipboard.writeText(shareUrl);
-          shareNote.textContent = `✅ Lien copié : ${shareUrl}`;
+          shareNote.textContent = `✅ Sauvegardé dans « Mes filtres ». Lien de partage copié : ${shareUrl}`;
         } catch (clipErr) {
-          shareNote.textContent = `✅ Lien créé : ${shareUrl}`;
+          shareNote.textContent = `✅ Sauvegardé dans « Mes filtres ». Lien de partage : ${shareUrl}`;
         }
         shareNote.hidden = false;
+        if (document.getElementById("d4a-myfilters-details")?.open) loadMyFilters();
       } catch (err) {
-        shareNote.textContent = `❌ Échec du partage (${err.message}) - réessaie plus tard.`;
+        shareNote.textContent = `❌ Échec de la sauvegarde (${err.message}) - réessaie plus tard.`;
         shareNote.hidden = false;
       } finally {
         shareBtn.disabled = false;
-        shareBtn.textContent = "🔗 Partager";
+        shareBtn.textContent = "💾 Sauvegarder";
       }
     };
+  }
+
+  async function saveFilterToLibrary(entry) {
+    const response = JSON.parse(await gmPostJson(APPS_SCRIPT_ENDPOINT_URL, { action: "share", secret: APPS_SCRIPT_SHARED_SECRET, ...entry }));
+    if (response.status !== "ok") throw new Error(response.message || "refusé");
+    return response.id;
+  }
+  async function loadMyFilters() {
+    const list = document.getElementById("d4a-myfilters-list");
+    if (!list) return;
+    list.textContent = "⏳ Chargement...";
+    let filters;
+    try {
+      const response = JSON.parse(await gmGet(`${APPS_SCRIPT_ENDPOINT_URL}?list=1&secret=${encodeURIComponent(APPS_SCRIPT_SHARED_SECRET)}`));
+      if (response.status !== "ok") throw new Error(response.message || "refusé");
+      filters = response.filters;
+    } catch (err) {
+      list.textContent = `❌ Bibliothèque indisponible (${err.message}).`;
+      return;
+    }
+    list.textContent = filters.length ? "" : "Aucun filtre sauvegardé pour l'instant.";
+    for (const f of filters) {
+      const row = document.createElement("div");
+      row.className = "d4a-myfilter";
+      const title = document.createElement("b");
+      title.textContent = String(f.name || "(sans nom)");
+      const meta = document.createElement("div");
+      const date = f.date ? new Date(f.date).toLocaleDateString("fr-FR") : "";
+      meta.textContent = [f.gameClass, f.mode, date].filter(Boolean).join(" · ") + (f.build ? " · " : "");
+      if (f.build && /^https?:\/\//.test(String(f.url))) {
+        const a = document.createElement("a");
+        a.href = String(f.url);
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = String(f.build);
+        meta.appendChild(a);
+      } else if (f.build) {
+        meta.append(String(f.build));
+      }
+      const copyBtn = document.createElement("button");
+      copyBtn.textContent = "📋 Copier";
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(String(f.code));
+        copyBtn.textContent = "✅ Copié !";
+      };
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "🗑 Supprimer";
+      delBtn.onclick = async () => {
+        if (!confirm(`Supprimer « ${f.name} » de la bibliothèque commune ?`)) return;
+        delBtn.disabled = true;
+        try {
+          const r = JSON.parse(await gmPostJson(APPS_SCRIPT_ENDPOINT_URL, { action: "delete", secret: APPS_SCRIPT_SHARED_SECRET, id: f.id }));
+          if (r.status !== "ok") throw new Error(r.message || "refusé");
+          row.remove();
+        } catch (err) {
+          delBtn.disabled = false;
+          alert(`Échec de la suppression (${err.message}).`);
+        }
+      };
+      row.append(title, meta, copyBtn, delBtn);
+      list.appendChild(row);
+    }
   }
 
   // 2026-09-27: matches a real build-detail path on any of the 6 sites
@@ -5645,6 +5713,18 @@
           </div>
         </details>
       </div>
+      <div id="d4a-myfilters-section">
+        <details id="d4a-myfilters-details">
+          <summary>💾 Mes filtres (partagés)</summary>
+          <div id="d4a-myfilters-list"></div>
+          <div id="d4a-myfilters-form">
+            <input id="d4a-myfilters-name" type="text" placeholder="Nom (ex : DoK Rogue - modifié main)">
+            <textarea id="d4a-myfilters-code" rows="2" placeholder="Coller un code de filtre exporté du jeu..."></textarea>
+            <button id="d4a-myfilters-add">💾 Ajouter à la bibliothèque</button>
+            <p id="d4a-myfilters-note">Bibliothèque commune (feuille Google) : le jeu ne garde que 10 filtres.</p>
+          </div>
+        </details>
+      </div>
       <div id="d4a-feedback-section">
         <details>
           <summary>💬 Retour d'expérience</summary>
@@ -5746,6 +5826,37 @@
     // Falls back to the old GitHub-Issue link (no account-free option,
     // but works with zero setup) if APPS_SCRIPT_ENDPOINT_URL is still the
     // placeholder - fill it in with the deployed Apps Script /exec URL.
+    // 2026-09-30 "Mes filtres": shared library = the Apps Script "Partages"
+    // sheet (see feedback-collector.gs listShares/handleDelete). Rows are
+    // written by anyone holding the public secret -> rendered with
+    // textContent only, links restricted to http(s).
+    const myFiltersDetails = document.getElementById("d4a-myfilters-details");
+    myFiltersDetails.addEventListener("toggle", () => {
+      if (myFiltersDetails.open) loadMyFilters();
+    });
+    const myFiltersAddBtn = document.getElementById("d4a-myfilters-add");
+    myFiltersAddBtn.onclick = async () => {
+      const note = document.getElementById("d4a-myfilters-note");
+      const name = document.getElementById("d4a-myfilters-name").value.trim();
+      const code = document.getElementById("d4a-myfilters-code").value.replace(/\s+/g, "");
+      if (!name || !/^[A-Za-z0-9+/]{16,}={0,2}$/.test(code)) {
+        note.textContent = "❌ Il faut un nom et un code de filtre valide (texte exporté du jeu).";
+        return;
+      }
+      myFiltersAddBtn.disabled = true;
+      try {
+        await saveFilterToLibrary({ filterName: name, filterCode: code, buildTitle: "", buildUrl: "", mode: "Manuel", gameClass: "" });
+        document.getElementById("d4a-myfilters-name").value = "";
+        document.getElementById("d4a-myfilters-code").value = "";
+        note.textContent = "✅ Ajouté.";
+        loadMyFilters();
+      } catch (err) {
+        note.textContent = `❌ Échec (${err.message}).`;
+      } finally {
+        myFiltersAddBtn.disabled = false;
+      }
+    };
+
     const feedbackSendBtn = document.getElementById("d4a-feedback-send");
     const feedbackNote = document.getElementById("d4a-feedback-note");
     feedbackSendBtn.onclick = async () => {

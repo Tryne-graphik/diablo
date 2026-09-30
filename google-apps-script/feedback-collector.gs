@@ -60,25 +60,32 @@
 var SHEET_ID = "PASTE_YOUR_GOOGLE_SHEET_ID_HERE";
 var SHARED_SECRET = "bc7a564a-445a-418c-bcd5-5d7d03a206ca";
 var SHARES_SHEET_NAME = "Partages";
-var SHARES_HEADER = ["Date", "Nom du filtre", "Build", "URL du build", "Mode", "Code"];
+var SHARES_HEADER = ["Date", "Nom du filtre", "Build", "URL du build", "Mode", "Code", "Classe", "Supprimé"];
+// 2026-09-30 "Mes filtres" (le jeu ne garde que 10 filtres) : la feuille
+// Partages sert de bibliothèque commune. Colonne 8 = suppression douce
+// (date de suppression, la ligne reste récupérable en effaçant la case).
+var SHARE_COL_CLASS = 7, SHARE_COL_DELETED = 8;
 
 // Plafonds de taille par champ (protege la feuille contre un payload
 // enorme envoye par erreur ou par abus) et quota d'appels/jour par action
 // (protege contre un flot de requetes, secret leake ou pas).
-var MAX_LENGTHS = { title: 200, body: 4000, version: 40, page: 500, filterName: 200, buildTitle: 300, buildUrl: 500, mode: 40, filterCode: 20000 };
-var DAILY_QUOTA = { feedback: 200, share: 200 };
+var MAX_LENGTHS = { title: 200, body: 4000, version: 40, page: 500, filterName: 200, buildTitle: 300, buildUrl: 500, mode: 40, filterCode: 20000, gameClass: 40 };
+var DAILY_QUOTA = { feedback: 200, share: 200, "delete": 100 };
 
 function doPost(e) {
   var data = JSON.parse(e.postData.contents);
   if (data.secret !== SHARED_SECRET) {
     return jsonResponse({ status: "error", message: "unauthorized" });
   }
-  var action = data.action === "share" ? "share" : "feedback";
+  var action = data.action === "share" || data.action === "delete" ? data.action : "feedback";
   if (!checkAndConsumeQuota(action)) {
     return jsonResponse({ status: "error", message: "quota exceeded" });
   }
   if (action === "share") {
     return handleShare(data);
+  }
+  if (action === "delete") {
+    return handleDelete(data);
   }
   return handleFeedback(data);
 }
@@ -118,8 +125,34 @@ function handleShare(data) {
     cap(data.buildUrl, MAX_LENGTHS.buildUrl),
     cap(data.mode, MAX_LENGTHS.mode),
     cap(data.filterCode, MAX_LENGTHS.filterCode),
+    cap(data.gameClass, MAX_LENGTHS.gameClass),
   ]);
   return jsonResponse({ status: "ok", id: sheet.getLastRow() });
+}
+
+function handleDelete(data) {
+  var sheet = getOrCreateSharesSheet();
+  var row = parseInt(data.id, 10);
+  if (!row || row < 2 || row > sheet.getLastRow()) {
+    return jsonResponse({ status: "error", message: "invalid id" });
+  }
+  sheet.getRange(row, SHARE_COL_DELETED).setValue(new Date());
+  return jsonResponse({ status: "ok" });
+}
+
+/** Liste des filtres non supprimés, plus récents d'abord (GET ?list=1&secret=...). */
+function listShares() {
+  var sheet = getOrCreateSharesSheet();
+  var last = sheet.getLastRow();
+  if (last < 2) return jsonResponse({ status: "ok", filters: [] });
+  var rows = sheet.getRange(2, 1, last - 1, SHARE_COL_DELETED).getValues();
+  var out = [];
+  for (var i = rows.length - 1; i >= 0; i--) {
+    var r = rows[i];
+    if (r[SHARE_COL_DELETED - 1] || !r[5]) continue;
+    out.push({ id: i + 2, date: r[0], name: r[1], build: r[2], url: r[3], mode: r[4], code: r[5], gameClass: r[SHARE_COL_CLASS - 1] });
+  }
+  return jsonResponse({ status: "ok", filters: out });
 }
 
 function getOrCreateSharesSheet() {
@@ -139,6 +172,10 @@ function jsonResponse(obj) {
 }
 
 function doGet(e) {
+  if (e.parameter && e.parameter.list) {
+    if (e.parameter.secret !== SHARED_SECRET) return jsonResponse({ status: "error", message: "unauthorized" });
+    return listShares();
+  }
   if (e.parameter && e.parameter.share) {
     return renderSharePage(e.parameter.share);
   }

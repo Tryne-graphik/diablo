@@ -883,3 +883,20 @@ ajoute `?variant=<id>` a l'URL, sans parametre = 1re variante. Nouveau
 `{"id":"v-...","name":"...","gear"`) utilise par l'equipement ET les charmes ;
 cache par-slot indexe sur l'URL. Teste sur 4 builds reels (dont 2 sets de
 charmes sur la variante Ultra Speed : Flesh of Abaddon + Rite of the Nameless).
+
+**v3.36 - "Mes filtres" (bibliotheque commune)** : le jeu ne garde que 10
+filtres. La feuille "Partages" (Apps Script) sert de bibliotheque partagee :
+bouton "Partager" renomme "Sauvegarder" (meme ligne + colonne Classe), nouvelle
+section "Mes filtres" (liste, Copier, Supprimer = suppression douce colonne 8,
+recuperable dans la feuille) + champ pour coller un filtre fait a la main.
+Apps Script : `GET ?list=1&secret=` et action POST `delete`. **Necessite de
+recopier `feedback-collector.gs` dans l editeur Apps Script (avec le vrai
+SHEET_ID) puis Deployer > Gerer > Nouvelle version.** Donnees de la feuille
+affichees via textContent uniquement (ecrites par quiconque a le secret public).
+
+Decodage du filtre DoK modifie a la main par l utilisateur : regles GA globales
+(2 GA magenta / 1 GA cyan), 2 niveaux sur une meme arme (2 stats obligatoires
+vs 1), masquage final cible sur les 11 types d equipement. Decouverte :
+GreaterAffix encode le nombre en champ 4 (le script met 1 en champ 4 et le
+nombre en champ 6 - identique tant qu on ne demande qu 1 GA). En attente du
+filtre de la femme de l utilisateur pour comparer avant de modifier le generateur.
