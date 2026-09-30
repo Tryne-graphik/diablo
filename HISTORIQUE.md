@@ -968,3 +968,8 @@ ignore sur un emplacement qui n a pas assez de stats connues. Avertissement si
 req+opt > 4. Stockage `d4a-levels` (JSON), migration auto depuis d4a-tier-a/b.
 Verifie : buildPerSlotRules()/readLevels() reels en Node (pools decodes,
 migration 3/5) + non-regression masquage + fenetre sur la page IB reelle.
+
+**v3.44** - liens rapides vers les 6 sites (listes de builds D4 : Maxroll,
+InfinityBuilds, kami-labs, D4Builds, D4Guides, talion.tv) en petits boutons sous
+"Retour d experience", visibles sur toutes les pages (idee notee le 29/09).
+Toutes les URLs verifiees (HTTP 200, bon titre de page).

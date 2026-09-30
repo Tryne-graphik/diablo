@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.43
+// @version      3.44
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3908,6 +3908,9 @@
       #d4a-wz-nav button.d4a-wz-primary { background: #8b0000; border-color: #8b0000; font-weight: bold; }
       #d4a-myfilters-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-myfilters-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
+      #d4a-site-links { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 8px; }
+      #d4a-site-links a { font-size: 11px; padding: 2px 7px; border: 1px solid #444; border-radius: 10px; color: #c9a227; text-decoration: none; background: #111; }
+      #d4a-site-links a:hover { border-color: #c9a227; }
       .d4a-build-filters { display: flex; flex-direction: column; gap: 3px; margin-top: 3px; text-align: left; }
       .d4a-build-filters small { display: block; opacity: .75; font-size: 11px; margin-left: 4px; }
       #d4a-wz .d4a-lvl { border: 1px solid #333; border-radius: 5px; padding: 6px 8px; margin: 6px 0; }
@@ -6130,6 +6133,14 @@
             <p id="d4a-feedback-note">Envoyé directement, aucun compte nécessaire.</p>
           </div>
         </details>
+      </div>
+      <div id="d4a-site-links" title="Sites où l'assistant fonctionne">
+        <a href="https://maxroll.gg/d4/build-guides" target="_blank" rel="noopener noreferrer">Maxroll</a>
+        <a href="https://infinitybuilds.gg/fr/builds" target="_blank" rel="noopener noreferrer">InfinityBuilds</a>
+        <a href="https://kami-labs.fr/diablo-4/builds/" target="_blank" rel="noopener noreferrer">kami-labs</a>
+        <a href="https://d4builds.gg/" target="_blank" rel="noopener noreferrer">D4Builds</a>
+        <a href="https://d4guides.gg/en/builds" target="_blank" rel="noopener noreferrer">D4Guides</a>
+        <a href="https://www.talion.tv/diablo-4/builds" target="_blank" rel="noopener noreferrer">talion.tv</a>
       </div>
     `;
     document.body.appendChild(column);
