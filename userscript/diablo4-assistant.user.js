@@ -3289,11 +3289,43 @@
     return makeSitePerSlotEntries(rawSlots, cls);
   }
 
+  // kami-labs: the prose page has no stat list, but its equipment widget's
+  // JSON (window.ESRD_STATE_V3, same fetch as extractKamiLabsDetail(), same
+  // last-step choice) carries each slot's item with its affixes
+  // (tooltip.mods, modType "explicit" - tempered/implicit/aspect/socket
+  // skipped). Maxroll-imported builds give the real game affix id (`nid`),
+  // others only an English name (`text_en`).
+  const KAMILABS_SLOT_MAP = {
+    helm: ["Helm"], chest: ["Chest Armor"], gloves: ["Gloves"], pants: ["Pants"], boots: ["Boots"], amulet: ["Amulet"],
+    ring1: ["Left Ring"], ring2: ["Right Ring"], weapon1: ["Mainhand"], weapon2: ["Offhand"], weapon_ranged: ["Ranged Weapon"],
+    weapon2h1: ["Bludgeoning Weapon", ARSENAL_TYPE_IDS.bludgeoning], weapon2h2: ["Slicing Weapon", ARSENAL_TYPE_IDS.slashing],
+    weapon1h1: ["Mainhand", ARSENAL_TYPE_IDS.dualWield], weapon1h2: ["Offhand", ARSENAL_TYPE_IDS.dualWield],
+  };
+  async function fetchKamiLabsPerSlotAffixes(gameClass) {
+    const buildId = document.getElementById("esrd-equipment-iframe")?.getAttribute("data-build-id");
+    if (!buildId) return [];
+    const html = await gmGet(`https://kami-labs.fr/wp-content/uploads/d4-builds/${buildId}/equipment-grid.html?embed=1`);
+    const state = JSON.parse(extractJsonAfter(html, "window.ESRD_STATE_V3") || "null");
+    const steps = state && state.steps;
+    if (!Array.isArray(steps) || !steps.length) return [];
+    const rawSlots = [];
+    for (const [key, item] of Object.entries(steps[steps.length - 1].slots || {})) {
+      const mapped = KAMILABS_SLOT_MAP[key];
+      if (!mapped || !item) continue;
+      const isUnique = /unique|mythic/i.test(item.rarity || "");
+      const stats = ((item.tooltip && item.tooltip.mods) || [])
+        .filter((m) => m && m.modType === "explicit")
+        .map((m) => ({ id: m.nid, text: m.text_en || m.text || "" }));
+      rawSlots.push({ slot: mapped[0], stats, itemName: isUnique ? item.name : null, typeIds: mapped[1] });
+    }
+    return makeSitePerSlotEntries(rawSlots, gameClass);
+  }
+
   // One entry point per site, cached per URL like the InfinityBuilds reader
   // (findPriorityAffixIds() and findPerSlotStatPriority() both call it).
   // Never throws - a failure just means "no per-slot data".
   // Fetch-based readers (API/JSON), by hostname.
-  const SITE_PER_SLOT_FETCHERS = { "d4guides.gg": fetchD4GuidesPerSlotAffixes };
+  const SITE_PER_SLOT_FETCHERS = { "d4guides.gg": fetchD4GuidesPerSlotAffixes, "kami-labs.fr": fetchKamiLabsPerSlotAffixes };
   let sitePerSlotCachePromise = null;
   let sitePerSlotCacheKey = null;
   function findSitePerSlotAffixesCached(gameClass) {
