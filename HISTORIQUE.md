@@ -936,3 +936,12 @@ utilise desormais. Piege rencontre : la copie Bureau `feedback-collector.txt`
 `Desktop/feedback-collector-v3.39.txt` (SHEET_ID rempli, hors depot). Un
 deploiement cree avant Ctrl+S fige l ancien code : toujours enregistrer puis
 "Gerer les deploiements > crayon > Nouvelle version" (l URL /exec ne change pas).
+
+**v3.41** - Uniques InfinityBuilds reconnus PAR EMPLACEMENT (etait toujours
+null) via l itemId -> table UNIQUE_BY_INTERNAL_NAME (742 noms internes
+D4LootBench, seulement pour les 335 Uniques connus). Trouve en decodant le 1er
+filtre sauvegarde (Warlock Bond endgame) : 0 regle Unique + "Cacher les
+Legendaires faibles" coche = les Uniques du build auraient ete caches en jeu.
+Sur 4 builds reels, 24/27 Uniques reconnus ; 3 trop recents pour D4LootBench
+(dont Leoric s Crown = helm-unique-generic-005) -> avertissement dans le
+panneau, precise s ils seront caches.
