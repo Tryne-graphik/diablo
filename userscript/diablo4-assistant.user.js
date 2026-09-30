@@ -3208,9 +3208,12 @@
     }
     return null;
   }
-  // Turns [{ slot, texts:[...], itemName, typeIds, knownIds:[...]? }] into the
-  // shared per-slot entry shape. `knownIds` (kami-labs gives real game ids)
-  // win over text when they're ids we already know.
+  // Turns [{ slot, stats:[{ text, id? }], itemName, typeIds }] into the shared
+  // per-slot entry shape. An `id` (kami-labs gives real game ids) wins over
+  // the text when it's an id we already know.
+  // Barbarian and Rogue main/off hands are always a dual-wielded 1H melee
+  // weapon, so those slots get that list instead of every weapon type.
+  const DUAL_WIELD_CLASSES = new Set(["barbarian", "rogue"]);
   function makeSitePerSlotEntries(rawSlots, gameClass) {
     const idToName = new Map();
     for (const table of [AFFIX_IDS, GENERIC_SKILL_AFFIX_IDS, SKILL_AFFIX_IDS[gameClass] || {}]) {
@@ -3228,6 +3231,7 @@
           names.push(resolved.name);
         }
       }
+      if (!typeIds && (slot === "Mainhand" || slot === "Offhand") && DUAL_WIELD_CLASSES.has(gameClass)) typeIds = ARSENAL_TYPE_IDS.dualWield;
       return { slot, ids, names, unresolvedCount, itemName: itemName || null, typeIds: typeIds || null };
     });
   }
