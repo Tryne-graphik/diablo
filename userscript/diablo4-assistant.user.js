@@ -463,12 +463,29 @@
     return text.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   }
 
+  // 2026-09-30 (talion.tv: 2 builds out of 3 unmatched): the dictionary was
+  // applied in file order, so "Tourbillon" became the paragon glyph "Twister"
+  // instead of the skill "Whirlwind". Longest French text first (a longer
+  // phrase is the more specific match), then skills before any other kind
+  // for the same text. Folded once, lazily.
+  let signatureDictionary = null;
+  function getSignatureDictionary() {
+    if (!signatureDictionary) {
+      signatureDictionary = FR_EN_DICTIONARY
+        .map((entry) => ({ fr: fold(entry.fr), en: fold(entry.en), skill: entry.kind === "skill" }))
+        .filter((entry) => entry.fr.length > 3)
+        .sort((x, y) => y.fr.length - x.fr.length || y.skill - x.skill);
+    }
+    return signatureDictionary;
+  }
+  // Site names in page titles ("... - TalionTV") are not build words.
+  for (const w of ["taliontv", "talion", "kami", "labs"]) NOISE_WORDS.add(w);
+
   function signature(title) {
     let folded = " " + fold(title) + " ";
-    for (const entry of FR_EN_DICTIONARY) {
-      const frFolded = fold(entry.fr);
-      if (frFolded.length > 3 && folded.includes(frFolded)) {
-        folded = folded.split(frFolded).join(" " + fold(entry.en) + " ");
+    for (const entry of getSignatureDictionary()) {
+      if (folded.includes(entry.fr)) {
+        folded = folded.split(entry.fr).join(" " + entry.en + " ");
       }
     }
     const words = new Set();
@@ -481,8 +498,29 @@
     return words;
   }
 
+  // "blood wave" vs "bloodwave": when one side has a word that is exactly two
+  // words of the other side glued together, count them as that one word.
+  function mergeGluedWords(a, b) {
+    const out = new Set(a);
+    for (const glued of b) {
+      if (out.has(glued)) continue;
+      for (const x of out) {
+        const y = glued.startsWith(x) ? glued.slice(x.length) : null;
+        if (y && y !== x && out.has(y)) {
+          out.delete(x);
+          out.delete(y);
+          out.add(glued);
+          break;
+        }
+      }
+    }
+    return out;
+  }
+
   function similarity(a, b) {
     if (a.size === 0 || b.size === 0) return 0;
+    a = mergeGluedWords(a, b);
+    b = mergeGluedWords(b, a);
     let inter = 0;
     for (const x of a) if (b.has(x)) inter++;
     return inter / (a.size + b.size - inter);
@@ -2771,6 +2809,9 @@
       }
     }
 
+    const fromSite = await findSitePerSlotAffixesCached(gameClass);
+    if (fromSite.length) return poolPerSlotEntries(fromSite);
+
     const text = document.body.innerText;
     for (const m of text.matchAll(/^\s*\d+\.\s*(.+)$/gm)) {
       const name = normalizeAffixText(m[1]);
@@ -2918,7 +2959,7 @@
   async function findPerSlotStatPriority(gameClass) {
     await ensureStatPriorityTabActive();
     const fromWidget = extractStatPriorityFromD4ToolsWidget(gameClass);
-    if (fromWidget.length) return fromWidget;
+    if (fromWidget.length) return addMaxrollWidgetExtras(fromWidget);
     if (location.hostname === "infinitybuilds.gg") {
       try {
         const fromInfinityBuilds = await findInfinityBuildsPerSlotAffixesCached(gameClass);
@@ -2927,6 +2968,8 @@
         // ignore - bonus signal, not required
       }
     }
+    const fromSite = await findSitePerSlotAffixesCached(gameClass);
+    if (fromSite.length) return fromSite;
     return extractStatPriorityByTextHeuristic();
   }
 
@@ -3119,6 +3162,307 @@
     return infinityBuildsPerSlotCachePromise;
   }
 
+  // ---------------------------------------------------------------------
+  // 2026-09-30: per-slot readers for the sites that had none (D4Builds,
+  // D4Guides, kami-labs) - same entry shape as findInfinityBuildsPerSlotAffixes()
+  // ({ slot, ids, names, unresolvedCount, itemName, typeIds }), read from the
+  // page's OWN build (not the InfinityBuilds equivalent). Without them the
+  // Strict filter fell back to 4 generic rules on these sites.
+  // ---------------------------------------------------------------------
+  // Placeholder "Primary Core Stat" (D4Builds/D4Guides) = the class's main stat.
+  const CLASS_CORE_STAT = {
+    barbarian: "Strength", paladin: "Strength", druid: "Willpower", warlock: "Willpower",
+    necromancer: "Intelligence", sorcerer: "Intelligence", rogue: "Dexterity", spiritborn: "Dexterity",
+  };
+  // Barbarian arsenal / dual-wield slots take a fixed weapon family (D4 rule):
+  // bludgeoning = 2H mace, slashing = 2H sword/2H axe/polearm, dual-wield = 1H melee.
+  const ARSENAL_TYPE_IDS = {
+    bludgeoning: [0x0006d144],
+    slashing: [0x0006d14f, 0x0006d152, 0x0006d15d],
+    dualWield: [0x0006d159, 0x0006d14c, 0x0006d13a, 0x0006d151],
+  };
+  // Site-specific stat wordings (kami-labs' Maxroll-style keys mostly) -> our names.
+  const SITE_STAT_ALIASES = {
+    "life": "Maximum Life", "crit chance": "Critical Strike Chance", "cooldown reduction cdr": "Cooldown Reduction",
+    "resistance all": "Resistance to All Elements", "resource max all classes": "Maximum Resource",
+    "resource gain": "Resource Generation", "primary core stat": null,
+  };
+  // Free text from any of these sites -> { name, id } or null. Tries our own
+  // resolver first, then "<text> Multiplier" (sites often drop the suffix:
+  // "Vulnerable Damage") and "Ranks to <text>" ("Hellfire Skills").
+  function resolveSiteStatText(raw, gameClass) {
+    let t = String(raw || "")
+      .replace(/­/g, "")
+      .replace(/\[[^\]]*\]/g, "")
+      .replace(/^X2\s+/i, "")
+      .replace(/\s+Greater$/i, "")
+      .replace(/^[+x\d.,\s]*%?\s*(?=\S)/i, "")
+      .replace(/^skill (?=ranks )/i, "")
+      .trim();
+    const lower = t.toLowerCase();
+    if (lower === "primary core stat") t = CLASS_CORE_STAT[gameClass] || t;
+    else if (SITE_STAT_ALIASES[lower]) t = SITE_STAT_ALIASES[lower];
+    t = t
+      .replace(/^core stat /i, "")
+      .replace(/^resistance single (\w+)$/i, "$1 Resistance")
+      .replace(/^(?:skill rank bonus|ranks) (?!to )\w+ category (.+)$/i, "Ranks to $1 Skills")
+      .replace(/^(?:skill rank bonus|ranks) (?!to )\w+ \w+ (.+)$/i, "Ranks to $1");
+    for (const candidate of [t, `${t} Multiplier`, `Ranks to ${t}`]) {
+      const resolved = resolveStatPriorityText(candidate, gameClass);
+      if (resolved) return resolved;
+    }
+    return null;
+  }
+  // Turns [{ slot, stats:[{ text, id? }], itemName, typeIds }] into the shared
+  // per-slot entry shape. An `id` (kami-labs gives real game ids) wins over
+  // the text when it's an id we already know.
+  // Barbarian and Rogue main/off hands are always a dual-wielded 1H melee
+  // weapon, so those slots get that list instead of every weapon type.
+  const DUAL_WIELD_CLASSES = new Set(["barbarian", "rogue"]);
+  function makeSitePerSlotEntries(rawSlots, gameClass) {
+    const idToName = new Map();
+    for (const table of [AFFIX_IDS, GENERIC_SKILL_AFFIX_IDS, SKILL_AFFIX_IDS[gameClass] || {}]) {
+      for (const [name, id] of Object.entries(table)) if (!idToName.has(id)) idToName.set(id, name);
+    }
+    return rawSlots.map(({ slot, stats, itemName, typeIds }) => {
+      const ids = [];
+      const names = [];
+      let unresolvedCount = 0;
+      for (const { text, id } of stats) {
+        const resolved = idToName.has(id) ? { name: idToName.get(id), id } : resolveSiteStatText(text, gameClass);
+        if (!resolved) unresolvedCount++;
+        else if (!ids.includes(resolved.id)) {
+          ids.push(resolved.id);
+          names.push(resolved.name);
+        }
+      }
+      if (!typeIds && (slot === "Mainhand" || slot === "Offhand") && DUAL_WIELD_CLASSES.has(gameClass)) typeIds = ARSENAL_TYPE_IDS.dualWield;
+      return { slot, ids, names, unresolvedCount, itemName: itemName || null, typeIds: typeIds || null };
+    });
+  }
+
+  // D4Builds: "Gear Stats" section, one `.builder__stats__group` per slot,
+  // one `.builder__stat` per affix in the author's order (DOM of the variant
+  // currently shown). Tempering ("Tempering Stat" icon) and transfiguration
+  // lines are skipped; placeholders ("Stat 2", "Weapon Type") just don't resolve.
+  // The slot's item comes from the gear grid (`.builder__gear__name--unique/--mythic`).
+  const D4BUILDS_SLOT_MAP = {
+    "Helm": ["Helm"], "Chest Armor": ["Chest Armor"], "Gloves": ["Gloves"], "Pants": ["Pants"], "Boots": ["Boots"],
+    "Amulet": ["Amulet"], "Ring 1": ["Left Ring"], "Ring 2": ["Right Ring"],
+    "Weapon": ["Mainhand"], "Offhand": ["Offhand"], "Ranged Weapon": ["Ranged Weapon"],
+    "Bludgeoning Weapon": ["Bludgeoning Weapon", ARSENAL_TYPE_IDS.bludgeoning],
+    "Slashing Weapon": ["Slicing Weapon", ARSENAL_TYPE_IDS.slashing],
+    "Dual-Wield Weapon 1": ["Mainhand", ARSENAL_TYPE_IDS.dualWield],
+    "Dual-Wield Weapon 2": ["Offhand", ARSENAL_TYPE_IDS.dualWield],
+  };
+  function extractD4BuildsPerSlotAffixes(gameClass) {
+    const uniqueBySlot = {};
+    for (const gear of document.querySelectorAll(".builder__gear__item")) {
+      const slot = gear.querySelector(".builder__gear__slot")?.textContent.trim();
+      const nameEl = gear.querySelector(".builder__gear__name--unique, .builder__gear__name--mythic");
+      if (slot && nameEl) uniqueBySlot[slot] = nameEl.textContent.trim();
+    }
+    const rawSlots = [];
+    for (const group of document.querySelectorAll(".builder__stats__group")) {
+      const label = group.querySelector(".builder__stats__slot")?.textContent.trim();
+      const mapped = D4BUILDS_SLOT_MAP[label];
+      if (!mapped) continue;
+      const stats = [];
+      for (const stat of group.querySelectorAll(".builder__stat")) {
+        if (stat.querySelector('img[alt="Tempering Stat"], img[alt*="ransfiguration"], img[alt*="ransifiguration"]')) continue;
+        stats.push({ text: stat.textContent.trim() });
+      }
+      rawSlots.push({ slot: mapped[0], stats, itemName: uniqueBySlot[label], typeIds: mapped[1] });
+    }
+    return makeSitePerSlotEntries(rawSlots, gameClass);
+  }
+
+  // D4Guides: the page loads its build from its own public API
+  // (`api/v1/builds.php?id=<data-build-id>`); `gear_setup` maps a slot number
+  // (api/v1/gear-slots.php) to { itemRarity, itemSlug, stats:[{text}], tempering }.
+  // Tempering is a separate field (never read). Stat texts are whatever the
+  // author typed - often German ("maximales Leben") - so German names are
+  // mapped back to English through the site's own affix list (name/name_de).
+  // Variant = the active `.variant-bar__tab` (index into data.variants).
+  const D4GUIDES_SLOT_MAP = {
+    1: "Helm", 2: "Chest Armor", 3: "Gloves", 4: "Pants", 5: "Boots", 6: "Amulet", 7: "Left Ring", 8: "Right Ring",
+    9: "Mainhand", 10: "Offhand", 11: "Slicing Weapon", 12: "Bludgeoning Weapon", 13: "Offhand", 14: "Ranged Weapon",
+  };
+  const D4GUIDES_SHIELD_TYPE_IDS = [0x0006d172];
+  function uniqueSlug(name) {
+    return fold(name).replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+  let uniqueNameBySlug = null;
+  async function fetchD4GuidesPerSlotAffixes(gameClass) {
+    const buildId = document.querySelector("[data-build-id]")?.getAttribute("data-build-id");
+    if (!buildId) return [];
+    const data = JSON.parse(await gmGet(`https://d4guides.gg/api/v1/builds.php?id=${encodeURIComponent(buildId)}&lang=en`)).data;
+    if (!data) return [];
+    const cls = gameClass || data.class_slug;
+    const deToEn = new Map();
+    const cleanDe = (text) => fold(text).replace(/­/g, "").replace(/^[+x\d.,\s]*%?\s*/, "").trim();
+    try {
+      const affixes = JSON.parse(await gmGet(`https://d4guides.gg/api/v1/affixes.php?class_id=${data.class_id}&all=1&lang=en`)).data || [];
+      for (const a of affixes) if (a.name_de) deToEn.set(cleanDe(a.name_de), a.name);
+    } catch (e) {
+      // no translation table - English texts still resolve
+    }
+    deToEn.set("primarer kernwert", "Primary Core Stat");
+    if (!uniqueNameBySlug) {
+      uniqueNameBySlug = new Map();
+      for (const name of Object.keys(UNIQUE_ITEM_IDS)) uniqueNameBySlug.set(uniqueSlug(name), name);
+    }
+    const variantIndex = document.querySelector(".variant-bar__tab--active")?.getAttribute("data-variant-index");
+    const gear = (data.variants && data.variants[variantIndex] && data.variants[variantIndex].gear_setup) || data.gear_setup || {};
+    const rawSlots = [];
+    for (const [slotNo, item] of Object.entries(gear)) {
+      let slot = D4GUIDES_SLOT_MAP[slotNo];
+      if (!slot || !item) continue;
+      let typeIds = null;
+      if (slotNo === "13") typeIds = D4GUIDES_SHIELD_TYPE_IDS;
+      else if (slotNo === "11" || slotNo === "12") {
+        // Two-handed slots: an arsenal slot for the Barbarian, the plain main weapon otherwise.
+        if (cls === "barbarian") typeIds = slotNo === "11" ? ARSENAL_TYPE_IDS.slashing : ARSENAL_TYPE_IDS.bludgeoning;
+        else slot = "Mainhand";
+      }
+      const isUnique = /unique|mythic/i.test(item.itemRarity || "");
+      const itemName = isUnique ? uniqueNameBySlug.get(item.itemSlug) || item.itemName : null;
+      const stats = (item.stats || []).map((s) => {
+        const text = s && s.text ? s.text : "";
+        return { text: deToEn.get(cleanDe(text)) || text };
+      });
+      rawSlots.push({ slot, stats, itemName, typeIds });
+    }
+    return makeSitePerSlotEntries(rawSlots, cls);
+  }
+
+  // kami-labs: the prose page has no stat list, but its equipment widget's
+  // JSON (window.ESRD_STATE_V3, same fetch as extractKamiLabsDetail(), same
+  // last-step choice) carries each slot's item with its affixes
+  // (tooltip.mods, modType "explicit" - tempered/implicit/aspect/socket
+  // skipped). Maxroll-imported builds give the real game affix id (`nid`),
+  // others only an English name (`text_en`).
+  const KAMILABS_SLOT_MAP = {
+    helm: ["Helm"], chest: ["Chest Armor"], gloves: ["Gloves"], pants: ["Pants"], boots: ["Boots"], amulet: ["Amulet"],
+    ring1: ["Left Ring"], ring2: ["Right Ring"], weapon1: ["Mainhand"], weapon2: ["Offhand"], weapon_ranged: ["Ranged Weapon"],
+    weapon2h1: ["Bludgeoning Weapon", ARSENAL_TYPE_IDS.bludgeoning], weapon2h2: ["Slicing Weapon", ARSENAL_TYPE_IDS.slashing],
+    weapon1h1: ["Mainhand", ARSENAL_TYPE_IDS.dualWield], weapon1h2: ["Offhand", ARSENAL_TYPE_IDS.dualWield],
+  };
+  async function fetchKamiLabsPerSlotAffixes(gameClass) {
+    const buildId = document.getElementById("esrd-equipment-iframe")?.getAttribute("data-build-id");
+    if (!buildId) return [];
+    const html = await gmGet(`https://kami-labs.fr/wp-content/uploads/d4-builds/${buildId}/equipment-grid.html?embed=1`);
+    const state = JSON.parse(extractJsonAfter(html, "window.ESRD_STATE_V3") || "null");
+    const steps = state && state.steps;
+    if (!Array.isArray(steps) || !steps.length) return [];
+    const rawSlots = [];
+    for (const [key, item] of Object.entries(steps[steps.length - 1].slots || {})) {
+      const mapped = KAMILABS_SLOT_MAP[key];
+      if (!mapped || !item) continue;
+      const isUnique = /unique|mythic/i.test(item.rarity || "");
+      const stats = ((item.tooltip && item.tooltip.mods) || [])
+        .filter((m) => m && m.modType === "explicit")
+        .map((m) => ({ id: m.nid, text: m.text_en || m.text || "" }));
+      rawSlots.push({ slot: mapped[0], stats, itemName: isUnique ? item.name : null, typeIds: mapped[1] });
+    }
+    return makeSitePerSlotEntries(rawSlots, gameClass);
+  }
+
+  // 2026-09-30: Maxroll's Stat Priority widget now colors most Uniques (not
+  // only Mythics) with `.d4-color-mythic` - checked live on 3 guides (Gohr's
+  // Devastating Grips, Etna's Lost Dagger, Cowl of the Nameless...) - while
+  // extractStatPriorityFromD4ToolsWidget() only reads `.d4-color-unique`, so
+  // those slots lost their itemName: no "U <slot>" rules and per-slot Rare/
+  // Legendary rules wasted on a slot that holds a Unique. Fills the gap.
+  async function addMaxrollWidgetExtras(entries) {
+    const mythicBySlot = {};
+    for (const item of document.querySelectorAll(".d4t-item")) {
+      const slot = item.querySelector(".d4t-slot")?.textContent.trim();
+      const mythic = item.querySelector(".d4t-header .d4-color-mythic");
+      if (slot && mythic) mythicBySlot[slot] = mythic.textContent.trim();
+    }
+    for (const entry of entries) if (!entry.itemName && mythicBySlot[entry.slot]) entry.itemName = mythicBySlot[entry.slot];
+    try {
+      await addMaxrollWeaponTypeIds(entries);
+    } catch (e) {
+      // bonus signal - the slot keeps its full weapon-type list
+    }
+    return entries;
+  }
+
+  // Maxroll: restrict weapon slots to the build's real weapon type (like
+  // `typeIds` on InfinityBuilds) - the widget only shows an aspect-style name
+  // ("Channeling"), but the planner JSON (fetchMaxrollPlannerData()) names
+  // each item's base ("1HSword_Legendary_Generic_001", "Runeword_Infinity_Mace2H").
+  // Planner slot numbers: 8/9 Barbarian 2H arsenal, 10 ranged, 11 main, 12 off.
+  // The widget shows one of the planner's profiles: picked as the one whose
+  // Uniques match the widget's (activeProfile on a tie), and a slot is only
+  // restricted when its Unique-or-not status agrees with the widget.
+  const MAXROLL_PLANNER_WEAPON_SLOTS = { "Bludgeoning Weapon": 8, "Slicing Weapon": 9, "Ranged Weapon": 10, "Mainhand": 11, "Offhand": 12 };
+  const WEAPON_BASE_RE = /(1h|2h)?(dagger|sword|mace|axe|wand|quarterstaff|glaive|staff|scythe|polearm|crossbow|bow|focus|totem|shield)(2h)?/;
+  function weaponTypeIdsFromBaseId(baseId) {
+    const m = WEAPON_BASE_RE.exec(String(baseId || "").toLowerCase());
+    if (!m) return null;
+    const hands = m[1] || (m[3] ? "2h" : "");
+    const id = IB_WEAPON_KIND_TYPE_IDS[hands + m[2]] ?? (hands ? undefined : IB_WEAPON_KIND_TYPE_IDS[m[2]]);
+    return id != null ? [id] : null;
+  }
+  async function addMaxrollWeaponTypeIds(entries) {
+    const weaponEntries = entries.filter((e) => MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds);
+    if (!weaponEntries.length) return;
+    const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
+    const plannerId = Array.from(pageHtml.matchAll(/d4\/planner\/([a-z0-9]{4,})/gi), (m) => m[1]).find((id) => id.toLowerCase() !== "builds");
+    const planner = plannerId && (await fetchMaxrollPlannerData(plannerId));
+    if (!planner || !Array.isArray(planner.profiles) || !planner.items) return;
+    const uniqueOf = (item) => item && UNIQUE_BY_INTERNAL_NAME[String(item.id || "").toLowerCase()];
+    const widgetUniques = new Set(entries.filter((e) => e.itemName).map((e) => normalizeUniqueName(e.itemName)));
+    let best = planner.profiles[planner.activeProfile];
+    let bestScore = -1;
+    planner.profiles.forEach((profile, index) => {
+      const refs = Object.values((profile && profile.items) || {});
+      const score = refs.filter((ref) => widgetUniques.has(normalizeUniqueName(uniqueOf(planner.items[ref])))).length;
+      if (score > bestScore || (score === bestScore && index === planner.activeProfile)) {
+        best = profile;
+        bestScore = score;
+      }
+    });
+    if (!best || !best.items) return;
+    for (const entry of weaponEntries) {
+      const item = planner.items[best.items[MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]]];
+      if (!item) continue;
+      const plannerIsUnique = /_unique_|^runeword_/i.test(item.id || "");
+      if (plannerIsUnique !== Boolean(entry.itemName)) continue; // profile/widget disagree - don't guess
+      const typeIds = weaponTypeIdsFromBaseId(item.id);
+      if (typeIds) entry.typeIds = typeIds;
+    }
+  }
+
+  // One entry point per site, cached per URL like the InfinityBuilds reader
+  // (findPriorityAffixIds() and findPerSlotStatPriority() both call it).
+  // Never throws - a failure just means "no per-slot data".
+  // Fetch-based readers (API/JSON), by hostname.
+  const SITE_PER_SLOT_FETCHERS = { "d4guides.gg": fetchD4GuidesPerSlotAffixes, "kami-labs.fr": fetchKamiLabsPerSlotAffixes };
+  let sitePerSlotCachePromise = null;
+  let sitePerSlotCacheKey = null;
+  function findSitePerSlotAffixesCached(gameClass) {
+    const host = location.hostname.replace(/^www\./, "");
+    // DOM readers reflect the variant on screen - never cached.
+    if (host === "d4builds.gg") return Promise.resolve().then(() => extractD4BuildsPerSlotAffixes(gameClass)).catch(() => []);
+    const reader = SITE_PER_SLOT_FETCHERS[host];
+    if (!reader) return Promise.resolve([]);
+    if (!sitePerSlotCachePromise || sitePerSlotCacheKey !== location.href) {
+      sitePerSlotCacheKey = location.href;
+      sitePerSlotCachePromise = reader(gameClass).catch(() => []);
+    }
+    return sitePerSlotCachePromise;
+  }
+  function poolPerSlotEntries(entries) {
+    return {
+      ids: Array.from(new Set(entries.flatMap((e) => e.ids))),
+      names: Array.from(new Set(entries.flatMap((e) => e.names))),
+    };
+  }
+
   function resolveSkillIds(gameClass, skillNamesList) {
     const classSkills = SKILL_AFFIX_IDS[gameClass] || {};
     const ids = [];
@@ -3247,7 +3591,12 @@
     // now Rare|Legendary as of v2.81) to do this correctly per slot, so this
     // flat rule is now Open-only, where there's no per-slot alternative to
     // fall back on.
-    if (!strict && allBuildIds.length >= 3) {
+    // 2026-09-30 (PROPOSITION, decision produit en attente): Strict with NO
+    // per-slot data (talion.tv, a site/build whose reader found nothing) used
+    // to hide every Rare. `flatRareRules` (set by runGenerateFilter() only in
+    // that case) brings back the flat 3+/2+ rules there - never the 1+ one.
+    const flatRareStrict = strict && options.flatRareRules === true;
+    if ((!strict || flatRareStrict) && allBuildIds.length >= 3) {
       // and, when requireAncestral is on, also requires Ancestral (kind=2
       // condition, reverse-engineered 2026-09-22), matching the community
       // "T12+ Strict" convention: at endgame every drop is Ancestral-
@@ -3256,7 +3605,7 @@
       if (requireAncestral) bisConditions.push(conditionAncestral());
       rules.push(tagRule(makeRule("Rare 3+ Affixes (BiS)", RECOLOR, bisConditions, colorBis)));
     }
-    if (!strict && allBuildIds.length >= 2) {
+    if ((!strict || flatRareStrict) && allBuildIds.length >= 2) {
       rules.push(tagRule(makeRule("Rare 2+ Affixes", RECOLOR, [conditionRarity(RARE), conditionAffixes(allBuildIds, 2)], colorGood)));
     } else if (!strict && allBuildIds.length === 1) {
       // Only one affix known in total - a ">=2" requirement could never
@@ -5734,6 +6083,7 @@
           hideMagic: optHideMagic,
           hideRare: optHideRare,
           farmMode: optFarmMode,
+          flatRareRules: perSlot.length === 0,
           colorBis,
           colorGood,
           colorCodex,
@@ -5766,7 +6116,11 @@
     const detectionDetails = `
       ${priority.names.length
         ? `<p>Pool : ${priority.names.join(", ")}</p>`
-        : `<p style="color:#c9a227">Aucune liste de priorité trouvée sur cette page - le filtre se base uniquement sur les compétences${filterResult.resolvedAffixCount < 2 ? " (règle simple ≥1 affixe)" : ""}.</p>`}
+        : `<p style="color:#c9a227">Aucune liste de stats trouvée sur cette page - ${
+            filterResult.resolvedAffixCount >= 2 || (!isStrict && filterResult.resolvedAffixCount === 1)
+              ? `règles Rares basées sur les rangs de compétences du build (${filterResult.resolvedAffixCount} affixe(s))`
+              : "pas de règle Rare propre au build"
+          } ; Uniques, Légendaires, Talismans et Codex gérés à part.</p>`}
       ${!isStrict
         ? `<p style="opacity:.7">Règles précises par emplacement : Strict uniquement.</p>`
         : optPerSlot
