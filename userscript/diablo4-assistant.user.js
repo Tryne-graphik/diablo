@@ -3335,7 +3335,59 @@
       if (slot && mythic) mythicBySlot[slot] = mythic.textContent.trim();
     }
     for (const entry of entries) if (!entry.itemName && mythicBySlot[entry.slot]) entry.itemName = mythicBySlot[entry.slot];
+    try {
+      await addMaxrollWeaponTypeIds(entries);
+    } catch (e) {
+      // bonus signal - the slot keeps its full weapon-type list
+    }
     return entries;
+  }
+
+  // Maxroll: restrict weapon slots to the build's real weapon type (like
+  // `typeIds` on InfinityBuilds) - the widget only shows an aspect-style name
+  // ("Channeling"), but the planner JSON (fetchMaxrollPlannerData()) names
+  // each item's base ("1HSword_Legendary_Generic_001", "Runeword_Infinity_Mace2H").
+  // Planner slot numbers: 8/9 Barbarian 2H arsenal, 10 ranged, 11 main, 12 off.
+  // The widget shows one of the planner's profiles: picked as the one whose
+  // Uniques match the widget's (activeProfile on a tie), and a slot is only
+  // restricted when its Unique-or-not status agrees with the widget.
+  const MAXROLL_PLANNER_WEAPON_SLOTS = { "Bludgeoning Weapon": 8, "Slicing Weapon": 9, "Ranged Weapon": 10, "Mainhand": 11, "Offhand": 12 };
+  const WEAPON_BASE_RE = /(1h|2h)?(dagger|sword|mace|axe|wand|quarterstaff|glaive|staff|scythe|polearm|crossbow|bow|focus|totem|shield)(2h)?/;
+  function weaponTypeIdsFromBaseId(baseId) {
+    const m = WEAPON_BASE_RE.exec(String(baseId || "").toLowerCase());
+    if (!m) return null;
+    const hands = m[1] || (m[3] ? "2h" : "");
+    const id = IB_WEAPON_KIND_TYPE_IDS[hands + m[2]] ?? (hands ? undefined : IB_WEAPON_KIND_TYPE_IDS[m[2]]);
+    return id != null ? [id] : null;
+  }
+  async function addMaxrollWeaponTypeIds(entries) {
+    const weaponEntries = entries.filter((e) => MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds);
+    if (!weaponEntries.length) return;
+    const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
+    const plannerId = Array.from(pageHtml.matchAll(/d4\/planner\/([a-z0-9]{4,})/gi), (m) => m[1]).find((id) => id.toLowerCase() !== "builds");
+    const planner = plannerId && (await fetchMaxrollPlannerData(plannerId));
+    if (!planner || !Array.isArray(planner.profiles) || !planner.items) return;
+    const uniqueOf = (item) => item && UNIQUE_BY_INTERNAL_NAME[String(item.id || "").toLowerCase()];
+    const widgetUniques = new Set(entries.filter((e) => e.itemName).map((e) => normalizeUniqueName(e.itemName)));
+    let best = planner.profiles[planner.activeProfile];
+    let bestScore = -1;
+    planner.profiles.forEach((profile, index) => {
+      const refs = Object.values((profile && profile.items) || {});
+      const score = refs.filter((ref) => widgetUniques.has(normalizeUniqueName(uniqueOf(planner.items[ref])))).length;
+      if (score > bestScore || (score === bestScore && index === planner.activeProfile)) {
+        best = profile;
+        bestScore = score;
+      }
+    });
+    if (!best || !best.items) return;
+    for (const entry of weaponEntries) {
+      const item = planner.items[best.items[MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]]];
+      if (!item) continue;
+      const plannerIsUnique = /_unique_|^runeword_/i.test(item.id || "");
+      if (plannerIsUnique !== Boolean(entry.itemName)) continue; // profile/widget disagree - don't guess
+      const typeIds = weaponTypeIdsFromBaseId(item.id);
+      if (typeIds) entry.typeIds = typeIds;
+    }
   }
 
   // One entry point per site, cached per URL like the InfinityBuilds reader
