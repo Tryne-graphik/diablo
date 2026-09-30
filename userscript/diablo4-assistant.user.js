@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.38
+// @version      3.39
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3870,7 +3870,11 @@
       #d4a-wz-nav button.d4a-wz-primary { background: #8b0000; border-color: #8b0000; font-weight: bold; }
       #d4a-myfilters-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-myfilters-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
-      .d4a-build-filters { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; justify-content: center; }
+      .d4a-build-filters { display: flex; flex-direction: column; gap: 3px; margin-top: 3px; text-align: left; }
+      .d4a-build-filters small { display: block; opacity: .75; font-size: 11px; margin-left: 4px; }
+      #d4a-wz .d4a-wz-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      #d4a-wz .d4a-wz-meta label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+      #d4a-wz .d4a-wz-meta input, #d4a-wz .d4a-wz-meta select { padding: 5px 7px; border-radius: 4px; border: 1px solid #444; background: #000; color: #eee; font-size: 13px; }
       .d4a-build-filters button { font-size: 11px; padding: 2px 6px; border-radius: 3px; border: 1px solid #555; background: #1c1c24; color: #eee; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .d4a-myfilter { border-bottom: 1px solid #222; padding: 4px 0; font-size: 12px; }
       .d4a-myfilter b { display: block; font-size: 13px; }
@@ -5267,6 +5271,30 @@
     { id: "endgame", label: "⚔ Endgame (Tourment)", desc: "Filtre Strict : seulement les objets qui correspondent au build." },
     { id: "farm", label: "🌾 Farm de matériaux", desc: "Filtre Strict + cache tout objet non-Ancestral (puissance 850+) : il ne reste que les Ancestraux du build et le Codex." },
   ];
+  // 2026-09-30: "auteur, saison et type de build ... préciser la variante" -
+  // metadata saved with the filter in the shared library.
+  const WZ_BUILD_TYPES = ["Leveling", "Mid-game", "Endgame", "Bossing", "Push"];
+  let filterMeta = {};
+  // IB: the shown variant's tab name (the variant slice starts with its
+  // {"id":"v-...","name":"..."} header - see getInfinityBuildsVariantPayload()).
+  // Other sites: "" (the field stays editable).
+  function detectVariantName() {
+    if (!/infinitybuilds\.gg$/.test(location.hostname)) return "";
+    const m = /^"id":"v-[^"]+","name":"([^"]*)"/.exec(getInfinityBuildsVariantPayload());
+    return m ? m[1] : "";
+  }
+  function guessBuildType(variant, situation) {
+    const v = (variant || "").toLowerCase();
+    if (/push|pit|fosse/.test(v)) return "Push";
+    if (/boss/.test(v)) return "Bossing";
+    if (/level|progression|starter|t1-/.test(v)) return "Leveling";
+    if (/mid|milieu/.test(v)) return "Mid-game";
+    if (/end|fin de partie/.test(v)) return "Endgame";
+    return situation === "leveling" ? "Leveling" : "Endgame";
+  }
+  function filterMetaText(f) {
+    return [f.author, f.season && `S${f.season}`, f.buildType, f.variant].filter(Boolean).join(" · ");
+  }
   function setOpt(id, value) {
     const el = document.getElementById(id);
     if (el.type === "checkbox") el.checked = value;
@@ -5277,6 +5305,9 @@
     let overlay = document.getElementById("d4a-wz-overlay");
     if (!overlay) overlay = buildFilterWizard();
     overlay.hidden = false;
+    const variant = detectVariantName();
+    document.getElementById("d4a-wz-variant").value = variant;
+    document.getElementById("d4a-wz-type").value = guessBuildType(variant, GM_getValue("d4a-wz-situation", "endgame"));
     overlay.showStep(0);
   }
   function buildFilterWizard() {
@@ -5311,6 +5342,13 @@
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Résumé</p>
           <ul id="d4a-wz-summary"></ul>
+          <p class="d4a-wz-q">Infos affichées avec le filtre sauvegardé</p>
+          <div class="d4a-wz-meta">
+            <label>Auteur <input id="d4a-wz-author" type="text" maxlength="60" placeholder="Ton pseudo"></label>
+            <label>Saison <input id="d4a-wz-season" type="number" min="1" max="99"></label>
+            <label>Type <select id="d4a-wz-type">${WZ_BUILD_TYPES.map((t) => `<option>${t}</option>`).join("")}</select></label>
+            <label>Variante <input id="d4a-wz-variant" type="text" maxlength="100" placeholder="ex : Push 150"></label>
+          </div>
         </div>
         <div id="d4a-wz-nav">
           <button id="d4a-wz-back">← Retour</button>
@@ -5366,6 +5404,7 @@
     overlay.addEventListener("change", (e) => {
       if (e.target.name === "d4a-wz-situation") {
         GM_setValue("d4a-wz-situation", e.target.value);
+        document.getElementById("d4a-wz-type").value = guessBuildType(document.getElementById("d4a-wz-variant").value, e.target.value);
         setOpt("d4a-opt-farm-mode", e.target.value === "farm");
       } else if (e.target.name === "d4a-wz-preset") {
         const p = WZ_PRESETS.find((o) => o.id === e.target.value);
@@ -5378,12 +5417,22 @@
     back.onclick = () => overlay.showStep(Math.max(0, current - 1));
     next.onclick = () => {
       if (current < steps.length - 1) return overlay.showStep(current + 1);
+      filterMeta = {
+        author: document.getElementById("d4a-wz-author").value.trim(),
+        season: document.getElementById("d4a-wz-season").value,
+        buildType: document.getElementById("d4a-wz-type").value,
+        variant: document.getElementById("d4a-wz-variant").value.trim(),
+      };
       close();
       runGenerateFilter(checked("d4a-wz-situation") === "leveling" ? "open" : "strict");
     };
     overlay.querySelector("#d4a-wz-close").onclick = close;
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
     overlay.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+    const authorInput = document.getElementById("d4a-wz-author");
+    authorInput.value = GM_getValue("d4a-author", "");
+    authorInput.onchange = () => GM_setValue("d4a-author", authorInput.value.trim());
+    document.getElementById("d4a-wz-season").value = CURRENT_SEASON;
     // Keep the farm checkbox consistent with the remembered situation.
     setOpt("d4a-opt-farm-mode", situation === "farm");
     return overlay;
@@ -5666,6 +5715,7 @@
           buildUrl: location.href,
           mode: label,
           gameClass: result.resolvedClass || "",
+          ...filterMeta,
         });
         const shareUrl = `${APPS_SCRIPT_ENDPOINT_URL}?share=${id}`;
         try {
@@ -5733,6 +5783,7 @@
     const box = document.createElement("div");
     box.className = "d4a-build-filters";
     for (const f of filters) {
+      const line = document.createElement("div");
       const btn = document.createElement("button");
       btn.type = "button";
       btn.textContent = `📋 ${f.name}`;
@@ -5741,7 +5792,10 @@
         navigator.clipboard.writeText(String(f.code));
         btn.textContent = `✅ ${f.name}`;
       };
-      box.appendChild(btn);
+      const meta = document.createElement("small");
+      meta.textContent = filterMetaText(f) || "(auteur inconnu)";
+      line.append(btn, meta);
+      box.appendChild(line);
     }
     return box;
   }
@@ -5764,7 +5818,7 @@
       title.textContent = String(f.name || "(sans nom)");
       const meta = document.createElement("div");
       const date = f.date ? new Date(f.date).toLocaleDateString("fr-FR") : "";
-      meta.textContent = [f.gameClass, f.mode, date].filter(Boolean).join(" · ") + (f.build ? " · " : "");
+      meta.textContent = [filterMetaText(f), f.gameClass, f.mode, date].filter(Boolean).join(" · ") + (f.build ? " · " : "");
       if (f.build && /^https?:\/\//.test(String(f.url))) {
         const a = document.createElement("a");
         a.href = String(f.url);

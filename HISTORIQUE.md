@@ -919,3 +919,12 @@ par curl) : message explicite maintenant. Filtres rattaches aux builds :
 Sauvegarder enregistre l URL de la PAGE (comme les favoris), rapprochement par
 hote+chemin (sans ?variant=, #, /fr|/en/) ; boutons "📋 <nom>" sous chaque
 favori de "Mes Builds" et sous la case favori de la page du build.
+
+**v3.39** - infos sur chaque filtre sauvegarde : Auteur (memorise), Saison
+(defaut CURRENT_SEASON), Type (Leveling/Mid-game/Endgame/Bossing/Push, devine
+depuis le nom de variante puis la situation), Variante (onglet IB affiche, lu
+dans le payload ; vide ailleurs, modifiable). Champs dans l etape Resume de la
+fenetre ; affiches sous chaque filtre (page du build, Mes Builds, Mes filtres).
+Apps Script : colonnes 9-12 (Auteur, Saison, Type de build, Variante), en-tete
+complete automatiquement sur l ancienne feuille. Teste sur la page IB reelle
+(?variant= Push 150 -> Type Push, Variante Push 150).
