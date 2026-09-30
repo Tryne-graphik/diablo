@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.36
+// @version      3.37
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3789,7 +3789,7 @@
       /* "quelques touches de rouge" - a subtle blood-red border sets Filtre
          Strict apart from Filtre Ouvert (plain gray) without a full
          redesign of either button. */
-      #d4a-btn-filter-strict { border: 1px solid #8b0000; }
+      #d4a-btn-filter-wizard { border: 1px solid #8b0000; }
       .d4a-filter-actions { display: flex; gap: 6px; margin: 4px 0 8px; }
       .d4a-filter-actions button { flex: 1; }
       #d4a-column button.d4a-toggle-text { background: #2a2a35; color: #eee; }
@@ -3821,6 +3821,23 @@
         width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 4px; border: none;
         background: #000; color: #eee; font-size: 13px; font-family: inherit;
       }
+      #d4a-wz-overlay { position: fixed; inset: 0; z-index: 2147483646; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; }
+      #d4a-wz { width: 480px; max-width: 92vw; max-height: 90vh; overflow-y: auto; background: #0c0c14; color: #e6e1d6; border: 1px solid #8b0000; border-radius: 8px; padding: 14px 18px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+      #d4a-wz h3 { margin: 0 0 8px; color: #c9a227; font-size: 18px; display: flex; justify-content: space-between; }
+      #d4a-wz-close { background: none; border: none; color: #aaa; font-size: 18px; cursor: pointer; }
+      #d4a-wz-steps { display: flex; gap: 6px; margin-bottom: 12px; font-size: 12px; }
+      #d4a-wz-steps span { flex: 1; text-align: center; padding: 4px 0; border-bottom: 2px solid #333; color: #777; }
+      #d4a-wz-steps span.on { border-color: #c9a227; color: #c9a227; font-weight: bold; }
+      #d4a-wz .d4a-wz-q { font-weight: bold; margin: 0 0 8px; }
+      #d4a-wz label.d4a-wz-choice { display: block; padding: 6px 8px; margin: 4px 0; border: 1px solid #333; border-radius: 5px; cursor: pointer; }
+      #d4a-wz label.d4a-wz-choice:has(input:checked) { border-color: #c9a227; background: #1a1610; }
+      #d4a-wz label.d4a-wz-choice small { display: block; opacity: .7; margin-left: 22px; }
+      #d4a-wz .d4a-wz-extra label { display: flex; align-items: center; gap: 6px; margin: 6px 0; font-size: 13px; }
+      #d4a-wz .d4a-wz-note { font-size: 12px; opacity: .75; }
+      #d4a-wz .d4a-color-row span { font-family: system-ui, sans-serif; font-size: 13px; }
+      #d4a-wz-nav { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+      #d4a-wz-nav button { padding: 6px 14px; border-radius: 5px; border: 1px solid #555; background: #1c1c24; color: #eee; cursor: pointer; }
+      #d4a-wz-nav button.d4a-wz-primary { background: #8b0000; border-color: #8b0000; font-weight: bold; }
       #d4a-myfilters-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-myfilters-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
       .d4a-myfilter { border-bottom: 1px solid #222; padding: 4px 0; font-size: 12px; }
@@ -5200,6 +5217,146 @@
   // also carries the Unique item names used by buildUniqueItemRules());
   // only the FINAL generateFilterCode() call and rendered block are
   // mode-specific now.
+  // 2026-09-30: "nos boutons pour la sélection des options sont un peu trop
+  // légers... une sorte de formulaire" - 4-step modal replacing the Ouvert/
+  // Strict button pair + raw option block. It MOVES the existing option
+  // inputs (checkboxes, color pickers, Tier A/B selects - their GM_setValue
+  // persistence already wired in init()) into its steps instead of copying
+  // them, and only translates player-language choices (situation, exigence)
+  // into those same inputs, so runGenerateFilter() is unchanged.
+  const WZ_PRESETS = [
+    { id: "large", label: "Large", desc: "2 bonnes stats sur l'emplacement", tiers: ["2", "0"] },
+    { id: "equilibre", label: "Équilibré (recommandé)", desc: "2 stats, et une couleur à part à partir de 3", tiers: ["2", "3"] },
+    { id: "exigeant", label: "Exigeant", desc: "3 stats minimum, couleur à part pour 4", tiers: ["3", "4"] },
+    { id: "ga", label: "Chasse aux Greater Affix", desc: "3 stats, couleur à part si un Greater Affix en plus", tiers: ["3", "5"] },
+  ];
+  const WZ_SITUATIONS = [
+    { id: "leveling", label: "🌱 Je monte de niveau", desc: "Filtre Ouvert : garde toutes les Légendaires/Uniques, cache le reste hors-build." },
+    { id: "endgame", label: "⚔ Endgame (Tourment)", desc: "Filtre Strict : seulement les objets qui correspondent au build." },
+    { id: "farm", label: "🌾 Farm de matériaux", desc: "Filtre Strict + cache tout objet non-Ancestral (puissance 850+) : il ne reste que les Ancestraux du build et le Codex." },
+  ];
+  function setOpt(id, value) {
+    const el = document.getElementById(id);
+    if (el.type === "checkbox") el.checked = value;
+    else el.value = value;
+    el.dispatchEvent(new Event("change"));
+  }
+  function openFilterWizard() {
+    let overlay = document.getElementById("d4a-wz-overlay");
+    if (!overlay) overlay = buildFilterWizard();
+    overlay.hidden = false;
+    overlay.showStep(0);
+  }
+  function buildFilterWizard() {
+    const overlay = document.createElement("div");
+    overlay.id = "d4a-wz-overlay";
+    const radio = (name, o, checked) => `<label class="d4a-wz-choice"><input type="radio" name="${name}" value="${o.id}"${checked ? " checked" : ""}> ${o.label}<small>${o.desc}</small></label>`;
+    const situation = GM_getValue("d4a-wz-situation", "endgame");
+    const tierA = document.getElementById("d4a-tier-a").value;
+    const tierB = document.getElementById("d4a-tier-b").value;
+    const preset = (WZ_PRESETS.find((p) => p.tiers[0] === tierA && p.tiers[1] === tierB) || {}).id;
+    overlay.innerHTML = `
+      <div id="d4a-wz" role="dialog" aria-modal="true" aria-labelledby="d4a-wz-title">
+        <h3><span id="d4a-wz-title">🛡 Créer mon filtre</span><button id="d4a-wz-close" aria-label="Fermer">✕</button></h3>
+        <div id="d4a-wz-steps"><span>① Situation</span><span>② Exigence</span><span>③ Couleurs</span><span>④ Résumé</span></div>
+        <div class="d4a-wz-step">
+          <p class="d4a-wz-q">Où en es-tu avec ce build ?</p>
+          ${WZ_SITUATIONS.map((o) => radio("d4a-wz-situation", o, o.id === situation)).join("")}
+          <div class="d4a-wz-extra" id="d4a-wz-extra-1"></div>
+        </div>
+        <div class="d4a-wz-step">
+          <p class="d4a-wz-q">Quel niveau d'exigence par emplacement ?</p>
+          <p class="d4a-wz-note" id="d4a-wz-open-note">Le filtre Ouvert (montée de niveau) n'utilise pas ce réglage.</p>
+          ${WZ_PRESETS.map((o) => radio("d4a-wz-preset", o, o.id === preset)).join("")}
+          <p class="d4a-wz-note">Le jeu limite un filtre à 25 règles : si ça dépasse, les règles les moins exigeantes sont retirées en premier (un avertissement s'affiche).</p>
+          <div class="d4a-wz-extra" id="d4a-wz-extra-2"></div>
+          <details><summary class="d4a-wz-note">Réglage fin (Tier A / Tier B)</summary><div id="d4a-wz-tiers"></div></details>
+        </div>
+        <div class="d4a-wz-step">
+          <p class="d4a-wz-q">Couleurs des objets dans le jeu</p>
+          <div id="d4a-wz-colors"></div>
+        </div>
+        <div class="d4a-wz-step">
+          <p class="d4a-wz-q">Résumé</p>
+          <ul id="d4a-wz-summary"></ul>
+        </div>
+        <div id="d4a-wz-nav">
+          <button id="d4a-wz-back">← Retour</button>
+          <button id="d4a-wz-next" class="d4a-wz-primary">Suivant →</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    // Move the real option controls in (keeps their persistence handlers).
+    const labelOf = (id) => document.getElementById(id).closest("label");
+    document.getElementById("d4a-wz-extra-1").append(labelOf("d4a-opt-ancestral"), labelOf("d4a-opt-hide-weak"));
+    document.getElementById("d4a-wz-extra-2").append(labelOf("d4a-opt-perslot"));
+    document.getElementById("d4a-wz-tiers").append(document.querySelector("#d4a-filter-options .d4a-tier-select"));
+    document.getElementById("d4a-wz-colors").append(
+      document.querySelector("#d4a-filter-options .d4a-color-row"),
+      document.querySelector("#d4a-filter-options .d4a-legend-details"),
+    );
+
+    const steps = overlay.querySelectorAll(".d4a-wz-step");
+    const tabs = overlay.querySelectorAll("#d4a-wz-steps span");
+    const back = overlay.querySelector("#d4a-wz-back");
+    const next = overlay.querySelector("#d4a-wz-next");
+    const checked = (name) => overlay.querySelector(`input[name="${name}"]:checked`)?.value;
+    let current = 0;
+    const close = () => { overlay.hidden = true; };
+    overlay.showStep = (i) => {
+      current = i;
+      steps.forEach((el, k) => { el.hidden = k !== i; });
+      tabs.forEach((el, k) => el.classList.toggle("on", k === i));
+      back.style.visibility = i === 0 ? "hidden" : "visible";
+      next.textContent = i === steps.length - 1 ? "🛡 Générer le filtre" : "Suivant →";
+      document.getElementById("d4a-wz-open-note").hidden = checked("d4a-wz-situation") !== "leveling";
+      if (i === steps.length - 1) renderSummary();
+    };
+    const renderSummary = () => {
+      const sit = WZ_SITUATIONS.find((o) => o.id === checked("d4a-wz-situation"));
+      const pre = WZ_PRESETS.find((o) => o.id === checked("d4a-wz-preset"));
+      const opt = (id) => document.getElementById(id).checked;
+      const lines = [`Situation : ${sit.label}`];
+      if (sit.id !== "leveling") {
+        lines.push(`Exigence : ${pre ? pre.label : `personnalisée (Tier ${document.getElementById("d4a-tier-a").value} / ${document.getElementById("d4a-tier-b").value})`}`);
+        lines.push(`Ancestraux uniquement : ${opt("d4a-opt-ancestral") ? "oui" : "non"}`);
+        lines.push(`Légendaires sans bonnes stats : ${opt("d4a-opt-hide-weak") || sit.id === "farm" ? "cachées" : "gardées"}`);
+        lines.push(`Précision par emplacement : ${opt("d4a-opt-perslot") ? "oui" : "non"}`);
+      }
+      const ul = document.getElementById("d4a-wz-summary");
+      ul.textContent = "";
+      for (const t of lines) {
+        const li = document.createElement("li");
+        li.textContent = t;
+        ul.appendChild(li);
+      }
+    };
+    overlay.addEventListener("change", (e) => {
+      if (e.target.name === "d4a-wz-situation") {
+        GM_setValue("d4a-wz-situation", e.target.value);
+        setOpt("d4a-opt-farm-mode", e.target.value === "farm");
+      } else if (e.target.name === "d4a-wz-preset") {
+        const p = WZ_PRESETS.find((o) => o.id === e.target.value);
+        setOpt("d4a-tier-a", p.tiers[0]);
+        setOpt("d4a-tier-b", p.tiers[1]);
+      } else if (e.target.id === "d4a-tier-a" || e.target.id === "d4a-tier-b") {
+        overlay.querySelectorAll('input[name="d4a-wz-preset"]').forEach((r) => { r.checked = false; });
+      }
+    });
+    back.onclick = () => overlay.showStep(Math.max(0, current - 1));
+    next.onclick = () => {
+      if (current < steps.length - 1) return overlay.showStep(current + 1);
+      close();
+      runGenerateFilter(checked("d4a-wz-situation") === "leveling" ? "open" : "strict");
+    };
+    overlay.querySelector("#d4a-wz-close").onclick = close;
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+    overlay.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+    // Keep the farm checkbox consistent with the remembered situation.
+    setOpt("d4a-opt-farm-mode", situation === "farm");
+    return overlay;
+  }
+
   async function runGenerateFilter(mode) {
     const isStrict = mode === "strict";
     renderPanel("<h3>Diablo IV Assistant</h3><p>Recherche du build équivalent...</p>");
@@ -5621,7 +5778,7 @@
         <button id="d4a-btn-ranking">🏆 Classement</button>
         <button id="d4a-btn-check-update">🔄 Vérifier MAJ</button>
       </div>
-      <div id="d4a-filter-options">
+      <div id="d4a-filter-options" hidden>
         <div class="d4a-section-title">⚙ Options du filtre Strict</div>
         <label><input type="checkbox" id="d4a-opt-ancestral"> 🔱 Ancestral uniquement</label>
         <label><input type="checkbox" id="d4a-opt-hide-weak"> 🙈 Cacher les Légendaires faibles</label>
@@ -5633,10 +5790,10 @@
           <p>🌾 Pour une session de farm une fois que tu as assez de matériaux : cache tout objet non-Ancestral de puissance ≥850 (le plafond au niveau 70), toutes raretés jusqu'à Unique incluse - il ne reste visible que les Ancestraux du build (déjà couverts ailleurs) et les mises à jour de Codex. Active automatiquement le même comportement que "Cacher les Légendaires faibles".</p>
         </details>
         <div class="d4a-color-row">
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>Tier 2</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>Tier 3</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Tier 4</span></div>
-          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Tier 5</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>2 stats</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>3 stats</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>4 stats</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Stats + GA</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-codex" value="${COLOR_HEX_DEFAULTS.codex}"><span>Codex</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-legendary" value="${COLOR_HEX_DEFAULTS.legendary}"><span>Légendaires</span></div>
         </div>
@@ -5679,10 +5836,7 @@
       </div>
       <div id="d4a-panel-section"></div>
       <div id="d4a-ranking-section"></div>
-      <div class="d4a-action-grid">
-        <button id="d4a-btn-filter-open">⚔ Filtre Ouvert</button>
-        <button id="d4a-btn-filter-strict">🛡 Filtre Strict</button>
-      </div>
+      <button id="d4a-btn-filter-wizard">🛡 Créer mon filtre</button>
       <div id="d4a-mybuilds-section">
         <details>
           <summary>📌 Mes Builds</summary>
@@ -5755,7 +5909,7 @@
       const idsToHide = [
         "d4a-buildinfo-section", "d4a-filter-options", "d4a-panel-section", "d4a-ranking-section",
         "d4a-btn-translate", "d4a-btn-untranslate", "d4a-btn-ranking",
-        "d4a-btn-filter-open", "d4a-btn-filter-strict",
+        "d4a-btn-filter-wizard",
       ];
       for (const id of idsToHide) {
         const el = document.getElementById(id);
@@ -5892,12 +6046,8 @@
     // search section used to sit, split into 2 buttons instead of 1 (see
     // runGenerateFilter()'s docstring for why the shared detection work
     // stays unconditional either way).
-    const filterOpenBtn = document.getElementById("d4a-btn-filter-open");
-    filterOpenBtn.title = "Génère le filtre Ouvert (leveling / early endgame / chasse aux aspects)";
-    filterOpenBtn.onclick = () => runGenerateFilter("open");
-    const filterStrictBtn = document.getElementById("d4a-btn-filter-strict");
-    filterStrictBtn.title = "Génère le filtre Strict (endgame T12+) à partir des options ci-dessus";
-    filterStrictBtn.onclick = () => runGenerateFilter("strict");
+    // 2026-09-30: replaced by the single "Créer mon filtre" wizard button.
+    document.getElementById("d4a-btn-filter-wizard").onclick = openFilterWizard;
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
     // filtre avant de le lancer" - options for the Strict filter, persisted

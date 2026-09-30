@@ -900,3 +900,15 @@ vs 1), masquage final cible sur les 11 types d equipement. Decouverte :
 GreaterAffix encode le nombre en champ 4 (le script met 1 en champ 4 et le
 nombre en champ 6 - identique tant qu on ne demande qu 1 GA). En attente du
 filtre de la femme de l utilisateur pour comparer avant de modifier le generateur.
+
+**v3.37 - formulaire "Creer mon filtre"** : les 2 boutons Ouvert/Strict + le
+bloc d options (cases, Tier A/B, 6 couleurs, legende) remplaces par un seul
+bouton qui ouvre une fenetre en 4 etapes : (1) Situation (monte de niveau =
+Ouvert, Endgame = Strict, Farm = Strict + mode farm) + Ancestral / cacher
+legendaires faibles ; (2) Exigence en clair (Large 2/-, Equilibre 2/3,
+Exigeant 3/4, Chasse GA 3/5 -> regle Tier A/B) + precision par emplacement +
+reglage fin Tier A/B replie ; (3) Couleurs (libelles "2 stats"/"3 stats"/...) ;
+(4) Resume + Generer. La fenetre DEPLACE les vrais champs existants (memes
+ids, meme memorisation GM) : runGenerateFilter() inchange. Teste via
+Playwright sur la page IB reelle (script injecte avec stubs GM) : 4 etapes
+affichees, preset Exigeant -> Tier 3/4 memorise, 0 erreur JS.
