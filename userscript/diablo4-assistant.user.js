@@ -3887,9 +3887,12 @@
       // item never matches these Rare-only conditions in the first place).
       // Freeing that rule budget lets other slots that DO need precision
       // fit under D4's 25-rule cap instead of being trimmed away.
-      const equippedUnique = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(entry.itemName));
-      if (equippedUnique) {
-        skippedSlots.push(`${entry.slot} (Unique: ${equippedUnique})`);
+      // 2026-09-30: skip on ANY Unique the site names for the slot, even one
+      // missing from UNIQUE_ITEM_IDS (Enigma, Grief...): the build wants that
+      // item, a Rare/Legendary rule there only burns the 25-rule budget.
+      if (entry.itemName) {
+        const equippedUnique = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(entry.itemName));
+        skippedSlots.push(`${entry.slot} (Unique: ${equippedUnique || entry.itemName + ", non ciblable"})`);
         continue;
       }
       const typeIds = entry.typeIds || ITEM_TYPE_IDS[entry.slot];
@@ -6036,7 +6039,11 @@
     // Farm mode implies the same broader hide as hideWeak (see
     // generateFilterCode()'s farmMode comment), so it needs the safety net too.
     const needsUniqueShowSafetyNet = isStrict && (optHideUnique || optFarmMode);
-    const uniqueRulesResult = buildUniqueItemRules(perSlot, result.itemsEn || [], colorGood, colorBis, needsUniqueShowSafetyNet, colorLegendary, levels, colorPerfect, colorGA);
+    // 2026-09-30: when the page's own reader gave per-slot data, don't mix in
+    // the Uniques of the InfinityBuilds EQUIVALENT build (result.itemsEn on
+    // D4Builds/D4Guides/talion) - they can differ from this page's build.
+    const uniqueFallbackNames = perSlot.length && result.sourceLabel !== currentSiteLabel() ? [] : result.itemsEn || [];
+    const uniqueRulesResult = buildUniqueItemRules(perSlot, uniqueFallbackNames, colorGood, colorBis, needsUniqueShowSafetyNet, colorLegendary, levels, colorPerfect, colorGA);
     let charmRulesResult = { rules: [], matched: [] };
     try {
       const charms = extractInfinityBuildsCharms();
