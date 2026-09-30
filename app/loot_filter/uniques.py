@@ -287,6 +287,10 @@ UNIQUE_ITEM_IDS: dict[str, list[int]] = {
     # instead: user built a single-condition in-game test filter
     # (SpecificUnique = this item only), exported, decoded byte-for-byte.
     "Stone of Jordan": [0x0028647E],
+    # 2026-09-30: Season 15, absent from D4LootBench - same method (the
+    # user's single-rule in-game test filter "Unique = Leoric's Crown",
+    # exported and decoded), also found in the wife's own real filter.
+    "Leoric's Crown": [0x0028646B],
     "Stone of Vehemen": [0x001F2EA3],
     "Storm's Companion": [0x000D6FCE],
     "Strides of War": [0x00205BD2],

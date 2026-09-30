@@ -973,3 +973,31 @@ migration 3/5) + non-regression masquage + fenetre sur la page IB reelle.
 InfinityBuilds, kami-labs, D4Builds, D4Guides, talion.tv) en petits boutons sous
 "Retour d experience", visibles sur toutes les pages (idee notee le 29/09).
 Toutes les URLs verifiees (HTTP 200, bon titre de page).
+
+## 2026-09-30 (suite) - Filtre de la femme de l utilisateur compare au generateur (v3.45)
+
+Filtre fait a la main par l epouse de l utilisateur (Mekuna Cri flamboyant,
+IB, variante Bond endgame) decode : par emplacement "4 sur 4" puis "3 sur 4"
+parmi les stats de l emplacement, sans stat obligatoire, sans Ancestral ; set
+de charmes + affixe Hellfire ; ne cache que les Magiques. 4 correctifs :
+- **Set de charmes (kind=9)** : format du VRAI export du jeu = une seule
+  entree {f1 set, f2 piece repete}, pas une paire par piece (doc D4LootBench) ;
+  + rarete Talisman + "au moins 1 des affixes principaux des pieces" (l affixe
+  de charme "to Hellfire Skills" a le meme id que sur l equipement). Octets
+  identiques a son export (a l ordre des pieces pres).
+- **0 obligatoire** autorise (0+0 = niveau desactive) ; helpers partages
+  levelActive/sortLevels/levelLabel/levelAffixConditions.
+- **Niveaux appliques aux Uniques** (regles "U Casque 0+4"...) au lieu des
+  AFX3/AFX2 fixes.
+- **Communs et Magiques separes** dans l etape Masquage (migration auto).
+- **Couronne de Leoric = 0x0028646B** (filtre de test en jeu de
+  l utilisateur, aussi present dans le filtre de l epouse) ajoutee
+  (userscript + app/loot_filter/uniques.py) ; liens noms internes IB
+  helm-unique-generic-005 -> Leoric s Crown, ring-unique-generic-108 -> Stone of
+  Jordan (confirmes par l itemName d IB).
+Test de bout en bout avec les vraies fonctions (Node, variante Bond endgame,
+reglages 0+4 / 0+3, sans Ancestral, Magiques caches) : 23 regles comme les
+siennes, memes 4 stats et memes seuils par emplacement. Differences restantes :
+elle vise les emplacements Uniques par type d objet + rarete Unique/Mythique,
+nous par l Unique precis ; son torse a des stats choisies a la main ; sa regle
+"Legend, Sets" (objets hors build) n est pas automatisable.
