@@ -2916,7 +2916,7 @@
   async function findPerSlotStatPriority(gameClass) {
     await ensureStatPriorityTabActive();
     const fromWidget = extractStatPriorityFromD4ToolsWidget(gameClass);
-    if (fromWidget.length) return fromWidget;
+    if (fromWidget.length) return addMaxrollWidgetExtras(fromWidget);
     if (location.hostname === "infinitybuilds.gg") {
       try {
         const fromInfinityBuilds = await findInfinityBuildsPerSlotAffixesCached(gameClass);
@@ -3319,6 +3319,23 @@
       rawSlots.push({ slot: mapped[0], stats, itemName: isUnique ? item.name : null, typeIds: mapped[1] });
     }
     return makeSitePerSlotEntries(rawSlots, gameClass);
+  }
+
+  // 2026-09-30: Maxroll's Stat Priority widget now colors most Uniques (not
+  // only Mythics) with `.d4-color-mythic` - checked live on 3 guides (Gohr's
+  // Devastating Grips, Etna's Lost Dagger, Cowl of the Nameless...) - while
+  // extractStatPriorityFromD4ToolsWidget() only reads `.d4-color-unique`, so
+  // those slots lost their itemName: no "U <slot>" rules and per-slot Rare/
+  // Legendary rules wasted on a slot that holds a Unique. Fills the gap.
+  async function addMaxrollWidgetExtras(entries) {
+    const mythicBySlot = {};
+    for (const item of document.querySelectorAll(".d4t-item")) {
+      const slot = item.querySelector(".d4t-slot")?.textContent.trim();
+      const mythic = item.querySelector(".d4t-header .d4-color-mythic");
+      if (slot && mythic) mythicBySlot[slot] = mythic.textContent.trim();
+    }
+    for (const entry of entries) if (!entry.itemName && mythicBySlot[entry.slot]) entry.itemName = mythicBySlot[entry.slot];
+    return entries;
   }
 
   // One entry point per site, cached per URL like the InfinityBuilds reader
