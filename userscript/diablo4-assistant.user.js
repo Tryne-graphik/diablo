@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.32
+// @version      3.33
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1882,7 +1882,7 @@
   // rule to get its own picker ("Légendaires - Garder" stays fixed green on
   // purpose - only Codex was asked for; "Mythique - Garder" was removed
   // entirely later the same day, see generateFilterCode()'s notes).
-  const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff", perfect: "#ff2fd1", codex: "#00c800" };
+  const COLOR_HEX_DEFAULTS = { bis: "#ffd700", good: "#ff8c00", ga: "#00ffff", perfect: "#ff2fd1", codex: "#00c800", legendary: "#00c800" };
   function hexToColor(hex, fallback) {
     const m = /^#?([0-9a-f]{6})$/i.exec(hex || "");
     if (!m) return fallback;
@@ -2898,8 +2898,27 @@
   const INFINITYBUILDS_SLOT_MAP = {
     helm: "Helm", chest: "Chest Armor", gloves: "Gloves", pants: "Pants", boots: "Boots",
     amulet: "Amulet", ring1: "Left Ring", ring2: "Right Ring",
-    mainhand: "Mainhand", offhandWeapon: "Offhand", weapon: "Ranged Weapon",
+    mainhand: "Mainhand", offhandWeapon: "Offhand", offhand: "Offhand", weapon: "Mainhand",
   };
+  // 2026-09-30 (retour testeur, Warlock 6SmunLGMnk): IB's "weapon" slot is the
+  // build's MAIN weapon (1H sword there), not always a ranged one - it used to
+  // be hard-mapped to "Ranged Weapon" (Bow/Crossbow rule for a sword), and
+  // "offhand" (the Focus) wasn't mapped at all. Each slot's itemId names the
+  // real weapon kind ("item-x2-1hdagger-...", "item-1hfocus-unique-..."), so
+  // the slot AND the item-type condition now come from it: the rule targets
+  // the build's actual weapon type instead of all 12 Mainhand types
+  // (complaint "main principale il choisit 12 objets"). Unknown kinds
+  // (e.g. Spiritborn "quarterstaff", no confirmed id) keep the full slot list.
+  const IB_WEAPON_KIND_TYPE_IDS = {
+    "1hdagger": 0x0006d159, dagger: 0x0006d159, "1hsword": 0x0006d14c, "2hsword": 0x0006d14f,
+    "1hmace": 0x0006d13a, "2hmace": 0x0006d144, "1haxe": 0x0006d151, "2haxe": 0x0006d152,
+    "1hwand": 0x0006d163, wand: 0x0006d163, staff: 0x0006d153, "2hstaff": 0x0006d153,
+    "1hscythe": 0x0006d154, "2hscythe": 0x0006d155, polearm: 0x0006d15d, "2hpolearm": 0x0006d15d,
+    bow: 0x0006d167, "2hbow": 0x0006d167, crossbow: 0x0006d169, "2hcrossbow": 0x0006d169,
+    "1hfocus": 0x0006d16a, focus: 0x0006d16a, "1htotem": 0x0006d16b, totem: 0x0006d16b,
+    "1hshield": 0x0006d172, shield: 0x0006d172,
+  };
+  const IB_WEAPON_KIND_RE = /-((?:1h|2h)?(?:dagger|sword|mace|axe|wand|quarterstaff|staff|scythe|polearm|crossbow|bow|focus|totem|shield))-/;
   // 2026-09-25 CORRECTION (real bug, found live the same day this shipped):
   // used to scan each <script> tag's textContent INDIVIDUALLY, requiring a
   // single tag to contain both '"slot"' and '"affixId"' before even trying
@@ -2921,19 +2940,40 @@
     for (const script of document.querySelectorAll("script")) {
       if (script.textContent) combined += script.textContent;
     }
-    if (!combined.includes('"affixId"') || !combined.includes('"slot"')) return slotAffixIds;
+    // 2026-09-30: guard moved AFTER unescaping - the RSC payload is escaped
+    // (\"affixId\"), so the old pre-unescape check never matched and silently
+    // returned 0 slots (tester's Warlock filter: 5 rules, zero per-slot).
     const unescaped = combined.replace(/\\"/g, '"');
-    const slotRe = /"slot":"(\w+)"[\s\S]{0,200}?"affixes":\[([\s\S]*?)\]/g;
-    const affixIdRe = /"affixId":"([a-z0-9\-]+)"/g;
+    if (!unescaped.includes('"affixId"') || !unescaped.includes('"slot"')) return slotAffixIds;
+    const slotRe = /"slot":"(\w+)"(?:,"itemId":"([^"]*)")?[\s\S]{0,200}?"affixes":\[([\s\S]*?)\]/g;
+    // 2026-09-30 (retour testeur, build Warlock 6SmunLGMnk): each affix object
+    // carries flags - "tempered":true (Trempe, can never drop on a floor item,
+    // so a filter requiring it matches nothing), "removed":true (replaced at
+    // the Occultist, not on the item anymore) and runeword ids (socket bonus,
+    // not an item affix). All skipped - only naturally-droppable affixes kept.
+    const affixObjRe = /\{[^{}]*"affixId":"([a-z0-9\-]+)"[^{}]*\}/g;
     let m;
+    const itemIdBySlot = {};
     while ((m = slotRe.exec(unescaped))) {
-      const ourSlot = INFINITYBUILDS_SLOT_MAP[m[1]];
+      let ourSlot = INFINITYBUILDS_SLOT_MAP[m[1]];
       if (!ourSlot) continue;
+      const itemId = m[2] || "";
+      itemIdBySlot[m[1]] = itemId;
+      // Two-hander: IB lists the same item under both weapon and offhand.
+      if (ourSlot === "Offhand" && itemId && itemId === itemIdBySlot.weapon) continue;
+      const kindMatch = itemId.match(IB_WEAPON_KIND_RE);
+      const kind = kindMatch ? kindMatch[1] : null;
+      if (kind && /bow$/.test(kind)) ourSlot = "Ranged Weapon";
+      const kindTypeId = kind ? IB_WEAPON_KIND_TYPE_IDS[kind] : undefined;
       const ids = [];
-      affixIdRe.lastIndex = 0;
+      affixObjRe.lastIndex = 0;
       let am;
-      while ((am = affixIdRe.exec(m[2]))) ids.push(am[1]);
-      if (ids.length) slotAffixIds.set(ourSlot, ids); // later occurrence wins (last variant tab)
+      while ((am = affixObjRe.exec(m[3]))) {
+        if (/"(tempered|removed)":true/.test(am[0]) || am[1].includes("runeword")) continue;
+        ids.push(am[1]);
+      }
+      // later occurrence wins (last variant tab)
+      if (ids.length) slotAffixIds.set(ourSlot, { ids, typeIds: kindTypeId != null ? [kindTypeId] : null });
     }
     return slotAffixIds;
   }
@@ -2949,10 +2989,10 @@
   async function findInfinityBuildsPerSlotAffixes(gameClass) {
     const slotAffixIds = extractInfinityBuildsRawSlotAffixes();
     if (slotAffixIds.size === 0) return [];
-    const allIds = Array.from(new Set(Array.from(slotAffixIds.values()).flat()));
+    const allIds = Array.from(new Set(Array.from(slotAffixIds.values()).flatMap((v) => v.ids)));
     const labelMap = await fetchInfinityBuildsAffixLabels(gameClass, allIds);
     const results = [];
-    for (const [ourSlot, ids] of slotAffixIds) {
+    for (const [ourSlot, { ids, typeIds }] of slotAffixIds) {
       const resolvedIds = new Set();
       const names = new Set();
       let unresolvedCount = 0;
@@ -2976,7 +3016,7 @@
       // correlation there, so a Unique found only this way still gets
       // pooled into the generic "Garder Uniques" safety net rather than its
       // own "U <slot>" rule. Real gap, deliberately left for a future pass.
-      results.push({ slot: ourSlot, ids: Array.from(resolvedIds), names: Array.from(names), unresolvedCount, itemName: null });
+      results.push({ slot: ourSlot, ids: Array.from(resolvedIds), names: Array.from(names), unresolvedCount, itemName: null, typeIds });
     }
     return results;
   }
@@ -3081,6 +3121,10 @@
     // "Légendaires - Garder" stays fixed green on purpose, only Codex was
     // asked for; "Mythique - Garder" removed entirely later this same day).
     const colorCodex = options.colorCodex ?? COLOR_GREEN;
+    // 2026-09-30 (retour testeur "une couleur verte non configurée"): was
+    // hardcoded COLOR_GREEN - same hue as the Codex default, so changing the
+    // Codex picker still left green items and looked like it was ignored.
+    const colorLegendary = options.colorLegendary ?? COLOR_GREEN;
     // 2026-09-22: user-customizable swatches (3 color pickers in the panel,
     // "pour que les gens puissent personnaliser un peu") - default to the
     // original hardcoded colors when not supplied.
@@ -3182,7 +3226,7 @@
     // reached AFTER the quality tiers get first shot at a better color
     // instead of only existing as an alternative to them.
     if (!effectiveHideWeak) {
-      rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], COLOR_GREEN)));
+      rules.push(tagRule(makeRule("Légendaires - Garder", RECOLOR, [conditionRarity(LEGENDARY_PLUS)], colorLegendary)));
     }
     // 2026-09-24: removed the old unconditional "any rarity with a Greater
     // Affix" recolor - the user pointed out D4 already marks GA affixes
@@ -3356,7 +3400,7 @@
         skippedSlots.push(`${entry.slot} (Unique: ${equippedUnique})`);
         continue;
       }
-      const typeIds = ITEM_TYPE_IDS[entry.slot];
+      const typeIds = entry.typeIds || ITEM_TYPE_IDS[entry.slot];
       if (!typeIds || entry.ids.length < 2) {
         skippedSlots.push(entry.slot);
         continue;
@@ -3478,7 +3522,7 @@
   // before 3-affix) since the rule count here is no longer a fixed 2 - a
   // build with several distinct per-slot Uniques could add up fast under
   // D4's 25-rule cap.
-  function buildUniqueItemRules(perSlotData, itemNamesEnFallback, colorGood, colorBis, needsShowSafetyNet = true) {
+  function buildUniqueItemRules(perSlotData, itemNamesEnFallback, colorGood, colorBis, needsShowSafetyNet = true, colorKeep = COLOR_GREEN) {
     const matched = [];
     const seen = new Set();
     const pooledSnoIds = [];
@@ -3539,7 +3583,9 @@
       // Never trimmable (see tagRule()'s docstring) - fixed cost no matter
       // how many Uniques matched, and a build's core Uniques are worth
       // keeping regardless of filter budget pressure.
-      rules.push(tagRule(makeRule("Garder Uniques", SHOW, [conditionSpecificUnique(pooledSnoIds)], colorBis), false));
+      // 2026-09-30: was SHOW (native in-game Unique yellow, not the user's
+      // colors - retour testeur "une couleur jaune non configurée").
+      rules.push(tagRule(makeRule("Garder Uniques", RECOLOR, [conditionSpecificUnique(pooledSnoIds)], colorKeep), false));
     }
     return { rules, matched };
   }
@@ -5128,6 +5174,7 @@
     const colorGA = hexToColor(hexGA, COLOR_CYAN);
     const colorPerfect = hexToColor(hexPerfect, COLOR_PERFECT);
     const colorCodex = hexToColor(hexCodex, COLOR_GREEN);
+    const colorLegendary = hexToColor(document.getElementById("d4a-color-legendary")?.value || COLOR_HEX_DEFAULTS.legendary, COLOR_GREEN);
 
     // Read the CURRENT page's own "Stat Priority" list, if it has one -
     // see findPriorityAffixIds()'s docstring. Never blocks filter
@@ -5173,7 +5220,7 @@
     // Farm mode implies the same broader hide as hideWeak (see
     // generateFilterCode()'s farmMode comment), so it needs the safety net too.
     const needsUniqueShowSafetyNet = isStrict && (optHideWeak || optFarmMode);
-    const uniqueRulesResult = buildUniqueItemRules(perSlot, result.itemsEn || [], colorGood, colorBis, needsUniqueShowSafetyNet);
+    const uniqueRulesResult = buildUniqueItemRules(perSlot, result.itemsEn || [], colorGood, colorBis, needsUniqueShowSafetyNet, colorLegendary);
 
     // 2026-09-22: "nommer le filtre avec le nom du build et le site d'où il
     // vient de façon abrégée" - the site is a 2-letter tag rather than the
@@ -5202,8 +5249,9 @@
           colorBis,
           colorGood,
           colorCodex,
+          colorLegendary,
         })
-      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorCodex });
+      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", uniqueRulesResult.rules, { colorBis, colorGood, colorCodex, colorLegendary });
 
     const detailNote = result.hasDetail
       ? ""
@@ -5428,6 +5476,7 @@
           <div class="d4a-tier-color"><input type="color" id="d4a-color-perfect" value="${COLOR_HEX_DEFAULTS.perfect}"><span>Tier 4</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-ga" value="${COLOR_HEX_DEFAULTS.ga}"><span>Tier 5</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-codex" value="${COLOR_HEX_DEFAULTS.codex}"><span>Codex</span></div>
+          <div class="d4a-tier-color"><input type="color" id="d4a-color-legendary" value="${COLOR_HEX_DEFAULTS.legendary}"><span>Légendaires</span></div>
         </div>
         <div class="d4a-tier-select">
           <label>Tier A <select id="d4a-tier-a">
@@ -5462,7 +5511,7 @@
             <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 : les 4 affixes du build sur cet emplacement</span>
             <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 : affixes du build + Greater Affix (par emplacement)</span>
             <span><i id="d4a-legend-codex" style="background:${COLOR_HEX_DEFAULTS.codex}"></i>Codex à améliorer</span>
-            <span><i style="background:#00c800"></i>Légendaire/Unique restant (Mythique : jamais recoloré, jamais caché)</span>
+            <span><i id="d4a-legend-legendary" style="background:${COLOR_HEX_DEFAULTS.legendary}"></i>Légendaire/Unique restant (Mythique : jamais recoloré, jamais caché)</span>
           </div>
         </details>
       </div>
@@ -5686,6 +5735,7 @@
       ["d4a-color-perfect", "perfect", "d4a-legend-perfect"],
       ["d4a-color-ga", "ga", "d4a-legend-ga"],
       ["d4a-color-codex", "codex", "d4a-legend-codex"],
+      ["d4a-color-legendary", "legendary", "d4a-legend-legendary"],
     ]) {
       const input = document.getElementById(id);
       const swatch = document.getElementById(legendId);
