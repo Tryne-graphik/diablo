@@ -956,3 +956,15 @@ vise plus que les raretes NON cachees (sinon il gagnerait le first-match) ;
 pas de regle Cacher si rien n est coche. Legendaires/Uniques jamais caches en
 Ouvert. Verifie : 6 combinaisons via le vrai generateFilterCode() en Node
 (masques de rarete decodes) + fenetre 5 etapes sur la page IB reelle.
+
+**v3.43 - affixes obligatoires/optionnels au choix** : Tier A/B remplaces par 2
+niveaux {req 1-4, opt 0-4, +GA} (niveau 2 desactivable) dans le "Reglage fin" de
+l etape Exigence. Obligatoires = les N PREMIERES stats affichees pour
+l emplacement (ordre du site : priorite Maxroll, ordre de l objet sur IB - choix
+explicite de l utilisateur plutot qu une selection stat par stat), toutes
+exigees ; optionnelles = au moins M parmi les suivantes. Couleur selon le total
+(2/3/4 stats) ou GA. Regles nommees "2+1 - Casque", "1+1 GA - Gants". Niveau
+ignore sur un emplacement qui n a pas assez de stats connues. Avertissement si
+req+opt > 4. Stockage `d4a-levels` (JSON), migration auto depuis d4a-tier-a/b.
+Verifie : buildPerSlotRules()/readLevels() reels en Node (pools decodes,
+migration 3/5) + non-regression masquage + fenetre sur la page IB reelle.

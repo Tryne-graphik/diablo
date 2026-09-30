@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.42
+// @version      3.43
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3482,8 +3482,20 @@
   // "loosest" one and gets the higher trim priority (dropped first) if
   // the filter would still exceed 25 rules for some other reason (many
   // Uniques, a long build-affix pool, etc).
-  function buildPerSlotRules(perSlotData, requireAncestral = true, selectedTiers = [2, 3], colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
-    const tierColors = { 2: colorGood, 3: colorBis, 4: colorPerfect, 5: colorGA };
+  // 2026-09-30 (demande utilisateur) : "choisir 1 à 4 affixes requis et 0 à
+  // 4 optionnels" - each level is {req, opt, ga}: the slot's FIRST `req`
+  // listed stats are ALL mandatory (site order: Maxroll priority rank, IB
+  // item order - the user's explicit choice over picking stats by hand),
+  // plus at least `opt` of the remaining ones, plus a Greater Affix if `ga`.
+  // Replaces the fixed tiers (tier N = 1 required + N-1 optional, 5 = +GA).
+  function buildPerSlotRules(perSlotData, requireAncestral = true, levels = DEFAULT_LEVELS, colorGood = COLOR_ORANGE, colorBis = COLOR_GOLD, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
+    // Color by how demanding the level is (keeps the "2/3/4 stats, + GA"
+    // pickers meaningful): GA wins, else total required stat count.
+    const levelColor = (l) => (l.ga ? colorGA : l.req + l.opt >= 4 ? colorPerfect : l.req + l.opt === 3 ? colorBis : colorGood);
+    // Most demanding first (first-match wins); the loosest is trimmed first.
+    const sorted = levels
+      .filter((l) => l && l.req >= 1)
+      .sort((a, b) => (b.ga - a.ga) || (b.req + b.opt - (a.req + a.opt)) || (b.req - a.req));
     // 2026-09-24: translated to French (rule names shown inside the actual
     // game's filter list, not just this panel) and shortened to fit D4's
     // real 24-character rule-name cap once combined with a slot label
@@ -3492,11 +3504,6 @@
     // "Supérieur") to just "Tier N" - the user found the named version
     // harder to scan at a glance than a consistent numeric scheme, same
     // reasoning as buildUniqueItemRules()'s "AFX" shortening below.
-    const tierLabels = { 2: "Tier 2", 3: "Tier 3", 4: "Tier 4", 5: "Tier 5" };
-    const tiersDesc = Array.from(new Set(selectedTiers)).filter((t) => t >= 2 && t <= 5).sort((a, b) => b - a);
-    const tiersAsc = [...tiersDesc].sort((a, b) => a - b);
-    const trimPriorityByTier = {};
-    tiersAsc.forEach((t, i) => { trimPriorityByTier[t] = tiersAsc.length - i; });
 
     const rules = [];
     const skippedSlots = [];
@@ -3516,7 +3523,7 @@
         continue;
       }
       const typeIds = entry.typeIds || ITEM_TYPE_IDS[entry.slot];
-      if (!typeIds || entry.ids.length < 2) {
+      if (!typeIds || entry.ids.length < 1) {
         skippedSlots.push(entry.slot);
         continue;
       }
@@ -3532,14 +3539,14 @@
       // count per tier is UNCHANGED (2/3/4) - this only makes the strongest
       // stat mandatory instead of merely one-of-many, a strict quality
       // improvement with no new UI/tier-naming needed.
-      for (const tier of tiersDesc) {
-        if (tier === 4 && entry.ids.length < 4) continue;
-        if (tier === 3 && entry.ids.length < 3) continue;
-        const requiredIds = entry.ids.slice(0, 1);
-        const optionalIds = entry.ids.slice(1);
-        const optionalCount = Math.min(tier === 5 ? 1 : tier - 1, optionalIds.length);
-        const affixConditions = [conditionAffixes(requiredIds, 1)];
-        if (optionalIds.length) affixConditions.push(conditionOptionalAffixes(optionalIds, optionalCount));
+      sorted.forEach((level, index) => {
+        // Not enough known stats on this slot for this level - skip it
+        // rather than silently asking for fewer than the user chose.
+        if (entry.ids.length < level.req + level.opt) return;
+        const requiredIds = entry.ids.slice(0, level.req);
+        const optionalIds = entry.ids.slice(level.req);
+        const affixConditions = [conditionAffixes(requiredIds, level.req)];
+        if (level.opt > 0) affixConditions.push(conditionOptionalAffixes(optionalIds, level.opt));
         // 2026-09-25: rarity mask changed from RARE-only to RARE|LEGENDARY,
         // matching the user's own hand-built Auradin (Paladin) filter - every
         // one of its per-slot precision rules uses rarity=12 (4|8), not 4.
@@ -3556,13 +3563,13 @@
         // change needed here since conditionAncestral() already achieves
         // the same restriction and is already independently confirmed
         // in-game.
-        const conditions =
-          tier === 5
-            ? [conditionRarity(RARE | LEGENDARY), conditionItemTypes(typeIds), ...affixConditions, conditionGreaterAffix(1)]
-            : [conditionRarity(RARE | LEGENDARY), conditionItemTypes(typeIds), ...affixConditions];
+        const conditions = [conditionRarity(RARE | LEGENDARY), conditionItemTypes(typeIds), ...affixConditions];
+        if (level.ga) conditions.push(conditionGreaterAffix(1));
         if (requireAncestral) conditions.push(conditionAncestral());
-        rules.push(tagRule(makeRule(`${tierLabels[tier]} - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, RECOLOR, conditions, tierColors[tier]), trimPriorityByTier[tier]));
-      }
+        // "2+1 - Casque", "1+1 GA - Gants" (fits D4's 24-char rule-name cap).
+        const label = `${level.req}+${level.opt}${level.ga ? " GA" : ""}`;
+        rules.push(tagRule(makeRule(`${label} - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, RECOLOR, conditions, levelColor(level)), index + 1));
+      });
     }
     return { rules, skippedSlots };
   }
@@ -3903,6 +3910,10 @@
       #d4a-myfilters-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
       .d4a-build-filters { display: flex; flex-direction: column; gap: 3px; margin-top: 3px; text-align: left; }
       .d4a-build-filters small { display: block; opacity: .75; font-size: 11px; margin-left: 4px; }
+      #d4a-wz .d4a-lvl { border: 1px solid #333; border-radius: 5px; padding: 6px 8px; margin: 6px 0; }
+      #d4a-wz .d4a-lvl label { display: inline-flex; align-items: center; gap: 4px; margin: 3px 10px 3px 0; font-size: 13px; }
+      #d4a-wz .d4a-lvl select { background: #000; color: #eee; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; }
+      #d4a-wz .d4a-lvl b { display: block; color: #c9a227; }
       #d4a-wz .d4a-wz-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       #d4a-wz .d4a-wz-meta label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
       #d4a-wz .d4a-wz-meta input, #d4a-wz .d4a-wz-meta select { padding: 5px 7px; border-radius: 4px; border: 1px solid #444; background: #000; color: #eee; font-size: 13px; }
@@ -3974,9 +3985,6 @@
          single row, made to fit this time by capping each select's width
          and shortening its option text (see the HTML) instead of just
          hoping it fits. */
-      .d4a-tier-select { display: flex; flex-direction: row; justify-content: center; gap: 10px; margin: 4px 0; }
-      .d4a-tier-select label { display: flex; align-items: center; gap: 4px; font-size: 12px; margin: 0; }
-      .d4a-tier-select select { background: #000; color: #eee; border: 1px solid #333; border-radius: 4px; padding: 2px 4px; font-size: 12px; max-width: 92px; }
       /* 2026-09-23 (follow-up): "separe les paliers en deux colonnes, laisse
          une ligne vide entre chaque entree" - was a 2x2 grid briefly, but
          the 4 tier descriptions have uneven line counts (1-2 lines each)
@@ -5291,12 +5299,26 @@
   // persistence already wired in init()) into its steps instead of copying
   // them, and only translates player-language choices (situation, exigence)
   // into those same inputs, so runGenerateFilter() is unchanged.
+  // Level 2 with req 0 = disabled (the 25-rule cap allows 2 levels per slot).
+  const DEFAULT_LEVELS = [{ req: 1, opt: 1, ga: false }, { req: 1, opt: 2, ga: false }];
   const WZ_PRESETS = [
-    { id: "large", label: "Large", desc: "2 bonnes stats sur l'emplacement", tiers: ["2", "0"] },
-    { id: "equilibre", label: "Équilibré (recommandé)", desc: "2 stats, et une couleur à part à partir de 3", tiers: ["2", "3"] },
-    { id: "exigeant", label: "Exigeant", desc: "3 stats minimum, couleur à part pour 4", tiers: ["3", "4"] },
-    { id: "ga", label: "Chasse aux Greater Affix", desc: "3 stats, couleur à part si un Greater Affix en plus", tiers: ["3", "5"] },
+    { id: "large", label: "Large", desc: "2 bonnes stats sur l'emplacement", levels: [{ req: 1, opt: 1, ga: false }, { req: 0, opt: 0, ga: false }] },
+    { id: "equilibre", label: "Équilibré (recommandé)", desc: "2 stats, et une couleur à part à partir de 3", levels: DEFAULT_LEVELS },
+    { id: "exigeant", label: "Exigeant", desc: "3 stats minimum, couleur à part pour 4", levels: [{ req: 1, opt: 2, ga: false }, { req: 1, opt: 3, ga: false }] },
+    { id: "ga", label: "Chasse aux Greater Affix", desc: "3 stats, couleur à part si un Greater Affix en plus", levels: [{ req: 1, opt: 2, ga: false }, { req: 1, opt: 1, ga: true }] },
   ];
+  // Old Tier A/B values (v2.47-v3.42) -> levels, so nobody loses their setting.
+  const tierToLevel = (t) => ({ 2: { req: 1, opt: 1, ga: false }, 3: { req: 1, opt: 2, ga: false }, 4: { req: 1, opt: 3, ga: false }, 5: { req: 1, opt: 1, ga: true } })[t] || { req: 0, opt: 0, ga: false };
+  function readLevels() {
+    try {
+      const saved = JSON.parse(GM_getValue("d4a-levels", "null"));
+      if (Array.isArray(saved) && saved.length === 2) return saved;
+    } catch (e) {
+      // fall through to the migration below
+    }
+    return [tierToLevel(GM_getValue("d4a-tier-a", "2")), tierToLevel(GM_getValue("d4a-tier-b", "3"))];
+  }
+  const sameLevels = (a, b) => a.every((l, i) => l.req === b[i].req && (l.req === 0 || (l.opt === b[i].opt && !!l.ga === !!b[i].ga)));
   const WZ_SITUATIONS = [
     { id: "leveling", label: "🌱 Je monte de niveau", desc: "Filtre Ouvert : garde toutes les Légendaires/Uniques, cache le reste hors-build." },
     { id: "endgame", label: "⚔ Endgame (Tourment)", desc: "Filtre Strict : seulement les objets qui correspondent au build." },
@@ -5346,9 +5368,16 @@
     overlay.id = "d4a-wz-overlay";
     const radio = (name, o, checked) => `<label class="d4a-wz-choice"><input type="radio" name="${name}" value="${o.id}"${checked ? " checked" : ""}> ${o.label}<small>${o.desc}</small></label>`;
     const situation = GM_getValue("d4a-wz-situation", "endgame");
-    const tierA = document.getElementById("d4a-tier-a").value;
-    const tierB = document.getElementById("d4a-tier-b").value;
-    const preset = (WZ_PRESETS.find((p) => p.tiers[0] === tierA && p.tiers[1] === tierB) || {}).id;
+    const preset = (WZ_PRESETS.find((p) => sameLevels(p.levels, readLevels())) || {}).id;
+    const num = (id, from, to, firstLabel) => `<select id="${id}">${Array.from({ length: to - from + 1 }, (_, k) => from + k).map((n) => `<option value="${n}">${n === 0 && firstLabel ? firstLabel : n}</option>`).join("")}</select>`;
+    const levelRow = (n) => `
+          <div class="d4a-lvl">
+            <b>Niveau ${n}</b>
+            <label>Obligatoires ${num(`d4a-l${n}-req`, n === 1 ? 1 : 0, 4, "Désactivé")}</label>
+            <label>Optionnelles ${num(`d4a-l${n}-opt`, 0, 4)}</label>
+            <label><input type="checkbox" id="d4a-l${n}-ga"> + Greater Affix</label>
+            <p class="d4a-wz-note" id="d4a-l${n}-desc"></p>
+          </div>`;
     overlay.innerHTML = `
       <div id="d4a-wz" role="dialog" aria-modal="true" aria-labelledby="d4a-wz-title">
         <h3><span id="d4a-wz-title">🛡 Créer mon filtre</span><button id="d4a-wz-close" aria-label="Fermer">✕</button></h3>
@@ -5364,7 +5393,11 @@
           ${WZ_PRESETS.map((o) => radio("d4a-wz-preset", o, o.id === preset)).join("")}
           <p class="d4a-wz-note">Le jeu limite un filtre à 25 règles : si ça dépasse, les règles les moins exigeantes sont retirées en premier (un avertissement s'affiche).</p>
           <div class="d4a-wz-extra" id="d4a-wz-extra-2"></div>
-          <details><summary class="d4a-wz-note">Réglage fin (Tier A / Tier B)</summary><div id="d4a-wz-tiers"></div></details>
+          <details id="d4a-wz-levels"><summary class="d4a-wz-note">Réglage fin : nombre d'affixes obligatoires / optionnels</summary>
+            <p class="d4a-wz-note">Obligatoires = les N <b>premières</b> stats affichées pour l'emplacement (ordre du site), toutes exigées. Optionnelles = au moins M parmi les stats suivantes.</p>
+            ${levelRow(1)}
+            ${levelRow(2)}
+          </details>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Qu'est-ce qui doit être caché en jeu ?</p>
@@ -5400,7 +5433,35 @@
     document.getElementById("d4a-wz-extra-1").append(labelOf("d4a-opt-ancestral"));
     document.getElementById("d4a-wz-extra-hide").append(labelOf("d4a-hide-cm"), labelOf("d4a-hide-rare"), labelOf("d4a-hide-leg"), labelOf("d4a-hide-uniq"));
     document.getElementById("d4a-wz-extra-2").append(labelOf("d4a-opt-perslot"));
-    document.getElementById("d4a-wz-tiers").append(document.querySelector("#d4a-filter-options .d4a-tier-select"));
+    const levelIds = (n) => [`d4a-l${n}-req`, `d4a-l${n}-opt`, `d4a-l${n}-ga`].map((id) => document.getElementById(id));
+    const writeLevelControls = (levels) => levels.forEach((l, i) => {
+      const [req, opt, ga] = levelIds(i + 1);
+      req.value = String(l.req);
+      opt.value = String(l.opt);
+      ga.checked = !!l.ga;
+    });
+    const readLevelControls = () => [1, 2].map((n) => {
+      const [req, opt, ga] = levelIds(n);
+      return { req: +req.value, opt: +opt.value, ga: ga.checked };
+    });
+    const describeLevels = () => readLevelControls().forEach((l, i) => {
+      const n = i + 1;
+      const desc = document.getElementById(`d4a-l${n}-desc`);
+      levelIds(n).slice(1).forEach((el) => { el.disabled = l.req === 0; });
+      if (l.req === 0) {
+        desc.textContent = "Niveau désactivé (1 seule règle par emplacement).";
+        return;
+      }
+      const total = l.req + l.opt;
+      desc.textContent =
+        `${l.req === 1 ? "La 1re stat" : `Les ${l.req} premières stats`} de l'emplacement` +
+        (l.opt ? ` + au moins ${l.opt} parmi les suivantes` : "") +
+        (l.ga ? " + un Greater Affix" : "") +
+        ` (${total} stat${total > 1 ? "s" : ""} du build)` +
+        (total > 4 ? " - ⚠️ aucun objet n'a plus de 4 affixes : ce niveau ne correspondra jamais." : ".");
+    });
+    writeLevelControls(readLevels());
+    describeLevels();
     document.getElementById("d4a-wz-colors").append(
       document.querySelector("#d4a-filter-options .d4a-color-row"),
       document.querySelector("#d4a-filter-options .d4a-legend-details"),
@@ -5432,7 +5493,8 @@
       const opt = (id) => document.getElementById(id).checked;
       const lines = [`Situation : ${sit.label}`];
       if (sit.id !== "leveling") {
-        lines.push(`Exigence : ${pre ? pre.label : `personnalisée (Tier ${document.getElementById("d4a-tier-a").value} / ${document.getElementById("d4a-tier-b").value})`}`);
+        const lv = readLevelControls().filter((l) => l.req > 0).map((l) => `${l.req} obligatoire(s) + ${l.opt} optionnelle(s)${l.ga ? " + GA" : ""}`);
+        lines.push(`Exigence : ${pre ? pre.label + " - " : ""}${lv.join(" / ")}`);
         lines.push(`Ancestraux uniquement : ${opt("d4a-opt-ancestral") ? "oui" : "non"}`);
         const hidden = [["d4a-hide-cm", "Communs/Magiques"], ["d4a-hide-rare", "Rares"], ["d4a-hide-leg", "Légendaires"], ["d4a-hide-uniq", "Uniques"]]
           .filter(([id]) => opt(id)).map(([, l]) => l);
@@ -5454,10 +5516,15 @@
         setOpt("d4a-opt-farm-mode", e.target.value === "farm");
       } else if (e.target.name === "d4a-wz-preset") {
         const p = WZ_PRESETS.find((o) => o.id === e.target.value);
-        setOpt("d4a-tier-a", p.tiers[0]);
-        setOpt("d4a-tier-b", p.tiers[1]);
-      } else if (e.target.id === "d4a-tier-a" || e.target.id === "d4a-tier-b") {
-        overlay.querySelectorAll('input[name="d4a-wz-preset"]').forEach((r) => { r.checked = false; });
+        writeLevelControls(p.levels);
+        GM_setValue("d4a-levels", JSON.stringify(p.levels));
+        describeLevels();
+      } else if (/^d4a-l[12]-/.test(e.target.id)) {
+        const levels = readLevelControls();
+        GM_setValue("d4a-levels", JSON.stringify(levels));
+        describeLevels();
+        const match = WZ_PRESETS.find((p) => sameLevels(p.levels, levels));
+        overlay.querySelectorAll('input[name="d4a-wz-preset"]').forEach((r) => { r.checked = !!match && r.value === match.id; });
       }
     });
     back.onclick = () => overlay.showStep(Math.max(0, current - 1));
@@ -5531,20 +5598,9 @@
     // 2026-09-25: "mode farm" - default OFF like hideWeak/uniquePerItem, a
     // real behavior change (see generateFilterCode()'s farmMode comment).
     const optFarmMode = document.getElementById("d4a-opt-farm-mode")?.checked ?? false;
-    // 2026-09-23: "on ne peut choisir que 2 paliers pour respecter la regle
-    // des 25" - the 2 dropdowns below replace the old "all 4 tiers +
-    // algorithmic trim" approach as the primary control (see
-    // buildPerSlotRules()'s docstring).
-    // 2026-09-25: Tier B can now be "Aucun" (value "0") to run with just one
-    // tier - `|| fallback` would wrongly coerce a real "0" selection back to
-    // the default (0 is falsy in JS), so check for NaN specifically instead
-    // (buildPerSlotRules()'s own tiersDesc filter already drops anything
-    // outside 2-5, so a 0 here simply results in one fewer tier, not a bug).
-    const parseTierValue = (id, fallback) => {
-      const n = parseInt(document.getElementById(id)?.value, 10);
-      return Number.isNaN(n) ? fallback : n;
-    };
-    const selectedTiers = [parseTierValue("d4a-tier-a", 2), parseTierValue("d4a-tier-b", 3)];
+    // At most 2 levels per slot ("on ne peut choisir que 2 paliers pour
+    // respecter la regle des 25") - see buildPerSlotRules().
+    const levels = readLevels();
     const hexBis = document.getElementById("d4a-color-bis")?.value || COLOR_HEX_DEFAULTS.bis;
     const hexGood = document.getElementById("d4a-color-good")?.value || COLOR_HEX_DEFAULTS.good;
     const hexGA = document.getElementById("d4a-color-ga")?.value || COLOR_HEX_DEFAULTS.ga;
@@ -5580,7 +5636,7 @@
     let perSlotRulesResult = { rules: [], skippedSlots: [] };
     try {
       perSlot = await findPerSlotStatPriority(result.resolvedClass);
-      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, selectedTiers, colorGood, colorBis, colorPerfect, colorGA);
+      if (optPerSlot) perSlotRulesResult = buildPerSlotRules(perSlot, optAncestral, levels, colorGood, colorBis, colorPerfect, colorGA);
     } catch (e) {
       // ignore - same as above, a bonus signal, not required
     }
@@ -5997,21 +6053,6 @@
           <div class="d4a-tier-color"><input type="color" id="d4a-color-codex" value="${COLOR_HEX_DEFAULTS.codex}"><span>Codex</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-legendary" value="${COLOR_HEX_DEFAULTS.legendary}"><span>Légendaires</span></div>
         </div>
-        <div class="d4a-tier-select">
-          <label>Tier A <select id="d4a-tier-a">
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select></label>
-          <label>Tier B <select id="d4a-tier-b">
-            <option value="0">Aucun</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select></label>
-        </div>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus sur les tiers</summary>
           <p>⚠️ Le jeu limite un filtre à 25 règles : au plus 2 tiers sur les 4 peuvent être actifs à la fois (Tier A et Tier B ci-dessus) - choisis "Aucun" pour Tier B pour n'en garder qu'un seul et libérer de la marge. Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement reçoit une règle pour chacun des tiers choisis, le plus élevé qui correspond l'emporte.</p>
@@ -6025,10 +6066,10 @@
         <details class="d4a-legend-details">
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">
-            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>Tier 2 : 2+ affixes du build par emplacement (ou pool général "Bon" - Ouvert uniquement)</span>
-            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>Tier 3 : 3+ affixes du build par emplacement (ou pool général "BiS" - Ouvert uniquement)</span>
-            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>Tier 4 : les 4 affixes du build sur cet emplacement</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Tier 5 : affixes du build + Greater Affix (par emplacement)</span>
+            <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>2 stats du build exigées (obligatoires + optionnelles) sur l'emplacement</span>
+            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>3 stats du build exigées</span>
+            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>4 stats du build exigées</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Niveau avec « + Greater Affix »</span>
             <span><i id="d4a-legend-codex" style="background:${COLOR_HEX_DEFAULTS.codex}"></i>Codex à améliorer</span>
             <span><i id="d4a-legend-legendary" style="background:${COLOR_HEX_DEFAULTS.legendary}"></i>Légendaire/Unique restant (Mythique : jamais recoloré, jamais caché)</span>
           </div>
@@ -6278,12 +6319,8 @@
     // 2026-09-23: the 2 tier dropdowns (see buildPerSlotRules()'s docstring)
     // - same GM_setValue persistence, default Tier A=2/B=3 (matches the
     // 2-tier behavior already validated in-game before this feature grew).
-    const tierA = document.getElementById("d4a-tier-a");
-    const tierB = document.getElementById("d4a-tier-b");
-    tierA.value = GM_getValue("d4a-tier-a", "2");
-    tierB.value = GM_getValue("d4a-tier-b", "3");
-    tierA.onchange = () => GM_setValue("d4a-tier-a", tierA.value);
-    tierB.onchange = () => GM_setValue("d4a-tier-b", tierB.value);
+    // 2026-09-30: Tier A/B selects replaced by the wizard's 2 levels
+    // (readLevels(), "d4a-levels"; old d4a-tier-a/b values migrate).
     // Same persistence for the 4 color pickers (Tier 2/Bon, Tier 3/BiS,
     // Tier 4/Parfait - added 2026-09-23, Tier 5/Greater Affix). Legend
     // swatches live next to the pickers now (moved there 2026-09-22, "juste
