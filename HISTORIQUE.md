@@ -839,3 +839,36 @@ la prochaine fois)** :
 
 Rien pousse sur un remote distant (travail 100% local, comme le reste de
 cette automatisation).
+
+## 2026-09-30 - Retours testeurs sur le filtre (v3.33 / v3.34)
+
+Retours lus dans la feuille Google (`sheets.new`). Ceux du 27/09 (traductions)
+etaient deja corriges. Ceux du 29/09 (filtre, build Warlock InfinityBuilds
+`6SmunLGMnk`) ont revele :
+
+**v3.33** (pousse, `93511bb`) :
+- Filtre a 5 regles seulement : `extractInfinityBuildsRawSlotAffixes()`
+  testait `"affixId"` AVANT de desechapper le payload RSC (`\"affixId\"`) ->
+  toujours 0 emplacement. Garde deplacee apres le desechappement.
+- Affixes de Trempe (icone hache blanche, `"tempered":true`), retires a
+  l'Occultiste (`"removed":true`) et mots runiques exclus : jamais sur un
+  objet au sol.
+- Emplacement IB `weapon` = arme principale (etait mappe "Distance"),
+  `offhand` mappe ; type d'arme exact tire de l'`itemId`
+  (`item-x2-1hdagger-...`) au lieu des 12 types "Main principale".
+- Vert non configure = "Legendaires - Garder" code en dur -> 6e selecteur
+  "Legendaires". Jaune non configure = "Garder Uniques" en SHOW (jaune natif
+  du jeu) -> RECOLOR avec la couleur Legendaires.
+
+**v3.34** :
+- Bagues : `mergeRingSlots()` fusionne Anneau G/D en une entree "Anneaux"
+  (meme type d'objet en jeu) -> 1 regle par tier au lieu de 2.
+- Charmes : table `TALISMAN_SETS` (45 sets, D4LootBench) + condition kind=9
+  (TalismanSet, format D4LootBench docs/filter-format.md : set id + paires
+  {set, piece}) + `extractInfinityBuildsCharms()` -> 1 regle "Set <nom>" par
+  set du build. InfinityBuilds uniquement pour l'instant. Affixe principal du
+  charme pas encore utilise (ids `affix-talisman-charm-*` inconnus).
+  **Condition kind=9 jamais testee en jeu** - a valider en priorite.
+
+Restent : Uniques par emplacement sur IB, Main principale precise sur
+Maxroll, charmes sur Maxroll.
