@@ -1001,3 +1001,20 @@ siennes, memes 4 stats et memes seuils par emplacement. Differences restantes :
 elle vise les emplacements Uniques par type d objet + rarete Unique/Mythique,
 nous par l Unique precis ; son torse a des stats choisies a la main ; sa regle
 "Legend, Sets" (objets hors build) n est pas automatisable.
+
+**v3.46 - support des 6 sites** : branche `sites-support` preparee par un
+agent en arriere-plan (worktree separee, 8 commits relus puis fusionnes) :
+lecteurs par emplacement D4Builds (Gear Stats DOM), D4Guides (API du build,
+textes allemands ramenes a l anglais), kami-labs (JSON equipment-grid, ids
+d affixes reels) ; Maxroll : Uniques colores "mythic" de nouveau reconnus + type
+d arme reel via le planner ; talion.tv : correspondance des titres corrigee
+(competence avant glyphe, mots colles "bloodwave", nom du site ignore).
+Decisions (Claude, delegation de l utilisateur) : A) Rares 2+/3+ en Strict
+quand aucune donnee par emplacement (talion) + message corrige ; B) plus
+d Uniques du build IB equivalent quand la page a ses donnees ; C) emplacement
+marque Unique par le site ignore meme si l Unique n est pas ciblable ; D) Primary
+Core Stat = stat principale de la classe. A verifier en jeu : ids "X2" de
+kami/Maxroll rattaches par nom.
+Verification Cri flamboyant sur les 6 sites (fichier fusionne) : IB 25 regles,
+Maxroll 24, D4Builds 19, D4Guides 22, kami-labs 24, talion.tv 6 (pas de
+donnees par emplacement : image). 0 erreur du script (seulement pubs/traceurs).
