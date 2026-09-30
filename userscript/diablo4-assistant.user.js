@@ -2766,6 +2766,9 @@
       }
     }
 
+    const fromSite = await findSitePerSlotAffixesCached(gameClass);
+    if (fromSite.length) return poolPerSlotEntries(fromSite);
+
     const text = document.body.innerText;
     for (const m of text.matchAll(/^\s*\d+\.\s*(.+)$/gm)) {
       const name = normalizeAffixText(m[1]);
@@ -2922,6 +2925,8 @@
         // ignore - bonus signal, not required
       }
     }
+    const fromSite = await findSitePerSlotAffixesCached(gameClass);
+    if (fromSite.length) return fromSite;
     return extractStatPriorityByTextHeuristic();
   }
 
@@ -3112,6 +3117,143 @@
       infinityBuildsPerSlotCachePromise = findInfinityBuildsPerSlotAffixes(gameClass);
     }
     return infinityBuildsPerSlotCachePromise;
+  }
+
+  // ---------------------------------------------------------------------
+  // 2026-09-30: per-slot readers for the sites that had none (D4Builds,
+  // D4Guides, kami-labs) - same entry shape as findInfinityBuildsPerSlotAffixes()
+  // ({ slot, ids, names, unresolvedCount, itemName, typeIds }), read from the
+  // page's OWN build (not the InfinityBuilds equivalent). Without them the
+  // Strict filter fell back to 4 generic rules on these sites.
+  // ---------------------------------------------------------------------
+  // Placeholder "Primary Core Stat" (D4Builds/D4Guides) = the class's main stat.
+  const CLASS_CORE_STAT = {
+    barbarian: "Strength", paladin: "Strength", druid: "Willpower", warlock: "Willpower",
+    necromancer: "Intelligence", sorcerer: "Intelligence", rogue: "Dexterity", spiritborn: "Dexterity",
+  };
+  // Barbarian arsenal / dual-wield slots take a fixed weapon family (D4 rule):
+  // bludgeoning = 2H mace, slashing = 2H sword/2H axe/polearm, dual-wield = 1H melee.
+  const ARSENAL_TYPE_IDS = {
+    bludgeoning: [0x0006d144],
+    slashing: [0x0006d14f, 0x0006d152, 0x0006d15d],
+    dualWield: [0x0006d159, 0x0006d14c, 0x0006d13a, 0x0006d151],
+  };
+  // Site-specific stat wordings (kami-labs' Maxroll-style keys mostly) -> our names.
+  const SITE_STAT_ALIASES = {
+    "life": "Maximum Life", "crit chance": "Critical Strike Chance", "cooldown reduction cdr": "Cooldown Reduction",
+    "resistance all": "Resistance to All Elements", "resource max all classes": "Maximum Resource",
+    "resource gain": "Resource Generation", "primary core stat": null,
+  };
+  // Free text from any of these sites -> { name, id } or null. Tries our own
+  // resolver first, then "<text> Multiplier" (sites often drop the suffix:
+  // "Vulnerable Damage") and "Ranks to <text>" ("Hellfire Skills").
+  function resolveSiteStatText(raw, gameClass) {
+    let t = String(raw || "")
+      .replace(/­/g, "")
+      .replace(/\[[^\]]*\]/g, "")
+      .replace(/^X2\s+/i, "")
+      .replace(/\s+Greater$/i, "")
+      .replace(/^[+x\d.,\s]*%?\s*(?=\S)/i, "")
+      .replace(/^skill (?=ranks )/i, "")
+      .trim();
+    const lower = t.toLowerCase();
+    if (lower === "primary core stat") t = CLASS_CORE_STAT[gameClass] || t;
+    else if (SITE_STAT_ALIASES[lower]) t = SITE_STAT_ALIASES[lower];
+    t = t
+      .replace(/^core stat /i, "")
+      .replace(/^resistance single (\w+)$/i, "$1 Resistance")
+      .replace(/^(?:skill rank bonus|ranks) (?!to )\w+ category (.+)$/i, "Ranks to $1 Skills")
+      .replace(/^(?:skill rank bonus|ranks) (?!to )\w+ \w+ (.+)$/i, "Ranks to $1");
+    for (const candidate of [t, `${t} Multiplier`, `Ranks to ${t}`]) {
+      const resolved = resolveStatPriorityText(candidate, gameClass);
+      if (resolved) return resolved;
+    }
+    return null;
+  }
+  // Turns [{ slot, texts:[...], itemName, typeIds, knownIds:[...]? }] into the
+  // shared per-slot entry shape. `knownIds` (kami-labs gives real game ids)
+  // win over text when they're ids we already know.
+  function makeSitePerSlotEntries(rawSlots, gameClass) {
+    const idToName = new Map();
+    for (const table of [AFFIX_IDS, GENERIC_SKILL_AFFIX_IDS, SKILL_AFFIX_IDS[gameClass] || {}]) {
+      for (const [name, id] of Object.entries(table)) if (!idToName.has(id)) idToName.set(id, name);
+    }
+    return rawSlots.map(({ slot, stats, itemName, typeIds }) => {
+      const ids = [];
+      const names = [];
+      let unresolvedCount = 0;
+      for (const { text, id } of stats) {
+        const resolved = idToName.has(id) ? { name: idToName.get(id), id } : resolveSiteStatText(text, gameClass);
+        if (!resolved) unresolvedCount++;
+        else if (!ids.includes(resolved.id)) {
+          ids.push(resolved.id);
+          names.push(resolved.name);
+        }
+      }
+      return { slot, ids, names, unresolvedCount, itemName: itemName || null, typeIds: typeIds || null };
+    });
+  }
+
+  // D4Builds: "Gear Stats" section, one `.builder__stats__group` per slot,
+  // one `.builder__stat` per affix in the author's order (DOM of the variant
+  // currently shown). Tempering ("Tempering Stat" icon) and transfiguration
+  // lines are skipped; placeholders ("Stat 2", "Weapon Type") just don't resolve.
+  // The slot's item comes from the gear grid (`.builder__gear__name--unique/--mythic`).
+  const D4BUILDS_SLOT_MAP = {
+    "Helm": ["Helm"], "Chest Armor": ["Chest Armor"], "Gloves": ["Gloves"], "Pants": ["Pants"], "Boots": ["Boots"],
+    "Amulet": ["Amulet"], "Ring 1": ["Left Ring"], "Ring 2": ["Right Ring"],
+    "Weapon": ["Mainhand"], "Offhand": ["Offhand"], "Ranged Weapon": ["Ranged Weapon"],
+    "Bludgeoning Weapon": ["Bludgeoning Weapon", ARSENAL_TYPE_IDS.bludgeoning],
+    "Slashing Weapon": ["Slicing Weapon", ARSENAL_TYPE_IDS.slashing],
+    "Dual-Wield Weapon 1": ["Mainhand", ARSENAL_TYPE_IDS.dualWield],
+    "Dual-Wield Weapon 2": ["Offhand", ARSENAL_TYPE_IDS.dualWield],
+  };
+  function extractD4BuildsPerSlotAffixes(gameClass) {
+    const uniqueBySlot = {};
+    for (const gear of document.querySelectorAll(".builder__gear__item")) {
+      const slot = gear.querySelector(".builder__gear__slot")?.textContent.trim();
+      const nameEl = gear.querySelector(".builder__gear__name--unique, .builder__gear__name--mythic");
+      if (slot && nameEl) uniqueBySlot[slot] = nameEl.textContent.trim();
+    }
+    const rawSlots = [];
+    for (const group of document.querySelectorAll(".builder__stats__group")) {
+      const label = group.querySelector(".builder__stats__slot")?.textContent.trim();
+      const mapped = D4BUILDS_SLOT_MAP[label];
+      if (!mapped) continue;
+      const stats = [];
+      for (const stat of group.querySelectorAll(".builder__stat")) {
+        if (stat.querySelector('img[alt="Tempering Stat"], img[alt*="ransfiguration"], img[alt*="ransifiguration"]')) continue;
+        stats.push({ text: stat.textContent.trim() });
+      }
+      rawSlots.push({ slot: mapped[0], stats, itemName: uniqueBySlot[label], typeIds: mapped[1] });
+    }
+    return makeSitePerSlotEntries(rawSlots, gameClass);
+  }
+
+  // One entry point per site, cached per URL like the InfinityBuilds reader
+  // (findPriorityAffixIds() and findPerSlotStatPriority() both call it).
+  // Never throws - a failure just means "no per-slot data".
+  // Fetch-based readers (API/JSON), by hostname.
+  const SITE_PER_SLOT_FETCHERS = {};
+  let sitePerSlotCachePromise = null;
+  let sitePerSlotCacheKey = null;
+  function findSitePerSlotAffixesCached(gameClass) {
+    const host = location.hostname.replace(/^www\./, "");
+    // DOM readers reflect the variant on screen - never cached.
+    if (host === "d4builds.gg") return Promise.resolve().then(() => extractD4BuildsPerSlotAffixes(gameClass)).catch(() => []);
+    const reader = SITE_PER_SLOT_FETCHERS[host];
+    if (!reader) return Promise.resolve([]);
+    if (!sitePerSlotCachePromise || sitePerSlotCacheKey !== location.href) {
+      sitePerSlotCacheKey = location.href;
+      sitePerSlotCachePromise = reader(gameClass).catch(() => []);
+    }
+    return sitePerSlotCachePromise;
+  }
+  function poolPerSlotEntries(entries) {
+    return {
+      ids: Array.from(new Set(entries.flatMap((e) => e.ids))),
+      names: Array.from(new Set(entries.flatMap((e) => e.names))),
+    };
   }
 
   function resolveSkillIds(gameClass, skillNamesList) {
