@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.37
+// @version      3.38
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1562,6 +1562,17 @@
       )
       .join("")}</tbody></table>`;
 
+    // 2026-09-30: filters saved for each favorite build, under its title.
+    fetchLibrary()
+      .then((filters) => {
+        for (const c of classes) {
+          const mine = filtersForBuild(filters, all[c].url);
+          const cell = resultEl.querySelector(`tr[data-class="${c}"] td:nth-child(2)`);
+          if (cell && mine.length) cell.appendChild(filterCopyButtons(mine));
+        }
+      })
+      .catch(() => {});
+
     resultEl.querySelectorAll(".d4a-mybuilds-remove").forEach((btn) => {
       btn.onclick = () => {
         const c = btn.dataset.class;
@@ -1663,6 +1674,23 @@
     };
   }
 
+  async function renderBuildFilters() {
+    const line = document.getElementById("d4a-build-filters-line");
+    if (!line) return;
+    let mine;
+    try {
+      mine = filtersForBuild(await fetchLibrary(), location.href);
+    } catch (e) {
+      return; // library unavailable - "Mes filtres" already says why
+    }
+    line.textContent = "";
+    if (!mine.length) return;
+    const label = document.createElement("div");
+    label.className = "d4a-rank-meta";
+    label.textContent = `🛡 Filtre(s) sauvegardé(s) pour ce build :`;
+    line.append(label, filterCopyButtons(mine));
+  }
+
   async function renderBuildInfo() {
     const section = document.getElementById("d4a-buildinfo-section");
     if (!section) return;
@@ -1680,8 +1708,10 @@
       <div id="d4a-rank-line"></div>
       <div id="d4a-rank-area" class="d4a-rank-box"><button id="d4a-rank-btn" type="button">🏆 Mon rang</button></div>
       ${favHtml}
+      <div id="d4a-build-filters-line"></div>
       <div id="d4a-links-line" class="d4a-rank-box">Recherche des autres sites...</div>
     `;
+    renderBuildFilters();
 
     const favCheckbox = document.getElementById("d4a-fav-checkbox");
     if (favCheckbox) {
@@ -3840,6 +3870,8 @@
       #d4a-wz-nav button.d4a-wz-primary { background: #8b0000; border-color: #8b0000; font-weight: bold; }
       #d4a-myfilters-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-myfilters-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
+      .d4a-build-filters { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; justify-content: center; }
+      .d4a-build-filters button { font-size: 11px; padding: 2px 6px; border-radius: 3px; border: 1px solid #555; background: #1c1c24; color: #eee; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .d4a-myfilter { border-bottom: 1px solid #222; padding: 4px 0; font-size: 12px; }
       .d4a-myfilter b { display: block; font-size: 13px; }
       .d4a-myfilter button { margin: 3px 4px 0 0; padding: 2px 8px; font-size: 12px; }
@@ -5629,7 +5661,9 @@
           filterName: baseName,
           filterCode: filterResult.code,
           buildTitle: result.match.title,
-          buildUrl: result.match.url,
+          // Page URL (not result.match.url) - it's what "Mes Builds" stores,
+          // so the filter can be found again from the build.
+          buildUrl: location.href,
           mode: label,
           gameClass: result.resolvedClass || "",
         });
@@ -5641,6 +5675,7 @@
           shareNote.textContent = `✅ Sauvegardé dans « Mes filtres ». Lien de partage : ${shareUrl}`;
         }
         shareNote.hidden = false;
+        fetchLibrary(true).then(() => { renderMyBuildsTable(); renderBuildFilters(); }).catch(() => {});
         if (document.getElementById("d4a-myfilters-details")?.open) loadMyFilters();
       } catch (err) {
         shareNote.textContent = `❌ Échec de la sauvegarde (${err.message}) - réessaie plus tard.`;
@@ -5657,17 +5692,68 @@
     if (response.status !== "ok") throw new Error(response.message || "refusé");
     return response.id;
   }
+  // One fetch per page load, shared by "Mes filtres", "Mes Builds" and the
+  // build page's own "filtres sauvegardés" line; force=true after a change.
+  let libraryPromise = null;
+  function fetchLibrary(force = false) {
+    if (!libraryPromise || force) {
+      libraryPromise = gmGet(`${APPS_SCRIPT_ENDPOINT_URL}?list=1&secret=${encodeURIComponent(APPS_SCRIPT_SHARED_SECRET)}`).then((text) => {
+        let response;
+        try {
+          response = JSON.parse(text);
+        } catch (e) {
+          // The pre-v3.36 Apps Script answers GET with plain text.
+          throw new Error("le serveur Google n'est pas à jour - redéployer l'Apps Script (nouvelle version)");
+        }
+        if (response.status !== "ok") throw new Error(response.message || "refusé");
+        return response.filters;
+      });
+      libraryPromise.catch(() => { libraryPromise = null; });
+    }
+    return libraryPromise;
+  }
+  // 2026-09-30 "associer la page de build et le filtre": same build = same
+  // host + path, ignoring ?variant=/#hash, the locale segment (/fr/, /en/)
+  // and a trailing slash.
+  function normBuildUrl(url) {
+    try {
+      const u = new URL(String(url));
+      return (u.host + u.pathname).toLowerCase().replace(/\/(fr|en)(?=\/)/, "").replace(/\/$/, "");
+    } catch (e) {
+      return "";
+    }
+  }
+  function filtersForBuild(filters, url) {
+    const key = normBuildUrl(url);
+    return key ? filters.filter((f) => normBuildUrl(f.url) === key) : [];
+  }
+  // Small "📋 <nom>" copy buttons, one per filter (textContent only - rows
+  // come from the shared sheet).
+  function filterCopyButtons(filters) {
+    const box = document.createElement("div");
+    box.className = "d4a-build-filters";
+    for (const f of filters) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = `📋 ${f.name}`;
+      btn.title = "Copier ce filtre de butin";
+      btn.onclick = () => {
+        navigator.clipboard.writeText(String(f.code));
+        btn.textContent = `✅ ${f.name}`;
+      };
+      box.appendChild(btn);
+    }
+    return box;
+  }
   async function loadMyFilters() {
     const list = document.getElementById("d4a-myfilters-list");
     if (!list) return;
     list.textContent = "⏳ Chargement...";
     let filters;
     try {
-      const response = JSON.parse(await gmGet(`${APPS_SCRIPT_ENDPOINT_URL}?list=1&secret=${encodeURIComponent(APPS_SCRIPT_SHARED_SECRET)}`));
-      if (response.status !== "ok") throw new Error(response.message || "refusé");
-      filters = response.filters;
+      filters = await fetchLibrary(true);
     } catch (err) {
-      list.textContent = `❌ Bibliothèque indisponible (${err.message}).`;
+      list.textContent = `❌ Bibliothèque indisponible : ${err.message}.`;
       return;
     }
     list.textContent = filters.length ? "" : "Aucun filtre sauvegardé pour l'instant.";
@@ -5704,6 +5790,7 @@
           const r = JSON.parse(await gmPostJson(APPS_SCRIPT_ENDPOINT_URL, { action: "delete", secret: APPS_SCRIPT_SHARED_SECRET, id: f.id }));
           if (r.status !== "ok") throw new Error(r.message || "refusé");
           row.remove();
+          fetchLibrary(true).then(() => { renderMyBuildsTable(); renderBuildFilters(); }).catch(() => {});
         } catch (err) {
           delBtn.disabled = false;
           alert(`Échec de la suppression (${err.message}).`);

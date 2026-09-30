@@ -912,3 +912,10 @@ reglage fin Tier A/B replie ; (3) Couleurs (libelles "2 stats"/"3 stats"/...) ;
 ids, meme memorisation GM) : runGenerateFilter() inchange. Teste via
 Playwright sur la page IB reelle (script injecte avec stubs GM) : 4 etapes
 affichees, preset Exigeant -> Tier 3/4 memorise, 0 erreur JS.
+
+**v3.38** - "Bibliotheque indisponible" venait de l Apps Script pas encore
+redeploye (GET repond encore en texte brut "endpoint de retours OK", verifie
+par curl) : message explicite maintenant. Filtres rattaches aux builds :
+Sauvegarder enregistre l URL de la PAGE (comme les favoris), rapprochement par
+hote+chemin (sans ?variant=, #, /fr|/en/) ; boutons "📋 <nom>" sous chaque
+favori de "Mes Builds" et sous la case favori de la page du build.
