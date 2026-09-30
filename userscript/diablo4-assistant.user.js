@@ -3230,11 +3230,70 @@
     return makeSitePerSlotEntries(rawSlots, gameClass);
   }
 
+  // D4Guides: the page loads its build from its own public API
+  // (`api/v1/builds.php?id=<data-build-id>`); `gear_setup` maps a slot number
+  // (api/v1/gear-slots.php) to { itemRarity, itemSlug, stats:[{text}], tempering }.
+  // Tempering is a separate field (never read). Stat texts are whatever the
+  // author typed - often German ("maximales Leben") - so German names are
+  // mapped back to English through the site's own affix list (name/name_de).
+  // Variant = the active `.variant-bar__tab` (index into data.variants).
+  const D4GUIDES_SLOT_MAP = {
+    1: "Helm", 2: "Chest Armor", 3: "Gloves", 4: "Pants", 5: "Boots", 6: "Amulet", 7: "Left Ring", 8: "Right Ring",
+    9: "Mainhand", 10: "Offhand", 11: "Slicing Weapon", 12: "Bludgeoning Weapon", 13: "Offhand", 14: "Ranged Weapon",
+  };
+  const D4GUIDES_SHIELD_TYPE_IDS = [0x0006d172];
+  function uniqueSlug(name) {
+    return fold(name).replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+  let uniqueNameBySlug = null;
+  async function fetchD4GuidesPerSlotAffixes(gameClass) {
+    const buildId = document.querySelector("[data-build-id]")?.getAttribute("data-build-id");
+    if (!buildId) return [];
+    const data = JSON.parse(await gmGet(`https://d4guides.gg/api/v1/builds.php?id=${encodeURIComponent(buildId)}&lang=en`)).data;
+    if (!data) return [];
+    const cls = gameClass || data.class_slug;
+    const deToEn = new Map();
+    const cleanDe = (text) => fold(text).replace(/­/g, "").replace(/^[+x\d.,\s]*%?\s*/, "").trim();
+    try {
+      const affixes = JSON.parse(await gmGet(`https://d4guides.gg/api/v1/affixes.php?class_id=${data.class_id}&all=1&lang=en`)).data || [];
+      for (const a of affixes) if (a.name_de) deToEn.set(cleanDe(a.name_de), a.name);
+    } catch (e) {
+      // no translation table - English texts still resolve
+    }
+    deToEn.set("primarer kernwert", "Primary Core Stat");
+    if (!uniqueNameBySlug) {
+      uniqueNameBySlug = new Map();
+      for (const name of Object.keys(UNIQUE_ITEM_IDS)) uniqueNameBySlug.set(uniqueSlug(name), name);
+    }
+    const variantIndex = document.querySelector(".variant-bar__tab--active")?.getAttribute("data-variant-index");
+    const gear = (data.variants && data.variants[variantIndex] && data.variants[variantIndex].gear_setup) || data.gear_setup || {};
+    const rawSlots = [];
+    for (const [slotNo, item] of Object.entries(gear)) {
+      let slot = D4GUIDES_SLOT_MAP[slotNo];
+      if (!slot || !item) continue;
+      let typeIds = null;
+      if (slotNo === "13") typeIds = D4GUIDES_SHIELD_TYPE_IDS;
+      else if (slotNo === "11" || slotNo === "12") {
+        // Two-handed slots: an arsenal slot for the Barbarian, the plain main weapon otherwise.
+        if (cls === "barbarian") typeIds = slotNo === "11" ? ARSENAL_TYPE_IDS.slashing : ARSENAL_TYPE_IDS.bludgeoning;
+        else slot = "Mainhand";
+      }
+      const isUnique = /unique|mythic/i.test(item.itemRarity || "");
+      const itemName = isUnique ? uniqueNameBySlug.get(item.itemSlug) || item.itemName : null;
+      const stats = (item.stats || []).map((s) => {
+        const text = s && s.text ? s.text : "";
+        return { text: deToEn.get(cleanDe(text)) || text };
+      });
+      rawSlots.push({ slot, stats, itemName, typeIds });
+    }
+    return makeSitePerSlotEntries(rawSlots, cls);
+  }
+
   // One entry point per site, cached per URL like the InfinityBuilds reader
   // (findPriorityAffixIds() and findPerSlotStatPriority() both call it).
   // Never throws - a failure just means "no per-slot data".
   // Fetch-based readers (API/JSON), by hostname.
-  const SITE_PER_SLOT_FETCHERS = {};
+  const SITE_PER_SLOT_FETCHERS = { "d4guides.gg": fetchD4GuidesPerSlotAffixes };
   let sitePerSlotCachePromise = null;
   let sitePerSlotCacheKey = null;
   function findSitePerSlotAffixesCached(gameClass) {
