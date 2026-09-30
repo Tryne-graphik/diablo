@@ -463,12 +463,29 @@
     return text.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   }
 
+  // 2026-09-30 (talion.tv: 2 builds out of 3 unmatched): the dictionary was
+  // applied in file order, so "Tourbillon" became the paragon glyph "Twister"
+  // instead of the skill "Whirlwind". Longest French text first (a longer
+  // phrase is the more specific match), then skills before any other kind
+  // for the same text. Folded once, lazily.
+  let signatureDictionary = null;
+  function getSignatureDictionary() {
+    if (!signatureDictionary) {
+      signatureDictionary = FR_EN_DICTIONARY
+        .map((entry) => ({ fr: fold(entry.fr), en: fold(entry.en), skill: entry.kind === "skill" }))
+        .filter((entry) => entry.fr.length > 3)
+        .sort((x, y) => y.fr.length - x.fr.length || y.skill - x.skill);
+    }
+    return signatureDictionary;
+  }
+  // Site names in page titles ("... - TalionTV") are not build words.
+  for (const w of ["taliontv", "talion", "kami", "labs"]) NOISE_WORDS.add(w);
+
   function signature(title) {
     let folded = " " + fold(title) + " ";
-    for (const entry of FR_EN_DICTIONARY) {
-      const frFolded = fold(entry.fr);
-      if (frFolded.length > 3 && folded.includes(frFolded)) {
-        folded = folded.split(frFolded).join(" " + fold(entry.en) + " ");
+    for (const entry of getSignatureDictionary()) {
+      if (folded.includes(entry.fr)) {
+        folded = folded.split(entry.fr).join(" " + entry.en + " ");
       }
     }
     const words = new Set();
@@ -481,8 +498,29 @@
     return words;
   }
 
+  // "blood wave" vs "bloodwave": when one side has a word that is exactly two
+  // words of the other side glued together, count them as that one word.
+  function mergeGluedWords(a, b) {
+    const out = new Set(a);
+    for (const glued of b) {
+      if (out.has(glued)) continue;
+      for (const x of out) {
+        const y = glued.startsWith(x) ? glued.slice(x.length) : null;
+        if (y && y !== x && out.has(y)) {
+          out.delete(x);
+          out.delete(y);
+          out.add(glued);
+          break;
+        }
+      }
+    }
+    return out;
+  }
+
   function similarity(a, b) {
     if (a.size === 0 || b.size === 0) return 0;
+    a = mergeGluedWords(a, b);
+    b = mergeGluedWords(b, a);
     let inter = 0;
     for (const x of a) if (b.has(x)) inter++;
     return inter / (a.size + b.size - inter);
