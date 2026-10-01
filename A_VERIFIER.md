@@ -16,7 +16,7 @@ affichée est bien 3.47.
       ne se lootent pas : ils se fabriquent au Cube Horadrique avec ce
       plastron blanc (Normal) + les runes (Énigme = Jah + Ith + Ber,
       Discrétion = Tal + Eth). La règle garde donc l'ingrédient, pas l'objet.
-- [ ] **2. Filtre Leveling** : même page, assistant → « Je monte de niveau ».
+- [ ] **2. Filtre Leveling** (ECHEC 2026-10-01 : Legendaires/Uniques caches, Mythiques visibles ; en attente du code du filtre a decoder) : même page, assistant → « Je monte de niveau ».
       Légendaires toujours visibles, Rares avec 2-3 stats du build colorées,
       le reste caché.
 - [ ] **3. Set de charmes** : les charmes du set du build ressortent en
