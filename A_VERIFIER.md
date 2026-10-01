@@ -9,7 +9,7 @@ Avant tout : importer la **v3.47** dans Tampermonkey (Utilitaires → importer l
 fichier `userscript/diablo4-assistant.user.js`) et vérifier que la version
 affichée est bien 3.47.
 
-- [ ] **1. Filtre Endgame + plastron runique** : sur IB Mekuna « Rank 1 Push »
+- [x] **1. Filtre Endgame + plastron runique** (OK en jeu le 2026-10-01 : v3.47, nom [IB] garde, 24 regles ; regle de base retiree en v3.48, inutile selon l'utilisateur) : sur IB Mekuna « Rank 1 Push »
       (`...rn824uhPl3?variant=v-mu6fct5o-a3knx`), assistant → « Endgame ».
       Le code s'importe, le nom est gardé, et un **plastron blanc ancestral**
       au sol reste visible (règle « Base runique - Torse »). Énigme/Discrétion

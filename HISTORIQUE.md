@@ -1038,3 +1038,12 @@ le rang 23 a exactement la regle "Enigma Craft" = Torse + Commun + Ancestral.
 Constat sur les filtres du top Demoniste (4 publies) : 3 sur 4 sont tres
 simples (Codex, charmes/sceaux, GA >= 1, Uniques ancestraux, Mythiques, puis
 tout cacher) ; un seul fait des regles par Unique avec 3 affixes sur 4-6.
+
+## 2026-10-01 (suite) - v3.48 : regle "Base runique" retiree
+
+Teste en jeu par l'utilisateur (v3.47) : import OK, nom "[IB] ..." garde, 24
+regles. Mais la regle "Base runique - Torse" est jugee inutile : Enigme /
+Discretion se fabriquent au Cube Horadrique (base blanche + runes) et les
+bases blanches s'obtiennent facilement ailleurs. v3.48 garde la detection du
+mot runique (l'emplacement est ignore : pas de regles Rare/Legendaire qui ne
+serviraient jamais) mais n'ajoute plus de regle -> 23 regles.
