@@ -31,7 +31,7 @@ affichée est bien 3.47.
 
 ## Par moi (Claude)
 
-- [ ] **7. Indice contre le classement** : les builds les mieux notés par
+- [x] **7. Indice contre le classement** (fait : aucun lien démontré, voir HISTORIQUE du calculateur, suite 13) : les builds les mieux notés par
       l'indice vont-ils plus vite dans la Fosse (helltides) ? C'est le test qui
       dit si le « DPS » veut dire quelque chose.
 - [ ] **8. Démoniste, éléments non lus** : « +2 à Cri ardent », aspect
