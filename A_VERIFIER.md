@@ -12,7 +12,10 @@ affichée est bien 3.47.
 - [ ] **1. Filtre Endgame + plastron runique** : sur IB Mekuna « Rank 1 Push »
       (`...rn824uhPl3?variant=v-mu6fct5o-a3knx`), assistant → « Endgame ».
       Le code s'importe, le nom est gardé, et un **plastron blanc ancestral**
-      au sol reste visible (règle « Base runique - Torse »).
+      au sol reste visible (règle « Base runique - Torse »). Énigme/Discrétion
+      ne se lootent pas : ils se fabriquent au Cube Horadrique avec ce
+      plastron blanc (Normal) + les runes (Énigme = Jah + Ith + Ber,
+      Discrétion = Tal + Eth). La règle garde donc l'ingrédient, pas l'objet.
 - [ ] **2. Filtre Leveling** : même page, assistant → « Je monte de niveau ».
       Légendaires toujours visibles, Rares avec 2-3 stats du build colorées,
       le reste caché.
