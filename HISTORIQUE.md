@@ -1018,3 +1018,23 @@ kami/Maxroll rattaches par nom.
 Verification Cri flamboyant sur les 6 sites (fichier fusionne) : IB 25 regles,
 Maxroll 24, D4Builds 19, D4Guides 22, kami-labs 24, talion.tv 6 (pas de
 donnees par emplacement : image). 0 erreur du script (seulement pubs/traceurs).
+
+## 2026-10-01 - Base de mot runique gardee (v3.47)
+
+Bug note le 2026-10-01 (Demoniste Mekuna, IB) : le torse du build est un mot
+runique (`item-runeword-stealth-itm` / `-enigma-`), fabrique sur une base
+COMMUNE ; le filtre genere n'avait aucune regle de torse et "Cacher Detritus"
+cachait tous les torses. Confirme par les filtres des meilleurs joueurs de la
+Fosse (helltides.com/pit, decodes par `E:\DiabloIV-DPS-Calculator\scripts\ladder_filters.py`) :
+le rang 23 a exactement la regle "Enigma Craft" = Torse + Commun + Ancestral.
+- Lecteur IB : `runeword: true` quand l'itemId contient `-runeword-`.
+- `buildPerSlotRules()` : emplacement mot runique -> une regle MONTRER
+  "Base runique - <emplacement>" (Commun + type + Ancestral si coche), jamais
+  rognee (tagRule priorite 0). Octets decodes : memes conditions que la regle
+  du joueur du top. Teste en bac a sable Node (vraie fonction du userscript).
+- Seulement IB pour l'instant (Maxroll : ids `Runeword_*` du planner, a faire
+  si besoin). A verifier en jeu.
+
+Constat sur les filtres du top Demoniste (4 publies) : 3 sur 4 sont tres
+simples (Codex, charmes/sceaux, GA >= 1, Uniques ancestraux, Mythiques, puis
+tout cacher) ; un seul fait des regles par Unique avec 3 affixes sur 4-6.

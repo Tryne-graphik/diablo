@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.46
+// @version      3.47
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3143,7 +3143,10 @@
       // never per slot, so "Cacher les Légendaires faibles" could hide them).
       const uniqueName = uniqueNameFromIbItemId(itemId);
       if (uniqueName === undefined) unknownUniqueItemIds.push(itemId);
-      results.push({ slot: ourSlot, ids: Array.from(resolvedIds), names: Array.from(names), unresolvedCount, itemName: uniqueName || null, typeIds });
+      // 2026-10-01: "item-runeword-stealth-itm" - a runeword is crafted on a
+      // COMMON (white) base of the slot's type, see buildPerSlotRules().
+      results.push({ slot: ourSlot, ids: Array.from(resolvedIds), names: Array.from(names), unresolvedCount, itemName: uniqueName || null, typeIds,
+                     runeword: /-runeword-/.test(itemId || "") });
     }
     return results;
   }
@@ -3890,6 +3893,21 @@
       // 2026-09-30: skip on ANY Unique the site names for the slot, even one
       // missing from UNIQUE_ITEM_IDS (Enigma, Grief...): the build wants that
       // item, a Rare/Legendary rule there only burns the 25-rule budget.
+      // 2026-10-01: runeword slot (Discretion/Enigme sur le torse du Demoniste
+      // Mekuna) - the base is a COMMON item: no Rare/Legendary rule can ever
+      // find it, and "Cacher Detritus" hid every chest. Same rule as the
+      // rank-23 Pit player's own filter ("Enigma Craft" : ChestArmor, Common,
+      // Ancestral, decoded from helltides.com/pit).
+      if (entry.runeword) {
+        const baseTypes = entry.typeIds || ITEM_TYPE_IDS[entry.slot];
+        if (baseTypes) {
+          const conditions = [conditionRarity(COMMON), conditionItemTypes(baseTypes)];
+          if (requireAncestral) conditions.push(conditionAncestral());
+          rules.push(tagRule(makeRule(`Base runique - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, SHOW, conditions)));
+          skippedSlots.push(`${entry.slot} (mot runique : base Commune gardee)`);
+          continue;
+        }
+      }
       if (entry.itemName) {
         const equippedUnique = UNIQUE_ITEM_IDS_BY_LOWER_NAME.get(normalizeUniqueName(entry.itemName));
         skippedSlots.push(`${entry.slot} (Unique: ${equippedUnique || entry.itemName + ", non ciblable"})`);
