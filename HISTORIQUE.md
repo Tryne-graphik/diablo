@@ -1047,3 +1047,11 @@ Discretion se fabriquent au Cube Horadrique (base blanche + runes) et les
 bases blanches s'obtiennent facilement ailleurs. v3.48 garde la detection du
 mot runique (l'emplacement est ignore : pas de regles Rare/Legendaire qui ne
 serviraient jamais) mais n'ajoute plus de regle -> 23 regles.
+
+## 2026-10-03 - v3.49 : tous les charmes visibles
+Compare au filtre "Cri ardent endgame (s15)" de l'utilisateur (OK en jeu, charmes
+compris). Les charmes non utilises servent de materiaux de craft -> la regle
+"Talismans Legendaires" (rarete Legendaire+) devient "Talismans (tous)" sans
+condition de rarete (avant, Magique/Rare tombaient dans Cacher Detritus). La regle
+du set de charmes colore toutes les pieces du set, plus seulement celles
+equipees par le guide (Abaddon 02_05 manquait). Meme changement dans generator.py.

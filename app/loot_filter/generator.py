@@ -23,7 +23,7 @@ final catch-all is redundant, not needed).
 
 Rule order now (first match wins, so more specific / better tiers go
 before looser ones that could also match the same item):
-  1. Show   - Legendary Talismans/Charms (always kept, not build-specific)
+  1. Show   - ALL Charms/Seals, any rarity (craft materials, always kept, not build-specific)
   2. Recolor gold  - Rare with >= gold_threshold of the build's core stats
   3. Recolor orange- Rare with >= 1 of any build-relevant affix
   4. Recolor green - Codex upgrade
@@ -112,8 +112,8 @@ def generate_filter_code(
 
     rules.append(
         codec.make_rule(
-            "Talismans Légendaires", codec.SHOW,
-            [codec.condition_rarity(codec.LEGENDARY_PLUS), codec.condition_item_types([codec.CHARM, codec.SEAL])],
+            "Talismans (tous)", codec.SHOW,  # toutes raretes : materiaux de craft
+            [codec.condition_item_types([codec.CHARM, codec.SEAL])],
         )
     )
     if len(core_ids) >= gold_threshold:

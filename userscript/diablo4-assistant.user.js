@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.48
+// @version      3.49
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3667,7 +3667,10 @@
     // are already covered by the existing Hide Junk mask (or the flat Rare
     // build-affix rules above, if they happen to match), no separate
     // option needed for those.
-    rules.push(tagRule(makeRule("Talismans Légendaires", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])])));
+    // v3.49: no rarity condition any more - EVERY Charm/Seal stays visible
+    // (unused ones are crafting materials, user 2026-10-03), Magic/Rare ones
+    // used to fall into Hide Junk.
+    rules.push(tagRule(makeRule("Talismans (tous)", SHOW, [conditionItemTypes([CHARM, SEAL])])));
     // Flat "keep everything else" catch-all - only skipped when
     // hideWeakLegendaries is on, so a Legendary/Unique that didn't match
     // either tier above falls through to Hide Junk instead (whose mask
@@ -4052,14 +4055,14 @@
       const set = m && TALISMAN_SETS[m[1]];
       const pieceId = set && set[2][parseInt(m[2], 10) - 1];
       if (!pieceId) continue;
-      if (!sets.has(m[1])) sets.set(m[1], { pieces: [], affixes: new Set() });
-      sets.get(m[1]).pieces.push(pieceId);
+      if (!sets.has(m[1])) sets.set(m[1], { affixes: new Set() });
       for (const raw of affixIds) if (affixIdOf.has(raw)) sets.get(m[1]).affixes.add(affixIdOf.get(raw));
     }
     const rules = [];
     const matched = [];
-    for (const [key, { pieces, affixes }] of sets) {
-      const [name, setId] = TALISMAN_SETS[key];
+    for (const [key, { affixes }] of sets) {
+      // v3.49: every piece of the set, not just the ones the guide equips.
+      const [name, setId, pieces] = TALISMAN_SETS[key];
       matched.push(name);
       const conditions = [conditionRarity(TALISMAN), conditionTalismanSet(setId, pieces)];
       if (affixes.size) conditions.push(conditionAffixes([...affixes], 1));
@@ -5799,7 +5802,7 @@
           <div class="d4a-wz-extra" id="d4a-wz-extra-hide"></div>
           <p class="d4a-wz-note" id="d4a-wz-hide-open-note">🌱 Filtre Ouvert : Légendaires et Uniques toujours gardés.</p>
           <p class="d4a-wz-note" id="d4a-wz-hide-farm-note">🌾 Mode Farm : cache en plus tout objet non-Ancestral de puissance 850+, quelle que soit la rareté.</p>
-          <p class="d4a-wz-note">✅ Toujours gardés : Mythiques, Talismans et Sceaux légendaires, améliorations du Codex, et tout objet qui correspond au build (y compris ses Uniques reconnus).</p>
+          <p class="d4a-wz-note">✅ Toujours gardés : Mythiques, tous les Charmes et Sceaux (matériaux de craft), améliorations du Codex, et tout objet qui correspond au build (y compris ses Uniques reconnus).</p>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Couleurs des objets dans le jeu</p>
