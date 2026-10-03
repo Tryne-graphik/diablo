@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.49
+// @version      3.50
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3670,7 +3670,12 @@
     // v3.49: no rarity condition any more - EVERY Charm/Seal stays visible
     // (unused ones are crafting materials, user 2026-10-03), Magic/Rare ones
     // used to fall into Hide Junk.
-    rules.push(tagRule(makeRule("Talismans (tous)", SHOW, [conditionItemTypes([CHARM, SEAL])])));
+    // v3.50: option "d4a-hide-low-charms" (default off) - Magic/Rare ones
+    // give fewer craft materials, so the user may let them fall into Hide
+    // Junk (only actually hidden if its Magic/Rare boxes are checked).
+    rules.push(tagRule(options.hideLowCharms
+      ? makeRule("Talismans Légendaires", SHOW, [conditionRarity(LEGENDARY_PLUS), conditionItemTypes([CHARM, SEAL])])
+      : makeRule("Talismans (tous)", SHOW, [conditionItemTypes([CHARM, SEAL])])));
     // Flat "keep everything else" catch-all - only skipped when
     // hideWeakLegendaries is on, so a Legendary/Unique that didn't match
     // either tier above falls through to Hide Junk instead (whose mask
@@ -5802,7 +5807,7 @@
           <div class="d4a-wz-extra" id="d4a-wz-extra-hide"></div>
           <p class="d4a-wz-note" id="d4a-wz-hide-open-note">🌱 Filtre Ouvert : Légendaires et Uniques toujours gardés.</p>
           <p class="d4a-wz-note" id="d4a-wz-hide-farm-note">🌾 Mode Farm : cache en plus tout objet non-Ancestral de puissance 850+, quelle que soit la rareté.</p>
-          <p class="d4a-wz-note">✅ Toujours gardés : Mythiques, tous les Charmes et Sceaux (matériaux de craft), améliorations du Codex, et tout objet qui correspond au build (y compris ses Uniques reconnus).</p>
+          <p class="d4a-wz-note">✅ Toujours gardés : Mythiques, Charmes et Sceaux Légendaires+ (les Magiques/Rares aussi, sauf si 🧿 coché), améliorations du Codex, et tout objet qui correspond au build (y compris ses Uniques reconnus).</p>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Couleurs des objets dans le jeu</p>
@@ -5828,7 +5833,7 @@
     // Move the real option controls in (keeps their persistence handlers).
     const labelOf = (id) => document.getElementById(id).closest("label");
     document.getElementById("d4a-wz-extra-1").append(labelOf("d4a-opt-ancestral"));
-    document.getElementById("d4a-wz-extra-hide").append(labelOf("d4a-hide-common"), labelOf("d4a-hide-magic"), labelOf("d4a-hide-rare"), labelOf("d4a-hide-leg"), labelOf("d4a-hide-uniq"));
+    document.getElementById("d4a-wz-extra-hide").append(labelOf("d4a-hide-common"), labelOf("d4a-hide-magic"), labelOf("d4a-hide-rare"), labelOf("d4a-hide-leg"), labelOf("d4a-hide-uniq"), labelOf("d4a-hide-low-charms"));
     document.getElementById("d4a-wz-extra-2").append(labelOf("d4a-opt-perslot"));
     const levelIds = (n) => [`d4a-l${n}-req`, `d4a-l${n}-opt`, `d4a-l${n}-ga`].map((id) => document.getElementById(id));
     const writeLevelControls = (levels) => levels.forEach((l, i) => {
@@ -5893,7 +5898,7 @@
         const lv = readLevelControls().filter(levelActive).map((l) => `${l.req} obligatoire(s) + ${l.opt} optionnelle(s)${l.ga ? " + GA" : ""}`);
         lines.push(`Exigence : ${pre ? pre.label + " - " : ""}${lv.join(" / ")}`);
         lines.push(`Ancestraux uniquement : ${opt("d4a-opt-ancestral") ? "oui" : "non"}`);
-        const hidden = [["d4a-hide-common", "Communs"], ["d4a-hide-magic", "Magiques"], ["d4a-hide-rare", "Rares"], ["d4a-hide-leg", "Légendaires"], ["d4a-hide-uniq", "Uniques"]]
+        const hidden = [["d4a-hide-common", "Communs"], ["d4a-hide-magic", "Magiques"], ["d4a-hide-rare", "Rares"], ["d4a-hide-leg", "Légendaires"], ["d4a-hide-uniq", "Uniques"], ["d4a-hide-low-charms", "Charmes/Sceaux Magiques et Rares"]]
           .filter(([id]) => opt(id)).map(([, l]) => l);
         lines.push(`Caché si hors build : ${hidden.length ? hidden.join(", ") : "rien"}${sit.id === "farm" ? " + non-Ancestraux 850+ (Farm)" : ""}`);
         lines.push(`Précision par emplacement : ${opt("d4a-opt-perslot") ? "oui" : "non"}`);
@@ -5992,6 +5997,7 @@
     const optHideLegendary = document.getElementById("d4a-hide-leg")?.checked ?? false;
     const optHideUnique = document.getElementById("d4a-hide-uniq")?.checked ?? false;
     const optHideWeak = optHideLegendary || optHideUnique;
+    const optHideLowCharms = document.getElementById("d4a-hide-low-charms")?.checked ?? false;
     const optPerSlot = document.getElementById("d4a-opt-perslot")?.checked ?? true;
     // 2026-09-25: "mode farm" - default OFF like hideWeak/uniquePerItem, a
     // real behavior change (see generateFilterCode()'s farmMode comment).
@@ -6105,6 +6111,7 @@
           hideCommon: optHideCommon,
           hideMagic: optHideMagic,
           hideRare: optHideRare,
+          hideLowCharms: optHideLowCharms,
           farmMode: optFarmMode,
           flatRareRules: perSlot.length === 0,
           colorBis,
@@ -6112,7 +6119,7 @@
           colorCodex,
           colorLegendary,
         })
-      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", [...uniqueRulesResult.rules, ...charmRulesResult.rules], { colorBis, colorGood, colorCodex, colorLegendary, hideCommon: optHideCommon, hideMagic: optHideMagic, hideRare: optHideRare });
+      : generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "open", [...uniqueRulesResult.rules, ...charmRulesResult.rules], { colorBis, colorGood, colorCodex, colorLegendary, hideCommon: optHideCommon, hideMagic: optHideMagic, hideRare: optHideRare, hideLowCharms: optHideLowCharms });
 
     const detailNote = result.hasDetail
       ? ""
@@ -6458,6 +6465,7 @@
         <label><input type="checkbox" id="d4a-hide-rare"> 🟡 Rares hors build</label>
         <label><input type="checkbox" id="d4a-hide-leg"> 🟠 Légendaires hors build</label>
         <label><input type="checkbox" id="d4a-hide-uniq"> 🟤 Uniques hors build</label>
+        <label><input type="checkbox" id="d4a-hide-low-charms"> 🧿 Charmes/Sceaux Magiques et Rares (moins de composants)</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
         <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
         <details class="d4a-help">
@@ -6737,6 +6745,8 @@
       "d4a-hide-leg": GM_getValue("d4a-opt-hide-weak", false),
       "d4a-hide-uniq": GM_getValue("d4a-opt-hide-weak", false),
       "d4a-opt-perslot": true,
+      // v3.50: Magic/Rare Charms/Seals shown by default (craft materials).
+      "d4a-hide-low-charms": false,
       // 2026-09-25: "mode farm" - real behavior change (broader hide), OFF
       // by default like the other opt-in behavior changes above.
       "d4a-opt-farm-mode": false,

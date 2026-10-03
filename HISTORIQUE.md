@@ -1055,3 +1055,9 @@ compris). Les charmes non utilises servent de materiaux de craft -> la regle
 condition de rarete (avant, Magique/Rare tombaient dans Cacher Detritus). La regle
 du set de charmes colore toutes les pieces du set, plus seulement celles
 equipees par le guide (Abaddon 02_05 manquait). Meme changement dans generator.py.
+
+## 2026-10-03 - v3.50 : option charmes/sceaux Magiques et Rares
+Case "🧿 Charmes/Sceaux Magiques et Rares" dans "Qu'est-ce qui doit etre cache"
+(defaut decochee = tout garder). Cochee -> la regle redevient "Talismans
+Legendaires" (Legendaire+), les Magiques/Rares tombent dans Cacher Detritus
+(donc seulement si les cases Magiques/Rares sont cochees aussi).
