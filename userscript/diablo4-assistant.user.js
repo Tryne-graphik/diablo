@@ -3401,7 +3401,9 @@
   // The widget shows one of the planner's profiles: picked as the one whose
   // Uniques match the widget's (activeProfile on a tie), and a slot is only
   // restricted when its Unique-or-not status agrees with the widget.
-  const MAXROLL_PLANNER_WEAPON_SLOTS = { "Bludgeoning Weapon": 8, "Slicing Weapon": 9, "Ranged Weapon": 10, "Mainhand": 11, "Offhand": 12 };
+  const MAXROLL_PLANNER_WEAPON_SLOTS = { "Bludgeoning Weapon": 8, "Slicing Weapon": 9, "Ranged Weapon": 10, "Mainhand": [7, 11], "Offhand": [6, 12] };
+  // 2026-10-07: S15 planners (Warlock, Necro, Sorc) put main hand/offhand at 7/6, not 11/12 -
+  // both kept, first one present wins (11/12 may still be dual-wield classes).
   const WEAPON_BASE_RE = /(1h|2h)?(dagger|sword|mace|axe|wand|quarterstaff|glaive|staff|scythe|polearm|crossbow|bow|focus|totem|shield)(2h)?/;
   function weaponTypeIdsFromBaseId(baseId) {
     const m = WEAPON_BASE_RE.exec(String(baseId || "").toLowerCase());
@@ -3441,7 +3443,7 @@
       const runeword = planner.items[best.items[MAXROLL_PLANNER_RUNEWORD_SLOTS[entry.slot]]];
       if (entry.itemName && /^runeword_/i.test((runeword && runeword.id) || "")) entry.runeword = true;
       if (!MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot] || entry.typeIds) continue;
-      const item = planner.items[best.items[MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]]];
+      const item = [].concat(MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]).map((i) => planner.items[best.items[i]]).find(Boolean);
       if (!item) continue;
       const plannerIsUnique = /_unique_|^runeword_/i.test(item.id || "");
       if (plannerIsUnique !== Boolean(entry.itemName)) continue; // profile/widget disagree - don't guess
