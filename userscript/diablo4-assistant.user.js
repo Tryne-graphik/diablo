@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.51
+// @version      3.52
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3410,8 +3410,15 @@
     const id = IB_WEAPON_KIND_TYPE_IDS[hands + m[2]] ?? (hands ? undefined : IB_WEAPON_KIND_TYPE_IDS[m[2]]);
     return id != null ? [id] : null;
   }
+  // 2026-10-07 (v3.52, A_VERIFIER #10): runeword slots too - the widget shows
+  // Enigma/Discretion in `.d4-color-unique` like a Unique, only the planner id
+  // ("Runeword_Enigma") says it's a runeword, crafted at the Cube (see
+  // buildPerSlotRules(), same `runeword` flag as InfinityBuilds). Planner
+  // slots seen on 3 S15 guides (Warlock, Necro, Sorc): 5 chest, 6 offhand,
+  // 7 main hand.
+  const MAXROLL_PLANNER_RUNEWORD_SLOTS = { "Chest Armor": 5, "Offhand": 6, "Mainhand": 7 };
   async function addMaxrollWeaponTypeIds(entries) {
-    const weaponEntries = entries.filter((e) => MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds);
+    const weaponEntries = entries.filter((e) => (MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds) || (MAXROLL_PLANNER_RUNEWORD_SLOTS[e.slot] && e.itemName));
     if (!weaponEntries.length) return;
     const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
     const plannerId = Array.from(pageHtml.matchAll(/d4\/planner\/([a-z0-9]{4,})/gi), (m) => m[1]).find((id) => id.toLowerCase() !== "builds");
@@ -3431,6 +3438,9 @@
     });
     if (!best || !best.items) return;
     for (const entry of weaponEntries) {
+      const runeword = planner.items[best.items[MAXROLL_PLANNER_RUNEWORD_SLOTS[entry.slot]]];
+      if (entry.itemName && /^runeword_/i.test((runeword && runeword.id) || "")) entry.runeword = true;
+      if (!MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot] || entry.typeIds) continue;
       const item = planner.items[best.items[MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]]];
       if (!item) continue;
       const plannerIsUnique = /_unique_|^runeword_/i.test(item.id || "");

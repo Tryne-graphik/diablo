@@ -1061,3 +1061,17 @@ Case "🧿 Charmes/Sceaux Magiques et Rares" dans "Qu'est-ce qui doit etre cache
 (defaut decochee = tout garder). Cochee -> la regle redevient "Talismans
 Legendaires" (Legendaire+), les Magiques/Rares tombent dans Cacher Detritus
 (donc seulement si les cases Magiques/Rares sont cochees aussi).
+
+## 2026-10-07 - v3.52 : mots runiques sur Maxroll (A_VERIFIER #10)
+Le widget Maxroll affiche Enigme/Discretion comme un Unique (`.d4-color-unique`) ;
+seul l'id du planner (`Runeword_Enigma`) dit que c'est un mot runique. Le lecteur
+planner (addMaxrollWeaponTypeIds) marque maintenant `runeword: true` sur Torse /
+Main principale / Main gauche (emplacements planner 5/7/6, vus sur 3 guides S15)
+quand le widget nomme un objet et que le planner dit `Runeword_*`. Meme traitement
+qu'IB : emplacement ignore "mot runique : fabrique au Cube" (pas de regle de base
+blanche, retiree en v3.48). Le filtre produit ne change pas (Enigme n'etait deja
+pas ciblable) : seul le libelle de l'emplacement ignore change. Teste en bac a
+sable Node avec le vrai planner du guide Blazing Scream (profil Push) + decodage
+Python. Constat annexe : MAXROLL_PLANNER_WEAPON_SLOTS (11 main / 12 gauche) ne
+correspond pas aux planners S15 vus (7 / 6) -> le type d'arme Maxroll ne serait
+jamais restreint ; non corrige ici, a verifier.
