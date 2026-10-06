@@ -49,7 +49,9 @@ affichée est bien 3.47.
       chance », pouvoirs de démon primordial (captures 407-412).
 - [x] **9. Ton vrai Parangon** (fait 2026-10-03, captures 449-459 : 14,6 % du guide Rank 1 Push) : pour l'instant c'est celui du guide qui sert
       d'approximation (avec tes vrais niveaux de glyphe).
-- [ ] **10. Mots runiques sur Maxroll** dans le filtre (fait seulement pour IB).
+- [x] **10. Mots runiques sur Maxroll** dans le filtre (v3.52, 2026-10-07, teste hors jeu seulement) :
+      le torse Enigme/Discretion d'un guide Maxroll est reconnu comme mot runique (id planner
+      `Runeword_*`) et ignore comme sur IB (pas de regle de base blanche depuis v3.48). A voir en jeu.
 - [ ] **11. Bit `arg4=36`** vu une fois dans un filtre Druide (faible risque,
       à revoir si on retrouve un filtre qui l'utilise).
 

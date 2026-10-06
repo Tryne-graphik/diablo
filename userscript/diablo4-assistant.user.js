@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.51
+// @version      3.52
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3401,7 +3401,9 @@
   // The widget shows one of the planner's profiles: picked as the one whose
   // Uniques match the widget's (activeProfile on a tie), and a slot is only
   // restricted when its Unique-or-not status agrees with the widget.
-  const MAXROLL_PLANNER_WEAPON_SLOTS = { "Bludgeoning Weapon": 8, "Slicing Weapon": 9, "Ranged Weapon": 10, "Mainhand": 11, "Offhand": 12 };
+  const MAXROLL_PLANNER_WEAPON_SLOTS = { "Bludgeoning Weapon": 8, "Slicing Weapon": 9, "Ranged Weapon": 10, "Mainhand": [7, 11], "Offhand": [6, 12] };
+  // 2026-10-07: S15 planners (Warlock, Necro, Sorc) put main hand/offhand at 7/6, not 11/12 -
+  // both kept, first one present wins (11/12 may still be dual-wield classes).
   const WEAPON_BASE_RE = /(1h|2h)?(dagger|sword|mace|axe|wand|quarterstaff|glaive|staff|scythe|polearm|crossbow|bow|focus|totem|shield)(2h)?/;
   function weaponTypeIdsFromBaseId(baseId) {
     const m = WEAPON_BASE_RE.exec(String(baseId || "").toLowerCase());
@@ -3410,8 +3412,15 @@
     const id = IB_WEAPON_KIND_TYPE_IDS[hands + m[2]] ?? (hands ? undefined : IB_WEAPON_KIND_TYPE_IDS[m[2]]);
     return id != null ? [id] : null;
   }
+  // 2026-10-07 (v3.52, A_VERIFIER #10): runeword slots too - the widget shows
+  // Enigma/Discretion in `.d4-color-unique` like a Unique, only the planner id
+  // ("Runeword_Enigma") says it's a runeword, crafted at the Cube (see
+  // buildPerSlotRules(), same `runeword` flag as InfinityBuilds). Planner
+  // slots seen on 3 S15 guides (Warlock, Necro, Sorc): 5 chest, 6 offhand,
+  // 7 main hand.
+  const MAXROLL_PLANNER_RUNEWORD_SLOTS = { "Chest Armor": 5, "Offhand": 6, "Mainhand": 7 };
   async function addMaxrollWeaponTypeIds(entries) {
-    const weaponEntries = entries.filter((e) => MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds);
+    const weaponEntries = entries.filter((e) => (MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds) || (MAXROLL_PLANNER_RUNEWORD_SLOTS[e.slot] && e.itemName));
     if (!weaponEntries.length) return;
     const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
     const plannerId = Array.from(pageHtml.matchAll(/d4\/planner\/([a-z0-9]{4,})/gi), (m) => m[1]).find((id) => id.toLowerCase() !== "builds");
@@ -3431,7 +3440,10 @@
     });
     if (!best || !best.items) return;
     for (const entry of weaponEntries) {
-      const item = planner.items[best.items[MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]]];
+      const runeword = planner.items[best.items[MAXROLL_PLANNER_RUNEWORD_SLOTS[entry.slot]]];
+      if (entry.itemName && /^runeword_/i.test((runeword && runeword.id) || "")) entry.runeword = true;
+      if (!MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot] || entry.typeIds) continue;
+      const item = [].concat(MAXROLL_PLANNER_WEAPON_SLOTS[entry.slot]).map((i) => planner.items[best.items[i]]).find(Boolean);
       if (!item) continue;
       const plannerIsUnique = /_unique_|^runeword_/i.test(item.id || "");
       if (plannerIsUnique !== Boolean(entry.itemName)) continue; // profile/widget disagree - don't guess
