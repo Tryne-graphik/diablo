@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.50
+// @version      3.51
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4076,7 +4076,13 @@
     return { rules, matched };
   }
 
-  function buildUniqueItemRules(perSlotData, itemNamesEnFallback, colorGood, colorBis, needsShowSafetyNet = true, colorKeep = COLOR_GREEN, levels = DEFAULT_LEVELS, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN) {
+  // v3.51 (demande utilisateur 2026-10-07, "laisser le choix") : gradeMode =
+  // "affixes" (niveaux d'affixes par Unique, comme avant), "ga" (niveaux par
+  // nombre de Greater Affix sur tous les Uniques du build : 3+ / 2 / 1) ou
+  // "both" (GA d'abord, puis affixes). skipGa3 : le 3+ GA est deja couvert
+  // par la regle "3-4 GA (tout objet)". requireAncestral : "Garder Uniques"
+  // ne garde que les Ancestraux (filtre Strict).
+  function buildUniqueItemRules(perSlotData, itemNamesEnFallback, colorGood, colorBis, needsShowSafetyNet = true, colorKeep = COLOR_GREEN, levels = DEFAULT_LEVELS, colorPerfect = COLOR_PERFECT, colorGA = COLOR_CYAN, gradeMode = "affixes", skipGa3 = false, requireAncestral = false) {
     const matched = [];
     const seen = new Set();
     const pooledSnoIds = [];
@@ -4105,7 +4111,14 @@
     }
 
     const rules = [];
+    if (gradeMode !== "affixes" && pooledSnoIds.length) {
+      for (const [count, color] of [[3, colorPerfect], [2, colorBis], [1, colorGA]]) {
+        if (count === 3 && skipGa3) continue;
+        rules.push(tagRule(makeRule(`Uniques build ${count === 3 ? "3+" : count} GA`, RECOLOR, [conditionSpecificUnique(pooledSnoIds), conditionGreaterAffix(count)], color), false));
+      }
+    }
     for (const [key, group] of groups) {
+      if (gradeMode === "ga") break;
       if (key === NO_SLOT_DATA) continue; // no reliable affix data - covered by the SHOW safety net only
       const snoIds = group.uniques.flatMap((u) => u.snoIds);
       // 2026-09-25: named after the Unique's own SLOT ("U Anneau G") instead
@@ -4139,7 +4152,7 @@
       // keeping regardless of filter budget pressure.
       // 2026-09-30: was SHOW (native in-game Unique yellow, not the user's
       // colors - retour testeur "une couleur jaune non configurée").
-      rules.push(tagRule(makeRule("Garder Uniques", RECOLOR, [conditionSpecificUnique(pooledSnoIds)], colorKeep), false));
+      rules.push(tagRule(makeRule("Garder Uniques", RECOLOR, [conditionSpecificUnique(pooledSnoIds), ...(requireAncestral ? [conditionAncestral()] : [])], colorKeep), false));
     }
     return { rules, matched };
   }
@@ -5834,7 +5847,7 @@
     const labelOf = (id) => document.getElementById(id).closest("label");
     document.getElementById("d4a-wz-extra-1").append(labelOf("d4a-opt-ancestral"));
     document.getElementById("d4a-wz-extra-hide").append(labelOf("d4a-hide-common"), labelOf("d4a-hide-magic"), labelOf("d4a-hide-rare"), labelOf("d4a-hide-leg"), labelOf("d4a-hide-uniq"), labelOf("d4a-hide-low-charms"));
-    document.getElementById("d4a-wz-extra-2").append(labelOf("d4a-opt-perslot"));
+    document.getElementById("d4a-wz-extra-2").append(labelOf("d4a-opt-perslot"), labelOf("d4a-uniq-grade"), labelOf("d4a-opt-ga-any3"));
     const levelIds = (n) => [`d4a-l${n}-req`, `d4a-l${n}-opt`, `d4a-l${n}-ga`].map((id) => document.getElementById(id));
     const writeLevelControls = (levels) => levels.forEach((l, i) => {
       const [req, opt, ga] = levelIds(i + 1);
@@ -5902,6 +5915,8 @@
           .filter(([id]) => opt(id)).map(([, l]) => l);
         lines.push(`Caché si hors build : ${hidden.length ? hidden.join(", ") : "rien"}${sit.id === "farm" ? " + non-Ancestraux 850+ (Farm)" : ""}`);
         lines.push(`Précision par emplacement : ${opt("d4a-opt-perslot") ? "oui" : "non"}`);
+        const grade = document.getElementById("d4a-uniq-grade");
+        lines.push(`Uniques du build classés par : ${grade.options[grade.selectedIndex].text}${opt("d4a-opt-ga-any3") ? " + tout objet à 3-4 GA" : ""}`);
       }
       const ul = document.getElementById("d4a-wz-summary");
       ul.textContent = "";
@@ -6065,7 +6080,12 @@
     // the Uniques of the InfinityBuilds EQUIVALENT build (result.itemsEn on
     // D4Builds/D4Guides/talion) - they can differ from this page's build.
     const uniqueFallbackNames = perSlot.length && result.sourceLabel !== currentSiteLabel() ? [] : result.itemsEn || [];
-    const uniqueRulesResult = buildUniqueItemRules(perSlot, uniqueFallbackNames, colorGood, colorBis, needsUniqueShowSafetyNet, colorLegendary, levels, colorPerfect, colorGA);
+    // v3.51: Strict only (Open keeps the plain affix grading, every Legendary+ is kept anyway).
+    const gradeMode = isStrict ? GM_getValue("d4a-uniq-grade", "affixes") : "affixes";
+    const optGaAny3 = isStrict && (document.getElementById("d4a-opt-ga-any3")?.checked ?? false);
+    const uniqueRulesResult = buildUniqueItemRules(perSlot, uniqueFallbackNames, colorGood, colorBis, needsUniqueShowSafetyNet, colorLegendary, levels, colorPerfect, colorGA, gradeMode, optGaAny3, isStrict && optAncestral);
+    // First in the list: first-match wins, so it must come before the per-slot/Unique rules.
+    const gaAny3Rules = optGaAny3 ? [tagRule(makeRule("3-4 GA (tout objet)", RECOLOR, [conditionRarity(RARE | LEGENDARY | UNIQUE), conditionGreaterAffix(3)], colorPerfect), false)] : [];
     let charmRulesResult = { rules: [], matched: [] };
     try {
       const charms = extractInfinityBuildsCharms();
@@ -6104,7 +6124,7 @@
     const titleBudget = Math.max(1, 24 - fixedPart.length);
     const baseName = `[${siteTag}] ${result.match.title.slice(0, titleBudget)} ${modeLetter}`;
     const filterResult = isStrict
-      ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...perSlotRulesResult.rules, ...uniqueRulesResult.rules, ...charmRulesResult.rules], {
+      ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...gaAny3Rules, ...perSlotRulesResult.rules, ...uniqueRulesResult.rules, ...charmRulesResult.rules], {
           requireAncestral: optAncestral,
           hideLegendary: optHideLegendary,
           hideUnique: optHideUnique,
@@ -6467,6 +6487,8 @@
         <label><input type="checkbox" id="d4a-hide-uniq"> 🟤 Uniques hors build</label>
         <label><input type="checkbox" id="d4a-hide-low-charms"> 🧿 Charmes/Sceaux Magiques et Rares (moins de composants)</label>
         <label><input type="checkbox" id="d4a-opt-perslot"> 🎯 Précision par emplacement</label>
+        <label>⭐ Uniques du build classés par <select id="d4a-uniq-grade"><option value="affixes">affixes</option><option value="ga">Greater Affix (1 / 2 / 3+)</option><option value="both">GA puis affixes</option></select></label>
+        <label><input type="checkbox" id="d4a-opt-ga-any3"> 🌟 Tout objet à 3-4 GA (même hors build)</label>
         <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
         <details class="d4a-help">
           <summary>ℹ️ En savoir plus</summary>
@@ -6495,9 +6517,9 @@
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">
             <span><i id="d4a-legend-good" style="background:${COLOR_HEX_DEFAULTS.good}"></i>2 stats du build exigées (obligatoires + optionnelles) sur l'emplacement</span>
-            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>3 stats du build exigées</span>
-            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>4 stats du build exigées</span>
-            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Niveau avec « + Greater Affix »</span>
+            <span><i id="d4a-legend-bis" style="background:${COLOR_HEX_DEFAULTS.bis}"></i>3 stats du build exigées (et Uniques du build à 2 GA)</span>
+            <span><i id="d4a-legend-perfect" style="background:${COLOR_HEX_DEFAULTS.perfect}"></i>4 stats du build exigées (et Uniques du build / tout objet à 3+ GA)</span>
+            <span><i id="d4a-legend-ga" style="background:${COLOR_HEX_DEFAULTS.ga}"></i>Niveau avec « + Greater Affix » (et Uniques du build à 1 GA)</span>
             <span><i id="d4a-legend-codex" style="background:${COLOR_HEX_DEFAULTS.codex}"></i>Codex à améliorer</span>
             <span><i id="d4a-legend-legendary" style="background:${COLOR_HEX_DEFAULTS.legendary}"></i>Légendaire/Unique restant (Mythique : jamais recoloré, jamais caché)</span>
           </div>
@@ -6750,12 +6772,16 @@
       // 2026-09-25: "mode farm" - real behavior change (broader hide), OFF
       // by default like the other opt-in behavior changes above.
       "d4a-opt-farm-mode": false,
+      "d4a-opt-ga-any3": false,
     };
     for (const [id, defaultValue] of Object.entries(OPT_DEFAULTS)) {
       const cb = document.getElementById(id);
       cb.checked = GM_getValue(id, defaultValue);
       cb.onchange = () => GM_setValue(id, cb.checked);
     }
+    const uniqGrade = document.getElementById("d4a-uniq-grade");
+    uniqGrade.value = GM_getValue("d4a-uniq-grade", "affixes");
+    uniqGrade.onchange = () => GM_setValue("d4a-uniq-grade", uniqGrade.value);
     // 2026-09-23: the 2 tier dropdowns (see buildPerSlotRules()'s docstring)
     // - same GM_setValue persistence, default Tier A=2/B=3 (matches the
     // 2-tier behavior already validated in-game before this feature grew).
