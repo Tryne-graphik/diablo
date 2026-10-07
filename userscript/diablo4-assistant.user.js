@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.52
+// @version      3.53
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -2629,6 +2629,8 @@
   // key = internal name minus "Talisman_" (matches InfinityBuilds' charm ids
   // "Talisman_Charm_Set_<key>_0N"): [display name, set SNO id, [piece 1..N ids]].
   // Season-13 snapshot - a newer season's sets are simply not matched.
+  // Noms FR des sets (paires EN/FR par id d'affixe des caches IB, DiabloIV-DPS-Calculator data/cache, 2026-10-07).
+  const TALISMAN_SETS_FR = {"Rathma's Waking Touch": "Toucher ambulant de Rathma", "Cain's Wild Lightning": "Lumière sauvage de Cain", "Sescheron's Fury": "Fureur de Sescheron", "Berserker's Crucible": "Creuset de berserker", "Arms of Arreat": "Armes d'Arreat", "Bloodletter's Flow": "Flux sanguin", "Bul-Kathos' Pride": "Orgueil de Bul-Kathos", "Storm Shepherd's Call": "Appel de guide des tempêtes", "Song of the Old Mountain": "Chant de la montagne ancienne", "Might of the Den Mother": "Puissance de la Mère de la tanière", "Rush of the Red Wolf Moon": "Afflux de la lune du loup rouge", "Nafain's Bestiary": "Bestiaire de Nafain", "Radament's Desecration": "Profanation de Radament", "Art of the Bone Weaver": "Art du tissage d'os", "Word of the Blood Binder": "Parole du sang lié", "Peace of the Black Shroud": "Paix du voile noir", "Cathan's Righteous Will": "Volonté vertueuse de Cathan", "Cathan's Dauntless Faith": "Foi vaillante de Cathan", "Heaven's Radiant Fire": "Feu radieux des Cieux", "Light's Epiphany": "Révélation de la Lumière", "Cathan's Iron Conviction": "Conviction inébranlable de Cathan", "Nilfur's Narrow Eye": "Œil plissé de Nilfur", "Way of the Blurring Blade": "Voie de la lame floue", "Applied Alchemy": "Alchimie appliquée", "Spellbound Steel": "Acier enchanté", "Legacy of the Sightless": "Héritage des aveugles", "Habacalva's Cauldron": "Chaudron d'Habacalva", "Breath of the Frozen Sea": "Souffle de la mer Gelée", "Tal Rasha's Threefold Way": "Voie triple de Tal Rasha", "Tiraj's Uncanny Insight": "Perspicacité inouïe de Tiraj", "Balazan's Bite": "Morsure de Balazan", "Wumba's Embrace": "Étreinte de Wumba", "Rezoka's Rage": "Rage de Rezoka", "Kwatli's Grace": "Grâce de Kwatli", "Bliss of the Multitude": "Bonheur du plus grand nombre", "Fulcrum of Mefis": "Pivot de Mefis", "Flesh of Abaddon": "Chair d'Abaddon", "Shadow of Harash": "Ombre d'Harash", "Rite of the Nameless": "Rite de l'Anonyme", "Chains of Horazon": "Chaînes d'Horazon"};
   const TALISMAN_SETS = {"Barb_01":["Sescheron's Fury",2292501,[2426522,2426536,2426549,2426552,2426573]],"Barb_02":["Berserker's Crucible",2292545,[2426580,2426583,2426588,2426591,2426594]],"Barb_03":["Arms of Arreat",2292969,[2426598,2426602,2426606,2426609,2426617]],"Barb_04":["Bloodletter's Flow",2292971,[2426625,2426628,2426634,2426637,2426641]],"Barb_05":["Bul-Kathos' Pride",2292974,[2426645,2426651,2426655,2426657,2426661]],"Druid_01":["Storm Shepherd's Call",2294566,[2426666,2426669,2426673,2426676,2426679]],"Druid_02":["Song of the Old Mountain",2294656,[2426683,2426687,2426690,2426697,2426700]],"Druid_03":["Might of the Den Mother",2294659,[2426704,2426709,2426711,2426715,2426720]],"Druid_04":["Rush of the Red Wolf Moon",2294662,[2426723,2426739,2426742,2426747,2426750]],"Druid_05":["Nafain's Bestiary",2294665,[2426754,2426757,2426760,2426763,2426766]],"Necro_01":["Radament's Desecration",2296936,[2426769,2426771,2426774,2426777,2426779]],"Necro_02":["Art of the Bone Weaver",2297192,[2426783,2426785,2426789,2426792,2426796]],"Necro_03":["Word of the Blood Binder",2297194,[2426801,2426804,2426809,2426812,2426816]],"Necro_04":["Peace of the Black Shroud",2297196,[2426823,2426825,2426830,2426835,2426839]],"Necro_05":["Rathma's Waking Touch",2297198,[2426844,2426848,2426851,2426854,2426859]],"Pala_01":["Cathan's Righteous Will",2340043,[2428542,2428544,2428546,2428548,2428550]],"Pala_02":["Cathan's Dauntless Faith",2340202,[2428552,2428554,2428556,2428558,2428560]],"Pala_03":["Heaven's Radiant Fire",2340204,[2428562,2428564,2428566,2428568,2428570]],"Pala_04":["Light's Epiphany",2340206,[2428572,2428574,2428577,2428579,2428581]],"Pala_05":["Cathan's Iron Conviction",2340208,[2428583,2428585,2428587,2428589,2428591]],"Rogue_01":["Nilfur's Narrow Eye",2296426,[2428593,2428595,2428597,2428599,2428602]],"Rogue_02":["Way of the Blurring Blade",2296482,[2428605,2428607,2428609,2428611,2428613]],"Rogue_03":["Applied Alchemy",2296520,[2428615,2428617,2428619,2428621,2428623]],"Rogue_04":["Spellbound Steel",2296522,[2428625,2428627,2428629,2428631,2428633]],"Rogue_05":["Legacy of the Sightless",2296524,[2428635,2428637,2428639,2428641,2428643]],"Small_Generic01":["Slaughter",2305930,[2304176,2448152,2448154]],"Small_Generic02":["Practiced Technique",2306534,[2308710,2448158,2448162]],"Small_Generic03":["Survival",2309267,[2309269,2448164,2448168]],"Small_Generic06":["Dark Pact",2314528,[2315174,2448178,2448180]],"Small_Generic09":["Mastery",2316610,[2316685,2448189]],"Sorc_01":["Habacalva's Cauldron",2245567,[2428492,2428494,2428496,2428498,2428500]],"Sorc_02":["Breath of the Frozen Sea",2245344,[2428502,2428504,2428506,2428508,2428510]],"Sorc_03":["Cain's Wild Lightning",2248805,[2428512,2428514,2428516,2428518,2428520]],"Sorc_04":["Tal Rasha's Threefold Way",2248932,[2428522,2428524,2428526,2428528,2428530]],"Sorc_05":["Tiraj's Uncanny Insight",2249013,[2428532,2428534,2428536,2428538,2428540]],"Spirit_01":["Balazan's Bite",2298770,[2428645,2428647,2428649,2428651,2428653]],"Spirit_02":["Wumba's Embrace",2299102,[2428655,2428657,2428659,2428661,2428663]],"Spirit_03":["Rezoka's Rage",2299104,[2428666,2428668,2428670,2428672,2428677]],"Spirit_04":["Kwatli's Grace",2299107,[2428682,2428684,2428686,2428689,2428691]],"Spirit_05":["Bliss of the Multitude",2299111,[2428693,2428696,2428698,2428700,2428702]],"Warlock_01":["Fulcrum of Mefis",2340368,[2428704,2428707,2428709,2428711,2428713]],"Warlock_02":["Flesh of Abaddon",2340371,[2428722,2428724,2428726,2428728,2428731]],"Warlock_03":["Shadow of Harash",2340374,[2428856,2428859,2428862,2428875,2428877]],"Warlock_04":["Rite of the Nameless",2340376,[2428880,2428884,2428886,2428891,2428893]],"Warlock_05":["Chains of Horazon",2340378,[2428896,2428899,2428903,2428906,2428908]]};
   // 2026-09-30: InfinityBuilds gives each slot's item as an internal id
   // ("item-1hsword-unique-warlock-001-itm", "item-4852-quarterstaff-unique-
@@ -3967,7 +3969,7 @@
         const conditions = [conditionRarity(RARE | LEGENDARY), conditionItemTypes(typeIds), ...affixConditions];
         if (requireAncestral) conditions.push(conditionAncestral());
         // "2+1 - Casque", "0+3 - Gants", "1+1 GA - Gants" (24-char cap).
-        rules.push(tagRule(makeRule(`${levelLabel(level)} - ${SLOT_LABELS_FR[entry.slot] || entry.slot}`, RECOLOR, conditions, levelColor(level)), index + 1));
+        rules.push(tagRule(makeRule(`${SLOT_LABELS_FR[entry.slot] || entry.slot} ${levelLabel(level)}`, RECOLOR, conditions, levelColor(level)), index + 1));
       });
     }
     return { rules, skippedSlots };
@@ -4080,10 +4082,10 @@
     for (const [key, { affixes }] of sets) {
       // v3.49: every piece of the set, not just the ones the guide equips.
       const [name, setId, pieces] = TALISMAN_SETS[key];
-      matched.push(name);
+      matched.push(TALISMAN_SETS_FR[name] || name);
       const conditions = [conditionRarity(TALISMAN), conditionTalismanSet(setId, pieces)];
       if (affixes.size) conditions.push(conditionAffixes([...affixes], 1));
-      rules.push(tagRule(makeRule(`Set ${name}`, RECOLOR, conditions, color), false));
+      rules.push(tagRule(makeRule(`Set ${TALISMAN_SETS_FR[name] || name}`, RECOLOR, conditions, color), false));
     }
     return { rules, matched };
   }
@@ -6133,8 +6135,13 @@
     const siteTag = SITE_ABBREV[result.sourceLabel] || result.sourceLabel.slice(0, 2).toUpperCase();
     const modeLetter = isStrict ? "S" : "O";
     const fixedPart = `[${siteTag}]  ${modeLetter}`;
-    const titleBudget = Math.max(1, 24 - fixedPart.length);
-    const baseName = `[${siteTag}] ${result.match.title.slice(0, titleBudget)} ${modeLetter}`;
+    // v3.53: "Cri flamboyant de Mekuna" se faisait couper en "Cri flamboyant de" : on retire les petits
+    // mots, puis le "[IB]" s'il ne laisse pas tenir le titre entier (le titre compte plus que le site).
+    const title = result.match.title.split(/\s+/).filter((w) => !/^(de|du|des|d'|la|le|les|l'|of|the)$/i.test(w)).join(" ").trim();
+    const withTag = `[${siteTag}] ${title} ${modeLetter}`;
+    const baseName = withTag.length <= 24 ? withTag
+      : `${title} ${modeLetter}`.length <= 24 ? `${title} ${modeLetter}`
+      : `[${siteTag}] ${title.slice(0, Math.max(1, 24 - fixedPart.length))} ${modeLetter}`;
     const filterResult = isStrict
       ? generateFilterCode(baseName, result.resolvedClass || "", result.skillsEn, priority.ids, "strict", [...gaAny3Rules, ...perSlotRulesResult.rules, ...uniqueRulesResult.rules, ...charmRulesResult.rules], {
           requireAncestral: optAncestral,
