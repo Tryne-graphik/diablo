@@ -1,9 +1,10 @@
 {
   "Rage of Harrogath": {
     "boss": [
-      "butcher"
+      "duriel"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Yen's Blessing": {
     "boss": [
@@ -267,14 +268,16 @@
     "boss": [
       "varshan"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Tempest Roar": {
     "boss": [
       "duriel",
       "harbinger"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Airidah's Inexorable Will": {
     "boss": [
@@ -292,14 +295,16 @@
     "boss": [
       "ice-beast"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Blood Artisan's Cuirass": {
     "boss": [
       "zir",
       "urivar"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Bloodless Scream": {
     "boss": [
@@ -317,7 +322,8 @@
     "boss": [
       "grigoire"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Mutilator Plate": {
     "boss": [
@@ -347,7 +353,8 @@
     "boss": [
       "varshan"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Ebonpiercer": {
     "boss": [
@@ -360,7 +367,8 @@
       "andarielle",
       "harbinger"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Deathless Visage": {
     "boss": [
@@ -613,7 +621,8 @@
     "boss": [
       "ice-beast"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Raiment of the Infinite": {
     "boss": [
@@ -629,9 +638,10 @@
   },
   "The Oculus": {
     "boss": [
-      "ice-beast"
+      "grigoire"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Blue Rose": {
     "boss": [
@@ -769,9 +779,10 @@
   },
   "Rod of Kepeleke": {
     "boss": [
-      "duriel"
+      "astaroth"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Sepazontec": {
     "boss": [
@@ -799,9 +810,10 @@
   },
   "Pitfighter's Gull": {
     "boss": [
-      "zir"
+      "varshan"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Sidhe Bindings": {
     "boss": [
@@ -859,9 +871,10 @@
   },
   "Vox Omnium": {
     "boss": [
-      "varshan"
+      "ice-beast"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Kessime's Legacy": {
     "boss": [
@@ -885,7 +898,8 @@
     "boss": [
       "ice-beast"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Assassin's Stride": {
     "boss": [
@@ -903,7 +917,8 @@
     "boss": [
       "zir"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "Sunstained War-Crozier": {
     "boss": [
@@ -964,7 +979,8 @@
       "varshan",
       "urivar"
     ],
-    "uber": false
+    "uber": false,
+    "note": "retire des boss (IB S15)"
   },
   "The Hand of Naz": {
     "boss": [
@@ -1256,9 +1272,11 @@
   },
   "Dirge of Odium": {
     "boss": [
+      "andarielle",
       "zir"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Elegy": {
     "boss": [
@@ -1598,9 +1616,10 @@
   },
   "Shanar's Resonance": {
     "boss": [
-      "harbinger"
+      "butcher"
     ],
-    "uber": false
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   },
   "Staff of Zerae": {
     "boss": [
@@ -1787,5 +1806,12 @@
       "all"
     ],
     "uber": false
+  },
+  "Morlu Fleshward": {
+    "boss": [
+      "duriel"
+    ],
+    "uber": false,
+    "source": "infinitybuilds 2026-10-07"
   }
 }

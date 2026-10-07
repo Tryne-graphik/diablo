@@ -1075,3 +1075,16 @@ sable Node avec le vrai planner du guide Blazing Scream (profil Push) + decodage
 Python. Constat annexe : MAXROLL_PLANNER_WEAPON_SLOTS (11 main / 12 gauche) ne
 correspond pas aux planners S15 vus (7 / 6) -> le type d'arme Maxroll ne serait
 jamais restreint ; non corrige ici, a verifier.
+
+## 2026-10-07 (nuit) - Sources des Uniques corrigees d'apres InfinityBuilds
+Comparaison de `app/data/unique_item_sources.json` (infobulle "ou tombe cet
+Unique") avec les donnees du jeu S15 d'InfinityBuilds. 7 sources corrigees
+(Pitfighter's Gull -> Varshan, The Oculus -> Grigoire, Vox Omnium -> Bete dans
+la glace, Dirge of Odium -> Andariel + Zir, Rage of Harrogath -> Duriel,
+Shanar's Resonance -> Le Boucher, Rod of Kepeleke -> Astaroth), 1 ajout
+(Morlu Fleshward -> Duriel), et 11 Uniques retires des tables de boss en S15
+(garde leur ancien boss mais recoivent une `note` "retire des boss (IB S15)").
+Chaque entree touchee porte desormais un champ `source`
+(`infinitybuilds 2026-10-07`). `scripts/sync_unique_item_sources.py` recopie la
+`note` dans le userscript, et l'infobulle (v3.54) affiche une ligne discrete
+"Retire des tables de boss (saison 15)". Verifie par `E:\nuit\check_boss.py`.
