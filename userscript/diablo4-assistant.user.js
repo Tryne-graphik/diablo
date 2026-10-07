@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.54
+// @version      3.55
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4284,6 +4284,7 @@
          Strict apart from Filtre Ouvert (plain gray) without a full
          redesign of either button. */
       #d4a-btn-filter-wizard { border: 1px solid #8b0000; }
+      #d4a-btn-oeil { border: 1px solid #1c4a6a; }
       .d4a-filter-actions { display: flex; gap: 6px; margin: 4px 0 8px; }
       .d4a-filter-actions button { flex: 1; }
       #d4a-column button.d4a-toggle-text { background: #2a2a35; color: #eee; }
@@ -6551,6 +6552,7 @@
       <div id="d4a-panel-section"></div>
       <div id="d4a-ranking-section"></div>
       <button id="d4a-btn-filter-wizard">🛡 Créer mon filtre</button>
+      <button id="d4a-btn-oeil" title="Ouvre ce build dans le releve (L'Oeil des Horadrims, a installer depuis le NAS) : il compare ton perso a ce guide">👁 Ouvrir dans L'Oeil des Horadrims</button>
       <div id="d4a-mybuilds-section">
         <details>
           <summary>📌 Mes Builds</summary>
@@ -6631,7 +6633,7 @@
       const idsToHide = [
         "d4a-buildinfo-section", "d4a-filter-options", "d4a-panel-section", "d4a-ranking-section",
         "d4a-btn-translate", "d4a-btn-untranslate", "d4a-btn-ranking",
-        "d4a-btn-filter-wizard",
+        "d4a-btn-filter-wizard", "d4a-btn-oeil",
       ];
       for (const id of idsToHide) {
         const el = document.getElementById(id);
@@ -6770,6 +6772,11 @@
     // stays unconditional either way).
     // 2026-09-30: replaced by the single "Créer mon filtre" wizard button.
     document.getElementById("d4a-btn-filter-wizard").onclick = openFilterWizard;
+    // 2026-10-08 : lien vers le releve (installeur : protocole oeil-horadrims://). talion.tv reserve le detail
+    // des builds aux comptes connectes : le releve ne peut pas le lire, bouton cache.
+    const oeilBtn = document.getElementById("d4a-btn-oeil");
+    if (location.hostname.includes("talion")) oeilBtn.hidden = true;
+    oeilBtn.onclick = () => { location.href = "oeil-horadrims://guide?url=" + encodeURIComponent(location.href); };
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
     // filtre avant de le lancer" - options for the Strict filter, persisted

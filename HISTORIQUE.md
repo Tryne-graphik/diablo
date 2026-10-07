@@ -1109,3 +1109,9 @@ Chaque entree touchee porte desormais un champ `source`
 (`infinitybuilds 2026-10-07`). `scripts/sync_unique_item_sources.py` recopie la
 `note` dans le userscript, et l'infobulle (v3.54) affiche une ligne discrete
 "Retire des tables de boss (saison 15)". Verifie par `E:\nuit\check_boss.py`.
+
+## 2026-10-08 (nuit) - v3.55 : bouton "Ouvrir dans L'Oeil des Horadrims"
+Sur les pages de build (IB, Maxroll, D4Builds, D4Guides, Kami-Labs ; cache sur talion.tv dont l'API de detail exige un
+compte), le bouton ouvre `oeil-horadrims://guide?url=<page>` : le releve (installeur du NAS, qui declare le protocole)
+s'ouvre et charge ce guide. Syntaxe verifiee (node --check). A TESTER en vrai : il faut l'installeur reconstruit le
+2026-10-08. NON POUSSE sur GitHub (a decider par l'utilisateur).
