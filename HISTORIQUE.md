@@ -1075,3 +1075,21 @@ sable Node avec le vrai planner du guide Blazing Scream (profil Push) + decodage
 Python. Constat annexe : MAXROLL_PLANNER_WEAPON_SLOTS (11 main / 12 gauche) ne
 correspond pas aux planners S15 vus (7 / 6) -> le type d'arme Maxroll ne serait
 jamais restreint ; non corrige ici, a verifier.
+
+## 2026-10-07 (suite) - type d'arme Maxroll : emplacements 7/6 (`e21e2f9`)
+Suite du constat de v3.52 : MAXROLL_PLANNER_WEAPON_SLOTS lit maintenant la main
+principale / main gauche aux emplacements 7 / 6 du planner (S15 : Demoniste,
+Necro, Sorcier), avec 11 / 12 en repli (classes a deux armes ?). Le premier
+emplacement present l'emporte. Teste hors jeu seulement.
+
+## 2026-10-07 (suite) - v3.53 : noms FR, nom du filtre, libelles de regles (`d563684`)
+- Sets de charmes en francais : table TALISMAN_SETS_FR (paires EN/FR par id
+  d'affixe, tirees des caches IB du calculateur). Regle "Set <nom FR>" et nom
+  FR dans le panneau ; repli sur le nom EN si absent.
+- Nom du filtre (24 car. max) : "Cri flamboyant de Mekuna" etait coupe en
+  "Cri flamboyant de". On retire les petits mots (de, du, des, la, le, les,
+  of, the...), puis le "[IB]" si le titre entier ne tient pas avec ; en dernier
+  recours on coupe comme avant.
+- Regles par emplacement : "Bottes 1+2" au lieu de "1+2 - Bottes" (emplacement
+  d'abord, plus lisible dans la liste en jeu).
+Pas encore teste en jeu.
