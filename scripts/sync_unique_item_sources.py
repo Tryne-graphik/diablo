@@ -48,7 +48,10 @@ def main() -> None:
                 unknown_bosses.add(slug)
                 label = slug
             boss_fr.append(label)
-        out[en_name] = {"bossFr": boss_fr, "uber": bool(info.get("uber"))}
+        entry = {"bossFr": boss_fr, "uber": bool(info.get("uber"))}
+        if info.get("note"):
+            entry["note"] = info["note"]
+        out[en_name] = entry
 
     if unknown_bosses:
         print(f"Warning: unrecognized boss slug(s), used as-is: {sorted(unknown_bosses)}")
