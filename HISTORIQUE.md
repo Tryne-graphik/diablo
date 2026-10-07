@@ -1093,3 +1093,7 @@ emplacement present l'emporte. Teste hors jeu seulement.
 - Regles par emplacement : "Bottes 1+2" au lieu de "1+2 - Bottes" (emplacement
   d'abord, plus lisible dans la liste en jeu).
 Pas encore teste en jeu.
+
+## 2026-10-07 (fin) - CLAUDE.md + suite
+CLAUDE.md ajoute (fichiers cles, pieges). Suite : #2 Filtre Leveling (attend le code du filtre
+exporte), tests en jeu de v3.53 + type d'arme Maxroll 7/6, puis #3/#4/#5 ; #11 bit arg4=36.
