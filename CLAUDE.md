@@ -16,4 +16,4 @@ A tester / a faire : `A_VERIFIER.md`.
 - Tests hors jeu : bac a sable Node / Playwright depuis le scratchpad, jamais dans le depot. Tuer les process Playwright apres usage (un orphelin a deja ecrase le userscript).
 - Ne jamais importer `research/bulk_decode.py` (s'execute a l'import).
 - Ne jamais ouvrir de fenetre de test quand l'utilisateur joue.
-- Projet frere : `E:\DiabloIV-DPS-Calculator`.
+- Projet frere : `E:\DevProject\DiabloIV-DPS-Calculator`.
