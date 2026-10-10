@@ -1120,4 +1120,4 @@ s'ouvre et charge ce guide. Syntaxe verifiee (node --check). A TESTER en vrai : 
 IB (Next.js) re-rend les enfants de <body> ~1-4 s apres le chargement et supprime nos noeuds
 (bouton, panneau, infobulle) : le panneau clignotait puis disparaissait. Un MutationObserver sur
 <body> (fin de init()) les remet en place. Reproduit puis verifie en Playwright headless (panneau
-present 8 s apres). NON POUSSE (v3.55 non plus).
+present 8 s apres). Pousse (ce6675f), v3.55 comprise.
