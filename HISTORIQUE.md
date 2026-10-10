@@ -1115,3 +1115,9 @@ Sur les pages de build (IB, Maxroll, D4Builds, D4Guides, Kami-Labs ; cache sur t
 compte), le bouton ouvre `oeil-horadrims://guide?url=<page>` : le releve (installeur du NAS, qui declare le protocole)
 s'ouvre et charge ce guide. Syntaxe verifiee (node --check). A TESTER en vrai : il faut l'installeur reconstruit le
 2026-10-08. NON POUSSE sur GitHub (a decider par l'utilisateur).
+
+## 2026-10-10 - v3.56 : panneau qui disparait sur InfinityBuilds
+IB (Next.js) re-rend les enfants de <body> ~1-4 s apres le chargement et supprime nos noeuds
+(bouton, panneau, infobulle) : le panneau clignotait puis disparaissait. Un MutationObserver sur
+<body> (fin de init()) les remet en place. Reproduit puis verifie en Playwright headless (panneau
+present 8 s apres). NON POUSSE (v3.55 non plus).

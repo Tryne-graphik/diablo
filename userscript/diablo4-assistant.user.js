@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.55
+// @version      3.56
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -6859,6 +6859,14 @@
     // Fire-and-forget: fills #d4a-buildinfo-section once resolved,
     // doesn't block anything else in init() (see renderBuildInfo()).
     renderBuildInfo();
+
+    // 2026-10-10: InfinityBuilds (Next.js) re-renders <body>'s children a
+    // few seconds after load and drops every foreign node - the panel
+    // flashed then vanished. Same <body> object, so just put ours back.
+    const persistent = [toggleBtn, column, document.getElementById("d4a-item-tooltip")];
+    new MutationObserver(() => {
+      for (const el of persistent) if (el && !el.isConnected) document.body.appendChild(el);
+    }).observe(document.body, { childList: true });
   }
 
   if (document.readyState === "loading") {
