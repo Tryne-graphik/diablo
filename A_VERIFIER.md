@@ -38,6 +38,10 @@ affichée est bien 3.47.
       après « Faire défiler » si besoin) ; fiche « Caractéristiques et
       matériaux » page par page ; les 5 glyphes survolés (NIVEAU visible) ;
       talisman (facultatif). Ensuite me dire le premier numéro de capture.
+- [ ] **13. Fenêtre « Créer mon filtre » qui se ferme** (v3.57, 2026-10-11, signalé par 2
+      personnes, poussé sur GitHub) : mettre à jour Tampermonkey (« Rechercher des mises à
+      jour », version 3.57), ouvrir l'assistant de filtre puis le fermer avec ✕, Échap et
+      clic à côté : le voile sombre doit disparaître. Confirmer aussi chez les 2 personnes.
 
 ## Par moi (Claude)
 
