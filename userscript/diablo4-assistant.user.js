@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.56
+// @version      3.57
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4318,6 +4318,7 @@
         background: #000; color: #eee; font-size: 13px; font-family: inherit;
       }
       #d4a-wz-overlay { position: fixed; inset: 0; z-index: 2147483646; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; }
+      #d4a-wz-overlay[hidden] { display: none; }
       #d4a-wz { width: 480px; max-width: 92vw; max-height: 90vh; overflow-y: auto; background: #0c0c14; color: #e6e1d6; border: 1px solid #8b0000; border-radius: 8px; padding: 14px 18px; font-family: inherit; font-size: 14px; box-sizing: border-box; }
       #d4a-wz h3 { margin: 0 0 8px; color: #c9a227; font-size: 18px; display: flex; justify-content: space-between; }
       #d4a-wz-close { background: none; border: none; color: #aaa; font-size: 18px; cursor: pointer; }

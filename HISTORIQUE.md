@@ -1121,3 +1121,10 @@ IB (Next.js) re-rend les enfants de <body> ~1-4 s apres le chargement et supprim
 (bouton, panneau, infobulle) : le panneau clignotait puis disparaissait. Un MutationObserver sur
 <body> (fin de init()) les remet en place. Reproduit puis verifie en Playwright headless (panneau
 present 8 s apres). Pousse (ce6675f), v3.55 comprise.
+Suite : confirmer v3.56 sur IB dans Tampermonkey, tester en jeu v3.53/v3.55 (bouton Oeil, installeur du 08/10),
+#2 filtre Leveling (attend le code exporte), #4/#5/#10, #11 bit arg4=36 ; menage research/.
+
+## 2026-10-11 - v3.57 : fenetre "Creer mon filtre" impossible a fermer
+Signale par 2 utilisateurs. `#d4a-wz-overlay { display:flex }` l'emportait sur l'attribut `hidden` :
+✕ / Echap / clic dehors passaient hidden=true mais le voile restait. Ajout de
+`#d4a-wz-overlay[hidden] { display:none }`. Syntaxe verifiee (node --check), pas teste en navigateur (jeu en cours).
