@@ -1142,3 +1142,8 @@ les choix cliques tombaient sur le mauvais exemplaire. Correctif : addEventListe
 Reproduit puis verifie en Playwright headless (8 -> 1 panneau ; choix, fermeture, reouverture, explications OK).
 Pas lie a uBlock (meme resultat pubs bloquees ou non). Le bandeau cookies OneTrust (z 2147483645) couvre
 le panneau (z 999998) tant qu'il n'est pas accepte : normal, il faut l'accepter.
+
+## 2026-10-12 (fin) - Bilan session
+v3.57 (fermeture assistant), v3.58 (explications par etape), v3.59 (Maxroll : init unique) pousses ;
+13 et 15 confirmes chez 2 joueurs. Installeur Releve du NAS verifie a jour (hash = dist du 08/10).
+Suite : #14 retour des joueurs sur les explications ; #2/#3/#4/#5/#10 en jeu ; #11 arg4=36 ; menage research/.
