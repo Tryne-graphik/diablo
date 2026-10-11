@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.57
+// @version      3.58
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4331,6 +4331,9 @@
       #d4a-wz label.d4a-wz-choice small { display: block; opacity: .7; margin-left: 22px; }
       #d4a-wz .d4a-wz-extra label { display: flex; align-items: center; gap: 6px; margin: 6px 0; font-size: 13px; }
       #d4a-wz .d4a-wz-note { font-size: 12px; opacity: .75; }
+      #d4a-wz .d4a-help { margin-top: 10px; font-size: 12.5px; border-top: 1px solid #333; padding-top: 6px; }
+      #d4a-wz .d4a-help summary { cursor: pointer; color: #c9a227; font-weight: bold; }
+      #d4a-wz .d4a-help p { margin: 6px 0; line-height: 1.4; }
       #d4a-wz .d4a-color-row span { font-family: system-ui, sans-serif; font-size: 13px; }
       #d4a-wz-nav { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
       #d4a-wz-nav button { padding: 6px 14px; border-radius: 5px; border: 1px solid #555; background: #1c1c24; color: #eee; cursor: pointer; }
@@ -5821,6 +5824,12 @@
           <p class="d4a-wz-q">Où en es-tu avec ce build ?</p>
           ${WZ_SITUATIONS.map((o) => radio("d4a-wz-situation", o, o.id === situation)).join("")}
           <div class="d4a-wz-extra" id="d4a-wz-extra-1"></div>
+          <details class="d4a-help"><summary>ℹ️ Explications détaillées</summary>
+            <p>🌱 <b>Je monte de niveau</b> (filtre Ouvert) : toutes les Légendaires et Uniques restent visibles, pour ne rien rater pendant la progression. Seuls les objets plus faibles qui n'ont rien à voir avec le build sont cachés.</p>
+            <p>⚔ <b>Endgame</b> (filtre Strict) : ne reste visible que ce qui correspond aux stats du guide, emplacement par emplacement, plus les Mythiques, les charmes et le Codex.</p>
+            <p>🌾 <b>Farm</b> : comme Endgame, mais cache en plus tout objet non-Ancestral de puissance 850 ou plus (toutes raretés jusqu'à Unique). Pour farmer des matériaux une fois l'équipement fait.</p>
+            <p>🔱 <b>Ancestral uniquement</b> : les règles du build ne s'allument que sur les objets Ancestraux.</p>
+          </details>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Quel niveau d'exigence par emplacement ?</p>
@@ -5828,6 +5837,13 @@
           ${WZ_PRESETS.map((o) => radio("d4a-wz-preset", o, o.id === preset)).join("")}
           <p class="d4a-wz-note">Le jeu limite un filtre à 25 règles : si ça dépasse, les règles les moins exigeantes sont retirées en premier (un avertissement s'affiche).</p>
           <div class="d4a-wz-extra" id="d4a-wz-extra-2"></div>
+          <details class="d4a-help"><summary>ℹ️ Explications détaillées</summary>
+            <p>Pour chaque emplacement (casque, torse, gants...), le guide donne une liste de stats dans un ordre de priorité. Le filtre colore un objet s'il porte assez de ces stats.</p>
+            <p><b>2 niveaux</b> : le 1er niveau = objet correct, le 2e = objet meilleur, avec sa propre couleur (étape ④). Si un objet correspond aux deux, c'est la couleur du plus exigeant qui l'emporte.</p>
+            <p><b>Greater Affix (GA)</b> : stat améliorée (marquée d'une étoile en jeu). « Chasse aux GA » met une couleur à part sur les objets qui en ont un en plus des bonnes stats.</p>
+            <p>🎯 <b>Précision par emplacement</b> : une règle par emplacement, avec les stats propres à cet emplacement. Décoché, le filtre est plus simple mais moins précis.</p>
+            <p>⚠️ Le jeu limite un filtre à <b>25 règles</b>. Plus l'exigence a de niveaux, plus il y a de règles : si ça dépasse, les moins exigeantes sont retirées et un avertissement s'affiche.</p>
+          </details>
           <details id="d4a-wz-levels"><summary class="d4a-wz-note">Réglage fin : nombre d'affixes obligatoires / optionnels</summary>
             <p class="d4a-wz-note">Obligatoires = les N <b>premières</b> stats affichées pour l'emplacement (ordre du site), toutes exigées. Optionnelles = au moins M parmi les stats suivantes (0 obligatoire = n'importe lesquelles). 0 + 0 = niveau désactivé. S'applique aussi aux Uniques du build.</p>
             ${levelRow(1)}
@@ -5841,10 +5857,19 @@
           <p class="d4a-wz-note" id="d4a-wz-hide-open-note">🌱 Filtre Ouvert : Légendaires et Uniques toujours gardés.</p>
           <p class="d4a-wz-note" id="d4a-wz-hide-farm-note">🌾 Mode Farm : cache en plus tout objet non-Ancestral de puissance 850+, quelle que soit la rareté.</p>
           <p class="d4a-wz-note">✅ Toujours gardés : Mythiques, Charmes et Sceaux Légendaires+ (les Magiques/Rares aussi, sauf si 🧿 coché), améliorations du Codex, et tout objet qui correspond au build (y compris ses Uniques reconnus).</p>
+          <details class="d4a-help"><summary>ℹ️ Explications détaillées</summary>
+            <p>Chaque case cochée cache, en jeu, les objets de cette rareté <b>qui ne correspondent à aucune règle du build</b>. Un objet qui correspond au build reste toujours visible, quelle que soit sa rareté.</p>
+            <p>Exemple : avec 🟡 Rares coché, un Rare qui a 2 bonnes stats du guide reste visible (et coloré) ; un Rare sans intérêt pour le build disparaît.</p>
+            <p>Conseil : en début de partie, ne cache que ⚪ Communs et 🔵 Magiques. En endgame, cache aussi 🟡 Rares et 🟠 Légendaires hors build.</p>
+          </details>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Couleurs des objets dans le jeu</p>
           <div id="d4a-wz-colors"></div>
+          <details class="d4a-help"><summary>ℹ️ Explications détaillées</summary>
+            <p>Ces couleurs sont celles que prendra le nom de l'objet <b>au sol, en jeu</b>. Clique sur un carré pour la changer.</p>
+            <p>Ouvre « 🎨 Légende des couleurs » pour savoir quel type d'objet reçoit chaque couleur. Les Mythiques gardent toujours leur couleur d'origine.</p>
+          </details>
         </div>
         <div class="d4a-wz-step">
           <p class="d4a-wz-q">Résumé</p>
@@ -6515,11 +6540,6 @@
         <label>⭐ Uniques du build classés par <select id="d4a-uniq-grade"><option value="affixes">affixes</option><option value="ga">Greater Affix (1 / 2 / 3+)</option><option value="both">GA puis affixes</option></select></label>
         <label><input type="checkbox" id="d4a-opt-ga-any3"> 🌟 Tout objet à 3-4 GA (même hors build)</label>
         <label><input type="checkbox" id="d4a-opt-farm-mode"> 🌾 Mode Farm</label>
-        <details class="d4a-help">
-          <summary>ℹ️ En savoir plus</summary>
-          <p>🙈 Cache complètement les Légendaires/Uniques qui n'ont matché aucune règle de précision, au lieu de les laisser visibles dans la couleur par défaut ("Légendaires - Garder").</p>
-          <p>🌾 Pour une session de farm une fois que tu as assez de matériaux : cache tout objet non-Ancestral de puissance ≥850 (le plafond au niveau 70), toutes raretés jusqu'à Unique incluse - il ne reste visible que les Ancestraux du build (déjà couverts ailleurs) et les mises à jour de Codex. Active automatiquement le même comportement que "Cacher les Légendaires faibles".</p>
-        </details>
         <div class="d4a-color-row">
           <div class="d4a-tier-color"><input type="color" id="d4a-color-good" value="${COLOR_HEX_DEFAULTS.good}"><span>2 stats</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-bis" value="${COLOR_HEX_DEFAULTS.bis}"><span>3 stats</span></div>
@@ -6528,16 +6548,6 @@
           <div class="d4a-tier-color"><input type="color" id="d4a-color-codex" value="${COLOR_HEX_DEFAULTS.codex}"><span>Codex</span></div>
           <div class="d4a-tier-color"><input type="color" id="d4a-color-legendary" value="${COLOR_HEX_DEFAULTS.legendary}"><span>Légendaires</span></div>
         </div>
-        <details class="d4a-help">
-          <summary>ℹ️ En savoir plus sur les tiers</summary>
-          <p>⚠️ Le jeu limite un filtre à 25 règles : au plus 2 tiers sur les 4 peuvent être actifs à la fois (Tier A et Tier B ci-dessus) - choisis "Aucun" pour Tier B pour n'en garder qu'un seul et libérer de la marge. Quand le panneau "Stat Priority" de Maxroll est détecté, chaque emplacement reçoit une règle pour chacun des tiers choisis, le plus élevé qui correspond l'emporte.</p>
-          <div class="d4a-tier-grid">
-            <p><strong>Tier 2</strong><br>Le Rare a 2 des affixes prioritaires de l'emplacement.</p>
-            <p><strong>Tier 3</strong><br>3 affixes prioritaires.</p>
-            <p><strong>Tier 4</strong><br>Les 4 affixes prioritaires connus pour cet emplacement.</p>
-            <p><strong>Tier 5</strong><br>2+ affixes prioritaires ET au moins un Greater Affix.</p>
-          </div>
-        </details>
         <details class="d4a-legend-details">
           <summary>🎨 Légende des couleurs</summary>
           <div class="d4a-legend">

@@ -1128,3 +1128,9 @@ Suite : confirmer v3.56 sur IB dans Tampermonkey, tester en jeu v3.53/v3.55 (bou
 Signale par 2 utilisateurs. `#d4a-wz-overlay { display:flex }` l'emportait sur l'attribut `hidden` :
 ✕ / Echap / clic dehors passaient hidden=true mais le voile restait. Ajout de
 `#d4a-wz-overlay[hidden] { display:none }`. Syntaxe verifiee (node --check), pas teste en navigateur (jeu en cours).
+
+## 2026-10-11 - v3.58 : explications detaillees dans "Creer mon filtre"
+Les joueurs etaient perdus : les blocs "En savoir plus" etaient restes dans l'ancien panneau d'options
+(cache depuis l'assistant v3.4x) et parlaient encore des Tier A/B. Supprimes ; a la place, un
+"Explications detaillees" repliable aux etapes 1 a 4 (situations + Ancestral, niveaux/GA/par emplacement/25 regles,
+masquage avec exemple, couleurs). node --check OK, pas vu en navigateur (jeu en cours).

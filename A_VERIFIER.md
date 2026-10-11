@@ -42,6 +42,9 @@ affichée est bien 3.47.
       personnes, poussé sur GitHub) : mettre à jour Tampermonkey (« Rechercher des mises à
       jour », version 3.57), ouvrir l'assistant de filtre puis le fermer avec ✕, Échap et
       clic à côté : le voile sombre doit disparaître. Confirmer aussi chez les 2 personnes.
+- [ ] **14. Explications dans « Créer mon filtre »** (v3.58, 2026-10-11) : à chaque étape 1 à 4,
+      « ℹ️ Explications détaillées » se déplie et le texte est lisible et juste. Demander aux
+      2 joueurs si c'est plus clair.
 
 ## Par moi (Claude)
 
