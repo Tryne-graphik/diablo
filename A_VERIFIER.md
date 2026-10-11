@@ -45,6 +45,9 @@ affichée est bien 3.47.
 - [ ] **14. Explications dans « Créer mon filtre »** (v3.58, 2026-10-11) : à chaque étape 1 à 4,
       « ℹ️ Explications détaillées » se déplie et le texte est lisible et juste. Demander aux
       2 joueurs si c'est plus clair.
+- [ ] **15. Maxroll : un seul panneau** (v3.59, 2026-10-12) : sur un guide Maxroll, le panneau
+      n'apparaît qu'une fois (plus de « Retour d'expérience » en double) et les choix de
+      « Créer mon filtre » se cliquent. Confirmer chez les 2 joueurs.
 
 ## Par moi (Claude)
 

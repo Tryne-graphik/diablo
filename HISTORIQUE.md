@@ -1134,3 +1134,11 @@ Les joueurs etaient perdus : les blocs "En savoir plus" etaient restes dans l'an
 (cache depuis l'assistant v3.4x) et parlaient encore des Tier A/B. Supprimes ; a la place, un
 "Explications detaillees" repliable aux etapes 1 a 4 (situations + Ancestral, niveaux/GA/par emplacement/25 regles,
 masquage avec exemple, couleurs). node --check OK, pas vu en navigateur (jeu en cours).
+
+## 2026-10-12 - v3.59 : panneaux empiles sur Maxroll (clics morts dans "Creer mon filtre")
+Maxroll (util-*.js, fonction O1) re-declenche DOMContentLoaded sur document pour ses scripts paresseux :
+notre init() tournait 8 fois -> 8 panneaux et 8 assistants de filtre avec les memes ids, superposes ;
+les choix cliques tombaient sur le mauvais exemplaire. Correctif : addEventListener(..., { once: true }).
+Reproduit puis verifie en Playwright headless (8 -> 1 panneau ; choix, fermeture, reouverture, explications OK).
+Pas lie a uBlock (meme resultat pubs bloquees ou non). Le bandeau cookies OneTrust (z 2147483645) couvre
+le panneau (z 999998) tant qu'il n'est pas accepte : normal, il faut l'accepter.
