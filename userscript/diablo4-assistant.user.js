@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.59
+// @version      3.60
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -3424,7 +3424,7 @@
   async function addMaxrollWeaponTypeIds(entries) {
     const weaponEntries = entries.filter((e) => (MAXROLL_PLANNER_WEAPON_SLOTS[e.slot] && !e.typeIds) || (MAXROLL_PLANNER_RUNEWORD_SLOTS[e.slot] && e.itemName));
     if (!weaponEntries.length) return;
-    const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
+    const pageHtml = location.pathname + " " + document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
     const plannerId = Array.from(pageHtml.matchAll(/d4\/planner\/([a-z0-9]{4,})/gi), (m) => m[1]).find((id) => id.toLowerCase() !== "builds");
     const planner = plannerId && (await fetchMaxrollPlannerData(plannerId));
     if (!planner || !Array.isArray(planner.profiles) || !planner.items) return;
@@ -4699,6 +4699,9 @@
       const raw = await gmGet(`https://planners.maxroll.gg/profiles/d4/${plannerId}`);
       const outer = JSON.parse(raw);
       result = JSON.parse(outer.data);
+      // v3.60: build name/class, only in the outer wrapper - used as the title on a bare planner page.
+      result.plannerName = outer.name;
+      result.plannerClass = outer.class;
     } catch (e) {
       result = null; // network error, unexpected shape, ... - caller falls back to the DOM scrape
     }
@@ -4773,7 +4776,7 @@
     // seulement dans window.__remixContext (peuple par leur framework Remix
     // apres coup, pas visible dans le HTML serialise). outerHTML reste scanne
     // en premier pour ne rien casser si Maxroll revient en arriere.
-    const pageHtml = document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
+    const pageHtml = location.pathname + " " + document.documentElement.outerHTML + (window.__remixContext ? JSON.stringify(window.__remixContext) : "");
     const plannerIds = new Set();
     const idRe = /d4\/planner\/([a-z0-9]{4,})/gi;
     let idMatch;
@@ -4835,7 +4838,11 @@
 
     if (skillsEn.length === 0 && itemsEn.length === 0) return null;
 
+    // v3.60: a bare planner page's document.title is the generic "D4planner Diablo 4...".
+    const onPlannerPage = /\/d4\/planner\//.test(location.pathname);
     return {
+      title: onPlannerPage ? plannerData?.plannerName : undefined,
+      gameClass: onPlannerPage ? String(plannerData?.plannerClass || "").toLowerCase() || undefined : undefined,
       sourceLabel: "Maxroll",
       sourceUrl: plannerUrl,
       skillsEn,
@@ -4966,8 +4973,8 @@
   // display) - the slow, shared part (background tabs). Returns null if
   // no InfinityBuilds match was found at all (nothing further to show).
   async function resolveTranslation() {
-    const title = guessTitle();
-    const gameClass = guessClass();
+    let title = guessTitle();
+    let gameClass = guessClass();
 
     let native = null;
     try {
@@ -4976,6 +4983,8 @@
       // ignore - falls back to InfinityBuilds matching below
     }
     if (native) {
+      title = native.title || title;
+      gameClass = native.gameClass || gameClass;
       return {
         title,
         match: { title, url: native.sourceUrl },
@@ -6473,7 +6482,8 @@
   // was widened later the same day to run everywhere.
   function isBuildDetailPage() {
     const p = location.pathname;
-    return /\/builds?\//.test(p) || /\/build-guides\//.test(p);
+    // v3.60: Maxroll planner pages (/d4/planner/<id>) too, not the "builds" nav list.
+    return /\/builds?\//.test(p) || /\/build-guides\//.test(p) || /\/d4\/planner\/(?!builds)[a-z0-9]{4,}/i.test(p);
   }
 
   function init() {

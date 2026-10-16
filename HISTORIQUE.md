@@ -1147,3 +1147,15 @@ le panneau (z 999998) tant qu'il n'est pas accepte : normal, il faut l'accepter.
 v3.57 (fermeture assistant), v3.58 (explications par etape), v3.59 (Maxroll : init unique) pousses ;
 13 et 15 confirmes chez 2 joueurs. Installeur Releve du NAS verifie a jour (hash = dist du 08/10).
 Suite : #14 retour des joueurs sur les explications ; #2/#3/#4/#5/#10 en jeu ; #11 arg4=36 ; menage research/.
+
+## 2026-10-16 - v3.60 : pages planner Maxroll (/d4/planner/<id>) non reconnues
+`isBuildDetailPage()` ne connaissait que /build(s)/ et /build-guides/ : sur un planner seul, les boutons
+build etaient caches. Ajout du motif /d4/planner/<id> ; l'id est aussi lu dans location.pathname (absent du
+HTML du planner). Le titre de ces pages est generique ("D4planner Diablo 4...") : nom et classe du build
+pris dans l'enveloppe de l'API planner (`outer.name` / `outer.class`). Verifie en Chrome headless avec
+stubs GM sur maxroll.gg/d4/planner/d54csk0q : 22 regles, filtre "[MR] Dance Knives - Si S", classe rogue.
+Pousse.
+Aussi : filtre manuel de l'utilisateur "Cri ardent endgame (s15)" (Uniques seuls, notes 4/3/2 affixes + Ancestral,
+puis Codex + cacher non-Ancestral) complete a la main a 25 regles, valide en jeu. Il contient l'Unique 0x2790d1
+(probablement la Flamme battante de Moloch en S15 ; notre table a 0x26e5ea) - a confirmer. Idee en attente :
+option "Uniques du build seulement" dans "Creer mon filtre".

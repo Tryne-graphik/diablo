@@ -65,6 +65,9 @@ affichée est bien 3.47.
 - [ ] **11. Bit `arg4=36`** vu une fois dans un filtre Druide (faible risque,
       à revoir si on retrouve un filtre qui l'utilise).
 
+- [ ] **16. Planner Maxroll** (v3.60, 2026-10-16, poussé) : sur `maxroll.gg/d4/planner/<id>`, les boutons build
+      apparaissent et « Créer mon filtre » porte le nom du build.
+
 ## Ménage (toi)
 
 - [x] Supprimer `research/diablofilter-bulk-decode-latest.json` et (deja absents le 2026-10-16)
