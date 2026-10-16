@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.60
+// @version      3.61
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -5284,6 +5284,9 @@
   // running Chrome's page translation afterward, on the same tab, doesn't
   // overwrite these precise names with a generic (and often wrong, for
   // proper nouns) translation.
+  // v3.61: rich-text editors (Lexical: Maxroll planner notes) undo any outside DOM change - translating
+  // inside them ping-ponged with the observer below in an endless microtask loop and froze the page.
+  const NO_TRANSLATE_SELECTOR = '#d4a-column, #d4a-toggle-btn, [translate="no"], [data-lexical-editor]';
   function translateTextNode(node, pairs) {
     const original = node.nodeValue;
     if (!original) return false;
@@ -5343,18 +5346,18 @@
 
     if (root.nodeType === Node.TEXT_NODE) {
       const parentEl = root.parentElement;
-      if (parentEl && parentEl.closest('#d4a-column, #d4a-toggle-btn, [translate="no"]')) return 0;
+      if (parentEl && parentEl.closest(NO_TRANSLATE_SELECTOR)) return 0;
       return translateTextNode(root, pairs) ? 1 : 0;
     }
     if (root.nodeType !== Node.ELEMENT_NODE) return 0;
     if (IGNORED_TAGS.has(root.tagName)) return 0;
-    if (root.closest && root.closest('#d4a-column, #d4a-toggle-btn, [translate="no"]')) return 0;
+    if (root.closest && root.closest(NO_TRANSLATE_SELECTOR)) return 0;
 
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode(node) {
         const tag = node.parentElement ? node.parentElement.tagName : "";
         if (IGNORED_TAGS.has(tag)) return NodeFilter.FILTER_REJECT;
-        if (node.parentElement && node.parentElement.closest('#d4a-column, #d4a-toggle-btn, [translate="no"]')) return NodeFilter.FILTER_REJECT;
+        if (node.parentElement && node.parentElement.closest(NO_TRANSLATE_SELECTOR)) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       },
     });
@@ -5467,7 +5470,7 @@
   function isGoogleTranslatableTextNode(node) {
     const tag = node.parentElement ? node.parentElement.tagName : "";
     if (IGNORED_TAGS.has(tag)) return false;
-    if (node.parentElement && node.parentElement.closest('#d4a-column, #d4a-toggle-btn, [translate="no"]')) return false;
+    if (node.parentElement && node.parentElement.closest(NO_TRANSLATE_SELECTOR)) return false;
     const text = node.nodeValue.trim();
     return text.length >= 2 && /[a-zA-Z]/.test(text);
   }
@@ -5482,7 +5485,7 @@
       return isGoogleTranslatableTextNode(root) ? [root] : [];
     }
     if (root.nodeType !== Node.ELEMENT_NODE) return [];
-    if (root.closest && root.closest('#d4a-column, #d4a-toggle-btn, [translate="no"]')) return [];
+    if (root.closest && root.closest(NO_TRANSLATE_SELECTOR)) return [];
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode(node) { return isGoogleTranslatableTextNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; },
     });

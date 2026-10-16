@@ -1159,3 +1159,11 @@ Aussi : filtre manuel de l'utilisateur "Cri ardent endgame (s15)" (Uniques seuls
 puis Codex + cacher non-Ancestral) complete a la main a 25 regles, valide en jeu. Il contient l'Unique 0x2790d1
 (probablement la Flamme battante de Moloch en S15 ; notre table a 0x26e5ea) - a confirmer. Idee en attente :
 option "Uniques du build seulement" dans "Creer mon filtre".
+
+## 2026-10-17 - v3.61 : "Traduire" gele un planner Maxroll (maxroll.gg/d4/planner/d54csk0q#6)
+Les notes du planner sont un editeur Lexical (`[data-lexical-editor]`, lecture seule) qui annule toute
+modification exterieure du DOM : notre MutationObserver retraduisait ("Spirit" -> "Esprit"), Lexical remettait
+l'anglais, etc. Boucle de microtaches sans fin -> page figee (Chrome headless plantait des le demarrage de
+l'observateur). Correctif : `[data-lexical-editor]` exclu de la traduction ; le selecteur d'exclusion (5 copies)
+regroupe dans NO_TRANSLATE_SELECTOR. Verifie en Chrome headless : plus de gel, 79 noms + 231 blocs Google traduits,
+notes laissees en anglais (limite connue).

@@ -68,6 +68,9 @@ affichée est bien 3.47.
 - [ ] **16. Planner Maxroll** (v3.60, 2026-10-16, poussé) : sur `maxroll.gg/d4/planner/<id>`, les boutons build
       apparaissent et « Créer mon filtre » porte le nom du build.
 
+- [ ] **17. Traduire sur un planner Maxroll** (v3.61, 2026-10-17) : la page ne gèle plus ; les notes de
+      l'auteur restent en anglais (éditeur protégé).
+
 ## Ménage (toi)
 
 - [x] Supprimer `research/diablofilter-bulk-decode-latest.json` et (deja absents le 2026-10-16)
