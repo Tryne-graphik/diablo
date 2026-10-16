@@ -67,5 +67,5 @@ affichée est bien 3.47.
 
 ## Ménage (toi)
 
-- [ ] Supprimer `research/diablofilter-bulk-decode-latest.json` et
+- [x] Supprimer `research/diablofilter-bulk-decode-latest.json` et (deja absents le 2026-10-16)
       `research/__pycache__` (créés par erreur le 2026-10-01).
