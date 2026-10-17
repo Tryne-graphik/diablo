@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.62
+// @version      3.63
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1730,17 +1730,34 @@
     line.append(label, filterCopyButtons(mine));
   }
 
+  // v3.63 : planner Maxroll nu (maxroll.gg/d4/planner/<id>) : ni la classe ni le nom du build ne sont dans l'URL ou
+  // le titre ("D4planner Diablo 4 Character...") -> plus de case favori / Mon rang / liens. L'API du planner les
+  // donne (fetchMaxrollPlannerData, deja utilisee). Une seule entree favori par planner : lien sans #variante.
+  function plannerIdFromUrl() {
+    const m = location.hostname.endsWith("maxroll.gg") && location.pathname.match(/^\/d4\/planner\/([a-z0-9]{4,})/i);
+    return m && m[1].toLowerCase() !== "builds" ? m[1] : null;
+  }
+
   async function renderBuildInfo() {
     const section = document.getElementById("d4a-buildinfo-section");
     if (!section) return;
-    const title = guessTitle();
-    const gameClass = guessClass();
+    let title = guessTitle();
+    let gameClass = guessClass();
+    let favUrl = location.href;
+    const plannerId = plannerIdFromUrl();
+    if (plannerId) {
+      const planner = await fetchMaxrollPlannerData(plannerId);
+      const cls = (planner?.plannerClass || "").toLowerCase();
+      if (CLASS_LABELS_FR[cls]) gameClass = cls;
+      if (planner?.plannerName) title = planner.plannerName;
+      favUrl = location.origin + location.pathname;
+    }
     if (!gameClass) {
       section.innerHTML = "";
       return;
     }
 
-    const favChecked = isFavorited(gameClass, location.href);
+    const favChecked = isFavorited(gameClass, favUrl);
     const favHtml = `<div style="margin-top:4px;text-align:center;"><label style="cursor:pointer;"><input type="checkbox" id="d4a-fav-checkbox" ${favChecked ? "checked" : ""}> ⭐ Garder ce build dans mes favoris</label></div>`;
 
     section.innerHTML = `
@@ -1755,7 +1772,7 @@
     const favCheckbox = document.getElementById("d4a-fav-checkbox");
     if (favCheckbox) {
       favCheckbox.addEventListener("change", (e) => {
-        setFavorite(gameClass, title, location.href, e.target.checked);
+        setFavorite(gameClass, title, favUrl, e.target.checked);
         renderMyBuildsTable();
       });
     }
