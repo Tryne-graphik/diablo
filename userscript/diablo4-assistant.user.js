@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.64
+// @version      3.65
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1750,6 +1750,8 @@
       const cls = (planner?.plannerClass || "").toLowerCase();
       if (CLASS_LABELS_FR[cls]) gameClass = cls;
       if (planner?.plannerName) title = planner.plannerName;
+      // v3.65 : planner perso sans nom (test 17/10) -> titre lisible dans "Mes Builds" au lieu de "D4planner Diablo 4...".
+      else if (CLASS_LABELS_FR[cls]) title = `Planner ${CLASS_LABELS_FR[cls]} ${plannerId}`;
       favUrl = location.origin + location.pathname;
     }
     if (!gameClass) {
@@ -4710,7 +4712,10 @@
     const releve = await oeilGet("/releve");
     const owned = new Set([...(releve?.gear || []).map((g) => farmNorm(g.name)),
                            ...(releve?.talisman?.charms || []).map(farmNorm)]);
-    const groups = farmGroups(native && native.itemsEn, owned);
+    let groups = farmGroups(native && native.itemsEn, owned);
+    // v3.65 (test 17/10, planner perso : "aucun Unique") : variante affichee sans Unique reconnu -> objets de toutes
+    // les variantes du planner (API, noms anglais fiables).
+    if (!groups.length && native && native.itemsEnWide) groups = farmGroups(native.itemsEnWide, owned);
     if (!groups.length) {
       el.textContent = native ? "Aucun Unique dans ce build." : "Uniques non lisibles sur ce site (Maxroll, kami-labs et InfinityBuilds seulement).";
       return;
