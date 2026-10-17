@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.61
+// @version      3.62
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -33,6 +33,7 @@
 // @connect      helltides.com
 // @connect      script.google.com
 // @connect      script.googleusercontent.com
+// @connect      127.0.0.1
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
 // @grant        GM_setValue
@@ -4189,6 +4190,44 @@
   // ---------------------------------------------------------------------
   // UI - unchanged in spirit from v1 (floating button, top-left panel).
   // ---------------------------------------------------------------------
+  // 2026-10-17 (v3.62, nuit 8) : pont local de L'Oeil des Horadrims (127.0.0.1:8765, ouvert seulement quand l'Oeil
+  // tourne). /theme : meme theme que l'Oeil (24 themes, Graphite par defaut) ; le dernier theme recu est garde
+  // (GM_setValue) pour que le panneau reste au theme choisi meme Oeil ferme. /etat : ligne "Oeil connecte".
+  const OEIL = "http://127.0.0.1:8765";
+  function oeilGet(path) {
+    return new Promise((resolve) => GM_xmlhttpRequest({
+      method: "GET", url: OEIL + path, timeout: 1500,
+      onload: (r) => { try { resolve(r.status === 200 ? JSON.parse(r.responseText) : null); } catch (e) { resolve(null); } },
+      onerror: () => resolve(null), ontimeout: () => resolve(null),
+    }));
+  }
+  function applyOeilTheme(css) {
+    if (!css || !css.startsWith(":root{")) return;
+    let el = document.getElementById("d4a-theme");
+    if (!el) { el = document.createElement("style"); el.id = "d4a-theme"; document.head.appendChild(el); }
+    // Variables posees sur NOS elements seulement (pas sur :root de la page du site).
+    el.textContent = css.replace(":root", "#d4a-toggle-btn, #d4a-column, #d4a-item-tooltip") + `
+      #d4a-toggle-btn, #d4a-column, #d4a-item-tooltip { background: var(--fond); color: var(--texte); border-color: var(--bordure); }
+      #d4a-column-title, #d4a-column a, #d4a-buildinfo-section a { color: var(--accent); }
+      #d4a-column > button, .d4a-action-grid button, #d4a-column button.d4a-toggle-text { background: var(--bouton); color: var(--texte-bouton); }
+      #d4a-btn-translate.d4a-active, #d4a-column button.d4a-copy { background: var(--accent); color: var(--texte-accent); }
+      #d4a-buildinfo-section, #d4a-column .d4a-close, #d4a-oeil-etat { color: var(--discret); }
+      #d4a-column .d4a-chip, #d4a-column textarea { background: var(--bloc); border-color: var(--bordure); color: var(--texte); }
+      #d4a-column h3, #d4a-version { color: var(--texte); }`;
+  }
+  async function connectOeil(oeilBtn) {
+    applyOeilTheme(GM_getValue("d4a-oeil-theme", ""));
+    const [etat, theme] = await Promise.all([oeilGet("/etat"), oeilGet("/theme")]);
+    if (theme && theme.css) { GM_setValue("d4a-oeil-theme", theme.css); applyOeilTheme(theme.css); }
+    if (!etat || etat.app !== "oeil-des-horadrims") return;
+    const line = document.createElement("div");
+    line.id = "d4a-oeil-etat";
+    line.style.cssText = "font-size:12px;margin:-2px 0 4px;";
+    line.textContent = "👁 Oeil connecte" + (etat.releve ? ` : ${etat.classe || "?"} ${etat.personnage || ""}` : " (aucun releve)")
+      + (theme ? ` · theme ${theme.nom}` : "");
+    oeilBtn.after(line);
+  }
+
   function injectStyles() {
     const style = document.createElement("style");
     style.textContent = `
@@ -6801,6 +6840,7 @@
     const oeilBtn = document.getElementById("d4a-btn-oeil");
     if (location.hostname.includes("talion")) oeilBtn.hidden = true;
     oeilBtn.onclick = () => { location.href = "oeil-horadrims://guide?url=" + encodeURIComponent(location.href); };
+    connectOeil(oeilBtn);
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
     // filtre avant de le lancer" - options for the Strict filter, persisted
