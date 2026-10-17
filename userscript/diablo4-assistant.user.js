@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.63
+// @version      3.64
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4364,8 +4364,13 @@
       .d4a-tier-badge { display: inline-block; font-weight: 700; font-size: 11px; padding: 1px 5px; border-radius: 3px; color: #fff; margin-right: 3px; }
       .d4a-rank-links { font-size: 12px; }
       .d4a-rank-links a { color: #d4af37; margin-right: 4px; }
-      #d4a-mybuilds-section { border-top: 1px solid #333; padding-top: 8px; }
-      #d4a-mybuilds-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
+      #d4a-mybuilds-section, #d4a-farm-section { border-top: 1px solid #333; padding-top: 8px; }
+      #d4a-farm-tbl { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12px; }
+      #d4a-farm-tbl td { padding: 3px 4px; border-bottom: 1px solid #222; vertical-align: top; }
+      #d4a-farm-tbl td:first-child { color: #d4af37; width: 42%; }
+      #d4a-farm-tbl tr.d4a-farm-done td { opacity: 0.5; }
+      #d4a-farm-result .d4a-farm-note { font-size: 11px; color: #9aa0ab; margin-top: 4px; }
+      #d4a-mybuilds-section > details > summary, #d4a-farm-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-gsearch-section { border-top: 1px solid #333; padding-top: 8px; margin-top: 8px; }
       #d4a-gsearch-section > details > summary { color: #eee !important; font-size: 14px !important; font-weight: bold; font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif !important; letter-spacing: 0.3px; }
       #d4a-gsearch-form { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
@@ -4648,6 +4653,71 @@
       }
     }
     return itemSourceLookup.get((en || "").toLowerCase()) || null;
+  }
+
+  // v3.64 : "Ou farmer les Uniques de ce build" (demande 17/10) : Uniques du build affiche (extractNativeDetail,
+  // planner Maxroll compris) groupes par BOSS (UNIQUE_ITEM_SOURCES) ; ✔ = deja dans mon releve (pont de l'Oeil,
+  // s'il est ouvert) ; boss deja tout ✔ en fin de liste. Calcule a la 1re ouverture de la section seulement.
+  // ponytail: la table talion.tv n'a pas les objets de la saison 15 (Pierre de Jordanie, Torche infernale...) ->
+  // "Source inconnue" ; seule la Couronne de Leoric est completee ici (allthings.how : butin general). A regenerer
+  // (scripts/build_talion_uniques_dictionary.py + sync_unique_item_sources.py) quand talion.tv sera a jour.
+  const WORLD_DROP = "Butin monde (n'importe quel boss/activité)";
+  const EXTRA_ITEM_SOURCES = { "Leoric's Crown": { bossFr: [WORLD_DROP], uber: false } };
+  const UNKNOWN_SOURCE = "Source inconnue (nouveauté saison 15 ?)";
+  let uniqueNamesEn = null, frByEn = null;
+  const farmNorm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[’`]/g, "'").toLowerCase().trim();
+  const farmEsc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // Noms FR d'un Unique, le nom du jeu d'abord (kind "unique_item", repris de talion.tv) : le dictionnaire a parfois
+  // une autre traduction en "item" ("Dague egaree d'Etna" contre "Dague perdue d'Etna" en jeu).
+  function frItemNames(en) {
+    if (!frByEn) {
+      frByEn = new Map();
+      const rank = { unique_item: 0, item: 1 };
+      for (const e of [...FR_EN_DICTIONARY].sort((a, b) => (rank[a.kind] ?? 2) - (rank[b.kind] ?? 2))) {
+        const k = e.en.toLowerCase();
+        if (!frByEn.has(k)) frByEn.set(k, []);
+        if (!frByEn.get(k).some((f) => farmNorm(f) === farmNorm(e.fr))) frByEn.get(k).push(e.fr.replace(/’/g, "'"));
+      }
+    }
+    return frByEn.get(en.toLowerCase()) || [en];
+  }
+  // itemsEn -> [{boss, items: [{fr, uber, owned}], missing}] ; ownedFr : noms FR normalises (farmNorm) de mon releve.
+  function farmGroups(itemsEn, ownedFr) {
+    if (!uniqueNamesEn) uniqueNamesEn = new Set(Object.values(UNIQUE_BY_INTERNAL_NAME).map((n) => n.toLowerCase()));
+    const groups = new Map();
+    for (const en of new Set(itemsEn || [])) {
+      const info = lookupItemSource(en) || EXTRA_ITEM_SOURCES[en];
+      if (!info && !uniqueNamesEn.has(en.toLowerCase())) continue; // aspect, competence... : pas un Unique
+      const names = frItemNames(en);
+      const owned = names.some((f) => ownedFr.has(farmNorm(f)));
+      for (const boss of info && info.bossFr.length ? info.bossFr : [UNKNOWN_SOURCE]) {
+        if (!groups.has(boss)) groups.set(boss, []);
+        groups.get(boss).push({ fr: names[0], uber: Boolean(info && info.uber), owned });
+      }
+    }
+    const generic = (b) => (b === WORLD_DROP ? 1 : b === UNKNOWN_SOURCE ? 2 : 0);
+    return [...groups.entries()]
+      .map(([boss, items]) => ({ boss, items, missing: items.filter((i) => !i.owned).length }))
+      .sort((a, b) => (a.missing === 0) - (b.missing === 0) || generic(a.boss) - generic(b.boss)
+        || b.missing - a.missing || a.boss.localeCompare(b.boss));
+  }
+  async function renderFarmSection() {
+    const el = document.getElementById("d4a-farm-result");
+    if (!el) return;
+    el.textContent = "Recherche des Uniques du build...";
+    let native = null;
+    try { native = await extractNativeDetail(); } catch (e) { native = null; }
+    const releve = await oeilGet("/releve");
+    const owned = new Set([...(releve?.gear || []).map((g) => farmNorm(g.name)),
+                           ...(releve?.talisman?.charms || []).map(farmNorm)]);
+    const groups = farmGroups(native && native.itemsEn, owned);
+    if (!groups.length) {
+      el.textContent = native ? "Aucun Unique dans ce build." : "Uniques non lisibles sur ce site (Maxroll, kami-labs et InfinityBuilds seulement).";
+      return;
+    }
+    el.innerHTML = `<table id="d4a-farm-tbl">${groups.map((g) => `<tr${g.missing ? "" : ' class="d4a-farm-done"'}><td>${farmEsc(g.boss)}</td><td>${
+      g.items.map((i) => farmEsc(i.fr) + (i.uber ? " ⚜" : "") + (i.owned ? " ✔" : "")).join(", ")}</td></tr>`).join("")}</table>
+      <div class="d4a-farm-note">⚜ objet mythique (boss uber)${releve ? " · ✔ déjà dans ton relevé (L'Oeil)" : " · ouvre L'Oeil des Horadrims pour cocher ce que tu as déjà"}</div>`;
   }
 
   async function extractKamiLabsDetail() {
@@ -6639,6 +6709,12 @@
           <div id="d4a-mybuilds-result"></div>
         </details>
       </div>
+      <div id="d4a-farm-section">
+        <details id="d4a-farm-details">
+          <summary>🗡 Où farmer les Uniques de ce build</summary>
+          <div id="d4a-farm-result"></div>
+        </details>
+      </div>
       <div id="d4a-gsearch-section">
         <details>
           <summary>🔎 Recherche Google</summary>
@@ -6858,6 +6934,10 @@
     if (location.hostname.includes("talion")) oeilBtn.hidden = true;
     oeilBtn.onclick = () => { location.href = "oeil-horadrims://guide?url=" + encodeURIComponent(location.href); };
     connectOeil(oeilBtn);
+    const farmDetails = document.getElementById("d4a-farm-details");
+    if (farmDetails) farmDetails.addEventListener("toggle", () => {
+      if (farmDetails.open && !farmDetails.dataset.done) { farmDetails.dataset.done = "1"; renderFarmSection(); }
+    });
 
     // 2026-09-22: "peut-etre créer des cases à cocher pour personnaliser le
     // filtre avant de le lancer" - options for the Strict filter, persisted
