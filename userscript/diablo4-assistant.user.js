@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.65
+// @version      3.66
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -4642,6 +4642,21 @@
     return enToFrLookup.get(en.toLowerCase()) || en;
   }
 
+  // v3.66 (capture du 17/10 : "Aucun Unique" sur un planner affiche en Francais) : Maxroll en FR ecrit les noms
+  // d'objets en francais dans la page ("Dague perdue d'Etna") alors que tout le reste compare des noms anglais.
+  // FR -> EN par le meme dictionnaire ; un nom deja anglais (ou inconnu) est rendu tel quel.
+  let frToEnLookup = null;
+  function lookupEn(fr) {
+    if (!frToEnLookup) {
+      frToEnLookup = new Map();
+      for (const entry of FR_EN_DICTIONARY) {
+        const key = farmNorm(entry.fr);
+        if (key && entry.en && !frToEnLookup.has(key)) frToEnLookup.set(key, entry.en);
+      }
+    }
+    return frToEnLookup.get(farmNorm(fr)) || fr;
+  }
+
   let itemSourceLookup = null;
 
   // Returns {bossFr: string[], uber: boolean} for a known Unique's English
@@ -4954,7 +4969,7 @@
     // docstring), planner data only fills in if the DOM read came back
     // completely empty. Used wherever the RIGHT variant matters, not just
     // any variant (the loot filter's Unique-matching fallback).
-    const domItems = await domItemsPromise;
+    const domItems = (await domItemsPromise).map(lookupEn);
     const plannerData = await plannerDataPromise;
     const plannerItems = extractMaxrollEquipmentFromPlannerData(plannerData);
     const itemsEn = domItems.length ? domItems : plannerItems.length ? plannerItems : meta && Array.isArray(meta.items) ? meta.items : [];

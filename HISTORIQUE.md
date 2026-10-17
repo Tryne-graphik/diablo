@@ -1167,3 +1167,9 @@ l'anglais, etc. Boucle de microtaches sans fin -> page figee (Chrome headless pl
 l'observateur). Correctif : `[data-lexical-editor]` exclu de la traduction ; le selecteur d'exclusion (5 copies)
 regroupe dans NO_TRANSLATE_SELECTOR. Verifie en Chrome headless : plus de gel, 79 noms + 231 blocs Google traduits,
 notes laissees en anglais (limite connue).
+
+## 2026-10-17 (fin) - Bilan session
+v3.60 (planner Maxroll reconnu, nom/classe via API) et v3.61 (Traduire ne gele plus : editeur Lexical exclu) pousses.
+Filtre manuel "Cri ardent endgame (s15)" (25 regles, Uniques Ultra Speed + Wendigo Brand) valide en jeu.
+Suite : confirmer 0x2790d1 (Flamme de Moloch S15 ?) et mettre a jour UNIQUE_ITEM_IDS ; option "Uniques du build
+seulement" (+ affixes a cocher par Unique) dans "Creer mon filtre" ; A_VERIFIER #14, #16, #17, #2-#5, #10, #11.
