@@ -1177,4 +1177,5 @@ seulement" (+ affixes a cocher par Unique) dans "Creer mon filtre" ; A_VERIFIER 
 ## 2026-10-18 - v3.67 : "Mes Builds" envoyes a l'extension SideBar
 `pushMyBuildsToSidebar()` (au chargement + a chaque favori coche/decoche) envoie les favoris par classe a l'extension Chrome
 SideBar (E:/DevProject/SideBar, ID en dur `SIDEBAR_ID`) via `unsafeWindow.chrome.runtime.sendMessage` ; sans l'extension, rien.
-Teste : Playwright sans fenetre (GM simules, maxroll.gg) -> SideBar recoit et affiche le build. PAS teste : vrai Chrome + Tampermonkey. Non pousse.
+Teste : Playwright sans fenetre (GM simules) puis vrai Chrome + Tampermonkey 5.5.1 (MAJ 3.64 -> 3.67 depuis un serveur local) :
+les 2 favoris (Voleur/Maxroll, Demoniste/InfinityBuilds) affiches dans SideBar ; boutons des sites OK. Non pousse.
