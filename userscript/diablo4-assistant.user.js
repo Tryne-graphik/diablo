@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.66
+// @version      3.67
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -1562,7 +1562,22 @@
       return; // unchecking a build that wasn't the favorited one for its class - nothing to do
     }
     GM_setValue(MY_BUILDS_KEY, JSON.stringify(all));
+    pushMyBuildsToSidebar();
   }
+
+  // 2026-10-18 (v3.67) : "Mes Builds" envoyes a l'extension Chrome SideBar (panneau lateral,
+  // E:/DevProject/SideBar) au chargement de chaque page de build et a chaque favori coche/decoche.
+  // chrome.runtime.sendMessage n'existe sur la page que si SideBar est installee : sinon rien.
+  const SIDEBAR_ID = "pehcomonbbdeofffncancicelkcbgldi";
+  function pushMyBuildsToSidebar() {
+    const rt = unsafeWindow.chrome && unsafeWindow.chrome.runtime;
+    if (!rt || !rt.sendMessage) return;
+    const builds = Object.entries(getMyBuilds()).map(([gameClass, b]) => ({
+      gameClass, classLabel: CLASS_LABELS_FR[gameClass] || gameClass, title: b.title, url: b.url, source: b.source, at: b.visitedAt,
+    }));
+    try { rt.sendMessage(SIDEBAR_ID, { type: "d4builds", builds }, () => void rt.lastError); } catch (e) { /* extension absente */ }
+  }
+  pushMyBuildsToSidebar();
 
   // 2026-09-27 REWRITE: real user request - a table of every remembered
   // build (one per class) at once, each with its site, a reopen link, and

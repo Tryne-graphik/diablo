@@ -1173,3 +1173,8 @@ v3.60 (planner Maxroll reconnu, nom/classe via API) et v3.61 (Traduire ne gele p
 Filtre manuel "Cri ardent endgame (s15)" (25 regles, Uniques Ultra Speed + Wendigo Brand) valide en jeu.
 Suite : confirmer 0x2790d1 (Flamme de Moloch S15 ?) et mettre a jour UNIQUE_ITEM_IDS ; option "Uniques du build
 seulement" (+ affixes a cocher par Unique) dans "Creer mon filtre" ; A_VERIFIER #14, #16, #17, #2-#5, #10, #11.
+
+## 2026-10-18 - v3.67 : "Mes Builds" envoyes a l'extension SideBar
+`pushMyBuildsToSidebar()` (au chargement + a chaque favori coche/decoche) envoie les favoris par classe a l'extension Chrome
+SideBar (E:/DevProject/SideBar, ID en dur `SIDEBAR_ID`) via `unsafeWindow.chrome.runtime.sendMessage` ; sans l'extension, rien.
+Teste : Playwright sans fenetre (GM simules, maxroll.gg) -> SideBar recoit et affiche le build. PAS teste : vrai Chrome + Tampermonkey. Non pousse.
