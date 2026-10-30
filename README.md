@@ -55,6 +55,16 @@ Recherche rapide sur tout le web (pas seulement les 6 sites connus) avec des men
 
 Le bouton **"💬 Retour d'expérience"** dans le panneau envoie un message directement (aucun compte requis) - utile pour signaler tout ce qui semble confus ou cassé, pas seulement les bugs. On préfère un message "j'ai pas compris ce bouton" à rien du tout.
 
+## Captures
+
+*(À venir : panneau « Diablo IV Assistant » sur une page de build Maxroll.)*
+
+## Limites
+
+- Dépend de la mise en page des sites de guides (Maxroll, InfinityBuilds…) : un changement de leur part peut casser un bouton jusqu'à la prochaine mise à jour du script.
+- Ne lit ni n'écrit rien dans le jeu : il fonctionne uniquement dans le navigateur. Le filtre de butin se colle à la main dans le jeu (Réglages > Filtre de butin > Importer).
+- Beta : testé par quelques joueurs, saison 15 ; les données de classement viennent de sources tierces.
+
 ## Statut
 
 Projet en cours de test actif, non publié sur un store d'extensions. Season 15.
