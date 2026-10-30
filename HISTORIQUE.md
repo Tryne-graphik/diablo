@@ -1182,3 +1182,8 @@ les 2 favoris (Voleur/Maxroll, Demoniste/InfinityBuilds) affiches dans SideBar ;
 
 ## 2026-10-18 - v3.68 : pseudo et situation envoyés à SideBar
 `pushMyBuildsToSidebar()` ajoute `author` (d4a-author) et `situation` (d4a-wz-situation) ; renvoi aussi quand l'un des deux change. Affichés dans la vue Builds de SideBar. Syntaxe vérifiée (node --check) ; non testé dans Tampermonkey. Non poussé.
+
+## 2026-10-30 (nuit, vague 1 verdicts)
+- Verdict : FUSIONNER avec DiabloIV-DPS-Calculator (plan en vague 2). Constat : TACHES.md du 13/10, tout est a tester en jeu.
+- Details : G:\DevProject\_outils
+uit-chef\sorties�6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
