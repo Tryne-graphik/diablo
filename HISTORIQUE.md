@@ -1190,3 +1190,6 @@ uit-chef\sorties‚6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
 
 ## 2026-10-30 (nuit, vague 2 diablo)
 - Aucune modif de code. Plan de fusion avec le Calculateur : DiabloIV-DPS-Calculator\PLAN_FUSION.md. Scrapers sans fixtures de test : a creer avant refactor.
+
+## 2026-10-30 (nuit, vague 4 vitrine)
+- README : sections Captures/Limites ajoutees (ou README refait pour Rainmeter) ; LICENSE : existante conservee (tous droits reserves), Rainmeter : LICENSE ajoutee (a valider). Rien pousse. Captures reelles a faire avec donnees de demo.
