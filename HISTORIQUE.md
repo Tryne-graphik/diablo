@@ -1202,3 +1202,6 @@ uit-chef\sorties‚6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
 - Fait : 4 imports inutilises retires (ruff F401, 13a9dec), branche nuit/2026-10-31.
 - Constate : osv-scanner = 11 CVE (2 critiques : anyio<4.14.2, certifi<2026.10.18 ; starlette 0.41.3 -> >=1.3.1 ; idna<3.15), dependances indirectes de fastapi/httpx ; serveur lie a 127.0.0.1 (app/main.py:31).
 - Reste : relever fastapi + anyio/certifi/idna dans requirements.txt et relancer les tests (decision utilisateur).
+
+## 2026-10-31 (rapport du matin)
+- Rapport de synthese : _outils/nuit-chef/sorties/2026-10-31/RAPPORT_NUIT.md. Branche nuit/2026-10-31 locale, rien de pousse. Decision attendue : fusion.
