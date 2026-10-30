@@ -1187,3 +1187,6 @@ les 2 favoris (Voleur/Maxroll, Demoniste/InfinityBuilds) affiches dans SideBar ;
 - Verdict : FUSIONNER avec DiabloIV-DPS-Calculator (plan en vague 2). Constat : TACHES.md du 13/10, tout est a tester en jeu.
 - Details : G:\DevProject\_outils
 uit-chef\sorties‚6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
+
+## 2026-10-30 (nuit, vague 2 diablo)
+- Aucune modif de code. Plan de fusion avec le Calculateur : DiabloIV-DPS-Calculator\PLAN_FUSION.md. Scrapers sans fixtures de test : a creer avant refactor.
