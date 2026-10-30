@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diablo IV Assistant - Générateur de filtre
 // @namespace    diablo4-assistant.local
-// @version      3.67
+// @version      3.68
 // @description  Ajoute des boutons sur les pages de build Diablo IV (kami-labs, Maxroll, D4Builds, D4Guides, talion.tv, InfinityBuilds) pour traduire le build, générer un code de filtre de butin, et afficher le classement consensus des meilleurs builds de la classe - sans changer d'onglet et sans serveur local.
 // @updateURL    https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
 // @downloadURL  https://raw.githubusercontent.com/Tryne-graphik/diablo/master/userscript/diablo4-assistant.user.js
@@ -47,7 +47,7 @@
 (function () {
   "use strict";
 
-  // v2: no local server anymore (E:\DiabloIV-Assistant\app\main.py is no
+  // v2: no local server anymore (H:\DiabloIV-Assistant\app\main.py is no
   // longer needed to use this script) - everything below runs entirely in
   // the browser. What changed vs v1 and why:
   //  - InfinityBuilds' tier list (list of builds) turns out to be
@@ -1566,7 +1566,7 @@
   }
 
   // 2026-10-18 (v3.67) : "Mes Builds" envoyes a l'extension Chrome SideBar (panneau lateral,
-  // E:/DevProject/SideBar) au chargement de chaque page de build et a chaque favori coche/decoche.
+  // G:/DevProject/SideBar) au chargement de chaque page de build et a chaque favori coche/decoche.
   // chrome.runtime.sendMessage n'existe sur la page que si SideBar est installee : sinon rien.
   const SIDEBAR_ID = "pehcomonbbdeofffncancicelkcbgldi";
   function pushMyBuildsToSidebar() {
@@ -1575,7 +1575,9 @@
     const builds = Object.entries(getMyBuilds()).map(([gameClass, b]) => ({
       gameClass, classLabel: CLASS_LABELS_FR[gameClass] || gameClass, title: b.title, url: b.url, source: b.source, at: b.visitedAt,
     }));
-    try { rt.sendMessage(SIDEBAR_ID, { type: "d4builds", builds }, () => void rt.lastError); } catch (e) { /* extension absente */ }
+    // v3.68 : + pseudo et situation de "Creer mon filtre" (id brut : WZ_SITUATIONS est defini plus bas, pas encore au chargement)
+    const author = GM_getValue("d4a-author", ""), situation = GM_getValue("d4a-wz-situation", "endgame");
+    try { rt.sendMessage(SIDEBAR_ID, { type: "d4builds", builds, author, situation }, () => void rt.lastError); } catch (e) { /* extension absente */ }
   }
   pushMyBuildsToSidebar();
 
@@ -4266,7 +4268,7 @@
     const style = document.createElement("style");
     style.textContent = `
       /* Palette/layout copied from the user's other project (Esprit
-         Donghua Continuum, E:\\EspritDonghua-Script - buildPersistentPanel()
+         Donghua Continuum, H:\\EspritDonghua-Script - buildPersistentPanel()
          and ensurePanelToggleButton()) at their request 2026-09-21, rather
          than inventing a new look: one small hamburger toggle button, one
          dark flex-column panel holding the title, all actions, and the
@@ -6147,6 +6149,7 @@
     overlay.addEventListener("change", (e) => {
       if (e.target.name === "d4a-wz-situation") {
         GM_setValue("d4a-wz-situation", e.target.value);
+        pushMyBuildsToSidebar();
         document.getElementById("d4a-wz-type").value = guessBuildType(document.getElementById("d4a-wz-variant").value, e.target.value);
         setOpt("d4a-opt-farm-mode", e.target.value === "farm");
       } else if (e.target.name === "d4a-wz-preset") {
@@ -6179,7 +6182,7 @@
     overlay.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
     const authorInput = document.getElementById("d4a-wz-author");
     authorInput.value = GM_getValue("d4a-author", "");
-    authorInput.onchange = () => GM_setValue("d4a-author", authorInput.value.trim());
+    authorInput.onchange = () => { GM_setValue("d4a-author", authorInput.value.trim()); pushMyBuildsToSidebar(); };
     document.getElementById("d4a-wz-season").value = CURRENT_SEASON;
     // Keep the farm checkbox consistent with the remembered situation.
     setOpt("d4a-opt-farm-mode", situation === "farm");
@@ -6674,7 +6677,7 @@
 
     // Single hamburger toggle + one flex-column panel holding everything -
     // layout and palette copied from the user's Esprit Donghua Continuum
-    // userscript (E:\EspritDonghua-Script\esprit-donghua-suivi-progression-
+    // userscript (H:\EspritDonghua-Script\esprit-donghua-suivi-progression-
     // v4.user.js, ensurePanelToggleButton()/buildPersistentPanel()) at
     // their request 2026-09-21, replacing the previous 5 separate floating
     // pill buttons. Since every action button now lives INSIDE the panel,

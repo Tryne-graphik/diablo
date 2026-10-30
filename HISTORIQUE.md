@@ -1025,7 +1025,7 @@ Bug note le 2026-10-01 (Demoniste Mekuna, IB) : le torse du build est un mot
 runique (`item-runeword-stealth-itm` / `-enigma-`), fabrique sur une base
 COMMUNE ; le filtre genere n'avait aucune regle de torse et "Cacher Detritus"
 cachait tous les torses. Confirme par les filtres des meilleurs joueurs de la
-Fosse (helltides.com/pit, decodes par `E:\DiabloIV-DPS-Calculator\scripts\ladder_filters.py`) :
+Fosse (helltides.com/pit, decodes par `H:\DiabloIV-DPS-Calculator\scripts\ladder_filters.py`) :
 le rang 23 a exactement la regle "Enigma Craft" = Torse + Commun + Ancestral.
 - Lecteur IB : `runeword: true` quand l'itemId contient `-runeword-`.
 - `buildPerSlotRules()` : emplacement mot runique -> une regle MONTRER
@@ -1108,7 +1108,7 @@ Shanar's Resonance -> Le Boucher, Rod of Kepeleke -> Astaroth), 1 ajout
 Chaque entree touchee porte desormais un champ `source`
 (`infinitybuilds 2026-10-07`). `scripts/sync_unique_item_sources.py` recopie la
 `note` dans le userscript, et l'infobulle (v3.54) affiche une ligne discrete
-"Retire des tables de boss (saison 15)". Verifie par `E:\nuit\check_boss.py`.
+"Retire des tables de boss (saison 15)". Verifie par `H:\nuit\check_boss.py`.
 
 ## 2026-10-08 (nuit) - v3.55 : bouton "Ouvrir dans L'Oeil des Horadrims"
 Sur les pages de build (IB, Maxroll, D4Builds, D4Guides, Kami-Labs ; cache sur talion.tv dont l'API de detail exige un
@@ -1176,6 +1176,32 @@ seulement" (+ affixes a cocher par Unique) dans "Creer mon filtre" ; A_VERIFIER 
 
 ## 2026-10-18 - v3.67 : "Mes Builds" envoyes a l'extension SideBar
 `pushMyBuildsToSidebar()` (au chargement + a chaque favori coche/decoche) envoie les favoris par classe a l'extension Chrome
-SideBar (E:/DevProject/SideBar, ID en dur `SIDEBAR_ID`) via `unsafeWindow.chrome.runtime.sendMessage` ; sans l'extension, rien.
+SideBar (G:/DevProject/SideBar, ID en dur `SIDEBAR_ID`) via `unsafeWindow.chrome.runtime.sendMessage` ; sans l'extension, rien.
 Teste : Playwright sans fenetre (GM simules) puis vrai Chrome + Tampermonkey 5.5.1 (MAJ 3.64 -> 3.67 depuis un serveur local) :
 les 2 favoris (Voleur/Maxroll, Demoniste/InfinityBuilds) affiches dans SideBar ; boutons des sites OK. Non pousse.
+
+## 2026-10-18 - v3.68 : pseudo et situation envoyés à SideBar
+`pushMyBuildsToSidebar()` ajoute `author` (d4a-author) et `situation` (d4a-wz-situation) ; renvoi aussi quand l'un des deux change. Affichés dans la vue Builds de SideBar. Syntaxe vérifiée (node --check) ; non testé dans Tampermonkey. Non poussé.
+
+## 2026-10-30 (nuit, vague 1 verdicts)
+- Verdict : FUSIONNER avec DiabloIV-DPS-Calculator (plan en vague 2). Constat : TACHES.md du 13/10, tout est a tester en jeu.
+- Details : G:\DevProject\_outils
+uit-chef\sorties�6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
+
+## 2026-10-30 (nuit, vague 2 diablo)
+- Aucune modif de code. Plan de fusion avec le Calculateur : DiabloIV-DPS-Calculator\PLAN_FUSION.md. Scrapers sans fixtures de test : a creer avant refactor.
+
+## 2026-10-30 (nuit, vague 4 vitrine)
+- README : sections Captures/Limites ajoutees (ou README refait pour Rainmeter) ; LICENSE : existante conservee (tous droits reserves), Rainmeter : LICENSE ajoutee (a valider). Rien pousse. Captures reelles a faire avec donnees de demo.
+
+## 2026-10-31 (nuit, vague 2 fixtures)
+- Ajout (aucun code applicatif touche) : tests/fixtures/<site>/ (6 sites, URL+date en .meta.json), tests/run.py (hors ligne, 6/6 vert), tests/expected/, scripts/enregistrer_fixtures.py, scripts/inventaire_doublons.py + tests/RAPPORT_DOUBLONS.md.
+- Constat : ids d'affixes du filtre = meme espace que Maxroll/Calc (0 incoherence) ; dictionnaires FR/EN : 47 conflits (libelle vs fragment) -> pas de fusion. Rapport : _outils\nuit-chef\sorties\2026-10-31\DIABLO_FIXTURES.md. Non pousse.
+
+## 2026-10-31 (nuit, vague 3 securite suite)
+- Fait : 4 imports inutilises retires (ruff F401, 13a9dec), branche nuit/2026-10-31.
+- Constate : osv-scanner = 11 CVE (2 critiques : anyio<4.14.2, certifi<2026.10.18 ; starlette 0.41.3 -> >=1.3.1 ; idna<3.15), dependances indirectes de fastapi/httpx ; serveur lie a 127.0.0.1 (app/main.py:31).
+- Reste : relever fastapi + anyio/certifi/idna dans requirements.txt et relancer les tests (decision utilisateur).
+
+## 2026-10-31 (rapport du matin)
+- Rapport de synthese : _outils/nuit-chef/sorties/2026-10-31/RAPPORT_NUIT.md. Branche nuit/2026-10-31 locale, rien de pousse. Decision attendue : fusion.

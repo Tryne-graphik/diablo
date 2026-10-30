@@ -1,0 +1,1784 @@
+[
+ {
+  "source": "d4guides",
+  "title": "Blazing Scream Damage",
+  "url": "https://d4guides.gg/en/build/warlock-blazing-scream-damage-by-jens795",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Jens795",
+  "skills": [
+   "Summon Abodian",
+   "Dark Prison",
+   "Rampage",
+   "Metamorphosis",
+   "Command Fallen",
+   "Blazing Scream"
+  ],
+  "external_id": "5d72239a-e773-fb2b-a90c-ccda60bf8110",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Minionmancer Triple Golem Minion",
+  "url": "https://d4guides.gg/en/build/necromancer-minionmancer-triple-golem-minion-by-malevolence21883",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Malevolence#21883",
+  "skills": [
+   "Army of the Dead",
+   "Skeleton Mage",
+   "Golem",
+   "Skeleton Warrior",
+   "Sever",
+   "Iron Maiden"
+  ],
+  "external_id": "3bf3587b-ca0f-6afc-9c71-cbd77df732eb",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Gorilla Facetank",
+  "url": "https://d4guides.gg/en/build/spiritborn-gorilla-facetank-by-skremer",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "skremer",
+  "skills": [
+   "Ravager",
+   "Toxic Skin",
+   "Armored Hide",
+   "The Protector",
+   "Rock Splitter",
+   "Scourge"
+  ],
+  "external_id": "e0efac07-12c9-cc27-ca15-c6050283e172",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Whirlwind",
+  "url": "https://d4guides.gg/en/build/barbarian-whirlwind-by-vdka21177",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Vdka#21177",
+  "skills": [
+   "Iron Skin",
+   "War Cry",
+   "Rallying Cry",
+   "Wrath of the Berserker",
+   "Frenzy",
+   "Whirlwind"
+  ],
+  "external_id": "45e8c41c-522a-c9df-b2e5-2169616d9b54",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Landslide Overpower",
+  "url": "https://d4guides.gg/en/build/druid-landslide-overpower-by-jstn",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Jstn",
+  "skills": [
+   "Earth Spike",
+   "Landslide",
+   "Debilitating Roar",
+   "Earthen Bulwark",
+   "Trample",
+   "Grizzly Rage"
+  ],
+  "external_id": "105b171e-d321-313a-ed81-537cab220439",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Lightning Storm",
+  "url": "https://d4guides.gg/en/build/druid-lightning-storm-by-yalandor",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Yalandor",
+  "skills": [
+   "Tornado",
+   "Wolves",
+   "Cataclysm",
+   "Hurricane",
+   "Storm Strike",
+   "Lightning Storm"
+  ],
+  "external_id": "f519cb05-3e2f-a2b6-93ea-ecaff2229eb2",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Skeleton Mage Dead Cold Minion",
+  "url": "https://d4guides.gg/en/build/necromancer-skeleton-mage-dead-cold-minion-by-sayra2990",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Sayra#2990",
+  "skills": [
+   "Skeleton Mage",
+   "Skeleton Warrior",
+   "Golem",
+   "Army of the Dead",
+   "Blood Surge",
+   "Hemorrhage"
+  ],
+  "external_id": "8a794ff7-d17f-a42c-263a-ef60c53b8624",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Army of the Dead Corpse Explosion",
+  "url": "https://d4guides.gg/en/build/necromancer-army-of-the-dead-corpse-explosion-by-jstn",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Jstn",
+  "skills": [
+   "Sever",
+   "Corpse Explosion",
+   "Corpse Tendrils",
+   "Blood Mist",
+   "Golem",
+   "Army of the Dead"
+  ],
+  "external_id": "8a97a593-07b6-eeb8-1e18-6aa66f5293ce",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Deep Freeze Barrier Cold",
+  "url": "https://d4guides.gg/en/build/sorcerer-deep-freeze-barrier-cold-by-sayra2990",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Sayra#2990",
+  "skills": [
+   "Familiar",
+   "Ice Armor",
+   "Teleport",
+   "Blizzard",
+   "Hydra",
+   "Deep Freeze"
+  ],
+  "external_id": "36b0b7a2-2872-1bb1-dd38-d7689b44b12e",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Ice Shards Frostmage",
+  "url": "https://d4guides.gg/en/build/sorcerer-ice-shards-frostmage-by-skremer",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "skremer",
+  "skills": [
+   "Flame Shield",
+   "Ice Armor",
+   "Hydra",
+   "Deep Freeze",
+   "Ice Shards",
+   "Frost Nova"
+  ],
+  "external_id": "8cde2b9d-d978-4ae4-bd72-e852224272bf",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Dread Claws Terror Demon Hybrid",
+  "url": "https://d4guides.gg/en/build/warlock-dread-claws-terror-demon-hybrid-by-alxsafx690",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Lillilein",
+  "skills": [
+   "Rampage",
+   "Sigil of Subversion",
+   "Summon Laalish",
+   "Metamorphosis",
+   "Command Fallen",
+   "Dread Claws"
+  ],
+  "external_id": "d6e58ed6-ba43-23c5-e8ef-300df1e51dd8",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Claw Grizzly Rage",
+  "url": "https://d4guides.gg/en/build/druid-claw-grizzly-rage-by-u806",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "강현수",
+  "skills": [
+   "Debilitating Roar",
+   "Lightning Storm",
+   "Hurricane",
+   "Ravens",
+   "Claw",
+   "Grizzly Rage"
+  ],
+  "external_id": "7fb2a20a-8d4d-0295-e8cd-919ca1ad5395",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Cataclysm Ravens Lightning",
+  "url": "https://d4guides.gg/en/build/druid-cataclysm-ravens-lightning-by-sayra2990",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Sayra#2990",
+  "skills": [
+   "Cataclysm",
+   "Hurricane",
+   "Poison Creeper",
+   "Lightning Storm",
+   "Storm Strike",
+   "Ravens"
+  ],
+  "external_id": "758638f7-bc5b-725c-8969-9d89749ac7ad",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Lacerate One-Button",
+  "url": "https://d4guides.gg/en/build/druid-lacerate-one-button-by-joker",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Joker",
+  "skills": [
+   "Blood Howl",
+   "Poison Creeper",
+   "Cyclone Armor",
+   "Debilitating Roar",
+   "Lacerate",
+   "Rabies"
+  ],
+  "external_id": "a446ee8a-f7ca-4a59-253b-5fb8ae99dfd0",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Cataclysm Landslide",
+  "url": "https://d4guides.gg/en/build/druid-cataclysm-landslide-by-joker",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Joker",
+  "skills": [
+   "Earthen Bulwark",
+   "Poison Creeper",
+   "Hurricane",
+   "Lightning Storm",
+   "Landslide",
+   "Cataclysm"
+  ],
+  "external_id": "b8cb8048-38d5-1860-f8e8-efc5f85bd3ca",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Cataclysm Wolves Minion",
+  "url": "https://d4guides.gg/en/build/druid-cataclysm-wolves-minion-by-joker",
+  "game_class": "druid",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Joker",
+  "skills": [
+   "Earthen Bulwark",
+   "Debilitating Roar",
+   "Poison Creeper",
+   "Wolves",
+   "Lightning Storm",
+   "Cataclysm"
+  ],
+  "external_id": "eee45e27-be08-5a80-f887-46f3d5f447a5",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Unyielding Commander Minionmancer Shadow",
+  "url": "https://d4guides.gg/en/build/necromancer-unyielding-commander-minionmancer-shadow-by-noitraz",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Noitraz",
+  "skills": [
+   "Skeleton Warrior",
+   "Skeleton Mage",
+   "Golem",
+   "Army of the Dead",
+   "Decrepify",
+   "Blood Mist"
+  ],
+  "external_id": "16ea2670-6e89-ba51-faf2-418b21c0f9fb",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Minionmancer",
+  "url": "https://d4guides.gg/en/build/necromancer-minionmancer-leveling-by-ciasther",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "ciasther",
+  "skills": [
+   "Sever",
+   "Decrepify",
+   "Army of the Dead",
+   "Skeleton Warrior",
+   "Skeleton Mage",
+   "Golem"
+  ],
+  "external_id": "b9a07952-104c-f5bc-69a5-4246a0767ec7",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Penetrating Shot",
+  "url": "https://d4guides.gg/en/build/rogue-penetrating-shot-by-piefke2554",
+  "game_class": "rogue",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Piefke#2554",
+  "skills": [
+   "Dark Shroud",
+   "Concealment",
+   "Dash",
+   "Poison Imbuement",
+   "Shadow Clone",
+   "Penetrating Shot"
+  ],
+  "external_id": "06b1e91e-b7e1-007c-bb80-ef142bdc769d",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Assassin Cold",
+  "url": "https://d4guides.gg/en/build/rogue-assassin-cold-by-kostja21841",
+  "game_class": "rogue",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Kostja#21841",
+  "skills": [
+   "Dance of Knives",
+   "Dash",
+   "Dark Shroud",
+   "Concealment",
+   "Cold Imbuement",
+   "Shadow Clone"
+  ],
+  "external_id": "ca6ede50-0641-9a10-e15b-23dbc7e4f5ef",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "The Seeker Vulnerable Lightning",
+  "url": "https://d4guides.gg/en/build/spiritborn-the-seeker-vulnerable-lightning-by-sayra2990",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Sayra#2990",
+  "skills": [
+   "The Seeker",
+   "Soar",
+   "Touch of Death",
+   "Ravager",
+   "Thrash",
+   "Stinger"
+  ],
+  "external_id": "dfc7c8c8-3551-cbca-89f1-e4d2046a727a",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Cast Speed Blessed Hammer",
+  "url": "https://d4guides.gg/en/build/paladin-cast-speed-blessed-hammer-by-fleufen",
+  "game_class": "paladin",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Fleufen",
+  "skills": [
+   "Defiance Aura",
+   "Falling Star",
+   "Condemn",
+   "Arbiter of Justice",
+   "Brandish",
+   "Blessed Hammer"
+  ],
+  "external_id": "c31983b0-9db4-551c-1517-9a9daa0dcae0",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Disciple Autopilot",
+  "url": "https://d4guides.gg/en/build/paladin-disciple-autopilot-by-shikry",
+  "game_class": "paladin",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "shikry_",
+  "skills": [
+   "Condemn",
+   "Aegis",
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Falling Star",
+   "Arbiter of Justice"
+  ],
+  "external_id": "cb1cbade-5f58-bfcd-9a8d-8f7b96a50745",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Blazing Scream Fire",
+  "url": "https://d4guides.gg/en/build/warlock-blazing-scream-fire-by-tuktuk842752",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "TukTuk84#2752",
+  "skills": [
+   "Summon Abodian",
+   "Command Fallen",
+   "Metamorphosis",
+   "Dark Prison",
+   "Bombardment",
+   "Blazing Scream"
+  ],
+  "external_id": "48ffe7fc-008b-87a4-ae46-4cd6e9417b70",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Doom Shadow",
+  "url": "https://d4guides.gg/en/build/warlock-doom-shadow-by-sayra2990",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Sayra#2990",
+  "skills": [
+   "Summon Laalish",
+   "Tortured Wretch",
+   "Terror Swarm",
+   "Nether Step",
+   "Doom",
+   "Profane Sentinel"
+  ],
+  "external_id": "4bcf3776-f3ff-a93b-be11-dd1826f81347",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Demonologist Bruiser",
+  "url": "https://d4guides.gg/en/build/warlock-demonologist-bruiser-by-helakion-2",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Helakion",
+  "skills": [
+   "Rampage",
+   "Summon Abodian",
+   "Dark Prison",
+   "Metamorphosis",
+   "Molten Bomb",
+   "Blazing Scream"
+  ],
+  "external_id": "871587c0-460f-deb9-48c0-4ac0d1e9a32e",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Hellion Sting Eviscerate Bleed",
+  "url": "https://d4guides.gg/en/build/warlock-hellion-sting-eviscerate-bleed-by-majorbuggie",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "MajorBuggie",
+  "skills": [
+   "Nether Step",
+   "Tortured Wretch",
+   "Profane Sentinel",
+   "Metamorphosis",
+   "Hellion Sting",
+   "Sigil of Summons"
+  ],
+  "external_id": "9366349e-6261-8aab-e954-1c4ee0a86ad2",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Blazing Scream Metamorphosis",
+  "url": "https://d4guides.gg/en/build/warlock-blazing-scream-metamorphosis-by-mr-fenderwheel-2",
+  "game_class": "warlock",
+  "tier": null,
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Mr_Fenderwheel",
+  "skills": [
+   "Rampage",
+   "Summon Abodian",
+   "Metamorphosis",
+   "Dark Prison",
+   "Command Fallen",
+   "Blazing Scream"
+  ],
+  "external_id": "f7426830-1d95-366c-5b68-3e717d48e393",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Blazing Scream",
+  "url": "https://d4guides.gg/en/build/warlock-blazing-scream",
+  "game_class": "warlock",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Summon Abodian",
+   "Command Fallen",
+   "Metamorphosis",
+   "Dark Prison",
+   "Bombardment",
+   "Blazing Scream"
+  ],
+  "external_id": "903fcd1e-b0b7-7e9c-d7e2-ca461d8353a5",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Whirlwind",
+  "url": "https://d4guides.gg/en/build/barbarian-whirlwind",
+  "game_class": "barbarian",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Rallying Cry",
+   "Challenging Shout",
+   "War Cry",
+   "Wrath of the Berserker",
+   "Iron Skin",
+   "Whirlwind"
+  ],
+  "external_id": "b4ce547a-cba5-92eb-e332-73d2014d191a",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Blazing Scream",
+  "url": "https://d4guides.gg/en/build/warlock-blazing-scream-leveling",
+  "game_class": "warlock",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Nether Step",
+   "Summon Abodian",
+   "Dark Prison",
+   "Terror Swarm",
+   "Command Fallen",
+   "Blazing Scream"
+  ],
+  "external_id": "0246b9d2-e2f4-f502-f386-2ab1d64e4067",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Apocalypse",
+  "url": "https://d4guides.gg/en/build/warlock-apocalypse",
+  "game_class": "warlock",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Summon Valloch",
+   "Bombardment",
+   "Sigil of Subversion",
+   "Dark Prison",
+   "Umbral Chains",
+   "Apocalypse"
+  ],
+  "external_id": "b71cc736-deb4-8289-c2ab-84e5ebcc1ab8",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Pestilent Swarm",
+  "url": "https://d4guides.gg/en/build/spiritborn-pestilent-swarm",
+  "game_class": "spiritborn",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Counterattack",
+   "Ravager",
+   "Toxic Skin",
+   "The Devourer",
+   "Rushing Claw",
+   "Scourge"
+  ],
+  "external_id": "79bd848f-c78e-f944-0d9a-b48e050bf967",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Dance of Knives",
+  "url": "https://d4guides.gg/en/build/rogue-dance-of-knives",
+  "game_class": "rogue",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Shadow Clone",
+   "Dance of Knives",
+   "Dark Shroud",
+   "Poison Imbuement",
+   "Dash",
+   "Concealment"
+  ],
+  "external_id": "3f5135dd-f300-ed1c-019e-9267e79ba899",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Whirlwind",
+  "url": "https://d4guides.gg/en/build/barbarian-whirlwind-leveling-by-cornaro",
+  "game_class": "barbarian",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Cornaro",
+  "skills": [
+   "War Cry",
+   "Ground Stomp",
+   "Challenging Shout",
+   "Call of the Ancients",
+   "Lunging Strike",
+   "Whirlwind"
+  ],
+  "external_id": "4aa2b3fb-5669-eb29-e0a1-e5e32048711e",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Minionmancer",
+  "url": "https://d4guides.gg/en/build/necromancer-minionmancer-leveling",
+  "game_class": "necromancer",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Sever",
+   "Decrepify",
+   "Army of the Dead",
+   "Skeleton Warrior",
+   "Skeleton Mage",
+   "Golem"
+  ],
+  "external_id": "1a2dd846-07f4-0c80-5be8-c6f9cb8000d1",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Dance of Knives",
+  "url": "https://d4guides.gg/en/build/rogue-dance-of-knives-leveling",
+  "game_class": "rogue",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Dash",
+   "Concealment",
+   "Dark Shroud",
+   "Shadow Imbuement",
+   "Puncture",
+   "Dance of Knives"
+  ],
+  "external_id": "7e385a0d-6222-dbba-444b-8f3e494a575e",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Ring of Fire",
+  "url": "https://d4guides.gg/en/build/sorcerer-ring-of-fire",
+  "game_class": "sorcerer",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Firewall",
+   "Hydra",
+   "Fire Bolt",
+   "Teleport",
+   "Chain Lightning",
+   "Inferno"
+  ],
+  "external_id": "566e4747-1904-9c88-7f40-b0cc5bfe79bd",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Blizzard Hailstorm",
+  "url": "https://d4guides.gg/en/build/sorcerer-blizzard-hailstorm",
+  "game_class": "sorcerer",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Ice Armor",
+   "Hydra",
+   "Familiar",
+   "Inferno",
+   "Teleport",
+   "Blizzard"
+  ],
+  "external_id": "e9173c2f-c976-c02f-1d91-97bae04da2ff",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Shield of Retribution",
+  "url": "https://d4guides.gg/en/build/paladin-shield-of-retribution",
+  "game_class": "paladin",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Fanaticism Aura",
+   "Fortress",
+   "Clash",
+   "Blessed Shield"
+  ],
+  "external_id": "e7c1e456-8cd2-3548-df41-4df620032b56",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Whirlwind",
+  "url": "https://d4guides.gg/en/build/barbarian-whirlwind-leveling",
+  "game_class": "barbarian",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Leap",
+   "Rallying Cry",
+   "War Cry",
+   "Call of the Ancients",
+   "Lunging Strike",
+   "Whirlwind"
+  ],
+  "external_id": "44d28f57-e6da-fa0a-2502-3e0ab3692ff4",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Corpse Explosion",
+  "url": "https://d4guides.gg/en/build/necromancer-corpse-explosion",
+  "game_class": "necromancer",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Skeleton Mage",
+   "Golem",
+   "Bone Storm",
+   "Skeleton Warrior",
+   "Sever",
+   "Corpse Explosion"
+  ],
+  "external_id": "32dfd4cf-2d7f-9bdb-0208-05fb13b87a5c",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Storm Stinger",
+  "url": "https://d4guides.gg/en/build/spiritborn-storm-stinger",
+  "game_class": "spiritborn",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "The Protector",
+   "Ravager",
+   "Toxic Skin",
+   "Scourge",
+   "Counterattack",
+   "Stinger"
+  ],
+  "external_id": "bc3d8f0e-2bc4-e8bd-62e9-7fe5ee562d64",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Lacerate",
+  "url": "https://d4guides.gg/en/build/druid-lacerate",
+  "game_class": "druid",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Cyclone Armor",
+   "Wolves",
+   "Hurricane",
+   "Debilitating Roar",
+   "Poison Creeper",
+   "Lacerate"
+  ],
+  "external_id": "c4d03695-b09d-093c-a53d-ee73dcd897dd",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Blood Wave",
+  "url": "https://d4guides.gg/en/build/necromancer-blood-wave",
+  "game_class": "necromancer",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Blood Lance",
+   "Sever",
+   "Bone Prison",
+   "Blood Mist",
+   "Reap",
+   "Blood Wave"
+  ],
+  "external_id": "2f816b17-28dc-288c-2a90-511c9ae9f2d8",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Rain of Arrows",
+  "url": "https://d4guides.gg/en/build/rogue-rain-of-arrows",
+  "game_class": "rogue",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Cornaro",
+  "skills": [
+   "Dark Shroud",
+   "Concealment",
+   "Cold Imbuement",
+   "Shadow Step",
+   "Rain of Arrows",
+   "Rapid Fire"
+  ],
+  "external_id": "c23a9263-20cc-ec7a-8530-346a4b02ba72",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Blizzard Static Field",
+  "url": "https://d4guides.gg/en/build/sorcerer-blizzard-static-field-leveling",
+  "game_class": "sorcerer",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Hydra",
+   "Familiar",
+   "Inferno",
+   "Teleport",
+   "Ice Armor",
+   "Blizzard"
+  ],
+  "external_id": "4cb8dfe1-e0f8-d061-a751-b122e26d2d21",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Stinger",
+  "url": "https://d4guides.gg/en/build/spiritborn-stinger-leveling",
+  "game_class": "spiritborn",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "The Devourer",
+   "Touch of Death",
+   "Scourge",
+   "Toxic Skin",
+   "Thrash",
+   "Stinger"
+  ],
+  "external_id": "864bb844-5b61-b660-1327-fcc9365b1045",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Charge Battering Ram",
+  "url": "https://d4guides.gg/en/build/barbarian-charge-battering-ram",
+  "game_class": "barbarian",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Cornaro",
+  "skills": [
+   "Rallying Cry",
+   "War Cry",
+   "Challenging Shout",
+   "Wrath of the Berserker",
+   "Iron Skin",
+   "Charge"
+  ],
+  "external_id": "2ef892bf-b22f-1fd8-c77d-171e85cb60ca",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Tornado",
+  "url": "https://d4guides.gg/en/build/druid-tornado",
+  "game_class": "druid",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Tornado",
+   "Debilitating Roar",
+   "Blood Howl",
+   "Wolves",
+   "Lightning Storm",
+   "Grizzly Rage"
+  ],
+  "external_id": "a4f017a1-341e-a10f-682c-a4d7cac70576",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Penetrating Shot Poison Imbuement",
+  "url": "https://d4guides.gg/en/build/rogue-penetrating-shot-poison-imbuement",
+  "game_class": "rogue",
+  "tier": "S",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Shadow Clone",
+   "Penetrating Shot",
+   "Shadow Step",
+   "Dash",
+   "Concealment",
+   "Poison Imbuement"
+  ],
+  "external_id": "377ef229-49d3-8645-fa85-d6b999defa22",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Shred Storm Shred",
+  "url": "https://d4guides.gg/en/build/druid-shred-storm-shred",
+  "game_class": "druid",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Blood Howl",
+   "Wolves",
+   "Lightning Storm",
+   "Grizzly Rage",
+   "Shred",
+   "Debilitating Roar"
+  ],
+  "external_id": "cb07bd09-f571-c195-c276-093e50cf46a6",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Storm Shred",
+  "url": "https://d4guides.gg/en/build/druid-storm-shred-leveling",
+  "game_class": "druid",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Cyclone Armor",
+   "Blood Howl",
+   "Poison Creeper",
+   "Cataclysm",
+   "Wind Shear",
+   "Shred"
+  ],
+  "external_id": "0daef1a2-1ca4-3e9c-bd26-4282b7f60fdb",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Army of the Dead",
+  "url": "https://d4guides.gg/en/build/necromancer-army-of-the-dead",
+  "game_class": "necromancer",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Skeleton Warrior",
+   "Corpse Explosion",
+   "Blood Mist",
+   "Golem",
+   "Skeleton Mage",
+   "Army of the Dead"
+  ],
+  "external_id": "127c7468-9b05-d750-987e-b0244ff057c2",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Meteor",
+  "url": "https://d4guides.gg/en/build/sorcerer-meteor",
+  "game_class": "sorcerer",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Blizzard",
+   "Meteor",
+   "Ball Lightning",
+   "Teleport",
+   "Ice Armor",
+   "Inferno"
+  ],
+  "external_id": "b72f0f35-32e7-680c-4d70-a928c4edef92",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Lunatic",
+  "url": "https://d4guides.gg/en/build/warlock-lunatic",
+  "game_class": "warlock",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Summon Ae'grom",
+   "Command Fallen",
+   "Sigil of Summons",
+   "Tortured Wretch",
+   "Rampage",
+   "Metamorphosis"
+  ],
+  "external_id": "799992be-81d2-9449-1d19-57a8da929634",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Rain of Arrows Cold Imbuement",
+  "url": "https://d4guides.gg/en/build/rogue-rain-of-arrows-cold-imbuement",
+  "game_class": "rogue",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Rain of Arrows",
+   "Cold Imbuement",
+   "Dash",
+   "Shadow Step",
+   "Concealment",
+   "Dark Shroud"
+  ],
+  "external_id": "8ba12083-cd8a-cfeb-050f-15b754aceccf",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Penetrating Shot Cold Imbuement",
+  "url": "https://d4guides.gg/en/build/rogue-penetrating-shot-cold-imbuement",
+  "game_class": "rogue",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Dash",
+   "Shadow Step",
+   "Smoke Grenade",
+   "Shadow Clone",
+   "Cold Imbuement",
+   "Penetrating Shot"
+  ],
+  "external_id": "b2704113-bd36-c218-c414-5e0f5916e2f3",
+  "external_class_id": 4
+ },
+ {
+  "source": "d4guides",
+  "title": "Stinger",
+  "url": "https://d4guides.gg/en/build/spiritborn-stinger",
+  "game_class": "spiritborn",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Ravager",
+   "Scourge",
+   "The Protector",
+   "Toxic Skin",
+   "Armored Hide",
+   "Stinger"
+  ],
+  "external_id": "287dda2a-da11-82ca-ce7a-e48deec92952",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Auradin",
+  "url": "https://d4guides.gg/en/build/paladin-auradin",
+  "game_class": "paladin",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Fortress",
+   "Purify",
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Fanaticism Aura",
+   "Falling Star"
+  ],
+  "external_id": "15d00781-c0c6-0df3-7bf9-f00d8c38f60b",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Hammerdin",
+  "url": "https://d4guides.gg/en/build/paladin-hammerdin-leveling",
+  "game_class": "paladin",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Falling Star",
+   "Arbiter of Justice",
+   "Defiance Aura",
+   "Fanaticism Aura",
+   "Rally",
+   "Blessed Hammer"
+  ],
+  "external_id": "d3a09f01-8bcc-9165-f6c4-01b4e3052331",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Dread Claws",
+  "url": "https://d4guides.gg/en/build/warlock-dread-claws-leveling",
+  "game_class": "warlock",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Nether Step",
+   "Rampage",
+   "Sigil of Subversion",
+   "Terror Swarm",
+   "Command Fallen",
+   "Dread Claws"
+  ],
+  "external_id": "5ab011b1-1d5a-a0c6-7fca-42db64de3ab2",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Double Swing",
+  "url": "https://d4guides.gg/en/build/barbarian-double-swing",
+  "game_class": "barbarian",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Iron Skin",
+   "Double Swing",
+   "Wrath of the Berserker",
+   "War Cry",
+   "Challenging Shout",
+   "Rallying Cry"
+  ],
+  "external_id": "447cb605-84d4-cfc2-4969-698dff87a537",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Landslide",
+  "url": "https://d4guides.gg/en/build/druid-landslide",
+  "game_class": "druid",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Wolves",
+   "Lightning Storm",
+   "Earth Spike",
+   "Grizzly Rage",
+   "Cyclone Armor",
+   "Landslide"
+  ],
+  "external_id": "a773f9fb-34ab-ecf4-5a8e-393e85540d3f",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Bone Spirit",
+  "url": "https://d4guides.gg/en/build/necromancer-bone-spirit",
+  "game_class": "necromancer",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Bone Spirit",
+   "Skeleton Warrior",
+   "Corpse Tendrils",
+   "Sever",
+   "Skeleton Mage",
+   "Bone Storm"
+  ],
+  "external_id": "ab3f56ee-804f-14ea-6a80-bad55723e748",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Shield Charge",
+  "url": "https://d4guides.gg/en/build/paladin-shield-charge",
+  "game_class": "paladin",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Clash",
+   "Aegis",
+   "Fortress",
+   "Defiance Aura",
+   "Fanaticism Aura",
+   "Shield Charge"
+  ],
+  "external_id": "4af62153-f621-04d1-ffd6-f9b234f3eb7d",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Blessed Hammer",
+  "url": "https://d4guides.gg/en/build/paladin-blessed-hammer",
+  "game_class": "paladin",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Arbiter of Justice",
+   "Blessed Hammer",
+   "Falling Star"
+  ],
+  "external_id": "d75ea95a-34ce-a2bc-475e-47c6f19a14af",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Hell Fracture",
+  "url": "https://d4guides.gg/en/build/warlock-hell-fracture-leveling",
+  "game_class": "warlock",
+  "tier": "A",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Nether Step",
+   "Summon Abodian",
+   "Sigil of Chaos",
+   "Apocalypse",
+   "Molten Bomb",
+   "Hell Fracture"
+  ],
+  "external_id": "fa931919-7a5d-921a-baf9-346d869f6ecd",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Ball Lightning",
+  "url": "https://d4guides.gg/en/build/sorcerer-ball-lightning",
+  "game_class": "sorcerer",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Hydra",
+   "Ball Lightning",
+   "Familiar",
+   "Teleport",
+   "Ice Armor",
+   "Unstable Currents"
+  ],
+  "external_id": "dbf47bac-4e9e-a650-2dd5-329533eb3983",
+  "external_class_id": 5
+ },
+ {
+  "source": "d4guides",
+  "title": "Zeal Paladin",
+  "url": "https://d4guides.gg/en/build/paladin-zeal-paladin",
+  "game_class": "paladin",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Falling Star",
+   "Zeal",
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Fortress"
+  ],
+  "external_id": "c6430d16-5f84-3ca6-f2ef-6d0eac3051e9",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Dread Claws",
+  "url": "https://d4guides.gg/en/build/warlock-dread-claws",
+  "game_class": "warlock",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Profane Sentinel",
+   "Dread Claws",
+   "Summon Laalish",
+   "Rampage",
+   "Sigil of Summons",
+   "Metamorphosis"
+  ],
+  "external_id": "4a39b1b0-df67-51b3-40dd-5381a456f064",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Frenzy",
+  "url": "https://d4guides.gg/en/build/barbarian-frenzy",
+  "game_class": "barbarian",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Rend",
+   "Frenzy",
+   "Rallying Cry",
+   "War Cry",
+   "Iron Skin",
+   "Call of the Ancients"
+  ],
+  "external_id": "38e8c04f-6159-74f1-4daa-7afa8da0975c",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Hammer of the Ancients",
+  "url": "https://d4guides.gg/en/build/barbarian-hammer-of-the-ancients",
+  "game_class": "barbarian",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Hammer of the Ancients",
+   "Mighty Throw",
+   "Rallying Cry",
+   "War Cry",
+   "Iron Skin",
+   "Wrath of the Berserker"
+  ],
+  "external_id": "966d92fe-f05d-fcde-cb07-6bf989814c7e",
+  "external_class_id": 1
+ },
+ {
+  "source": "d4guides",
+  "title": "Companion",
+  "url": "https://d4guides.gg/en/build/druid-companion",
+  "game_class": "druid",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Wolves",
+   "Ravens",
+   "Trample",
+   "Cyclone Armor",
+   "Debilitating Roar",
+   "Grizzly Rage"
+  ],
+  "external_id": "5f14a4ee-32f1-9869-db3c-58877f2e4d70",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Companion",
+  "url": "https://d4guides.gg/en/build/druid-companion-leveling",
+  "game_class": "druid",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "leveling"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Wind Shear",
+   "Lightning Storm",
+   "Blood Howl",
+   "Poison Creeper",
+   "Ravens",
+   "Wolves"
+  ],
+  "external_id": "9ba8eab2-5a75-7a5e-be41-afee787a41b4",
+  "external_class_id": 2
+ },
+ {
+  "source": "d4guides",
+  "title": "Golem",
+  "url": "https://d4guides.gg/en/build/necromancer-golem",
+  "game_class": "necromancer",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Hemorrhage",
+   "Sever",
+   "Blight",
+   "Skeleton Warrior",
+   "Golem",
+   "Bone Storm"
+  ],
+  "external_id": "4c6ec985-98e0-b17d-97da-f831432f94e2",
+  "external_class_id": 3
+ },
+ {
+  "source": "d4guides",
+  "title": "Razor Wings",
+  "url": "https://d4guides.gg/en/build/spiritborn-razor-wings",
+  "game_class": "spiritborn",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Razor Wings",
+   "Soar",
+   "Vortex",
+   "Touch of Death",
+   "The Seeker",
+   "Scourge"
+  ],
+  "external_id": "333bd975-6517-1caa-0749-82a22a13f014",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Rock Splitter",
+  "url": "https://d4guides.gg/en/build/spiritborn-rock-splitter",
+  "game_class": "spiritborn",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Rock Splitter",
+   "Ravager",
+   "Counterattack",
+   "Toxic Skin",
+   "Scourge",
+   "The Hunter"
+  ],
+  "external_id": "70adc609-94d7-cd23-556f-0f1eec85757d",
+  "external_class_id": 6
+ },
+ {
+  "source": "d4guides",
+  "title": "Arbiter of Justice",
+  "url": "https://d4guides.gg/en/build/paladin-arbiter-of-justice",
+  "game_class": "paladin",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Arbiter of Justice",
+   "Condemn",
+   "Holy Light Aura",
+   "Fanaticism Aura",
+   "Aegis",
+   "Defiance Aura"
+  ],
+  "external_id": "da4f4a45-8285-b83a-a313-8ab9656d9e30",
+  "external_class_id": 7
+ },
+ {
+  "source": "d4guides",
+  "title": "Umbral Chains",
+  "url": "https://d4guides.gg/en/build/warlock-umbral-chains",
+  "game_class": "warlock",
+  "tier": "B",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Profane Sentinel",
+   "Sigil of Summons",
+   "Terror Swarm",
+   "Summon Valloch",
+   "Umbral Chains",
+   "Blazing Scream"
+  ],
+  "external_id": "ef4cf0b8-5f54-7c6c-261b-58c9d44a5409",
+  "external_class_id": 8
+ },
+ {
+  "source": "d4guides",
+  "title": "Incinerate",
+  "url": "https://d4guides.gg/en/build/sorcerer-incinerate",
+  "game_class": "sorcerer",
+  "tier": "C",
+  "season": "S15",
+  "tags": [
+   "endgame"
+  ],
+  "author": "Chrix1848",
+  "skills": [
+   "Hydra",
+   "Incinerate",
+   "Teleport",
+   "Ice Armor",
+   "Familiar",
+   "Firewall"
+  ],
+  "external_id": "c3d580b3-4421-3de2-26f1-aa2a0a007e5e",
+  "external_class_id": 5
+ }
+]

@@ -1,0 +1,1596 @@
+[
+ {
+  "source": "d4builds",
+  "title": "Ancients",
+  "url": "https://d4builds.gg/builds/ancients-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Iron Skin",
+   "War Cry",
+   "Challenging Shout",
+   "Rallying Cry",
+   "Call of the Ancients",
+   "Mighty Throw"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blazing Scream",
+  "url": "https://d4builds.gg/builds/blazing-scream-warlock-endgame/",
+  "game_class": "warlock",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Nether Step",
+   "Metamorphosis",
+   "Summon Abodian",
+   "Dark Prison",
+   "Molten Bomb",
+   "Blazing Scream"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blessed Shield",
+  "url": "https://d4builds.gg/builds/blessed-shield-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Fortress",
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Condemn",
+   "Blessed Shield",
+   "Clash"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blood Wave",
+  "url": "https://d4builds.gg/builds/blood-wave-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Sever",
+   "Blood Lance",
+   "Bone Prison",
+   "Corpse Tendrils",
+   "Decrepify",
+   "Blood Wave"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Charge",
+  "url": "https://d4builds.gg/builds/charge-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Iron Skin",
+   "War Cry",
+   "Steel Grasp",
+   "Rallying Cry",
+   "Charge",
+   "Wrath of the Berserker"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Firewall",
+  "url": "https://d4builds.gg/builds/firewall-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Meteor",
+   "Ice Armor",
+   "Teleport",
+   "Flame Shield",
+   "Firewall",
+   "Unstable Currents"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Flurry",
+  "url": "https://d4builds.gg/builds/flurry-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Poison Imbuement",
+   "Dash",
+   "Dance of Knives",
+   "Concealment",
+   "Flurry",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Minion",
+  "url": "https://d4builds.gg/builds/minion-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Sever",
+   "Bone Storm",
+   "Golem",
+   "Corpse Tendrils",
+   "Skeleton Warrior",
+   "Skeleton Mage"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Penetrating Shot",
+  "url": "https://d4builds.gg/builds/penetrating-shot-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Poison Imbuement",
+   "Dash",
+   "Dark Shroud",
+   "Concealment",
+   "Penetrating Shot",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Stinger",
+  "url": "https://d4builds.gg/builds/stinger-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Thunderspike",
+   "Scourge",
+   "Toxic Skin",
+   "Stinger",
+   "The Protector"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Pestilent Swarm",
+  "url": "https://d4builds.gg/builds/pestilent-swarm-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Toxic Skin",
+   "Counterattack",
+   "Ravager",
+   "Scourge",
+   "Rushing Claw",
+   "The Devourer"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Rain of Arrows",
+  "url": "https://d4builds.gg/builds/rain-of-arrows-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Cold Imbuement",
+   "Concealment",
+   "Rapid Fire",
+   "Shadow Step",
+   "Rain of Arrows",
+   "Dark Shroud"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Whirlwind",
+  "url": "https://d4builds.gg/builds/whirlwind-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-145"
+  ],
+  "author": null,
+  "skills": [
+   "Lunging Strike",
+   "War Cry",
+   "Challenging Shout",
+   "Rallying Cry",
+   "Wrath of the Berserker",
+   "Whirlwind"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Shred",
+  "url": "https://d4builds.gg/builds/shred-druid-endgame/?var=3",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-145"
+  ],
+  "author": null,
+  "skills": [
+   "Lightning Storm",
+   "Debilitating Roar",
+   "Cyclone Armor",
+   "Grizzly Rage",
+   "Stone Burst",
+   "Shred"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Dance of Knives",
+  "url": "https://d4builds.gg/builds/dance-of-knives-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-135"
+  ],
+  "author": null,
+  "skills": [
+   "Poison Imbuement",
+   "Concealment",
+   "Dash",
+   "Dark Shroud",
+   "Dance of Knives",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Apocalypse",
+  "url": "https://d4builds.gg/builds/apocalypse-warlock-endgame/",
+  "game_class": "warlock",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Umbral Chains",
+   "Sigil of Subversion",
+   "Summon Vollach",
+   "Dark Prison",
+   "Apocalypse",
+   "Bombardment"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Meteor",
+  "url": "https://d4builds.gg/builds/meteor-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-150"
+  ],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Ice Armor",
+   "Familiar",
+   "Flame Shield",
+   "Meteor",
+   "Inferno"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Boulder",
+  "url": "https://d4builds.gg/builds/boulder-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-140"
+  ],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Lightning Storm",
+   "Wolves",
+   "Cyclone Armor",
+   "Boulder",
+   "Claw"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Divine Lance",
+  "url": "https://d4builds.gg/builds/divine-lance-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-140"
+  ],
+  "author": null,
+  "skills": [
+   "Divine Lance",
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Rally",
+   "Condemn",
+   "Fortress"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Ice Spikes",
+  "url": "https://d4builds.gg/builds/ice-spikes-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-140"
+  ],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Ice Armor",
+   "Familiar",
+   "Deep Freeze",
+   "Blizzard",
+   "Flame Shield"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Death Trap",
+  "url": "https://d4builds.gg/builds/death-trap-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-135"
+  ],
+  "author": null,
+  "skills": [
+   "Dark Shroud",
+   "Concealment",
+   "Smoke Grenade",
+   "Shadow Step",
+   "Death Trap",
+   "Dash"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Storm Strike",
+  "url": "https://d4builds.gg/builds/storm-strike-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-135"
+  ],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Cyclone Armor",
+   "Wolves",
+   "Hurricane",
+   "Lightning Storm",
+   "Storm Strike"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Tornado",
+  "url": "https://d4builds.gg/builds/tornado-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-135"
+  ],
+  "author": null,
+  "skills": [
+   "Lightning Storm",
+   "Debilitating Roar",
+   "Cyclone Armor",
+   "Grizzly Rage",
+   "Stone Burst",
+   "Tornado"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Auradin",
+  "url": "https://d4builds.gg/builds/auradin-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-130"
+  ],
+  "author": null,
+  "skills": [
+   "Condemn",
+   "Fanaticism Aura",
+   "Holy Light Aura",
+   "Defiance Aura",
+   "Aegis",
+   "Fortress"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Lacerate",
+  "url": "https://d4builds.gg/builds/lacerate-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-130"
+  ],
+  "author": null,
+  "skills": [
+   "Stone Burst",
+   "Hurricane",
+   "Ravens",
+   "Cyclone Armor",
+   "Lacerate",
+   "Debilitating Roar"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Golem",
+  "url": "https://d4builds.gg/builds/golem-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-125"
+  ],
+  "author": null,
+  "skills": [
+   "Sever",
+   "Bone Prison",
+   "Skeleton Warrior",
+   "Bone Storm",
+   "Golem",
+   "Blight"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Zeal",
+  "url": "https://d4builds.gg/builds/zeal-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [
+   "tower-125"
+  ],
+  "author": null,
+  "skills": [
+   "Zeal",
+   "Fanaticism Aura",
+   "Condemn",
+   "Defiance Aura",
+   "Rally",
+   "Fortress"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "HotA",
+  "url": "https://d4builds.gg/builds/hota-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Hammer of the Ancients",
+   "War Cry",
+   "Iron Skin",
+   "Rallying Cry",
+   "Wrath of the Berserker",
+   "Bash"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Ball Lightning",
+  "url": "https://d4builds.gg/builds/ball-lightning-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Unstable Currents",
+   "Teleport",
+   "Ice Armor",
+   "Flame Shield",
+   "Ball Lightning",
+   "Hydra"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blessed Hammer",
+  "url": "https://d4builds.gg/builds/blessed-hammer-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Blessed Hammer",
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Aegis",
+   "Condemn",
+   "Arbiter of Justice"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blizzard",
+  "url": "https://d4builds.gg/builds/blizzard-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Unstable Currents",
+   "Teleport",
+   "Ice Armor",
+   "Flame Shield",
+   "Blizzard",
+   "Hydra"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Bone Spirit",
+  "url": "https://d4builds.gg/builds/bone-spirit-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Sever",
+   "Bone Storm",
+   "Golem",
+   "Skeleton Mage",
+   "Bone Prison",
+   "Bone Spirit"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Clash",
+  "url": "https://d4builds.gg/builds/clash-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Condemn",
+   "Consecration",
+   "Clash",
+   "Fortress"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Command Fallen",
+  "url": "https://d4builds.gg/builds/command-fallen-warlock-endgame/",
+  "game_class": "warlock",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Metamorphosis",
+   "Sigil of Summons",
+   "Summon Ae'grom",
+   "Sigil of Subversion",
+   "Command Fallen",
+   "Tortured Wretch"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Crackling Energy",
+  "url": "https://d4builds.gg/builds/crackling-energy-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Flame Shield",
+   "Ice Armor",
+   "Meteor",
+   "Fire Bolt",
+   "Unstable Currents"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Crushing Hand",
+  "url": "https://d4builds.gg/builds/crushing-hand-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Armored Hide",
+   "Scourge",
+   "Toxic Skin",
+   "Crushing Hand",
+   "The Hunter"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Earth Spike",
+  "url": "https://d4builds.gg/builds/earth-spike-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Debilitating Roar",
+   "Wolves",
+   "Cyclone Armor",
+   "Earth Spike",
+   "Lightning Storm"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Fireball",
+  "url": "https://d4builds.gg/builds/fireball-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Ice Armor",
+   "Flame Shield",
+   "Hydra",
+   "Fireball",
+   "Inferno"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Heartseeker",
+  "url": "https://d4builds.gg/builds/heartseeker-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Cold Imbuement",
+   "Smoke Grenade",
+   "Concealment",
+   "Dash",
+   "Heartseeker",
+   "Shadow Step"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Hydra",
+  "url": "https://d4builds.gg/builds/hydra-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Ice Armor",
+   "Ice Blades",
+   "Flame Shield",
+   "Hydra",
+   "Inferno"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Incinerate",
+  "url": "https://d4builds.gg/builds/incinerate-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Ice Armor",
+   "Flame Shield",
+   "Hydra",
+   "Incinerate",
+   "Inferno"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Landslide",
+  "url": "https://d4builds.gg/builds/landslide-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Wolves",
+   "Cyclone Armor",
+   "Lightning Storm",
+   "Grizzly Rage",
+   "Earth Spike",
+   "Landslide"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Leap Rend",
+  "url": "https://d4builds.gg/builds/leap-rend-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "War Cry",
+   "Iron Skin",
+   "Challenging Shout",
+   "Rallying Cry",
+   "Wrath of the Berserker",
+   "Leap"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Rend",
+  "url": "https://d4builds.gg/builds/rend-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Iron Skin",
+   "War Cry",
+   "Challenging Shout",
+   "Rallying Cry",
+   "Rend",
+   "Wrath of the Berserker"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Payback",
+  "url": "https://d4builds.gg/builds/payback-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Armored Hide",
+   "Scourge",
+   "Toxic Skin",
+   "Payback",
+   "The Hunter"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Profane Sentinel",
+  "url": "https://d4builds.gg/builds/profane-sentinel-warlock-endgame/",
+  "game_class": "warlock",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Terror Swarm",
+   "Sigil of Summons",
+   "Sigil of Subversion",
+   "Summon Laalish",
+   "Profane Sentinel",
+   "Blazing Scream"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Quill Volley",
+  "url": "https://d4builds.gg/builds/quill-volley-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Armored Hide",
+   "Scourge",
+   "Toxic Skin",
+   "Quill Volley",
+   "The Hunter"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Rabies",
+  "url": "https://d4builds.gg/builds/rabies-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Lightning Storm",
+   "Wolves",
+   "Cyclone Armor",
+   "Rabies",
+   "Debilitating Roar"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Rake",
+  "url": "https://d4builds.gg/builds/rake-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Armored Hide",
+   "Scourge",
+   "Toxic Skin",
+   "Rake",
+   "The Hunter"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Razor Wings",
+  "url": "https://d4builds.gg/builds/razor-wings-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Armored Hide",
+   "Scourge",
+   "Toxic Skin",
+   "Razor Wings",
+   "The Hunter"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Rock Splitter",
+  "url": "https://d4builds.gg/builds/rock-splitter-spiritborn-endgame/",
+  "game_class": "spiritborn",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Ravager",
+   "Armored Hide",
+   "Scourge",
+   "Toxic Skin",
+   "Rock Splitter",
+   "The Hunter"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Umbral Chains",
+  "url": "https://d4builds.gg/builds/umbral-chains-warlock-endgame/",
+  "game_class": "warlock",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Terror Swarm",
+   "Sigil of Summons",
+   "Profane Sentinel",
+   "Summon Vollach",
+   "Umbral Chains",
+   "Blazing Scream"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Pulverize",
+  "url": "https://d4builds.gg/builds/pulverize-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Lightning Storm",
+   "Wolves",
+   "Cyclone Armor",
+   "Pulverize",
+   "Earth Spike"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Arbiter Wing Strike",
+  "url": "https://d4builds.gg/builds/arbiter-wing-strike-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Aegis",
+   "Fanaticism Aura",
+   "Condemn",
+   "Defiance Aura",
+   "Arbiter of Justice",
+   "Consecration"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Army of the Dead",
+  "url": "https://d4builds.gg/builds/army-of-the-dead-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Skeleton Warrior",
+   "Army of the Dead",
+   "Blood Mist",
+   "Corpse Explosion",
+   "Skeleton Mage",
+   "Golem"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Arrow Storms",
+  "url": "https://d4builds.gg/builds/arrow-storms-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Cold Imbuement",
+   "Dash",
+   "Concealment",
+   "Smoke Grenade",
+   "Barrage",
+   "Forceful Arrow"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blight",
+  "url": "https://d4builds.gg/builds/blight-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Skeleton Warrior",
+   "Corpse Tendrils",
+   "Bone Prison",
+   "Blood Wave",
+   "Blight",
+   "Sever"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blood Lance",
+  "url": "https://d4builds.gg/builds/blood-lance-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Skeleton Warrior",
+   "Corpse Tendrils",
+   "Bone Prison",
+   "Blood Wave",
+   "Blood Lance",
+   "Sever"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Blood Surge",
+  "url": "https://d4builds.gg/builds/blood-surge-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Skeleton Warrior",
+   "Corpse Tendrils",
+   "Bone Prison",
+   "Blood Wave",
+   "Blood Surge",
+   "Sever"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Bone Spear",
+  "url": "https://d4builds.gg/builds/bone-spear-necromancer-endgame/",
+  "game_class": "necromancer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Skeleton Warrior",
+   "Corpse Tendrils",
+   "Bone Prison",
+   "Blood Wave",
+   "Bone Spear",
+   "Sever"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Brandish",
+  "url": "https://d4builds.gg/builds/brandish-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Falling Star",
+   "Brandish",
+   "Fortress"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Cataclysm",
+  "url": "https://d4builds.gg/builds/cataclysm-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Lightning Storm",
+   "Ravens",
+   "Hurricane",
+   "Cyclone Armor",
+   "Cataclysm",
+   "Earth Spike"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Companion",
+  "url": "https://d4builds.gg/builds/companion-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Debilitating Roar",
+   "Earthen Bulwark",
+   "Cyclone Armor",
+   "Grizzly Rage",
+   "Claw",
+   "Wolves"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Death Blow",
+  "url": "https://d4builds.gg/builds/death-blow-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Frenzy",
+   "Death Blow",
+   "Challenging Shout",
+   "Rallying Cry",
+   "Wrath of the Berserker",
+   "Whirlwind"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Double Swing",
+  "url": "https://d4builds.gg/builds/double-swing-barbarian-endgame/",
+  "game_class": "barbarian",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Double Swing",
+   "War Cry",
+   "Challenging Shout",
+   "Rallying Cry",
+   "Wrath of the Berserker",
+   "Iron Skin"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Dread Claws",
+  "url": "https://d4builds.gg/builds/dread-claws-warlock-endgame/",
+  "game_class": "warlock",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Dread Claws",
+   "Doom",
+   "Profane Sentinel",
+   "Metamorphosis",
+   "Summon Laalish",
+   "Sigil of Subversion"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Frozen Orb",
+  "url": "https://d4builds.gg/builds/frozen-orb-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Teleport",
+   "Ice Armor",
+   "Flame Shield",
+   "Familiar",
+   "Frozen Orb",
+   "Arc Lash"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Grenade",
+  "url": "https://d4builds.gg/builds/grenade-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Cold Imbuement",
+   "Dark Shroud",
+   "Concealment",
+   "Smoke Grenade",
+   "Dance of Knives",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Heaven's Fury",
+  "url": "https://d4builds.gg/builds/heaven's-fury-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Consecration",
+   "Heaven's Fury",
+   "Falling Star"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Ice Shards",
+  "url": "https://d4builds.gg/builds/ice-shards-sorcerer-endgame/",
+  "game_class": "sorcerer",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Unstable Currents",
+   "Teleport",
+   "Ice Armor",
+   "Meteor",
+   "Ice Shards",
+   "Hydra"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Lightning Storm",
+  "url": "https://d4builds.gg/builds/lightning-storm-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Stone Burst",
+   "Wolves",
+   "Debilitating Roar",
+   "Lightning Storm",
+   "Storm Strike"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Maul",
+  "url": "https://d4builds.gg/builds/maul-druid-endgame/",
+  "game_class": "druid",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Grizzly Rage",
+   "Debilitating Roar",
+   "Wolves",
+   "Cyclone Armor",
+   "Maul",
+   "Lightning Storm"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Poison Trap",
+  "url": "https://d4builds.gg/builds/poison-trap-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Cold Imbuement",
+   "Concealment",
+   "Poison Trap",
+   "Dark Shroud",
+   "Dance of Knives",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Rapid Fire",
+  "url": "https://d4builds.gg/builds/rapid-fire-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Cold Imbuement",
+   "Dash",
+   "Smoke Grenade",
+   "Concealment",
+   "Rapid Fire",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Smoke Grenade",
+  "url": "https://d4builds.gg/builds/smoke-grenade-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Dash",
+   "Shadow Step",
+   "Concealment",
+   "Dark Shroud",
+   "Smoke Grenade",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Twisting Blades",
+  "url": "https://d4builds.gg/builds/twisting-blades-rogue-endgame/",
+  "game_class": "rogue",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Poison Imbuement",
+   "Dash",
+   "Smoke Grenade",
+   "Dark Shroud",
+   "Twisting Blades",
+   "Shadow Clone"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ },
+ {
+  "source": "d4builds",
+  "title": "Zenith",
+  "url": "https://d4builds.gg/builds/zenith-paladin-endgame/",
+  "game_class": "paladin",
+  "tier": null,
+  "season": null,
+  "tags": [],
+  "author": null,
+  "skills": [
+   "Fanaticism Aura",
+   "Defiance Aura",
+   "Holy Light Aura",
+   "Consecration",
+   "Zenith",
+   "Falling Star"
+  ],
+  "external_id": null,
+  "external_class_id": null
+ }
+]
