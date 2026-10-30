@@ -1197,3 +1197,8 @@ uit-chef\sorties‚6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
 ## 2026-10-31 (nuit, vague 2 fixtures)
 - Ajout (aucun code applicatif touche) : tests/fixtures/<site>/ (6 sites, URL+date en .meta.json), tests/run.py (hors ligne, 6/6 vert), tests/expected/, scripts/enregistrer_fixtures.py, scripts/inventaire_doublons.py + tests/RAPPORT_DOUBLONS.md.
 - Constat : ids d'affixes du filtre = meme espace que Maxroll/Calc (0 incoherence) ; dictionnaires FR/EN : 47 conflits (libelle vs fragment) -> pas de fusion. Rapport : _outils\nuit-chef\sorties\2026-10-31\DIABLO_FIXTURES.md. Non pousse.
+
+## 2026-10-31 (nuit, vague 3 securite suite)
+- Fait : 4 imports inutilises retires (ruff F401, 13a9dec), branche nuit/2026-10-31.
+- Constate : osv-scanner = 11 CVE (2 critiques : anyio<4.14.2, certifi<2026.10.18 ; starlette 0.41.3 -> >=1.3.1 ; idna<3.15), dependances indirectes de fastapi/httpx ; serveur lie a 127.0.0.1 (app/main.py:31).
+- Reste : relever fastapi + anyio/certifi/idna dans requirements.txt et relancer les tests (decision utilisateur).
