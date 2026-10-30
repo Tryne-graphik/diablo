@@ -19,7 +19,7 @@ Usage (from the repo root, with the venv active):
 Not re-run automatically / not scheduled - this is a manual research tool,
 rerun it whenever we want a fresh cross-check against the live site.
 """
-import base64, glob, re, struct, sys, os, json
+import base64, glob, struct, sys, os, json
 from collections import defaultdict
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
