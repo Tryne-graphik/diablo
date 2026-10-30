@@ -1193,3 +1193,7 @@ uit-chef\sorties‚6-10-30\VERDICTS.md. Aucune modification de code cette nuit.
 
 ## 2026-10-30 (nuit, vague 4 vitrine)
 - README : sections Captures/Limites ajoutees (ou README refait pour Rainmeter) ; LICENSE : existante conservee (tous droits reserves), Rainmeter : LICENSE ajoutee (a valider). Rien pousse. Captures reelles a faire avec donnees de demo.
+
+## 2026-10-31 (nuit, vague 2 fixtures)
+- Ajout (aucun code applicatif touche) : tests/fixtures/<site>/ (6 sites, URL+date en .meta.json), tests/run.py (hors ligne, 6/6 vert), tests/expected/, scripts/enregistrer_fixtures.py, scripts/inventaire_doublons.py + tests/RAPPORT_DOUBLONS.md.
+- Constat : ids d'affixes du filtre = meme espace que Maxroll/Calc (0 incoherence) ; dictionnaires FR/EN : 47 conflits (libelle vs fragment) -> pas de fusion. Rapport : _outils\nuit-chef\sorties\2026-10-31\DIABLO_FIXTURES.md. Non pousse.
