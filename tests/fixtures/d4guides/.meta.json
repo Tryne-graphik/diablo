@@ -1,0 +1,7 @@
+{
+ "site": "d4guides",
+ "url": "https://d4guides.gg/api/v1/builds.php?limit=200&offset=0&sort=tier&season=15",
+ "date": "2026-10-30T20:56:48",
+ "status": 200,
+ "note": ""
+}
