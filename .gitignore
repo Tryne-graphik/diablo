@@ -24,3 +24,5 @@ scripts/_*
 
 # fixture trop lourde pour le depot public ; regenerer avec scripts/enregistrer_fixtures.py
 tests/fixtures/kamilabs/api.json
+# genere par scripts/fusion_dictionnaires.py
+app/data/dictionnaire_unifie.json
