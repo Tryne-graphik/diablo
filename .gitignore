@@ -21,3 +21,6 @@ installer/dist/
 
 # Artefacts de debug/exploration Playwright (screenshots, dumps JSON/HTML bruts)
 scripts/_*
+
+# fixture trop lourde pour le depot public ; regenerer avec scripts/enregistrer_fixtures.py
+tests/fixtures/kamilabs/api.json

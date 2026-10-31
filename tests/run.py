@@ -74,7 +74,10 @@ def run_site(site: str) -> list[dict]:
 def main() -> int:
     update, bad = "--update" in sys.argv, 0
     EXP.mkdir(exist_ok=True)
-    for site in CASES:
+    for site, (_, _, fname) in CASES.items():
+        if not (FIX / site / fname).exists():  # fixture trop lourde pour le depot public (kamilabs) : a regenerer par scripts/enregistrer_fixtures.py
+            print(f"SKIP {site}: fixture absente")
+            continue
         got = run_site(site)
         f = EXP / f"{site}.json"
         if update:
