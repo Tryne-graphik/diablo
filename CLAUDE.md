@@ -1,5 +1,7 @@
 # DiabloIV-Assistant
 
+Version : 3.68.0 (numérotation X.Y.Z, règle dans ~/.claude/CLAUDE.md ; monter à chaque changement).
+
 Userscript Tampermonkey (traduction EN->FR des guides, filtre de butin natif D4, classement
 consensus) + serveur local FastAPI (`app/`). Depot : github.com/Tryne-graphik/diablo (pousse).
 Journal : `HISTORIQUE.md` (lire la DERNIERE section `## 2026-` en reprise).
